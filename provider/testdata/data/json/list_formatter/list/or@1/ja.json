@@ -1,0 +1,44 @@
+{
+  "start": {
+    "default": {
+      "string": "、",
+      "insertion_points": 3
+    },
+    "special_case": null
+  },
+  "middle": null,
+  "end": {
+    "default": {
+      "string": "、または",
+      "insertion_points": 12
+    },
+    "special_case": null
+  },
+  "pair": {
+    "default": {
+      "string": "または",
+      "insertion_points": 9
+    },
+    "special_case": null
+  },
+  "short_start": null,
+  "short_middle": null,
+  "short_end": null,
+  "short_pair": {
+    "default": {
+      "string": "または",
+      "insertion_points": 9
+    },
+    "special_case": null
+  },
+  "narrow_start": null,
+  "narrow_middle": null,
+  "narrow_end": null,
+  "narrow_pair": {
+    "default": {
+      "string": "または",
+      "insertion_points": 9
+    },
+    "special_case": null
+  }
+}
