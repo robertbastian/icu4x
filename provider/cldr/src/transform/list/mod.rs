@@ -84,7 +84,7 @@ impl DataProvider<ListFormatterPatternsV1Marker> for ListProvider {
                     "{0} y {1}".parse().unwrap(),
                     ConditionalListJoinerPattern::from_regex_and_strs(
                         // Starts with i or (hi but not hia/hie)
-                        "i|hi([^ae]|$)",
+                        "(i|hi[^ae]).*|hi", // "i|hi([^ae]|$)" if prefix-checking
                         "{0} e {1}",
                         "{0} y {1}",
                     )
@@ -97,7 +97,7 @@ impl DataProvider<ListFormatterPatternsV1Marker> for ListProvider {
                     ConditionalListJoinerPattern::from_regex_and_strs(
                         // Starts with o, ho, 8 (including 80, 800, ...), or 11 either alone or followed
                         // by thousand groups and/or decimals (excluding e.g. 110, 1100, ...)
-                        r"o|ho|8|(11(\.?\d\d\d)*(,\d*)?([^\.,\d]|$))",
+                        r"(o|ho|8|11(\.?\d\d\d)*(,\d*)?[^\.,\d]).*|11(\.?\d\d\d)*(,\d*)?", // "o|ho|8|11(\.?\d\d\d)*(,\d*)?([^\.,\d]|$)" if prefix checking
                         "{0} u {1}",
                         "{0} o {1}",
                     )
@@ -115,7 +115,7 @@ impl DataProvider<ListFormatterPatternsV1Marker> for ListProvider {
                 ConditionalListJoinerPattern::from_regex_and_strs(
                     // Starts with a non-Hebrew letter
                     &format!(
-                        "[^{}]",
+                        "[^{}].*",  // "[^{}]" if prefix checking
                         icu_properties::sets::get_for_script(
                             &icu_provider_uprops::PropertiesDataProvider::try_new(
                                 &self.uprops_path
