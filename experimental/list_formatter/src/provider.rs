@@ -20,7 +20,7 @@ pub mod key {
     pub const LIST_FORMAT_UNIT_V1: ResourceKey = resource_key!(ListFormatter, "list/unit", 1);
 }
 
-/// Symbols and metadata required for [`ListFormatter`](crate::ListFormatter). 
+/// Symbols and metadata required for [`ListFormatter`](crate::ListFormatter).
 /// Absent values follow this fallback structure:
 /// ", " - start - middle
 ///            |-- end - pair
@@ -137,6 +137,49 @@ impl<'data> ListFormatterPatternsV1<'data> {
                 self.narrow_pair.as_ref().or(self.narrow_end.as_ref()).or(self.short_end.as_ref()),
         }.or(self.end.as_ref()).or(self.start.as_ref()).unwrap_or(LATIN_COMMA)
     }
+
+    pub fn replace_patterns(
+        &mut self,
+        old: &ConditionalListJoinerPattern<'data>,
+        new: &ConditionalListJoinerPattern<'data>,
+    ) {
+        if self.start.as_ref() == Some(old) {
+            self.start = Some(new.clone());
+        }
+        if self.middle.as_ref() == Some(old) {
+            self.middle = Some(new.clone())
+        }
+        if self.end.as_ref() == Some(old) {
+            self.end = Some(new.clone())
+        }
+        if self.pair.as_ref() == Some(old) {
+            self.pair = Some(new.clone())
+        }
+        if self.short_start.as_ref() == Some(old) {
+            self.short_start = Some(new.clone());
+        }
+        if self.short_middle.as_ref() == Some(old) {
+            self.short_middle = Some(new.clone())
+        }
+        if self.short_end.as_ref() == Some(old) {
+            self.short_end = Some(new.clone())
+        }
+        if self.short_pair.as_ref() == Some(old) {
+            self.short_pair = Some(new.clone())
+        }
+        if self.narrow_start.as_ref() == Some(old) {
+            self.narrow_start = Some(new.clone());
+        }
+        if self.narrow_middle.as_ref() == Some(old) {
+            self.narrow_middle = Some(new.clone())
+        }
+        if self.narrow_end.as_ref() == Some(old) {
+            self.narrow_end = Some(new.clone())
+        }
+        if self.narrow_pair.as_ref() == Some(old) {
+            self.narrow_pair = Some(new.clone())
+        }
+    }
 }
 
 const LATIN_COMMA: &'static ConditionalListJoinerPattern = &ConditionalListJoinerPattern {
@@ -247,6 +290,11 @@ pub mod pattern_construction {
         }
     }
 
+    /// Creates a conditional list joiner that will evaluate to the `then_pattern` when
+    /// `regex` matches the following element, and to `else_pattern` otherwise.
+    /// The regex is interpreted case-insensitive and anchored to the beginning, but
+    /// to improve efficiency does not search for full matches. If a full match is
+    /// required, use `$`.
     impl<'data> ConditionalListJoinerPattern<'data> {
         pub fn from_regex_and_strs(
             regex: &str,
@@ -256,7 +304,7 @@ pub mod pattern_construction {
             Ok(ConditionalListJoinerPattern {
                 default: ListJoinerPattern::from_str(else_pattern)?,
                 special_case: Some(SpecialCasePattern {
-                    condition: Cow::Owned(regex.to_string()),
+                    condition: Cow::Owned("(?i)^(".to_string() + regex + ")"),
                     pattern: ListJoinerPattern::from_str(then_pattern)?,
                 }),
             })
@@ -278,10 +326,12 @@ mod test {
     #[test]
     fn produces_correct_parts_conditionally() {
         let pattern =
-            ConditionalListJoinerPattern::from_regex_and_strs("b.*", "c{0}d{1}e", "a{0}b{1}c")
+            ConditionalListJoinerPattern::from_regex_and_strs("b", "c{0}d{1}e", "a{0}b{1}c")
                 .unwrap();
-        assert_eq!(pattern.parts("a"), ("a", "b", "c"));
-        assert_eq!(pattern.parts("b"), ("c", "d", "e"));
+        // Only matches at the beginning of the string
+        assert_eq!(pattern.parts("ab"), ("a", "b", "c"));
+        // Doesn't require a full match
+        assert_eq!(pattern.parts("ba"), ("c", "d", "e"));
     }
 
     #[test]

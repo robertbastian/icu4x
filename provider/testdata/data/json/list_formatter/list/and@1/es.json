@@ -6,7 +6,13 @@
       "string": " y ",
       "insertion_points": 3
     },
-    "special_case": null
+    "special_case": {
+      "condition": "(?i)^(i|hi([^ae]|$))",
+      "pattern": {
+        "string": " e ",
+        "insertion_points": 3
+      }
+    }
   },
   "pair": null,
   "short_start": null,

@@ -7,6 +7,7 @@ use crate::reader::{get_langid_subdirectories, open_reader};
 use crate::CldrPaths;
 use icu_list::provider::*;
 use icu_locid::LanguageIdentifier;
+use icu_locid_macros::langid;
 use icu_provider::iter::{IterableDataProviderCore, KeyedDataProvider};
 use icu_provider::prelude::*;
 use std::convert::TryFrom;
@@ -69,7 +70,7 @@ impl<'data> DataProvider<'data, ListFormatterPatternsV1Marker> for ListProvider<
             Err(_) => return Err(DataError::MissingResourceOptions(req.clone())),
         };
 
-        let patterns = if key::LIST_FORMAT_AND_V1
+        let mut patterns = if key::LIST_FORMAT_AND_V1
             .match_key(req.resource_path.key)
             .is_ok()
         {
@@ -88,6 +89,14 @@ impl<'data> DataProvider<'data, ListFormatterPatternsV1Marker> for ListProvider<
             panic!("Cannot happen due to check in supports_key")
         };
 
+        if langid.language == langid!("es").language {
+            replace_es_special_cases(&mut patterns);
+        }
+
+        if langid.language == langid!("he").language {
+            replace_he_special_cases(&mut patterns);
+        }
+
         Ok(DataResponse {
             metadata: DataResponseMetadata {
                 data_langid: req.resource_path.options.langid.clone(),
@@ -95,6 +104,47 @@ impl<'data> DataProvider<'data, ListFormatterPatternsV1Marker> for ListProvider<
             payload: Some(DataPayload::from_owned(patterns)),
         })
     }
+}
+
+fn replace_es_special_cases(pattern: &mut ListFormatterPatternsV1) {
+    let simple_y = &"{0} y {1}".parse().unwrap();
+    let e_before_y = &ConditionalListJoinerPattern::from_regex_and_strs(
+        // Starts with i or (hi but not hia/hie)
+        "i|hi([^ae]|$)",
+        "{0} e {1}",
+        "{0} y {1}",
+    )
+    .unwrap();
+
+    // Replace all simple_ys with e_before_y.
+    pattern.replace_patterns(simple_y, e_before_y);
+
+    let simple_o = &"{0} o {1}".parse().unwrap();
+    let u_before_o = &ConditionalListJoinerPattern::from_regex_and_strs(
+        // Starts with o, ho, 8 (including 80, 800, ...), or 11 either alone or followed
+        // by thousand groups and/or decimals (excluding e.g. 110, 1100, ...)
+        r"o|ho|8|(11(\.?\d\d\d)*(,\d*)?([^\.,\d]|$))",
+        "{0} u {1}",
+        "{0} o {1}",
+    )
+    .unwrap();
+
+    // Replace all simple_os with u_before_o.
+    pattern.replace_patterns(simple_o, u_before_o);
+}
+
+fn replace_he_special_cases(pattern: &mut ListFormatterPatternsV1) {
+    let simple_vav = &"{0} \u{05D5}{1}".parse().unwrap();
+    let vav_dash_after_non_he = &ConditionalListJoinerPattern::from_regex_and_strs(
+        // Starts with a non-Hebrew letter
+        r"[^\p{IsHebrew}]",
+        "{0} ו-{1}",
+        "{0} ו{1}",
+    )
+    .unwrap();
+
+    // Replace all simple_vavs with vav_dash_after_non_he.
+    pattern.replace_patterns(simple_vav, vav_dash_after_non_he);
 }
 
 icu_provider::impl_dyn_provider!(ListProvider<'data>, {
@@ -176,48 +226,123 @@ fn parse_unit_patterns<'a>(
     ))
 }
 
-#[test]
-fn test_basic() {
+#[cfg(test)]
+mod tests {
+    use super::*;
     use icu_list::options::Width;
+    use icu_locid::LanguageIdentifier;
     use icu_locid_macros::langid;
 
-    let cldr_paths = crate::cldr_paths::for_test();
-    let provider = ListProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
-
-    let fr_and_list: DataPayload<ListFormatterPatternsV1Marker> = provider
-        .load_payload(&DataRequest {
-            resource_path: ResourcePath {
-                key: key::LIST_FORMAT_AND_V1,
-                options: ResourceOptions {
-                    variant: None,
-                    langid: Some(langid!("fr")),
+    fn provide<'data>(
+        lang: LanguageIdentifier,
+        key: ResourceKey,
+    ) -> DataPayload<'data, ListFormatterPatternsV1Marker> {
+        let cldr_paths = crate::cldr_paths::for_test();
+        let provider = ListProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+        provider
+            .load_payload(&DataRequest {
+                resource_path: ResourcePath {
+                    key,
+                    options: ResourceOptions {
+                        variant: None,
+                        langid: Some(lang),
+                    },
                 },
-            },
-        })
-        .unwrap()
-        .take_payload()
-        .unwrap();
+            })
+            .unwrap()
+            .take_payload()
+            .unwrap()
+    }
 
-    assert_eq!(
-        fr_and_list.get().pair(Width::Wide),
-        &"{0} et {1}".parse().unwrap()
-    );
+    #[test]
+    fn test_basic() {
+        assert_eq!(
+            provide(langid!("fr"), key::LIST_FORMAT_OR_V1)
+                .get()
+                .end(Width::Wide),
+            &"{0} ou {1}".parse().unwrap()
+        );
+    }
 
-    let es_or_list: DataPayload<ListFormatterPatternsV1Marker> = provider
-        .load_payload(&DataRequest {
-            resource_path: ResourcePath {
-                key: key::LIST_FORMAT_OR_V1,
-                options: ResourceOptions {
-                    variant: None,
-                    langid: Some(langid!("es")),
-                },
-            },
-        })
-        .unwrap()
-        .take_payload()
-        .unwrap();
-    assert_eq!(
-        es_or_list.get().middle(Width::Wide),
-        &"{0}, {1}".parse().unwrap()
-    );
+    #[test]
+    fn test_spanish() {
+        let y_parts = ("", " y ", "");
+        let e_parts = ("", " e ", "");
+        let o_parts = ("", " o ", "");
+        let u_parts = ("", " u ", "");
+
+        let payload_and = provide(langid!("es"), key::LIST_FORMAT_AND_V1);
+        let and = &payload_and.get().end(Width::Wide);
+        let payload_or = provide(langid!("es"), key::LIST_FORMAT_OR_V1);
+        let or = &payload_or.get().end(Width::Wide);
+
+        // ... y Mallorca
+        assert_eq!(and.parts("Mallorca"), y_parts);
+        // ... e Ibiza
+        assert_eq!(and.parts("Ibiza"), e_parts);
+        // ... e Hidalgo
+        assert_eq!(and.parts("Hidalgo"), e_parts);
+        // ... y Hierva
+        assert_eq!(and.parts("Hierva"), y_parts);
+
+        // ... o Ibiza
+        assert_eq!(or.parts("Ibiza"), o_parts);
+        // ... u Okinawa
+        assert_eq!(or.parts("Okinawa"), u_parts);
+        // ... u 8 más
+        assert_eq!(or.parts("8 más"), u_parts);
+        // ... u 8
+        assert_eq!(or.parts("8"), u_parts);
+        // ... u 87 más
+        assert_eq!(or.parts("87 más"), u_parts);
+        // ... u 87
+        assert_eq!(or.parts("87"), u_parts);
+        // ... u 11 más
+        assert_eq!(or.parts("11 más"), u_parts);
+        // ... u 11
+        assert_eq!(or.parts("11"), u_parts);
+        // ... o 110 más
+        assert_eq!(or.parts("110 más"), o_parts);
+        // ... o 110
+        assert_eq!(or.parts("110"), o_parts);
+        // ... o 11.000 más
+        assert_eq!(or.parts("11.000 más"), u_parts);
+        // ... o 11.000
+        assert_eq!(or.parts("11.000"), u_parts);
+        // ... o 11.000,92 más
+        assert_eq!(or.parts("11.000,92 más"), u_parts);
+        // ... o 11.000,92
+        assert_eq!(or.parts("11.000,92"), u_parts);
+
+        // Works for all es-* locales
+        assert_eq!(
+            provide(langid!("es-AR"), key::LIST_FORMAT_AND_V1)
+                .get()
+                .end(Width::Wide)
+                .parts("Ibiza"),
+            e_parts
+        );
+    }
+
+    #[test]
+    fn test_hebrew() {
+        let vav_parts = ("", " ו", "");
+        let vav_dash_parts = ("", " ו-", "");
+
+        assert_eq!(
+            provide(langid!("he"), key::LIST_FORMAT_AND_V1)
+                .get()
+                .end(Width::Wide)
+                .parts("יפו"),
+            vav_parts
+        );
+
+        assert_eq!(
+            provide(langid!("he"), key::LIST_FORMAT_AND_V1)
+                .get()
+                .end(Width::Wide)
+                .parts("Ibiza"),
+            vav_dash_parts
+        );
+    }
 }
