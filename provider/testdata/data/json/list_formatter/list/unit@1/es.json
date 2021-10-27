@@ -6,7 +6,13 @@
       "string": " y ",
       "index_1": 3
     },
-    "special_case": null
+    "special_case": {
+      "condition": "(?i)^(i|hi([^ae]|$))",
+      "pattern": {
+        "string": " e ",
+        "index_1": 3
+      }
+    }
   },
   "pair": null,
   "short_start": null,
@@ -23,7 +29,13 @@
       "string": " y ",
       "index_1": 3
     },
-    "special_case": null
+    "special_case": {
+      "condition": "(?i)^(i|hi([^ae]|$))",
+      "pattern": {
+        "string": " e ",
+        "index_1": 3
+      }
+    }
   },
   "narrow_start": {
     "default": {

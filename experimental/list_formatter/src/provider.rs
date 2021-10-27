@@ -164,6 +164,31 @@ impl<'data> ListFormatterPatternsV1<'data> {
             ),
         }
     }
+
+    #[cfg(any(test, feature = "provider_transform_internals"))]
+    pub fn replace_patterns(
+        &mut self,
+        old: &ConditionalListJoinerPattern<'data>,
+        new: &ConditionalListJoinerPattern<'data>,
+    ) {
+        let replace = |field: &mut Option<ConditionalListJoinerPattern<'data>>| {
+            if field.as_ref() == Some(old) {
+                *field = Some(new.clone())
+            }
+        };
+        replace(&mut self.start);
+        replace(&mut self.middle);
+        replace(&mut self.end);
+        replace(&mut self.pair);
+        replace(&mut self.short_start);
+        replace(&mut self.short_middle);
+        replace(&mut self.short_end);
+        replace(&mut self.short_pair);
+        replace(&mut self.narrow_start);
+        replace(&mut self.narrow_middle);
+        replace(&mut self.narrow_end);
+        replace(&mut self.narrow_pair);
+    }
 }
 
 /// A pattern that can behave conditionally on the next element.
@@ -272,6 +297,11 @@ pub mod pattern_construction {
         }
     }
 
+    /// Creates a conditional list joiner that will evaluate to the `then_pattern` when
+    /// `regex` matches the following element, and to `else_pattern` otherwise.
+    /// The regex is interpreted case-insensitive and anchored to the beginning, but
+    /// to improve efficiency does not search for full matches. If a full match is
+    /// required, use `$`.
     impl<'data> ConditionalListJoinerPattern<'data> {
         pub fn from_regex_and_strs(
             regex: &str,
@@ -281,7 +311,7 @@ pub mod pattern_construction {
             Ok(ConditionalListJoinerPattern {
                 default: ListJoinerPattern::from_str(else_pattern)?,
                 special_case: Some(SpecialCasePattern {
-                    condition: Cow::Owned(regex.to_string()),
+                    condition: Cow::Owned("(?i)^(".to_string() + regex + ")"),
                     pattern: ListJoinerPattern::from_str(then_pattern)?,
                 }),
             })
@@ -303,10 +333,11 @@ mod test {
     #[test]
     fn produces_correct_parts_conditionally() {
         let pattern =
-            ConditionalListJoinerPattern::from_regex_and_strs("b.*", "{0}c{1}d", "{0}a{1}b")
-                .unwrap();
-        assert_eq!(pattern.parts("a"), ("a", "b"));
-        assert_eq!(pattern.parts("b"), ("c", "d"));
+            ConditionalListJoinerPattern::from_regex_and_strs("b", "{0}c{1}d", "{0}a{1}b").unwrap();
+        // Only matches at the beginning of the string
+        assert_eq!(pattern.parts("ab"), ("a", "b"));
+        // Doesn't require a full match
+        assert_eq!(pattern.parts("ba"), ("c", "d"));
     }
 
     #[test]
