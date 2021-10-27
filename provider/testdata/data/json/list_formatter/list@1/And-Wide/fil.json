@@ -1,0 +1,22 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": ", at ",
+        "insertion_points": [
+          0,
+          5
+        ]
+      }
+    },
+    "pair": {
+      "default": {
+        "string": " at ",
+        "insertion_points": [
+          0,
+          4
+        ]
+      }
+    }
+  }
+}

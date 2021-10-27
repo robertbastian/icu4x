@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": " и ",
+        "insertion_points": [
+          0,
+          4
+        ]
+      }
+    }
+  }
+}

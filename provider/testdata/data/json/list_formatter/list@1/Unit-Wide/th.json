@@ -1,0 +1,22 @@
+{
+  "patterns": {
+    "start": {
+      "default": {
+        "string": " ",
+        "insertion_points": [
+          0,
+          1
+        ]
+      }
+    },
+    "end": {
+      "default": {
+        "string": " และ ",
+        "insertion_points": [
+          0,
+          11
+        ]
+      }
+    }
+  }
+}

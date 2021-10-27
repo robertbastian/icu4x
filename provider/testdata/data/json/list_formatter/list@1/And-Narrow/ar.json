@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "start": {
+      "default": {
+        "string": " و",
+        "insertion_points": [
+          0,
+          3
+        ]
+      }
+    }
+  }
+}

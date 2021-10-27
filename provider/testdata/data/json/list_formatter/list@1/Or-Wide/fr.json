@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": " ou ",
+        "insertion_points": [
+          0,
+          4
+        ]
+      }
+    }
+  }
+}

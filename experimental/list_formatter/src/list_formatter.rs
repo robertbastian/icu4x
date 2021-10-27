@@ -18,8 +18,6 @@ pub enum FieldType {
 
 pub struct ListFormatter<'data> {
     data: DataPayload<'data, ListFormatterPatternsV1Marker>,
-    type_: Type,
-    width: Width,
 }
 
 impl<'a> ListFormatter<'a> {
@@ -34,13 +32,17 @@ impl<'a> ListFormatter<'a> {
                 resource_path: ResourcePath {
                     key: key::LIST_FORMAT_V1,
                     options: ResourceOptions {
-                        variant: None,
+                        variant: Some(alloc::borrow::Cow::Owned(alloc::format!(
+                            "{:?}-{:?}",
+                            type_,
+                            width
+                        ))),
                         langid: Some(locale.into().into()),
                     },
                 },
             })?
             .take_payload()?;
-        Ok(Self { data, type_, width })
+        Ok(Self { data })
     }
 
     fn format_internal<'c, B>(
@@ -50,7 +52,7 @@ impl<'a> ListFormatter<'a> {
         single: fn(&str) -> B,
         apply_pattern: fn(&str, &PatternParts<'c>, B) -> B,
     ) -> B {
-        let pattern = &self.data.get().patterns[self.type_][self.width];
+        let pattern = &self.data.get().patterns;
         match values.len() {
             0 => empty(),
             1 => single(values[0]),
@@ -117,27 +119,22 @@ mod tests {
     const VALUES: &[&str] = &["one", "two", "three", "four", "five"];
 
     fn formatter<'data>() -> ListFormatter<'data> {
-        let pattern = ListFormatterPattern::new(
-            ConditionalListJoinerPattern::from_str("{0}: {1}").unwrap(),
-            ConditionalListJoinerPattern::from_str("{0}, {1}").unwrap(),
-            ConditionalListJoinerPattern::from_str("{0}. {1}!").unwrap(),
-            ConditionalListJoinerPattern::from_regex_and_strs("^A", "{0} :o {1}", "{0}; {1}")
-                .unwrap(),
-        );
-
-        let pattern_sizes = PatternSizes::new(pattern.clone(), pattern.clone(), pattern.clone());
         ListFormatter {
             data: DataPayload::<ListFormatterPatternsV1Marker>::from_owned(
                 ListFormatterPatternsV1 {
-                    patterns: PatternTypes {
-                        and: pattern_sizes.clone(),
-                        or: pattern_sizes.clone(),
-                        unit: pattern_sizes,
-                    },
+                    patterns: ListFormatterPattern::new(
+                        ConditionalListJoinerPattern::from_str("{0}: {1}").unwrap(),
+                        ConditionalListJoinerPattern::from_str("{0}, {1}").unwrap(),
+                        ConditionalListJoinerPattern::from_str("{0}. {1}!").unwrap(),
+                        ConditionalListJoinerPattern::from_regex_and_strs(
+                            "^A",
+                            "{0} :o {1}",
+                            "{0}; {1}",
+                        )
+                        .unwrap(),
+                    ),
                 },
             ),
-            type_: Type::default(),
-            width: Width::default(),
         }
     }
 

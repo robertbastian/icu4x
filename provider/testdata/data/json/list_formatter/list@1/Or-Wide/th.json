@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": " หรือ ",
+        "insertion_points": [
+          0,
+          14
+        ]
+      }
+    }
+  }
+}

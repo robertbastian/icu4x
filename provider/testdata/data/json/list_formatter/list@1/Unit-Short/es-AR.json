@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "pair": {
+      "default": {
+        "string": " y ",
+        "insertion_points": [
+          0,
+          3
+        ]
+      }
+    }
+  }
+}

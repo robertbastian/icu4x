@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "start": {
+      "default": {
+        "string": "、",
+        "insertion_points": [
+          0,
+          3
+        ]
+      }
+    }
+  }
+}

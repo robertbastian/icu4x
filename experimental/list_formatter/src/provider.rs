@@ -6,9 +6,7 @@
 //!
 //! Read more about data providers: [`icu_provider`]
 
-use crate::options::{Type, Width};
 use alloc::borrow::Cow;
-use core::ops::Index;
 use icu_provider::yoke::{self, *};
 
 fn is_default<T: Default + PartialEq>(that: &T) -> bool {
@@ -33,82 +31,7 @@ pub mod key {
 pub struct ListFormatterPatternsV1<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
     #[serde(default, skip_serializing_if = "is_default")]
-    pub patterns: PatternTypes<'data>,
-}
-
-#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom, Default)]
-#[cfg_attr(
-    feature = "provider_serde",
-    derive(serde::Serialize, serde::Deserialize)
-)]
-pub struct PatternTypes<'data> {
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    #[serde(default, skip_serializing_if = "is_default")]
-    pub and: PatternSizes<'data>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    #[serde(default, skip_serializing_if = "is_default")]
-    pub or: PatternSizes<'data>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    #[serde(default, skip_serializing_if = "is_default")]
-    pub unit: PatternSizes<'data>,
-}
-
-impl<'data> Index<Type> for PatternTypes<'data> {
-    type Output = PatternSizes<'data>;
-    fn index(&self, type_: Type) -> &Self::Output {
-        match type_ {
-            Type::And => &self.and,
-            Type::Or => &self.or,
-            Type::Unit => &self.unit,
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom, Default)]
-#[cfg_attr(
-    feature = "provider_serde",
-    derive(serde::Serialize, serde::Deserialize)
-)]
-pub struct PatternSizes<'data> {
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    #[serde(default, skip_serializing_if = "is_default")]
-    wide: ListFormatterPattern<'data>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    #[serde(default, skip_serializing_if = "is_default")]
-    short: Option<ListFormatterPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    #[serde(default, skip_serializing_if = "is_default")]
-    narrow: Option<ListFormatterPattern<'data>>,
-}
-
-// The constructor and index define the fallback logic that is used for a more compact representation
-impl<'data> PatternSizes<'data> {
-    pub fn new(
-        wide: ListFormatterPattern<'data>,
-        short: ListFormatterPattern<'data>,
-        narrow: ListFormatterPattern<'data>,
-    ) -> Self {
-        Self {
-            narrow: if narrow == short { None } else { Some(narrow) },
-            short: if short == wide { None } else { Some(short) },
-            wide,
-        }
-    }
-}
-
-impl<'data> Index<Width> for PatternSizes<'data> {
-    type Output = ListFormatterPattern<'data>;
-    fn index(&self, width: Width) -> &Self::Output {
-        match width {
-            Width::Wide => &self.wide,
-            Width::Short => self.short.as_ref().unwrap_or(&self.wide),
-            Width::Narrow => self
-                .narrow
-                .as_ref()
-                .or(self.short.as_ref())
-                .unwrap_or(&self.wide),
-        }
-    }
+    pub patterns: ListFormatterPattern<'data>,
 }
 
 /// A collection of patterns that are needed to join a list

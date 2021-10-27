@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": " ili ",
+        "insertion_points": [
+          0,
+          5
+        ]
+      }
+    }
+  }
+}

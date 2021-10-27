@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "start": {
+      "default": {
+        "string": " أو ",
+        "insertion_points": [
+          0,
+          6
+        ]
+      }
+    }
+  }
+}

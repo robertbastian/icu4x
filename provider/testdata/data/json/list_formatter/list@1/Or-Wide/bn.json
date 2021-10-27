@@ -1,0 +1,22 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": ", বা ",
+        "insertion_points": [
+          0,
+          9
+        ]
+      }
+    },
+    "pair": {
+      "default": {
+        "string": " বা ",
+        "insertion_points": [
+          0,
+          8
+        ]
+      }
+    }
+  }
+}

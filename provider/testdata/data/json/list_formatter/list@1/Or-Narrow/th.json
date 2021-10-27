@@ -1,0 +1,22 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": " หรือ ",
+        "insertion_points": [
+          0,
+          14
+        ]
+      }
+    },
+    "pair": {
+      "default": {
+        "string": "หรือ",
+        "insertion_points": [
+          0,
+          12
+        ]
+      }
+    }
+  }
+}

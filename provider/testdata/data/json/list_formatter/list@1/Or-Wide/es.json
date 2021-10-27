@@ -1,0 +1,13 @@
+{
+  "patterns": {
+    "end": {
+      "default": {
+        "string": " o ",
+        "insertion_points": [
+          0,
+          3
+        ]
+      }
+    }
+  }
+}
