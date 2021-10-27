@@ -2,26 +2,6 @@
   "patterns": {
     "and": {
       "wide": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
         "end": {
           "default": {
             "string": ", and ",
@@ -29,8 +9,7 @@
               0,
               6
             ]
-          },
-          "special_case": null
+          }
         },
         "pair": {
           "default": {
@@ -39,31 +18,10 @@
               0,
               5
             ]
-          },
-          "special_case": null
+          }
         }
       },
       "short": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
         "end": {
           "default": {
             "string": ", & ",
@@ -71,8 +29,7 @@
               0,
               4
             ]
-          },
-          "special_case": null
+          }
         },
         "pair": {
           "default": {
@@ -81,75 +38,13 @@
               0,
               3
             ]
-          },
-          "special_case": null
+          }
         }
       },
-      "narrow": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        }
-      }
+      "narrow": {}
     },
     "or": {
       "wide": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
         "end": {
           "default": {
             "string": ", or ",
@@ -157,8 +52,7 @@
               0,
               5
             ]
-          },
-          "special_case": null
+          }
         },
         "pair": {
           "default": {
@@ -167,180 +61,11 @@
               0,
               4
             ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": ", or ",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " or ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "narrow": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": ", or ",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " or ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     },
     "unit": {
-      "wide": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        }
-      },
       "narrow": {
         "start": {
           "default": {
@@ -349,38 +74,7 @@
               0,
               1
             ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " ",
-            "insertion_points": [
-              0,
-              1
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " ",
-            "insertion_points": [
-              0,
-              1
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " ",
-            "insertion_points": [
-              0,
-              1
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     }

@@ -9,122 +9,7 @@
               0,
               3
             ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "narrow": {
-        "start": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     },
@@ -137,122 +22,7 @@
               0,
               6
             ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "narrow": {
-        "start": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " أو ",
-            "insertion_points": [
-              0,
-              6
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     },
@@ -265,28 +35,7 @@
               0,
               5
             ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": "، و",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": "، و",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
+          }
         },
         "pair": {
           "default": {
@@ -295,50 +44,7 @@
               0,
               3
             ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": "، و",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": "، و",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": "، و",
-            "insertion_points": [
-              0,
-              5
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
+          }
         }
       },
       "narrow": {
@@ -349,38 +55,7 @@
               0,
               3
             ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " و",
-            "insertion_points": [
-              0,
-              3
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     }

@@ -99,12 +99,12 @@ impl<'a> TryFrom<&cldr_serde::list_patterns_json::ListPattern> for ListFormatter
     type Error = icu_list::error::Error;
 
     fn try_from(other: &cldr_serde::list_patterns_json::ListPattern) -> Result<Self, Self::Error> {
-        Ok(Self {
-            start: other.start.parse()?,
-            middle: other.middle.parse()?,
-            end: other.end.parse()?,
-            pair: other.pair.parse()?,
-        })
+        Ok(Self::new(
+            other.start.parse()?,
+            other.middle.parse()?,
+            other.end.parse()?,
+            other.pair.parse()?,
+        ))
     }
 }
 
@@ -114,21 +114,21 @@ impl<'a> TryFrom<&cldr_serde::list_patterns_json::ListPatterns> for ListFormatte
     fn try_from(other: &cldr_serde::list_patterns_json::ListPatterns) -> Result<Self, Self::Error> {
         Ok(ListFormatterPatternsV1 {
             patterns: PatternTypes {
-                and: PatternSizes {
-                    wide: ListFormatterPattern::try_from(&other.standard)?,
-                    short: ListFormatterPattern::try_from(&other.standard_short)?,
-                    narrow: ListFormatterPattern::try_from(&other.standard_narrow)?,
-                },
-                or: PatternSizes {
-                    wide: ListFormatterPattern::try_from(&other.or)?,
-                    short: ListFormatterPattern::try_from(&other.or_short)?,
-                    narrow: ListFormatterPattern::try_from(&other.or_narrow)?,
-                },
-                unit: PatternSizes {
-                    wide: ListFormatterPattern::try_from(&other.unit)?,
-                    short: ListFormatterPattern::try_from(&other.unit_short)?,
-                    narrow: ListFormatterPattern::try_from(&other.unit_narrow)?,
-                },
+                and: PatternSizes::new(
+                    ListFormatterPattern::try_from(&other.standard)?,
+                    ListFormatterPattern::try_from(&other.standard_short)?,
+                    ListFormatterPattern::try_from(&other.standard_narrow)?,
+                ),
+                or: PatternSizes::new(
+                    ListFormatterPattern::try_from(&other.or)?,
+                    ListFormatterPattern::try_from(&other.or_short)?,
+                    ListFormatterPattern::try_from(&other.or_narrow)?,
+                ),
+                unit: PatternSizes::new(
+                    ListFormatterPattern::try_from(&other.unit)?,
+                    ListFormatterPattern::try_from(&other.unit_short)?,
+                    ListFormatterPattern::try_from(&other.unit_narrow)?,
+                ),
             },
         })
     }
@@ -136,6 +136,7 @@ impl<'a> TryFrom<&cldr_serde::list_patterns_json::ListPatterns> for ListFormatte
 
 #[test]
 fn test_basic() {
+    use icu_list::options::Width;
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
@@ -156,7 +157,7 @@ fn test_basic() {
         .unwrap();
 
     assert_eq!(
-        fr_list.get().patterns.and.wide.end,
-        "{0} et {1}".parse().unwrap()
+        fr_list.get().patterns.and[Width::Wide].pair(),
+        &"{0} et {1}".parse().unwrap()
     );
 }

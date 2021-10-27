@@ -2,26 +2,6 @@
   "patterns": {
     "and": {
       "wide": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
         "end": {
           "default": {
             "string": " et ",
@@ -29,127 +9,13 @@
               0,
               4
             ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " et ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
+          }
         }
       },
-      "short": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " et ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " et ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "narrow": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        }
-      }
+      "narrow": {}
     },
     "or": {
       "wide": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
         "end": {
           "default": {
             "string": " ou ",
@@ -157,127 +23,12 @@
               0,
               4
             ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " ou ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " ou ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " ou ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "narrow": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " ou ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " ou ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     },
     "unit": {
       "wide": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
         "end": {
           "default": {
             "string": " et ",
@@ -285,60 +36,7 @@
               0,
               4
             ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " et ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        }
-      },
-      "short": {
-        "start": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": ", ",
-            "insertion_points": [
-              0,
-              2
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " et ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " et ",
-            "insertion_points": [
-              0,
-              4
-            ]
-          },
-          "special_case": null
+          }
         }
       },
       "narrow": {
@@ -349,38 +47,7 @@
               0,
               1
             ]
-          },
-          "special_case": null
-        },
-        "middle": {
-          "default": {
-            "string": " ",
-            "insertion_points": [
-              0,
-              1
-            ]
-          },
-          "special_case": null
-        },
-        "end": {
-          "default": {
-            "string": " ",
-            "insertion_points": [
-              0,
-              1
-            ]
-          },
-          "special_case": null
-        },
-        "pair": {
-          "default": {
-            "string": " ",
-            "insertion_points": [
-              0,
-              1
-            ]
-          },
-          "special_case": null
+          }
         }
       }
     }

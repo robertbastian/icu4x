@@ -54,18 +54,22 @@ impl<'a> ListFormatter<'a> {
         match values.len() {
             0 => empty(),
             1 => single(values[0]),
-            2 => apply_pattern(values[0], &pattern.pair.parts(values[1]), single(values[1])),
+            2 => apply_pattern(
+                values[0],
+                &pattern.pair().parts(values[1]),
+                single(values[1]),
+            ),
             n => {
                 let mut builder = apply_pattern(
                     values[n - 2],
-                    &pattern.end.parts(values[n - 1]),
+                    &pattern.end().parts(values[n - 1]),
                     single(values[n - 1]),
                 );
                 for i in (1..n - 2).rev() {
                     builder =
-                        apply_pattern(values[i], &pattern.middle.parts(values[i + 1]), builder);
+                        apply_pattern(values[i], &pattern.middle().parts(values[i + 1]), builder);
                 }
-                apply_pattern(values[0], &pattern.start.parts(values[1]), builder)
+                apply_pattern(values[0], &pattern.start().parts(values[1]), builder)
             }
         }
     }
@@ -113,18 +117,15 @@ mod tests {
     const VALUES: &[&str] = &["one", "two", "three", "four", "five"];
 
     fn formatter<'data>() -> ListFormatter<'data> {
-        let pattern = ListFormatterPattern {
-            pair: ConditionalListJoinerPattern::from_regex_and_strs("^A", "{0} :o {1}", "{0}; {1}")
+        let pattern = ListFormatterPattern::new(
+            ConditionalListJoinerPattern::from_str("{0}: {1}").unwrap(),
+            ConditionalListJoinerPattern::from_str("{0}, {1}").unwrap(),
+            ConditionalListJoinerPattern::from_str("{0}. {1}!").unwrap(),
+            ConditionalListJoinerPattern::from_regex_and_strs("^A", "{0} :o {1}", "{0}; {1}")
                 .unwrap(),
-            start: ConditionalListJoinerPattern::from_str("{0}: {1}").unwrap(),
-            middle: ConditionalListJoinerPattern::from_str("{0}, {1}").unwrap(),
-            end: ConditionalListJoinerPattern::from_str("{0}. {1}!").unwrap(),
-        };
-        let pattern_sizes = PatternSizes {
-            wide: pattern.clone(),
-            narrow: pattern.clone(),
-            short: pattern,
-        };
+        );
+
+        let pattern_sizes = PatternSizes::new(pattern.clone(), pattern.clone(), pattern.clone());
         ListFormatter {
             data: DataPayload::<ListFormatterPatternsV1Marker>::from_owned(
                 ListFormatterPatternsV1 {

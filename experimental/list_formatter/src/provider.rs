@@ -11,6 +11,10 @@ use alloc::borrow::Cow;
 use core::ops::Index;
 use icu_provider::yoke::{self, *};
 
+fn is_default<T: Default + PartialEq>(that: &T) -> bool {
+    &T::default() == that
+}
+
 pub mod key {
     //! Resource keys for [`list_formatter`](crate).
     use icu_provider::{resource_key, ResourceKey};
@@ -28,20 +32,24 @@ pub mod key {
 )]
 pub struct ListFormatterPatternsV1<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub patterns: PatternTypes<'data>,
 }
 
-#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom, Default)]
 #[cfg_attr(
     feature = "provider_serde",
     derive(serde::Serialize, serde::Deserialize)
 )]
 pub struct PatternTypes<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub and: PatternSizes<'data>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub or: PatternSizes<'data>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub unit: PatternSizes<'data>,
 }
 
@@ -56,18 +64,36 @@ impl<'data> Index<Type> for PatternTypes<'data> {
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom, Default)]
 #[cfg_attr(
     feature = "provider_serde",
     derive(serde::Serialize, serde::Deserialize)
 )]
 pub struct PatternSizes<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub wide: ListFormatterPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    wide: ListFormatterPattern<'data>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub short: ListFormatterPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    short: Option<ListFormatterPattern<'data>>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub narrow: ListFormatterPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    narrow: Option<ListFormatterPattern<'data>>,
+}
+
+// The constructor and index define the fallback logic that is used for a more compact representation
+impl<'data> PatternSizes<'data> {
+    pub fn new(
+        wide: ListFormatterPattern<'data>,
+        short: ListFormatterPattern<'data>,
+        narrow: ListFormatterPattern<'data>,
+    ) -> Self {
+        Self {
+            narrow: if narrow == short { None } else { Some(narrow) },
+            short: if short == wide { None } else { Some(short) },
+            wide,
+        }
+    }
 }
 
 impl<'data> Index<Width> for PatternSizes<'data> {
@@ -75,31 +101,75 @@ impl<'data> Index<Width> for PatternSizes<'data> {
     fn index(&self, width: Width) -> &Self::Output {
         match width {
             Width::Wide => &self.wide,
-            Width::Short => &self.short,
-            Width::Narrow => &self.narrow,
+            Width::Short => self.short.as_ref().unwrap_or(&self.wide),
+            Width::Narrow => self
+                .narrow
+                .as_ref()
+                .or(self.short.as_ref())
+                .unwrap_or(&self.wide),
         }
     }
 }
 
 /// A collection of patterns that are needed to join a list
-#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom, Default)]
 #[cfg_attr(
     feature = "provider_serde",
     derive(serde::Serialize, serde::Deserialize)
 )]
 pub struct ListFormatterPattern<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub start: ConditionalListJoinerPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    start: ConditionalListJoinerPattern<'data>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub middle: ConditionalListJoinerPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    middle: Option<ConditionalListJoinerPattern<'data>>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub end: ConditionalListJoinerPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    end: Option<ConditionalListJoinerPattern<'data>>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pub pair: ConditionalListJoinerPattern<'data>,
+    #[serde(default, skip_serializing_if = "is_default")]
+    pair: Option<ConditionalListJoinerPattern<'data>>,
+}
+
+// The constructor and getters define the fallback logic that is used for a more compact representation
+impl<'data> ListFormatterPattern<'data> {
+    pub fn new(
+        start: ConditionalListJoinerPattern<'data>,
+        middle: ConditionalListJoinerPattern<'data>,
+        end: ConditionalListJoinerPattern<'data>,
+        pair: ConditionalListJoinerPattern<'data>,
+    ) -> Self {
+        Self {
+            // Pair is usually the same as end, so it falls back
+            pair: if pair == end { None } else { Some(pair) },
+            // End is sometimes the same as middle/start, so let's make it fall back
+            end: if end == start { None } else { Some(end) },
+            // Middle is usually the same as start, so it falls back
+            middle: if middle == start { None } else { Some(middle) },
+            start,
+        }
+    }
+
+    pub fn start(&self) -> &ConditionalListJoinerPattern<'data> {
+        &self.start
+    }
+
+    pub fn middle(&self) -> &ConditionalListJoinerPattern<'data> {
+        self.middle.as_ref().unwrap_or(&self.start)
+    }
+
+    pub fn end(&self) -> &ConditionalListJoinerPattern<'data> {
+        self.end.as_ref().unwrap_or(&self.start)
+    }
+
+    pub fn pair(&self) -> &ConditionalListJoinerPattern<'data> {
+        self.pair.as_ref().unwrap_or_else(|| self.end())
+    }
 }
 
 /// A pattern that can behave conditionally on the next element.
-#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Debug, PartialEq, Clone, Yokeable, ZeroCopyFrom, Default)]
 #[cfg_attr(
     feature = "provider_serde",
     derive(serde::Serialize, serde::Deserialize)
@@ -108,6 +178,7 @@ pub struct ConditionalListJoinerPattern<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
     default: ListJoinerPattern<'data>,
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    #[serde(default, skip_serializing_if = "is_default")]
     special_case: Option<SpecialCasePattern<'data>>,
 }
 
@@ -135,6 +206,17 @@ struct ListJoinerPattern<'data> {
     string: Cow<'data, str>,
     /// The indices of the two placeholders
     insertion_points: [usize; 2],
+}
+
+// The Latin comma is the most common pattern, so we make it the default
+// to never have to serialize it.
+impl<'a> Default for ListJoinerPattern<'a> {
+    fn default() -> Self {
+        Self {
+            string: Cow::Borrowed(", "),
+            insertion_points: [0, 2],
+        }
+    }
 }
 
 pub type PatternParts<'a> = (&'a str, &'a str, &'a str);
@@ -232,5 +314,41 @@ mod test {
                 .unwrap();
         assert_eq!(pattern.parts("a"), ("a", "b", "c"));
         assert_eq!(pattern.parts("b"), ("c", "d", "e"));
+    }
+
+    #[test]
+    fn fallbacks_work() {
+        let comma = ConditionalListJoinerPattern::default();
+        let period = ConditionalListJoinerPattern::from_str("{0}. {1}").unwrap();
+        let semicolon = ConditionalListJoinerPattern::from_str("{0}; {1}").unwrap();
+        let colon = ConditionalListJoinerPattern::from_str("{0}: {1}").unwrap();
+
+        // Different fields are returned correctly
+        let pattern = ListFormatterPattern::new(
+            comma.clone(),
+            period.clone(),
+            semicolon.clone(),
+            colon.clone(),
+        );
+        assert_eq!(pattern.start(), &comma);
+        assert_eq!(pattern.middle(), &period);
+        assert_eq!(pattern.end(), &semicolon);
+        assert_eq!(pattern.pair(), &colon);
+
+        // Same fields are returned correctly
+        let pattern =
+            ListFormatterPattern::new(comma.clone(), comma.clone(), comma.clone(), comma.clone());
+        assert_eq!(pattern.start(), &comma);
+        assert_eq!(pattern.middle(), &comma);
+        assert_eq!(pattern.end(), &comma);
+        assert_eq!(pattern.pair(), &comma);
+
+        // Pair/end fallback works correctly
+        let pattern =
+            ListFormatterPattern::new(comma.clone(), comma.clone(), period.clone(), period.clone());
+        assert_eq!(pattern.start(), &comma);
+        assert_eq!(pattern.middle(), &comma);
+        assert_eq!(pattern.end(), &period);
+        assert_eq!(pattern.pair(), &period);
     }
 }
