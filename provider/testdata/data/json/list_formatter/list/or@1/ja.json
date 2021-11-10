@@ -1,44 +1,31 @@
 {
-  "start": {
-    "default": {
-      "string": "、",
-      "index_1": 3
+  "patterns": [
+    {
+      "default": {
+        "string": "、または",
+        "index_1": 12
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "middle": null,
-  "end": {
-    "default": {
-      "string": "、または",
-      "index_1": 12
+    {
+      "default": {
+        "string": "または",
+        "index_1": 9
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "pair": {
-    "default": {
-      "string": "または",
-      "index_1": 9
-    },
-    "special_case": null
-  },
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": {
-    "default": {
-      "string": "または",
-      "index_1": 9
-    },
-    "special_case": null
-  },
-  "narrow_start": null,
-  "narrow_middle": null,
-  "narrow_end": null,
-  "narrow_pair": {
-    "default": {
-      "string": "または",
-      "index_1": 9
-    },
-    "special_case": null
-  }
+    {
+      "default": {
+        "string": "、",
+        "index_1": 3
+      },
+      "special_case": null
+    }
+  ],
+  "start_middle": 51,
+  "end_pair": 18,
+  "short_start_middle": 51,
+  "short_end_pair": 18,
+  "narrow_start_middle": 51,
+  "narrow_end_pair": 18
 }

@@ -1,56 +1,30 @@
 {
-  "start": null,
-  "middle": null,
-  "end": {
-    "default": {
-      "string": " y ",
-      "index_1": 3
-    },
-    "special_case": {
-      "condition": "(?i)^(i|hi([^ae]|$))",
-      "pattern": {
-        "string": " e ",
+  "patterns": [
+    {
+      "default": {
+        "string": " y ",
         "index_1": 3
+      },
+      "special_case": {
+        "condition": "(?i)^(i|hi([^ae]|$))",
+        "pattern": {
+          "string": " e ",
+          "index_1": 3
+        }
       }
+    },
+    {
+      "default": {
+        "string": " ",
+        "index_1": 1
+      },
+      "special_case": null
     }
-  },
-  "pair": null,
-  "short_start": null,
-  "short_middle": null,
-  "short_end": {
-    "default": {
-      "string": ", ",
-      "index_1": 2
-    },
-    "special_case": null
-  },
-  "short_pair": {
-    "default": {
-      "string": " y ",
-      "index_1": 3
-    },
-    "special_case": {
-      "condition": "(?i)^(i|hi([^ae]|$))",
-      "pattern": {
-        "string": " e ",
-        "index_1": 3
-      }
-    }
-  },
-  "narrow_start": {
-    "default": {
-      "string": " ",
-      "index_1": 1
-    },
-    "special_case": null
-  },
-  "narrow_middle": null,
-  "narrow_end": {
-    "default": {
-      "string": " ",
-      "index_1": 1
-    },
-    "special_case": null
-  },
-  "narrow_pair": null
+  ],
+  "start_middle": 0,
+  "end_pair": 17,
+  "short_start_middle": 0,
+  "short_end_pair": 1,
+  "narrow_start_middle": 34,
+  "narrow_end_pair": 34
 }

@@ -1,26 +1,17 @@
 {
-  "start": null,
-  "middle": null,
-  "end": null,
-  "pair": null,
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": null,
-  "narrow_start": {
-    "default": {
-      "string": " ",
-      "index_1": 1
-    },
-    "special_case": null
-  },
-  "narrow_middle": null,
-  "narrow_end": {
-    "default": {
-      "string": " ",
-      "index_1": 1
-    },
-    "special_case": null
-  },
-  "narrow_pair": null
+  "patterns": [
+    {
+      "default": {
+        "string": " ",
+        "index_1": 1
+      },
+      "special_case": null
+    }
+  ],
+  "start_middle": 0,
+  "end_pair": 0,
+  "short_start_middle": 0,
+  "short_end_pair": 0,
+  "narrow_start_middle": 17,
+  "narrow_end_pair": 17
 }

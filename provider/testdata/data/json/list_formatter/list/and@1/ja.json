@@ -1,20 +1,17 @@
 {
-  "start": {
-    "default": {
-      "string": "、",
-      "index_1": 3
-    },
-    "special_case": null
-  },
-  "middle": null,
-  "end": null,
-  "pair": null,
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": null,
-  "narrow_start": null,
-  "narrow_middle": null,
-  "narrow_end": null,
-  "narrow_pair": null
+  "patterns": [
+    {
+      "default": {
+        "string": "、",
+        "index_1": 3
+      },
+      "special_case": null
+    }
+  ],
+  "start_middle": 17,
+  "end_pair": 17,
+  "short_start_middle": 17,
+  "short_end_pair": 17,
+  "narrow_start_middle": 17,
+  "narrow_end_pair": 17
 }

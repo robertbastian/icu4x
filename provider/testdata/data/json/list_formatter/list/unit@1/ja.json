@@ -1,32 +1,24 @@
 {
-  "start": {
-    "default": {
-      "string": " ",
-      "index_1": 1
+  "patterns": [
+    {
+      "default": {
+        "string": "",
+        "index_1": 0
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "middle": null,
-  "end": null,
-  "pair": null,
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": null,
-  "narrow_start": {
-    "default": {
-      "string": "",
-      "index_1": 0
-    },
-    "special_case": null
-  },
-  "narrow_middle": null,
-  "narrow_end": {
-    "default": {
-      "string": "",
-      "index_1": 0
-    },
-    "special_case": null
-  },
-  "narrow_pair": null
+    {
+      "default": {
+        "string": " ",
+        "index_1": 1
+      },
+      "special_case": null
+    }
+  ],
+  "start_middle": 34,
+  "end_pair": 34,
+  "short_start_middle": 34,
+  "short_end_pair": 34,
+  "narrow_start_middle": 17,
+  "narrow_end_pair": 17
 }

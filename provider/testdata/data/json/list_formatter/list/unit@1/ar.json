@@ -1,44 +1,24 @@
 {
-  "start": {
-    "default": {
-      "string": "، و",
-      "index_1": 5
+  "patterns": [
+    {
+      "default": {
+        "string": " و",
+        "index_1": 3
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "middle": null,
-  "end": null,
-  "pair": {
-    "default": {
-      "string": " و",
-      "index_1": 3
-    },
-    "special_case": null
-  },
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": {
-    "default": {
-      "string": " و",
-      "index_1": 3
-    },
-    "special_case": null
-  },
-  "narrow_start": {
-    "default": {
-      "string": " و",
-      "index_1": 3
-    },
-    "special_case": null
-  },
-  "narrow_middle": null,
-  "narrow_end": {
-    "default": {
-      "string": " و",
-      "index_1": 3
-    },
-    "special_case": null
-  },
-  "narrow_pair": null
+    {
+      "default": {
+        "string": "، و",
+        "index_1": 5
+      },
+      "special_case": null
+    }
+  ],
+  "start_middle": 34,
+  "end_pair": 33,
+  "short_start_middle": 34,
+  "short_end_pair": 33,
+  "narrow_start_middle": 17,
+  "narrow_end_pair": 17
 }
