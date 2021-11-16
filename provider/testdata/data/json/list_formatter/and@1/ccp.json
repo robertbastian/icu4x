@@ -1,20 +1,22 @@
 {
-  "start": null,
-  "middle": null,
-  "end": {
-    "default": {
-      "string": " 𑄃𑄳𑄃 ",
-      "index_1": 14
+  "patterns": [
+    null,
+    null,
+    {
+      "default": {
+        "string": " 𑄃𑄳𑄃 ",
+        "index_1": 14
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "pair": null,
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": null,
-  "narrow_start": null,
-  "narrow_middle": null,
-  "narrow_end": null,
-  "narrow_pair": null
+    "End",
+    null,
+    null,
+    "End",
+    "End",
+    null,
+    null,
+    "End",
+    "End"
+  ]
 }

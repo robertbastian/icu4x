@@ -22,155 +22,98 @@ pub mod key {
 
 /// Symbols and metadata required for [`ListFormatter`](crate::ListFormatter).
 /// Absent values follow this fallback structure:
-/// ", " - start - middle
-///            |-- end - pair
-///            |     \ short_end - short_pair
-///            |               \ narrow_end - narrow_pair
-///             \ short_start - short_middle
-///                         \ narrow_start <- narrow_middle
 #[icu_provider::data_struct]
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug)]
 #[cfg_attr(
     feature = "provider_serde",
-    derive(serde::Serialize, serde::Deserialize)
+    derive(serde::Deserialize, serde::Serialize)
 )]
 pub struct ListFormatterPatternsV1<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    start: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    middle: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    end: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    pair: Option<ConditionalListJoinerPattern<'data>>,
-
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    short_start: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    short_middle: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    short_end: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    short_pair: Option<ConditionalListJoinerPattern<'data>>,
-
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    narrow_start: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    narrow_middle: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    narrow_end: Option<ConditionalListJoinerPattern<'data>>,
-    #[cfg_attr(feature = "provider_serde", serde(borrow))]
-    narrow_pair: Option<ConditionalListJoinerPattern<'data>>,
+    patterns: [OptimizedConditionalListJoinerPattern<'data>; 12],
 }
 
-macro_rules! fallback {
-    ( $from:ident, $to:expr  ) => {
-        if $from == $to {
-            None
-        } else {
-            Some($from)
-        }
-    };
+#[derive(Debug, Yokeable, ZeroCopyFrom)]
+#[cfg_attr(
+    feature = "provider_serde",
+    derive(serde::Deserialize, serde::Serialize)
+)]
+#[serde(untagged)]
+enum OptimizedConditionalListJoinerPattern<'data> {
+    Comma,
+    #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    Value(ConditionalListJoinerPattern<'data>),
+    Fallback(Field),
 }
-macro_rules! or {
-    ($from:expr $(,$to:expr)*) => {
-        {
-            #[allow(unused_mut)]
-            let mut res = $from.as_ref();
-            $(
-                res = res.or($to.as_ref());
-            )*
-            res.unwrap_or_default()
-        }
-    };
+
+#[derive(Clone, Copy, Debug, Yokeable, ZeroCopyFrom)]
+#[cfg_attr(
+    feature = "provider_serde",
+    derive(serde::Deserialize, serde::Serialize)
+)]
+enum Field {
+    Start,
+    Middle,
+    End,
+    Pair,
+    ShortStart,
+    ShortMiddle,
+    ShortEnd,
+    ShortPair,
+    NarrowStart,
+    NarrowMiddle,
+    NarrowEnd,
+    NarrowPair,
 }
+
 impl<'data> ListFormatterPatternsV1<'data> {
-    #[allow(clippy::too_many_arguments)] // same as constructor
-    pub fn new(
-        start: ConditionalListJoinerPattern<'data>,
-        middle: ConditionalListJoinerPattern<'data>,
-        end: ConditionalListJoinerPattern<'data>,
-        pair: ConditionalListJoinerPattern<'data>,
-        short_start: ConditionalListJoinerPattern<'data>,
-        short_middle: ConditionalListJoinerPattern<'data>,
-        short_end: ConditionalListJoinerPattern<'data>,
-        short_pair: ConditionalListJoinerPattern<'data>,
-        narrow_start: ConditionalListJoinerPattern<'data>,
-        narrow_middle: ConditionalListJoinerPattern<'data>,
-        narrow_end: ConditionalListJoinerPattern<'data>,
-        narrow_pair: ConditionalListJoinerPattern<'data>,
-    ) -> Self {
-        Self {
-            narrow_pair: fallback!(narrow_pair, narrow_end),
-            narrow_end: fallback!(narrow_end, short_end),
-            narrow_middle: fallback!(narrow_middle, narrow_start),
-            narrow_start: fallback!(narrow_start, short_start),
-
-            short_pair: fallback!(short_pair, short_end),
-            short_end: fallback!(short_end, end),
-            short_middle: fallback!(short_middle, short_start),
-            short_start: fallback!(short_start, start),
-
-            pair: fallback!(pair, end),
-            end: fallback!(end, start),
-            middle: fallback!(middle, start),
-            start: fallback!(start, *<&ConditionalListJoinerPattern>::default()),
+    fn get(&self, field: Field) -> &ConditionalListJoinerPattern<'data> {
+        match &self.patterns[field as usize] {
+            OptimizedConditionalListJoinerPattern::Comma => Default::default(),
+            OptimizedConditionalListJoinerPattern::Value(pattern) => pattern,
+            // Valid structs will only have one layer of indirection.
+            OptimizedConditionalListJoinerPattern::Fallback(fallback) => self.get(*fallback),
         }
     }
 
-    pub fn start(&self, width: Width) -> &ConditionalListJoinerPattern<'data> {
-        match width {
-            Width::Wide => or!(self.start),
-            Width::Short => or!(self.short_start, self.start),
-            Width::Narrow => or!(self.narrow_start, self.short_start, self.start),
-        }
+    pub fn start(&'data self, width: Width) -> &ConditionalListJoinerPattern<'data> {
+        self.get(match width {
+            Width::Wide => Field::Start,
+            Width::Short => Field::ShortStart,
+            Width::Narrow => Field::NarrowStart,
+        })
     }
 
-    pub fn middle(&self, width: Width) -> &ConditionalListJoinerPattern<'data> {
-        match width {
-            Width::Wide => or!(self.middle, self.start),
-            Width::Short => or!(self.short_middle, self.short_start, self.start),
-            Width::Narrow => or!(
-                self.narrow_middle,
-                self.narrow_start,
-                self.short_start,
-                self.start
-            ),
-        }
+    pub fn middle(&'data self, width: Width) -> &ConditionalListJoinerPattern<'data> {
+        self.get(match width {
+            Width::Wide => Field::Middle,
+            Width::Short => Field::ShortMiddle,
+            Width::Narrow => Field::NarrowMiddle,
+        })
     }
 
-    pub fn end(&self, width: Width) -> &ConditionalListJoinerPattern<'data> {
-        match width {
-            Width::Wide => or!(self.end, self.start),
-            Width::Short => or!(self.short_end, self.end, self.start),
-            Width::Narrow => {
-                or!(self.narrow_end, self.short_end, self.end, self.start)
-            }
-        }
+    pub fn end(&'data self, width: Width) -> &ConditionalListJoinerPattern<'data> {
+        self.get(match width {
+            Width::Wide => Field::End,
+            Width::Short => Field::ShortEnd,
+            Width::Narrow => Field::NarrowEnd,
+        })
     }
 
-    pub fn pair(&self, width: Width) -> &ConditionalListJoinerPattern<'data> {
-        match width {
-            Width::Wide => or!(self.pair, self.end, self.start),
-            Width::Short => {
-                or!(self.short_pair, self.short_end, self.end, self.start)
-            }
-            Width::Narrow => or!(
-                self.narrow_pair,
-                self.narrow_end,
-                self.short_end,
-                self.end,
-                self.start
-            ),
-        }
+    pub fn pair(&'data self, width: Width) -> &ConditionalListJoinerPattern<'data> {
+        self.get(match width {
+            Width::Wide => Field::Pair,
+            Width::Short => Field::ShortPair,
+            Width::Narrow => Field::NarrowPair,
+        })
     }
 }
 
 /// A pattern that can behave conditionally on the next element.
-#[derive(Debug, PartialEq, Eq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, Yokeable, ZeroCopyFrom)]
 #[cfg_attr(
     feature = "provider_serde",
-    derive(serde::Serialize, serde::Deserialize)
+    derive(serde::Deserialize, serde::Serialize)
 )]
 pub struct ConditionalListJoinerPattern<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
@@ -192,10 +135,10 @@ impl<'data> Default for &ConditionalListJoinerPattern<'data> {
 }
 
 /// A pattern that can behave conditionally on the next element.
-#[derive(Debug, PartialEq, Eq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, Yokeable, ZeroCopyFrom)]
 #[cfg_attr(
     feature = "provider_serde",
-    derive(serde::Serialize, serde::Deserialize)
+    derive(serde::Deserialize, serde::Serialize)
 )]
 struct SpecialCasePattern<'data> {
     #[cfg_attr(feature = "provider_serde", serde(borrow))]
@@ -205,10 +148,10 @@ struct SpecialCasePattern<'data> {
 }
 
 /// A pattern containing two numeric placeholders ("{0}, and {1}.")
-#[derive(Debug, PartialEq, Eq, Clone, Yokeable, ZeroCopyFrom)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, Yokeable, ZeroCopyFrom)]
 #[cfg_attr(
     feature = "provider_serde",
-    derive(serde::Serialize, serde::Deserialize)
+    derive(serde::Deserialize, serde::Serialize)
 )]
 struct ListJoinerPattern<'data> {
     /// The pattern string without the placeholders
@@ -247,7 +190,66 @@ impl<'a> ConditionalListJoinerPattern<'a> {
 pub mod pattern_construction {
     use super::*;
     use crate::error::Error;
-    use core::str::FromStr;
+    use std::collections::HashMap;
+    use std::str::FromStr;
+
+    impl<'data> Default for OptimizedConditionalListJoinerPattern<'data> {
+        fn default() -> Self {
+            OptimizedConditionalListJoinerPattern::Comma
+        }
+    }
+
+    impl<'data> ListFormatterPatternsV1<'data> {
+        #[allow(clippy::too_many_arguments)] // We don't want to expose the Field enum
+        pub fn new(
+            start: ConditionalListJoinerPattern<'data>,
+            middle: ConditionalListJoinerPattern<'data>,
+            end: ConditionalListJoinerPattern<'data>,
+            pair: ConditionalListJoinerPattern<'data>,
+            short_start: ConditionalListJoinerPattern<'data>,
+            short_middle: ConditionalListJoinerPattern<'data>,
+            short_end: ConditionalListJoinerPattern<'data>,
+            short_pair: ConditionalListJoinerPattern<'data>,
+            narrow_start: ConditionalListJoinerPattern<'data>,
+            narrow_middle: ConditionalListJoinerPattern<'data>,
+            narrow_end: ConditionalListJoinerPattern<'data>,
+            narrow_pair: ConditionalListJoinerPattern<'data>,
+        ) -> Self {
+            let mut pattern_to_fields: HashMap<ConditionalListJoinerPattern<'data>, Vec<Field>> =
+                HashMap::new();
+            for (pattern, field) in [
+                (start, Field::Start),
+                (middle, Field::Middle),
+                (end, Field::End),
+                (pair, Field::Pair),
+                (short_start, Field::ShortStart),
+                (short_middle, Field::ShortMiddle),
+                (short_end, Field::ShortEnd),
+                (short_pair, Field::ShortPair),
+                (narrow_start, Field::NarrowStart),
+                (narrow_middle, Field::NarrowMiddle),
+                (narrow_end, Field::NarrowEnd),
+                (narrow_pair, Field::NarrowPair),
+            ] {
+                pattern_to_fields.entry(pattern).or_default().push(field);
+            }
+            pattern_to_fields.remove(Default::default());
+
+            let mut patterns: [OptimizedConditionalListJoinerPattern; 12] = Default::default();
+
+            for (pattern, mut fields) in pattern_to_fields {
+                let representative = fields.remove(0);
+                patterns[representative as usize] =
+                    OptimizedConditionalListJoinerPattern::Value(pattern);
+                for field in fields {
+                    patterns[field as usize] =
+                        OptimizedConditionalListJoinerPattern::Fallback(representative);
+                }
+            }
+
+            Self { patterns }
+        }
+    }
 
     impl<'data> FromStr for ListJoinerPattern<'data> {
         type Err = Error;
@@ -311,7 +313,7 @@ mod test {
 
     #[test]
     fn fallbacks_work() {
-        let comma = <&ConditionalListJoinerPattern>::default().clone();
+        let comma = ConditionalListJoinerPattern::from_str("{0}, {1}").unwrap();
         let period = ConditionalListJoinerPattern::from_str("{0}. {1}").unwrap();
         let semicolon = ConditionalListJoinerPattern::from_str("{0}; {1}").unwrap();
         let colon = ConditionalListJoinerPattern::from_str("{0}: {1}").unwrap();
@@ -332,48 +334,16 @@ mod test {
             colon.clone(),
         );
         assert_eq!(pattern.start(Width::Wide), &comma);
+        assert_eq!(pattern.start(Width::Short), &comma);
+        assert_eq!(pattern.start(Width::Narrow), &comma);
         assert_eq!(pattern.middle(Width::Wide), &period);
+        assert_eq!(pattern.middle(Width::Short), &period);
+        assert_eq!(pattern.middle(Width::Narrow), &period);
         assert_eq!(pattern.end(Width::Wide), &semicolon);
+        assert_eq!(pattern.end(Width::Short), &semicolon);
+        assert_eq!(pattern.end(Width::Narrow), &semicolon);
         assert_eq!(pattern.pair(Width::Wide), &colon);
-
-        // Same fields are returned correctly
-        let pattern = ListFormatterPatternsV1::new(
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-            comma.clone(),
-        );
-        assert_eq!(pattern.start(Width::Wide), &comma);
-        assert_eq!(pattern.middle(Width::Wide), &comma);
-        assert_eq!(pattern.end(Width::Wide), &comma);
-        assert_eq!(pattern.pair(Width::Wide), &comma);
-
-        // Pair/end fallback works correctly
-        let pattern = ListFormatterPatternsV1::new(
-            comma.clone(),
-            comma.clone(),
-            period.clone(),
-            period.clone(),
-            comma.clone(),
-            comma.clone(),
-            period.clone(),
-            period.clone(),
-            comma.clone(),
-            comma.clone(),
-            period.clone(),
-            period.clone(),
-        );
-        assert_eq!(pattern.start(Width::Wide), &comma);
-        assert_eq!(pattern.middle(Width::Wide), &comma);
-        assert_eq!(pattern.end(Width::Wide), &period);
-        assert_eq!(pattern.pair(Width::Wide), &period);
+        assert_eq!(pattern.pair(Width::Short), &colon);
+        assert_eq!(pattern.pair(Width::Narrow), &colon);
     }
 }

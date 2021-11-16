@@ -1,32 +1,28 @@
 {
-  "start": {
-    "default": {
-      "string": " ",
-      "index_1": 1
+  "patterns": [
+    {
+      "default": {
+        "string": " ",
+        "index_1": 1
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "middle": null,
-  "end": null,
-  "pair": null,
-  "short_start": null,
-  "short_middle": null,
-  "short_end": null,
-  "short_pair": null,
-  "narrow_start": {
-    "default": {
-      "string": "",
-      "index_1": 0
+    "Start",
+    "Start",
+    "Start",
+    "Start",
+    "Start",
+    "Start",
+    "Start",
+    {
+      "default": {
+        "string": "",
+        "index_1": 0
+      },
+      "special_case": null
     },
-    "special_case": null
-  },
-  "narrow_middle": null,
-  "narrow_end": {
-    "default": {
-      "string": "",
-      "index_1": 0
-    },
-    "special_case": null
-  },
-  "narrow_pair": null
+    "NarrowStart",
+    "NarrowStart",
+    "NarrowStart"
+  ]
 }
