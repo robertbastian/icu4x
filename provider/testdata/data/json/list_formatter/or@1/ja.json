@@ -1,34 +1,32 @@
-{
-  "patterns": [
-    {
-      "default": {
-        "string": "、",
-        "index_1": 3
-      },
-      "special_case": null
+[
+  {
+    "default": {
+      "string": "、",
+      "index_1": 3
     },
-    "Start",
-    {
-      "default": {
-        "string": "、または",
-        "index_1": 12
-      },
-      "special_case": null
+    "special_case": null
+  },
+  0,
+  {
+    "default": {
+      "string": "、または",
+      "index_1": 12
     },
-    {
-      "default": {
-        "string": "または",
-        "index_1": 9
-      },
-      "special_case": null
+    "special_case": null
+  },
+  {
+    "default": {
+      "string": "または",
+      "index_1": 9
     },
-    "Start",
-    "Start",
-    "End",
-    "Pair",
-    "Start",
-    "Start",
-    "End",
-    "Pair"
-  ]
-}
+    "special_case": null
+  },
+  0,
+  0,
+  2,
+  3,
+  0,
+  0,
+  2,
+  3
+]

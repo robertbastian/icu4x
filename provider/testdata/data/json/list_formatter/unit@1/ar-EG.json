@@ -1,28 +1,26 @@
-{
-  "patterns": [
-    {
-      "default": {
-        "string": "، و",
-        "index_1": 5
-      },
-      "special_case": null
+[
+  {
+    "default": {
+      "string": "، و",
+      "index_1": 5
     },
-    "Start",
-    "Start",
-    {
-      "default": {
-        "string": " و",
-        "index_1": 3
-      },
-      "special_case": null
+    "special_case": null
+  },
+  0,
+  0,
+  {
+    "default": {
+      "string": " و",
+      "index_1": 3
     },
-    "Start",
-    "Start",
-    "Start",
-    "Pair",
-    "Pair",
-    "Pair",
-    "Pair",
-    "Pair"
-  ]
-}
+    "special_case": null
+  },
+  0,
+  0,
+  0,
+  3,
+  3,
+  3,
+  3,
+  3
+]

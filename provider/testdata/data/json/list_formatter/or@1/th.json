@@ -1,28 +1,32 @@
-{
-  "patterns": [
-    null,
-    null,
-    {
-      "default": {
-        "string": " หรือ ",
-        "index_1": 14
-      },
-      "special_case": null
+[
+  {
+    "default": {
+      "string": ", ",
+      "index_1": 2
     },
-    "End",
-    null,
-    null,
-    "End",
-    {
-      "default": {
-        "string": "หรือ",
-        "index_1": 12
-      },
-      "special_case": null
+    "special_case": null
+  },
+  0,
+  {
+    "default": {
+      "string": " หรือ ",
+      "index_1": 14
     },
-    null,
-    null,
-    "End",
-    "ShortPair"
-  ]
-}
+    "special_case": null
+  },
+  2,
+  0,
+  0,
+  2,
+  {
+    "default": {
+      "string": "หรือ",
+      "index_1": 12
+    },
+    "special_case": null
+  },
+  0,
+  0,
+  2,
+  7
+]

@@ -1,34 +1,32 @@
-{
-  "patterns": [
-    {
-      "default": {
-        "string": " ",
-        "index_1": 1
-      },
-      "special_case": null
+[
+  {
+    "default": {
+      "string": " ",
+      "index_1": 1
     },
-    "Start",
-    {
-      "default": {
-        "string": " และ",
-        "index_1": 10
-      },
-      "special_case": null
+    "special_case": null
+  },
+  0,
+  {
+    "default": {
+      "string": " และ",
+      "index_1": 10
     },
-    {
-      "default": {
-        "string": "และ",
-        "index_1": 9
-      },
-      "special_case": null
+    "special_case": null
+  },
+  {
+    "default": {
+      "string": "และ",
+      "index_1": 9
     },
-    "Start",
-    "Start",
-    "End",
-    "Pair",
-    "Start",
-    "Start",
-    "End",
-    "Pair"
-  ]
-}
+    "special_case": null
+  },
+  0,
+  0,
+  2,
+  3,
+  0,
+  0,
+  2,
+  3
+]

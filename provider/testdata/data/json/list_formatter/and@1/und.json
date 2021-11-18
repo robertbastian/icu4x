@@ -1,16 +1,20 @@
-{
-  "patterns": [
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-  ]
-}
+[
+  {
+    "default": {
+      "string": ", ",
+      "index_1": 2
+    },
+    "special_case": null
+  },
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+]

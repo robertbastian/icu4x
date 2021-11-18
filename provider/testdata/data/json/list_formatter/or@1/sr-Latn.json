@@ -1,22 +1,26 @@
-{
-  "patterns": [
-    null,
-    null,
-    {
-      "default": {
-        "string": " ili ",
-        "index_1": 5
-      },
-      "special_case": null
+[
+  {
+    "default": {
+      "string": ", ",
+      "index_1": 2
     },
-    "End",
-    null,
-    null,
-    "End",
-    "End",
-    null,
-    null,
-    "End",
-    "End"
-  ]
-}
+    "special_case": null
+  },
+  0,
+  {
+    "default": {
+      "string": " ili ",
+      "index_1": 5
+    },
+    "special_case": null
+  },
+  2,
+  0,
+  0,
+  2,
+  2,
+  0,
+  0,
+  2,
+  2
+]

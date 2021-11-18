@@ -1,28 +1,32 @@
-{
-  "patterns": [
-    null,
-    null,
-    {
-      "default": {
-        "string": " y ",
-        "index_1": 3
-      },
-      "special_case": null
+[
+  {
+    "default": {
+      "string": ", ",
+      "index_1": 2
     },
-    "End",
-    null,
-    null,
-    null,
-    "End",
-    {
-      "default": {
-        "string": " ",
-        "index_1": 1
-      },
-      "special_case": null
+    "special_case": null
+  },
+  0,
+  {
+    "default": {
+      "string": " y ",
+      "index_1": 3
     },
-    "NarrowStart",
-    "NarrowStart",
-    "NarrowStart"
-  ]
-}
+    "special_case": null
+  },
+  2,
+  0,
+  0,
+  0,
+  2,
+  {
+    "default": {
+      "string": " ",
+      "index_1": 1
+    },
+    "special_case": null
+  },
+  8,
+  8,
+  8
+]

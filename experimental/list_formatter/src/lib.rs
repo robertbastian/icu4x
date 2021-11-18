@@ -9,6 +9,7 @@ extern crate alloc;
 mod list_formatter;
 
 pub use crate::list_formatter::ListFormatter;
+mod deduplicating_array;
 pub mod error;
 pub mod options;
 pub mod provider;
