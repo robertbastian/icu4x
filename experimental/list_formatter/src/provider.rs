@@ -35,7 +35,7 @@ pub mod key {
 pub struct ListFormatterPatternsV1<'data>(
     #[cfg_attr(
         feature = "provider_serde",
-        serde(borrow, with = "crate::deduplicating_array")
+        serde(borrow, with = "deduplicating_array")
     )]
     [ConditionalListJoinerPattern<'data>; 12],
 );

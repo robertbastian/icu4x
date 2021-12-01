@@ -1,6 +1,8 @@
 use serde::de::{Deserialize, Deserializer, EnumAccess, Visitor};
 use serde::ser::{Serialize, Serializer};
 
+extern crate alloc;
+
 pub fn serialize<S, T, const N: usize>(array: &[T; N], serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
