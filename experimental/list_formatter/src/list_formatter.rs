@@ -6,7 +6,7 @@ use crate::error::*;
 use crate::options::*;
 use crate::provider::*;
 use alloc::string::String;
-use formatted_string::*;
+use formatted_string::FormattedString;
 use icu_locid::Locale;
 use icu_provider::prelude::*;
 
@@ -148,24 +148,26 @@ mod tests {
 
     #[test]
     fn test_format_to_parts() {
+        use formatted_string::FormattedStringLike;
+
         let formatter = formatter(Width::Wide);
 
-        assert_eq!(formatter.format_to_parts(&VALUES[0..0]).as_ref(), "");
-        assert_eq!(formatter.format_to_parts(&VALUES[0..1]).as_ref(), "one");
+        assert_eq!(formatter.format_to_parts(&VALUES[0..0]).as_str(), "");
+        assert_eq!(formatter.format_to_parts(&VALUES[0..1]).as_str(), "one");
         assert_eq!(
-            formatter.format_to_parts(&VALUES[0..2]).as_ref(),
+            formatter.format_to_parts(&VALUES[0..2]).as_str(),
             "one; two"
         );
         assert_eq!(
-            formatter.format_to_parts(&VALUES[0..3]).as_ref(),
+            formatter.format_to_parts(&VALUES[0..3]).as_str(),
             "one: two. three!"
         );
         assert_eq!(
-            formatter.format_to_parts(&VALUES[0..4]).as_ref(),
+            formatter.format_to_parts(&VALUES[0..4]).as_str(),
             "one: two, three. four!"
         );
-        let parts = formatter.format_to_parts(VALUES);
-        assert_eq!(parts.as_ref(), "one: two, three, four. five!");
+        let mut parts = formatter.format_to_parts(VALUES);
+        assert_eq!(parts.as_str(), "one: two, three, four. five!");
 
         assert_eq!(parts.fields_at(0), [FieldType::Element]);
         assert!(parts.is_field_start(0, 0));

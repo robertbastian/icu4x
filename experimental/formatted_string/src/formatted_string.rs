@@ -4,7 +4,7 @@
 
 use crate::FormattedStringError;
 use alloc::borrow::ToOwned;
-use alloc::vec::Vec;
+use alloc::collections::vec_deque::VecDeque;
 use core::str;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -15,7 +15,7 @@ pub enum LocationInPart {
 
 /// A string with L levels of annotations of type F. For N = 0, this is
 /// implemented for `&str`, for higher N see LayeredFormattedString.
-pub trait FormattedStringLike<F: Copy, const L: usize>: AsRef<str> {
+pub trait FormattedStringLike<'a, F: Copy, const L: usize> {
     fn fields_at(&self, pos: usize) -> [F; L] {
         self.annotation_at(pos).map(|(_, field)| field)
     }
@@ -26,16 +26,30 @@ pub trait FormattedStringLike<F: Copy, const L: usize>: AsRef<str> {
         location == LocationInPart::Begin
     }
 
+    // These members are not part of the public API.
     #[doc(hidden)]
-    // This is used to make the inserts more efficient; clients should
-    // use fields_at and is_field_start.
     fn annotation_at(&self, pos: usize) -> &[(LocationInPart, F); L];
+    #[doc(hidden)]
+    type BytesIter: DoubleEndedIterator<Item = u8> + 'a;
+    #[doc(hidden)]
+    fn bytes(&'a self) -> Self::BytesIter;
+    #[doc(hidden)]
+    fn len(&self) -> usize;
 }
 
-impl<F: Copy> FormattedStringLike<F, 0> for &str {
+impl<'a, F: Copy> FormattedStringLike<'a, F, 0> for &'a str {
     fn annotation_at(&self, _pos: usize) -> &[(LocationInPart, F); 0] {
         // Yay we can return dangling references for singleton types!
         &[]
+    }
+
+    type BytesIter = core::str::Bytes<'a>;
+    fn bytes(&'a self) -> Self::BytesIter {
+        (self as &str).bytes()
+    }
+
+    fn len(&self) -> usize {
+        (self as &str).len()
     }
 }
 
@@ -43,22 +57,54 @@ impl<F: Copy> FormattedStringLike<F, 0> for &str {
 #[derive(Debug, PartialEq)]
 pub struct LayeredFormattedString<F: Copy, const L: usize> {
     // bytes is always valid UTF-8, so from_utf8_unchecked is safe
-    bytes: Vec<u8>,
+    bytes: VecDeque<u8>,
     // The vector dimension corresponds to the bytes, the array dimension are the L levels of annotations
-    annotations: Vec<[(LocationInPart, F); L]>,
+    annotations: VecDeque<[(LocationInPart, F); L]>,
 }
 
 pub type FormattedString<F> = LayeredFormattedString<F, 1>;
 
-impl<F: Copy, const L: usize> AsRef<str> for LayeredFormattedString<F, L> {
-    fn as_ref(&self) -> &str {
-        unsafe { str::from_utf8_unchecked(&self.bytes) }
+impl<'a, F: Copy, const L: usize> FormattedStringLike<'a, F, L> for LayeredFormattedString<F, L> {
+    fn annotation_at(&self, pos: usize) -> &[(LocationInPart, F); L] {
+        &self.annotations[pos]
+    }
+
+    type BytesIter =
+        core::iter::Copied<core::iter::Chain<core::slice::Iter<'a, u8>, core::slice::Iter<'a, u8>>>;
+    fn bytes(&'a self) -> Self::BytesIter {
+        let (front, back) = self.bytes.as_slices();
+        front.iter().chain(back.iter()).copied()
+    }
+
+    fn len(&self) -> usize {
+        self.bytes.len()
     }
 }
 
-impl<F: Copy, const L: usize> FormattedStringLike<F, L> for LayeredFormattedString<F, L> {
-    fn annotation_at(&self, pos: usize) -> &[(LocationInPart, F); L] {
-        &self.annotations[pos]
+trait InsertIter<T> {
+    fn insert_iter<I>(&mut self, pos: usize, values: I)
+    where
+        I: DoubleEndedIterator<Item = T>;
+}
+
+impl<T> InsertIter<T> for VecDeque<T> {
+    fn insert_iter<I>(&mut self, pos: usize, values: I)
+    where
+        I: DoubleEndedIterator<Item = T>,
+    {
+        if pos == 0 {
+            for value in values.rev() {
+                self.push_front(value)
+            }
+        } else if pos == self.len() {
+            for value in values {
+                self.push_back(value)
+            }
+        } else {
+            for (i, value) in values.enumerate() {
+                self.insert(pos + i, value)
+            }
+        }
     }
 }
 
@@ -71,8 +117,8 @@ impl<F: Copy, const L: usize> LayeredFormattedString<F, L> {
         // A LayeredFormattedString with 0 annotations doesn't make sense.
         assert!(L > 0);
         Self {
-            bytes: Vec::with_capacity(capacity),
-            annotations: Vec::with_capacity(capacity),
+            bytes: VecDeque::with_capacity(capacity),
+            annotations: VecDeque::with_capacity(capacity),
         }
     }
 
@@ -86,44 +132,43 @@ impl<F: Copy, const L: usize> LayeredFormattedString<F, L> {
         self.bytes.len()
     }
 
-    pub fn append<S, const L1: usize>(&mut self, string: &S, field: F) -> &mut Self
+    pub fn append<'a, S, const L1: usize>(&mut self, string: &'a S, field: F) -> &mut Self
     where
-        S: FormattedStringLike<F, L1>,
+        S: FormattedStringLike<'a, F, L1>,
     {
         assert_eq!(L - 1, L1);
         // len() is always a char boundary
         self.insert_internal(self.bytes.len(), string, field)
     }
 
-    pub fn prepend<S, const L1: usize>(&mut self, string: &S, field: F) -> &mut Self
+    pub fn prepend<'a, S, const L1: usize>(&mut self, string: &'a S, field: F) -> &mut Self
     where
-        S: FormattedStringLike<F, L1>,
+        S: FormattedStringLike<'a, F, L1>,
     {
         assert_eq!(L - 1, L1);
         // 0 is always a char boundary
         self.insert_internal(0, string, field)
     }
 
-    pub fn insert<S, const L1: usize>(
+    pub fn insert<'a, S, const L1: usize>(
         &mut self,
         pos: usize,
-        string: &S,
+        string: &'a S,
         field: F,
     ) -> Result<&mut Self, FormattedStringError>
     where
-        S: FormattedStringLike<F, L1>,
+        S: FormattedStringLike<'a, F, L1>,
     {
         assert_eq!(L - 1, L1);
         if pos > self.bytes.len() {
             return Err(FormattedStringError::IndexOutOfBounds(pos));
         }
-        // bytes is valid UTF-8 precisely because we do this check before
-        // insertion (and string is valid UTF-8)
-        let current = unsafe { str::from_utf8_unchecked(&self.bytes) };
-        if !current.is_char_boundary(pos) {
+        // This is bit magic equivalent to: b >= 128 && b < 192, i.e. b is
+        // not a UTF-8 character boundary. Lifted from str::is_char_boundary
+        if (self.bytes[pos] as i8) < -0x40 {
             Err(FormattedStringError::PositionNotCharBoundary(
                 pos,
-                current.to_owned(),
+                self.as_str().to_owned(),
             ))
         } else {
             Ok(self.insert_internal(pos, string, field))
@@ -131,15 +176,20 @@ impl<F: Copy, const L: usize> LayeredFormattedString<F, L> {
     }
 
     // Precondition here is that pos is a char boundary and < bytes.len().
-    fn insert_internal<S, const L1: usize>(&mut self, pos: usize, string: &S, field: F) -> &mut Self
+    fn insert_internal<'a, S, const L1: usize>(
+        &mut self,
+        pos: usize,
+        string: &'a S,
+        field: F,
+    ) -> &mut Self
     where
-        S: FormattedStringLike<F, L1>,
+        S: FormattedStringLike<'a, F, L1>,
     {
         assert_eq!(L - 1, L1);
-        self.bytes.splice(pos..pos, string.as_ref().bytes());
-        self.annotations.splice(
-            pos..pos,
-            (0..string.as_ref().len()).map(|i| {
+        self.bytes.insert_iter(pos, string.bytes());
+        self.annotations.insert_iter(
+            pos,
+            (0..string.len()).map(|i| {
                 let top_level = (
                     if i == 0 {
                         LocationInPart::Begin
@@ -158,6 +208,10 @@ impl<F: Copy, const L: usize> LayeredFormattedString<F, L> {
 
     pub fn field_at(&self, pos: usize) -> F {
         self.fields_at(pos)[0]
+    }
+
+    pub fn as_str(&mut self) -> &str {
+        unsafe { &str::from_utf8_unchecked(self.bytes.make_contiguous()) }
     }
 }
 
@@ -186,7 +240,7 @@ mod test {
             .prepend(&" ", Field::Space)
             .prepend(&"hello", Field::Word);
 
-        assert_eq!(x.as_ref(), "hello world");
+        assert_eq!(x.as_str(), "hello world");
 
         for i in 0.."hello".len() {
             assert_eq!(x.field_at(i), Field::Word);
@@ -208,7 +262,7 @@ mod test {
         let mut y = LayeredFormattedString::<Field, 2>::new();
         y.append(&x, Field::Greeting);
 
-        assert_eq!(y.as_ref(), "hello world");
+        assert_eq!(y.as_str(), "hello world");
         assert_eq!(y.fields_at(0), [Field::Greeting, Field::Word]);
     }
 
@@ -221,7 +275,7 @@ mod test {
             "index 1 is not a character boundary in \"π\"",
         );
 
-        assert_eq!(x.as_ref(), "π");
+        assert_eq!(x.as_str(), "π");
         assert_eq!(x.field_at(0), Field::Word);
         assert_eq!(x.field_at(1), Field::Word);
         assert_panics(|| x.field_at(2));
