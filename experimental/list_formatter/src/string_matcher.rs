@@ -1,47 +1,68 @@
 #[cfg(any(test, feature = "provider_transform_internals"))]
 use crate::error::Error;
 use alloc::borrow::Cow;
+use core::cell::Cell;
 use icu_provider::yoke::{self, *};
-use regex_automata::{SparseDFA, DFA};
 
 #[derive(Clone, Debug, PartialEq, Yokeable, ZeroCopyFrom)]
 #[cfg_attr(
     feature = "provider_serde",
     derive(serde::Deserialize, serde::Serialize)
 )]
-pub(crate) struct StringMatcher<'data>(
-    #[cfg_attr(feature = "provider_serde", serde(borrow))] Cow<'data, [u8]>,
-);
+#[yoke(cloning_zcf)]
+#[serde(transparent)]
+pub(crate) struct StringMatcher<'data> {
+    #[cfg_attr(feature = "provider_serde", serde(borrow))]
+    dfa_bytes: Cow<'data, [u8]>,
+    // Deserializing into a DFA requires us to trust the bytes,
+    // however unless we wrote them ourselves we cannot do that.
+    // This field stores the verification result, so that we only
+    // have to do that once.
+    #[cfg_attr(feature = "provider_serde", serde(skip))]
+    is_valid: Cell<Option<bool>>,
+}
 
 impl<'data> StringMatcher<'data> {
     #[cfg(any(test, feature = "provider_transform_internals"))]
     pub(crate) fn new(pattern: &str) -> Result<Self, Error> {
-        let mut builder = regex_automata::dense::Builder::new();
-        let dfa: regex_automata::DenseDFA<Vec<u16>, u16> = builder
-            .anchored(true)
-            .case_insensitive(true)
-            .minimize(true)
-            .build_with_size(pattern)
+        use regex_automata::{
+            dfa::dense::{Builder, Config, DFA},
+            SyntaxConfig,
+        };
+
+        let mut builder = Builder::new();
+        let dfa: DFA<Vec<u32>> = builder
+            .syntax(SyntaxConfig::new().case_insensitive(true))
+            .configure(Config::new().anchored(true).minimize(true))
+            .build(pattern)
             .map_err(Error::IllegalCondition)?;
 
-        let sparse_dfa = dfa
-            .to_sparse_sized::<u16>()
-            .map_err(Error::IllegalCondition)?;
-
-        // We have to decide on an endianness here. For now we use LE, and ignore
-        // conditional patterns on BE systems. In the future the regex_automata
-        // crate will make it easier to deserialize on different-endian systems:
-        // https://github.com/BurntSushi/regex-automata/issues/20
-        let bytes = sparse_dfa.to_bytes_little_endian();
-
-        // We can unwrap because the u16 state size does not produce an error
-        Ok(Self(Cow::Owned(bytes.unwrap())))
+        Ok(Self {
+            dfa_bytes: Cow::Owned(
+                dfa.to_sparse()
+                    .map_err(Error::IllegalCondition)?
+                    .to_bytes_little_endian(),
+            ),
+            is_valid: Cell::new(None),
+        })
     }
 
     pub(crate) fn test(&self, string: &str) -> bool {
-        cfg!(target_endian = "little")
-            && unsafe { SparseDFA::<&[u8], u16>::from_bytes(&*self.0) }.find(string.as_bytes())
-                == Some(string.len())
+        use regex_automata::dfa::sparse::DFA;
+        use regex_automata::dfa::Automaton;
+
+        if self.is_valid.get().is_none() {
+            // This catches things like data corruption (which would lead to UB),
+            // or wrong endianness.
+            self.is_valid
+                .set(Some(DFA::from_bytes(&*self.dfa_bytes).is_ok()));
+        }
+        self.is_valid.get().unwrap()
+            && unsafe { DFA::from_bytes_unchecked(&*self.dfa_bytes).unwrap().0 }
+                .find_earliest_fwd(string.as_bytes()) // Result<Option<HalfMatch>, Error>
+                .ok() // Option<Option<HalfMatch>>
+                .flatten() // Option<HalfMatch>
+                .is_some() // bool
     }
 }
 
