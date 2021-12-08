@@ -2,9 +2,8 @@
 use crate::error::Error;
 use alloc::borrow::Cow;
 use alloc::string::String;
-use alloc::vec::Vec;
 use icu_provider::yoke::{self, *};
-use regex_automata::{SparseDFA, DFA};
+use regex_automata::dfa::sparse::DFA;
 
 #[derive(Clone, Debug, Yokeable, ZeroCopyFrom)]
 // TODO: Store the actual DFA instead of their serializations. This requires ZCF and Yokeable on them.
@@ -18,10 +17,9 @@ pub(crate) enum StringMatcher<'data> {
 impl PartialEq for StringMatcher<'_> {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
-            (
-                StringMatcher::FromPattern(pattern1, _),
-                StringMatcher::FromPattern(pattern2, _),
-            ) => pattern1 == pattern2,
+            (StringMatcher::FromPattern(pattern1, _), StringMatcher::FromPattern(pattern2, _)) => {
+                pattern1 == pattern2
+            }
             (StringMatcher::Precomputed(bytes1), StringMatcher::FromPattern(_, bytes2)) => {
                 bytes1 == bytes2
             }
@@ -79,7 +77,10 @@ impl<'de: 'data, 'data> serde::Deserialize<'de> for StringMatcher<'data> {
             }
 
             let bytes = <Cow<'de, [u8]>>::deserialize(deserializer)?;
-            // TODO: Validate, see https://github.com/BurntSushi/regex-automata/issues/20
+            DFA::from_bytes(&bytes).map_err(|e| {
+                use serde::de::Error;
+                D::Error::custom(alloc::format!("Invalid DFA bytes: {}", e))
+            })?;
             Ok(StringMatcher::Precomputed(bytes))
         }
     }
@@ -88,22 +89,22 @@ impl<'de: 'data, 'data> serde::Deserialize<'de> for StringMatcher<'data> {
 impl<'data> StringMatcher<'data> {
     #[cfg(feature = "provider_serde")]
     pub(crate) fn new(pattern: &str) -> Result<Self, Error> {
-        let mut builder = regex_automata::dense::Builder::new();
-        let dfa: regex_automata::DenseDFA<Vec<u16>, u16> = builder
-            .anchored(true)
-            .case_insensitive(true)
-            .minimize(true)
-            .build_with_size(pattern)
+        use regex_automata::{
+            dfa::dense::{Builder, Config},
+            SyntaxConfig,
+        };
+        let mut builder = Builder::new();
+        let dfa = builder
+            .syntax(SyntaxConfig::new().case_insensitive(true))
+            .configure(Config::new().anchored(true).minimize(true))
+            .build(pattern)
             .map_err(Error::IllegalCondition)?;
 
-        let sparse_dfa = dfa
-            .to_sparse_sized::<u16>()
-            .map_err(Error::IllegalCondition)?;
+        let sparse_dfa = dfa.to_sparse().map_err(Error::IllegalCondition)?;
 
         Ok(Self::FromPattern(
             Cow::Owned(String::from(pattern)),
-            // We can unwrap because the u16 state size does not produce an error
-            Cow::Owned(sparse_dfa.to_bytes_little_endian().unwrap()),
+            Cow::Owned(sparse_dfa.to_bytes_little_endian()),
         ))
     }
 
@@ -111,18 +112,19 @@ impl<'data> StringMatcher<'data> {
         #[cfg(target_endian = "big")]
         return false;
 
+        use regex_automata::dfa::Automaton;
+
         let dfa = match self {
             StringMatcher::FromPattern(_, dfa_bytes) => unsafe {
-                // This is safe because we created these bytes ourselves
-                SparseDFA::<&[u8], u16>::from_bytes(&dfa_bytes)
+                // This is safe (and Ok) because we created these bytes ourselves
+                DFA::from_bytes_unchecked(&dfa_bytes).unwrap().0
             },
             StringMatcher::Precomputed(dfa_bytes) => unsafe {
-                // TODO: This is not safe
-                SparseDFA::<&[u8], u16>::from_bytes(dfa_bytes)
+                // This is safe (and Ok) because we validated the bytes during deserialization
+                DFA::from_bytes_unchecked(dfa_bytes).unwrap().0
             },
         };
-
-        dfa.find(string.as_bytes()) == Some(string.len())
+        matches!(dfa.find_earliest_fwd(string.as_bytes()), Ok(Some(_)))
     }
 }
 
@@ -142,11 +144,24 @@ mod test {
     fn test_postcard_serialization() {
         let matcher = StringMatcher::new("abc*").unwrap();
 
-        let bytes = postcard::to_stdvec(&matcher).unwrap();
+        let mut bytes = postcard::to_stdvec(&matcher).unwrap();
         assert_eq!(
             postcard::from_bytes::<StringMatcher>(&bytes).unwrap(),
             matcher
         );
+
+        // A corrupted byte leads to an error
+        bytes[17] ^= 255;
+        assert!(postcard::from_bytes::<StringMatcher>(&bytes).is_err());
+        bytes[17] ^= 255;
+    
+        // An extra byte leads to an error
+        bytes.insert(123, 40);
+        assert!(postcard::from_bytes::<StringMatcher>(&bytes).is_err());
+        bytes.remove(123);
+
+        // Missing bytes lead to an error
+        assert!(postcard::from_bytes::<StringMatcher>(&bytes[0..bytes.len()-5]).is_err());
     }
 
     #[test]
