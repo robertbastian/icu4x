@@ -160,7 +160,9 @@ impl<'data> FromStr for ConditionalListJoinerPattern<'data> {
 impl<'a> ConditionalListJoinerPattern<'a> {
     /// Creates a conditional list joiner that will evaluate to the `then_pattern` when
     /// `regex` matches the following element, and to `else_pattern` otherwise.
-    /// The regex is interpreted case-insensitive and has to be a full match.
+    /// The regex is interpreted case-insensitive and anchored to the beginning, but
+    /// to improve efficiency does not search for full matches. If a full match is
+    /// required, use `$`.
     #[cfg(any(test, feature = "provider_transform_internals"))]
     pub fn from_regex_and_strs(
         regex: &str,
@@ -199,8 +201,7 @@ mod test {
     #[test]
     fn produces_correct_parts_conditionally() {
         let pattern =
-            ConditionalListJoinerPattern::from_regex_and_strs("b.*", "{0}c{1}d", "{0}a{1}b")
-                .unwrap();
+            ConditionalListJoinerPattern::from_regex_and_strs("b", "{0}c{1}d", "{0}a{1}b").unwrap();
         // Only matches at the beginning of the string
         assert_eq!(pattern.parts("ab"), ("a", "b"));
         assert_eq!(pattern.parts("ba"), ("c", "d"));
