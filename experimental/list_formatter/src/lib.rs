@@ -3,6 +3,7 @@
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
 #![cfg_attr(not(any(test, feature = "std")), no_std)]
+#![feature(once_cell)]
 
 extern crate alloc;
 
