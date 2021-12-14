@@ -1167,6 +1167,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
+ "writeable",
  "zerovec",
 ]
 

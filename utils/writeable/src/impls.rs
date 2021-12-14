@@ -102,6 +102,37 @@ fn test_ints() {
     assert_writeable_eq!(&i128::MIN, i128::MIN.to_string());
 }
 
+impl Writeable for str {
+    fn write_to<W: fmt::Write + ?Sized>(&self, sink: &mut W) -> fmt::Result {
+        sink.write_str(self)
+    }
+
+    fn write_len(&self) -> LengthHint {
+        LengthHint::exact(self.len())
+    }
+
+    fn peek(&self) -> Option<&str> {
+        Some(self)
+    }
+}
+
+impl<'a, W> Writeable for &'a W
+where
+    W: Writeable + ?Sized,
+{
+    fn write_to<V: fmt::Write + ?Sized>(&self, sink: &mut V) -> fmt::Result {
+        (**self).write_to(sink)
+    }
+
+    fn write_len(&self) -> LengthHint {
+        (**self).write_len()
+    }
+
+    fn peek<'b>(&'b self) -> Option<&'a str> {
+        (**self).peek()
+    }
+}
+
 #[test]
 fn assert_log10_approximation() {
     for i in 1..u128::BITS {
