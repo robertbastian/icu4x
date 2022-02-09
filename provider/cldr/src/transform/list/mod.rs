@@ -161,7 +161,6 @@ impl<M: ResourceMarker<Yokeable = ListFormatterPatternsV1<'static>>> IterableRes
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
         Ok(Box::new(
             get_langid_subdirectories(&self.cldr_misc.join("main"))?
-                .map(|(l, _)| l)
                 // ur-IN has a buggy pattern ("{1}, {0}") which violates
                 // our invariant that {0} is at index 0 (and rotates the output).
                 // ml has middle and start patterns with suffixes.

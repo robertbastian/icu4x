@@ -19,8 +19,7 @@ pub fn open_reader(path: &Path) -> Result<BufReader<File>, Error> {
         .map_err(|e| (e, path).into())
 }
 
-/// Helper function which returns an unsorted list of langid subdirectories.
-pub fn get_langid_subdirectories(
+fn get_langid_subdirectories_internal(
     root: &Path,
 ) -> Result<impl Iterator<Item = (LanguageIdentifier, PathBuf)>, Error> {
     let mut result = vec![];
@@ -37,13 +36,20 @@ pub fn get_langid_subdirectories(
     }))
 }
 
+/// Helper function which returns an unsorted list of langids for which subdirectories exist.
+pub fn get_langid_subdirectories(
+    root: &Path,
+) -> Result<impl Iterator<Item = LanguageIdentifier>, Error> {
+    get_langid_subdirectories_internal(root).map(|iter| iter.map(|(l, _)| l))
+}
+
 /// Helper function which returns the subdirectory for the selected language, if it exists.
 pub fn get_langid_subdirectory(
     root: &Path,
     langid: &LanguageIdentifier,
 ) -> Result<Option<PathBuf>, Error> {
-    get_langid_subdirectories(root).map(|paths| {
-        paths
+    get_langid_subdirectories_internal(root).map(|iter| {
+        iter
             .filter(|(langid2, _)| langid2 == langid)
             .next()
             .map(|(_, path)| path)

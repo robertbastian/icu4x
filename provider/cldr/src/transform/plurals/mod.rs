@@ -131,14 +131,11 @@ fn test_basic() {
     let provider = PluralsProvider::try_from(&cldr_paths).unwrap();
 
     // Spot-check locale 'cs' since it has some interesting entries
-    let cs_rules: DataPayload<PluralRulesV1Marker> = provider
-        .load_payload(
-            CardinalV1Marker::KEY,
-            &DataRequest {
-                options: langid!("cs").into(),
-                metadata: Default::default(),
-            },
-        )
+    let cs_rules: DataPayload<CardinalV1Marker> = provider
+        .load_resource(&DataRequest {
+            options: langid!("cs").into(),
+            metadata: Default::default(),
+        })
         .unwrap()
         .take_payload()
         .unwrap();

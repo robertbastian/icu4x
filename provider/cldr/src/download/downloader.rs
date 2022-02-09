@@ -22,10 +22,10 @@ use std::path::PathBuf;
 /// use icu_provider_cldr::CldrPaths;
 /// use icu_provider_cldr::download::CldrDownloader;
 
-/// let downloader = CldrDownloader::try_new_from_github("38.1.0", "modern")
+/// let downloader = CldrDownloader::try_new_from_github("38.1.0", "modern", None)
 ///     .expect("Cache directory not found");
 ///
-/// let paths: CldrPaths = downloader.download(None).expect("The data should download successfully");
+/// let paths: CldrPaths = downloader.download().expect("The data should download successfully");
 /// ```
 #[derive(Debug)]
 pub struct CldrDownloader {

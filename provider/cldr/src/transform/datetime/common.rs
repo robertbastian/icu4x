@@ -85,7 +85,6 @@ impl CommonDateProvider {
             let cal = Some((*bcp_cal).into());
             res.extend(
                 get_langid_subdirectories(&path.join("main"))?
-                    .map(|(l, _)| l)
                     .map(Into::<ResourceOptions>::into)
                     .map(move |mut r| {
                         r.variant = cal.clone();

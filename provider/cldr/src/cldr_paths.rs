@@ -20,7 +20,7 @@ use std::path::PathBuf;
 ///     uprops_root: Some(PathBuf::from("path/to/uprops")),
 /// };
 ///
-/// let data_provider = CldrJsonDataProvider::new(&paths);
+/// let data_provider = CldrJsonDataProvider::try_new(&paths);
 /// ```
 #[derive(Debug, PartialEq)]
 pub struct CldrPaths {

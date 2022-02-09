@@ -34,96 +34,67 @@ impl TryFrom<&CldrPaths> for TimeZonesProvider {
     }
 }
 
-// impl TryFrom<&str> for TimeZonesProvider {
-//     type Error = Error;
-//     fn try_from(input: &str) -> Result<Self, Self::Error> {
-//         let resource: cldr_serde::time_zone_names::Resource =
-//             serde_json::from_str(input).map_err(|e| Error::Json(e, None))?;
-//         Ok(Self {
-//             data: resource.main.0,
-//         })
-//     }
-// }
+macro_rules! impl_resource_provider {
+    ($($marker:ident),+) => {
+        $(
+            impl ResourceProvider<$marker> for TimeZonesProvider {
+                fn load_resource(&self, req: &DataRequest) -> Result<DataResponse<$marker>, DataError> {
+                    let langid = req
+                        .get_langid()
+                        .ok_or_else(|| DataErrorKind::NeedsLocale.with_req(<$marker>::KEY, req))?;
 
-macro_rules! impl_data_provider {
-    ($id:ident, $marker:ident) => {
-        impl ResourceProvider<$marker> for TimeZonesProvider {
-            fn load_resource(&self, req: &DataRequest) -> Result<DataResponse<$marker>, DataError> {
-                let langid = req
-                    .get_langid()
-                    .ok_or_else(|| DataErrorKind::NeedsLocale.with_req(<$marker>::KEY, req))?;
+                    let time_zone_names = if self.data.read().unwrap().contains_key(langid) {
+                        self.data.read().unwrap().get(langid).unwrap().clone()
+                    } else {
+                        let path = get_langid_subdirectory(&self.path, langid)?
+                            .ok_or_else(|| DataErrorKind::MissingLocale.with_req(<$marker>::KEY, req))?
+                            .join("timeZoneNames.json");
 
-                let time_zone_names = if self.data.read().unwrap().contains_key(langid) {
-                    self.data.read().unwrap().get(langid).unwrap().clone()
-                } else {
-                    let path = get_langid_subdirectory(&self.path, langid)?
-                        .ok_or_else(|| DataErrorKind::MissingLocale.with_req(<$marker>::KEY, req))?
-                        .join("timeZoneNames.json");
+                        let mut resource: cldr_serde::time_zone_names::Resource =
+                            serde_json::from_reader(open_reader(&path)?)
+                                .map_err(|e| Error::Json(e, Some(path)))?;
+                        let r = resource
+                            .main
+                            .0
+                            .remove(langid)
+                            .expect("CLDR file contains the expected language")
+                            .dates
+                            .time_zone_names;
 
-                    let mut resource: cldr_serde::time_zone_names::Resource =
-                        serde_json::from_reader(open_reader(&path)?)
-                            .map_err(|e| Error::Json(e, Some(path)))?;
-                    let r = resource
-                        .main
-                        .0
-                        .remove(langid)
-                        .expect("CLDR file contains the expected language")
-                        .dates
-                        .time_zone_names;
+                        self.data.write().unwrap().insert(langid.clone(), r.clone());
+                        r
+                    };
 
-                    self.data.write().unwrap().insert(langid.clone(), r.clone());
-                    r
-                };
-
-                let metadata = DataResponseMetadata::default();
-                // TODO(#1109): Set metadata.data_langid correctly.
-                Ok(DataResponse {
-                    metadata,
-                    payload: Some(DataPayload::from_owned($id::from(time_zone_names))),
-                })
+                    let metadata = DataResponseMetadata::default();
+                    // TODO(#1109): Set metadata.data_langid correctly.
+                    Ok(DataResponse {
+                        metadata,
+                        payload: Some(DataPayload::from_owned(<$marker as DataMarker>::Yokeable::from(time_zone_names))),
+                    })
+                }
             }
-        }
 
-        impl IterableResourceProvider<$marker> for TimeZonesProvider {
-            fn supported_options(
-                &self,
-            ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
-                Ok(Box::new(
-                    get_langid_subdirectories(&self.path)?
-                        .map(|(l, _)| l)
-                        .map(Into::<ResourceOptions>::into),
-                ))
+            impl IterableResourceProvider<$marker> for TimeZonesProvider {
+                fn supported_options(
+                    &self,
+                ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
+                    Ok(Box::new(
+                        get_langid_subdirectories(&self.path)?
+                            .map(Into::<ResourceOptions>::into),
+                    ))
+                }
             }
-        }
+        )+
+        icu_provider::impl_dyn_provider!(TimeZonesProvider, [$($marker),+,], SERDE_SE);
     };
 }
 
-icu_provider::impl_dyn_provider!(
-    TimeZonesProvider,
-    [
-        TimeZoneFormatsV1Marker,
-        ExemplarCitiesV1Marker,
-        MetaZoneGenericNamesLongV1Marker,
-        MetaZoneGenericNamesShortV1Marker,
-        MetaZoneSpecificNamesLongV1Marker,
-        MetaZoneSpecificNamesShortV1Marker,
-    ],
-    SERDE_SE
-);
-
-impl_data_provider!(TimeZoneFormatsV1, TimeZoneFormatsV1Marker);
-impl_data_provider!(ExemplarCitiesV1, ExemplarCitiesV1Marker);
-impl_data_provider!(MetaZoneGenericNamesLongV1, MetaZoneGenericNamesLongV1Marker);
-impl_data_provider!(
-    MetaZoneGenericNamesShortV1,
-    MetaZoneGenericNamesShortV1Marker
-);
-impl_data_provider!(
-    MetaZoneSpecificNamesLongV1,
-    MetaZoneSpecificNamesLongV1Marker
-);
-impl_data_provider!(
-    MetaZoneSpecificNamesShortV1,
+impl_resource_provider!(
+    TimeZoneFormatsV1Marker,
+    ExemplarCitiesV1Marker,
+    MetaZoneGenericNamesLongV1Marker,
+    MetaZoneGenericNamesShortV1Marker,
+    MetaZoneSpecificNamesLongV1Marker,
     MetaZoneSpecificNamesShortV1Marker
 );
 
