@@ -200,8 +200,8 @@ struct FooProvider {
 impl TryFrom<&CldrPaths> for FooProvider {
     type Error = Error;
     fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
-        // CLDR providers are constructed from CldrPaths, which gives you
-        // access to raw CLDR JSON data.
+        // Don't do any heavy lifting here. Ideally you just want to save
+        // the paths you need.
     }
 }
 
@@ -213,25 +213,20 @@ impl ResourceProvider<FooV1Marker> for FooProvider {
         // Load the data from CLDR JSON and emit it as an ICU4X data struct.
         // This is the core transform operation. This step could take a lot of
         // work, such as pre-parsing patterns, re-organizing the data, etc.
+        // This method will be called once per option returned by supported_options.
+        // Use internal mutability (RwLock) to avoid duplicating work.
     }
 }
 
-impl IterableProvider for FooProvider {
-    fn supported_options_for_key(
+impl IterableResourceProvider<FooV1Marker> for FooProvider {
+    fn supported_options(
         &self,
-        _resc_key: &ResourceKey,
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions>>, DataError> {
         // This should list all supported locales, for example.
     }
 }
 
-impl KeyedDataProvider for FooProvider {
-    fn supported_keys() -> Vec<ResourceKey> {
-        vec![FooV1Marker::KEY]
-    }
-}
-
-// Once we have ResourceProvider, IterableProvider, and KeyedDataProvider, we can
+// Once we have ResourceProvider and IterableResourceProvider, we can
 // implement DynProvider<SerializeMarker>.
 icu_provider::impl_dyn_provider!(FooProvider, [
     FooV1Marker,

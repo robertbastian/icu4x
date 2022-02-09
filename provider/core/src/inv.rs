@@ -59,7 +59,7 @@ where
     }
 }
 
-impl IterableProvider for InvariantDataProvider {
+impl<M: DataMarker> IterableProvider<M> for InvariantDataProvider {
     fn supported_options_for_key(
         &self,
         _resc_key: &ResourceKey,

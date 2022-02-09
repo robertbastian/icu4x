@@ -101,7 +101,7 @@ icu_provider::impl_dyn_provider!(ScriptExtensionsPropertyProvider, {
     key::SCRIPT_EXTENSIONS_V1 => ScriptExtensionsPropertyV1Marker,
 }, SERDE_SE);
 
-impl IterableProvider for ScriptExtensionsPropertyProvider {
+impl IterableProvider<icu_provider::serde::SerializeMarker> for ScriptExtensionsPropertyProvider {
     fn supported_options_for_key(
         &self,
         _resc_key: &ResourceKey,

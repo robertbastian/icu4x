@@ -5,14 +5,15 @@
 use crate::cldr_serde;
 use crate::error::Error;
 use crate::reader::{get_langid_subdirectories, get_langid_subdirectory, open_reader};
-use crate::support::KeyedDataProvider;
 use crate::CldrPaths;
 use icu_decimal::provider::*;
-use icu_provider::iter::IterableProvider;
+use icu_provider::iter::IterableResourceProvider;
 use icu_provider::prelude::*;
+use litemap::LiteMap;
 use std::borrow::Cow;
 use std::convert::TryFrom;
 use std::path::PathBuf;
+use std::sync::RwLock;
 use tinystr::TinyStr8;
 
 mod decimal_pattern;
@@ -20,30 +21,23 @@ mod decimal_pattern;
 /// A data provider reading from CLDR JSON plural rule files.
 #[derive(Debug)]
 pub struct NumbersProvider {
-    // TODO: put this in a lazy cell
-    cldr_numbering_systems_data: Result<cldr_serde::numbering_systems::Resource, Error>,
+    numbering_systems_path: PathBuf,
     numbers_path: PathBuf,
+    cldr_numbering_systems_data:
+        RwLock<Option<LiteMap<TinyStr8, cldr_serde::numbering_systems::NumberingSystem>>>,
 }
 
 impl TryFrom<&CldrPaths> for NumbersProvider {
     type Error = Error;
     fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         Ok(Self {
-            cldr_numbering_systems_data: open_reader(
-                &cldr_paths
-                    .cldr_core()?
-                    .join("supplemental")
-                    .join("numberingSystems.json"),
-            )
-            .and_then(|r| serde_json::from_reader(r).map_err(|e| Error::Json(e, None))),
+            numbering_systems_path: cldr_paths
+                .cldr_core()?
+                .join("supplemental")
+                .join("numberingSystems.json"),
             numbers_path: cldr_paths.cldr_numbers()?.join("main"),
+            cldr_numbering_systems_data: RwLock::new(None),
         })
-    }
-}
-
-impl KeyedDataProvider for NumbersProvider {
-    fn supported_keys() -> Vec<ResourceKey> {
-        vec![DecimalSymbolsV1Marker::KEY]
     }
 }
 
@@ -52,10 +46,10 @@ impl NumbersProvider {
     fn get_digits_for_numbering_system(&self, nsname: TinyStr8) -> Option<[char; 10]> {
         match self
             .cldr_numbering_systems_data
+            .read()
+            .unwrap()
             .as_ref()
-            .ok()?
-            .supplemental
-            .numbering_systems
+            .unwrap()
             .get(&nsname)
         {
             Some(ns) => match ns.digits.as_ref() {
@@ -109,6 +103,17 @@ impl ResourceProvider<DecimalSymbolsV1Marker> for NumbersProvider {
 
         let mut result = DecimalSymbolsV1::try_from(numbers)
             .map_err(|s| Error::Custom(s.to_string(), Some(langid.clone())))?;
+
+        if self.cldr_numbering_systems_data.read().unwrap().is_none() {
+            let resource: cldr_serde::numbering_systems::Resource =
+                serde_json::from_reader(open_reader(&self.numbering_systems_path)?)
+                    .map_err(|e| Error::Json(e, None))?;
+            let _none = self
+                .cldr_numbering_systems_data
+                .write()
+                .unwrap()
+                .insert(resource.supplemental.numbering_systems);
+        }
         result.digits = self
             .get_digits_for_numbering_system(nsname)
             .ok_or_else(|| {
@@ -129,10 +134,9 @@ impl ResourceProvider<DecimalSymbolsV1Marker> for NumbersProvider {
 
 icu_provider::impl_dyn_provider!(NumbersProvider, [DecimalSymbolsV1Marker,], SERDE_SE);
 
-impl IterableProvider for NumbersProvider {
-    fn supported_options_for_key(
+impl IterableResourceProvider<DecimalSymbolsV1Marker> for NumbersProvider {
+    fn supported_options(
         &self,
-        _resc_key: &ResourceKey,
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
         Ok(Box::new(
             get_langid_subdirectories(&self.numbers_path)?

@@ -73,7 +73,7 @@ impl<M: ResourceMarker, P0: ResourceProvider<M>, P1: ResourceProvider<M>> Resour
     }
 }
 
-impl<P0: IterableProvider, P1: IterableProvider> IterableProvider for EitherProvider<P0, P1> {
+impl<M: DataMarker, P0: IterableProvider<M>, P1: IterableProvider<M>> IterableProvider<M> for EitherProvider<P0, P1> {
     #[inline]
     fn supported_options_for_key(
         &self,

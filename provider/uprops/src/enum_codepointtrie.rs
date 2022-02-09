@@ -130,7 +130,7 @@ icu_provider::impl_dyn_provider!(EnumeratedPropertyCodePointTrieProvider, {
     key::SENTENCE_BREAK_V1 => UnicodePropertyMapV1Marker<SentenceBreak>,
 }, SERDE_SE);
 
-impl IterableProvider for EnumeratedPropertyCodePointTrieProvider {
+impl IterableProvider<icu_provider::serde::SerializeMarker> for EnumeratedPropertyCodePointTrieProvider {
     fn supported_options_for_key(
         &self,
         _resc_key: &ResourceKey,

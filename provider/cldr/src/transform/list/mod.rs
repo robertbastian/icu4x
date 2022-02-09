@@ -5,11 +5,10 @@
 use crate::cldr_serde;
 use crate::error::Error;
 use crate::reader::{get_langid_subdirectories, get_langid_subdirectory, open_reader};
-use crate::support::KeyedDataProvider;
 use crate::CldrPaths;
 use icu_list::provider::*;
 use icu_locid_macros::langid;
-use icu_provider::iter::IterableProvider;
+use icu_provider::iter::IterableResourceProvider;
 use icu_provider::prelude::*;
 use std::convert::TryFrom;
 use std::path::PathBuf;
@@ -154,20 +153,11 @@ icu_provider::impl_dyn_provider!(
     SERDE_SE
 );
 
-impl KeyedDataProvider for ListProvider {
-    fn supported_keys() -> Vec<ResourceKey> {
-        vec![
-            AndListV1Marker::KEY,
-            OrListV1Marker::KEY,
-            UnitListV1Marker::KEY,
-        ]
-    }
-}
-
-impl IterableProvider for ListProvider {
-    fn supported_options_for_key(
+impl<M: ResourceMarker<Yokeable = ListFormatterPatternsV1<'static>>> IterableResourceProvider<M>
+    for ListProvider
+{
+    fn supported_options(
         &self,
-        _resc_key: &ResourceKey,
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
         Ok(Box::new(
             get_langid_subdirectories(&self.cldr_misc.join("main"))?

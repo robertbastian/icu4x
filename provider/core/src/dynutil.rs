@@ -228,9 +228,19 @@ macro_rules! impl_dyn_provider {
                             })
                         }
                     )+,
-                    // Don't complain if the call site has its own wildcard match
-                    #[allow(unreachable_patterns)]
                     _ => Err($crate::DataErrorKind::MissingResourceKey.with_req(key, req))
+                }
+            }
+        }
+
+        impl $crate::iter::IterableProvider<$dyn_m> for $provider {
+            fn supported_options_for_key(&self, key: &$crate::ResourceKey) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
+                match key {
+                    $(
+                        &<$struct_m as $crate::ResourceMarker>::KEY => 
+                                $crate::iter::IterableResourceProvider::<$struct_m>::supported_options(self)
+                    ),+,
+                    _ => Err($crate::DataErrorKind::MissingResourceKey.with_key(*key))
                 }
             }
         }

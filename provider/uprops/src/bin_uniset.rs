@@ -53,7 +53,7 @@ icu_provider::impl_dyn_provider!(BinaryPropertyUnicodeSetDataProvider, {
     _ => UnicodePropertyV1Marker,
 }, SERDE_SE);
 
-impl IterableProvider for BinaryPropertyUnicodeSetDataProvider {
+impl IterableProvider<icu_provider::serde::SerializeMarker> for BinaryPropertyUnicodeSetDataProvider {
     fn supported_options_for_key(
         &self,
         _resc_key: &ResourceKey,

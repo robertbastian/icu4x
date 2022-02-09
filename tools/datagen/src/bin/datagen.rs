@@ -15,8 +15,8 @@ use icu_provider::serde::SerializeMarker;
 use icu_provider_blob::export::BlobExporter;
 use icu_provider_cldr::download::CldrDownloader;
 use icu_provider_cldr::CldrJsonDataProvider;
+use icu_provider_cldr::ALL_KEYS as CLDR_KEYS;
 use icu_provider_cldr::CldrPaths;
-use icu_provider_cldr::KeyedDataProvider;
 use icu_provider_fs::export::fs_exporter;
 use icu_provider_fs::export::serializers;
 use icu_provider_fs::export::FilesystemExporter;
@@ -421,7 +421,7 @@ fn export_cldr(
         eyre::bail!("Either --cldr-tag or --cldr-root must be specified",)
     };
 
-    let raw_provider = CldrJsonDataProvider::new(&cldr_paths);
+    let raw_provider = CldrJsonDataProvider::try_new(&cldr_paths)?;
     let provider: EitherProvider<_, _> = if let Some(allowlist) = allowed_locales {
         let filtered_provider = raw_provider
             .filterable("icu4x-datagen langid allowlist")
@@ -431,7 +431,7 @@ fn export_cldr(
         EitherProvider::B(raw_provider)
     };
 
-    for key in CldrJsonDataProvider::supported_keys() {
+    for key in CLDR_KEYS {
         if let Some(allowed_keys) = allowed_keys {
             if !allowed_keys.contains(&*key.writeable_to_string()) {
                 continue;

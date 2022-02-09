@@ -5,11 +5,10 @@
 use crate::cldr_serde;
 use crate::error::Error;
 use crate::reader::open_reader;
-use crate::support::KeyedDataProvider;
 use crate::CldrPaths;
 use icu_plurals::provider::*;
 use icu_plurals::rules::runtime::ast::Rule;
-use icu_provider::iter::IterableProvider;
+use icu_provider::iter::IterableResourceProvider;
 use icu_provider::prelude::*;
 use std::convert::TryFrom;
 
@@ -45,12 +44,6 @@ impl TryFrom<&CldrPaths> for PluralsProvider {
             cardinal_rules,
             ordinal_rules,
         })
-    }
-}
-
-impl KeyedDataProvider for PluralsProvider {
-    fn supported_keys() -> Vec<ResourceKey> {
-        vec![CardinalV1Marker::KEY, OrdinalV1Marker::KEY]
     }
 }
 
@@ -95,13 +88,14 @@ icu_provider::impl_dyn_provider!(
     SERDE_SE
 );
 
-impl IterableProvider for PluralsProvider {
-    fn supported_options_for_key(
+impl<M: ResourceMarker<Yokeable = PluralRulesV1<'static>>> IterableResourceProvider<M>
+    for PluralsProvider
+{
+    fn supported_options(
         &self,
-        resc_key: &ResourceKey,
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
         Ok(Box::new(
-            self.get_rules_for(resc_key)?
+            self.get_rules_for(&M::KEY)?
                 .0
                 .iter_keys()
                 // TODO(#568): Avoid the clone

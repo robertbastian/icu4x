@@ -15,8 +15,6 @@ mod locale_canonicalizer;
 mod plurals;
 mod time_zones;
 
-use crate::support::KeyedDataProvider;
-use crate::support::LazyCldrProvider;
 use crate::CldrPaths;
 use icu_provider::iter::IterableProvider;
 use icu_provider::prelude::*;
@@ -25,63 +23,51 @@ use icu_provider::serde::SerializeMarker;
 macro_rules! cldr_json_data_provider {
     ($($ident: ident: $type: ty,)+) => {
         #[derive(Debug)]
-        pub struct CldrJsonDataProvider<'a> {
-            pub cldr_paths: &'a CldrPaths,
+        pub struct CldrJsonDataProvider {
             $(
-                $ident: LazyCldrProvider<$type>,
+                $ident: $type,
             )+
         }
 
-        impl<'a> CldrJsonDataProvider<'a> {
-            pub fn new(cldr_paths: &'a CldrPaths) -> Self {
-                CldrJsonDataProvider {
-                    cldr_paths,
+        impl CldrJsonDataProvider {
+            pub fn try_new(cldr_paths: &CldrPaths) -> Result<Self, $crate::error::Error> {
+                use std::convert::TryFrom;
+                Ok(CldrJsonDataProvider {
                     $(
-                        $ident: Default::default(),
+                        $ident: <$type>::try_from(cldr_paths)?,
                     )+
-                }
+                })
             }
         }
 
-        impl<'a> DynProvider<SerializeMarker> for CldrJsonDataProvider<'a> {
+        impl DynProvider<SerializeMarker> for CldrJsonDataProvider {
             fn load_payload(
                 &self,
                 key: ResourceKey,
                 req: &DataRequest,
             ) -> Result<DataResponse<SerializeMarker>, DataError> {
                 $(
-                    if let Some(result) = self.$ident.try_load_serde(key, req, self.cldr_paths)? {
-                        return Ok(result);
+                    match DynProvider::load_payload(&self.$ident, key, req) {
+                        Err(DataError { kind: DataErrorKind::MissingResourceKey, ..}) => {}
+                        r => return r,
                     }
                 )+
                 Err(DataErrorKind::MissingResourceKey.with_req(key, req))
             }
         }
 
-        impl<'a> IterableProvider for CldrJsonDataProvider<'a> {
+        impl IterableProvider<SerializeMarker> for CldrJsonDataProvider {
             fn supported_options_for_key(
                 &self,
-                resc_key: &ResourceKey,
+                key: &ResourceKey,
             ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
                 $(
-                    if let Some(resp) = self
-                        .$ident
-                        .try_supported_options(resc_key, self.cldr_paths)?
-                    {
-                        return Ok(Box::new(resp.into_iter()));
+                    match IterableProvider::supported_options_for_key(&self.$ident, key) {
+                        Err(DataError { kind: DataErrorKind::MissingResourceKey, ..}) => {}
+                        r => return r,
                     }
                 )+
-                Err(DataErrorKind::MissingResourceKey.with_key(*resc_key))
-            }
-        }
-
-        impl<'a> KeyedDataProvider for CldrJsonDataProvider<'a> {
-            fn supported_keys() -> Vec<ResourceKey> {
-                let mut result: Vec<ResourceKey> = vec![];
-                $(
-                    result.extend(<$type>::supported_keys());
-                )+
-                result
+                Err(DataErrorKind::MissingResourceKey.with_key(*key))
             }
         }
     };
@@ -113,3 +99,27 @@ cldr_json_data_provider!(
     plurals: plurals::PluralsProvider,
     time_zones: time_zones::TimeZonesProvider,
 );
+
+pub const ALL_KEYS: [ResourceKey; if cfg!(feature = "icu_list") { 18 } else { 15 }] = [
+    icu_calendar::provider::JapaneseErasV1Marker::KEY,
+    icu_datetime::provider::calendar::DatePatternsV1Marker::KEY,
+    icu_datetime::provider::calendar::DateSkeletonPatternsV1Marker::KEY,
+    icu_datetime::provider::calendar::DateSymbolsV1Marker::KEY,
+    icu_datetime::provider::time_zones::TimeZoneFormatsV1Marker::KEY,
+    icu_datetime::provider::time_zones::ExemplarCitiesV1Marker::KEY,
+    icu_datetime::provider::time_zones::MetaZoneGenericNamesLongV1Marker::KEY,
+    icu_datetime::provider::time_zones::MetaZoneGenericNamesShortV1Marker::KEY,
+    icu_datetime::provider::time_zones::MetaZoneSpecificNamesLongV1Marker::KEY,
+    icu_datetime::provider::time_zones::MetaZoneSpecificNamesShortV1Marker::KEY,
+    icu_decimal::provider::DecimalSymbolsV1Marker::KEY,
+    #[cfg(feature = "icu_list")]
+    icu_list::provider::AndListV1Marker::KEY,
+    #[cfg(feature = "icu_list")]
+    icu_list::provider::OrListV1Marker::KEY,
+    #[cfg(feature = "icu_list")]
+    icu_list::provider::UnitListV1Marker::KEY,
+    icu_locale_canonicalizer::provider::AliasesV1Marker::KEY,
+    icu_locale_canonicalizer::provider::LikelySubtagsV1Marker::KEY,
+    icu_plurals::provider::CardinalV1Marker::KEY,
+    icu_plurals::provider::OrdinalV1Marker::KEY,
+];

@@ -33,7 +33,6 @@ impl CommonDateProvider {
         &self,
         req: &DataRequest,
     ) -> Result<cldr_serde::ca::Dates, DataError> {
-        // todo lazy
         let langid = req
             .get_langid()
             .ok_or_else(|| DataErrorKind::NeedsLocale.with_req(M::KEY, req))?;
@@ -77,14 +76,13 @@ impl CommonDateProvider {
 }
 
 impl CommonDateProvider {
-    pub fn supported_options_for_key(
+    pub fn supported_options(
         &self,
-        _resc_key: &ResourceKey,
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
         let mut res = vec![];
 
-        for (cal, _, path) in self.paths.iter() {
-            let cal = Some((*cal).into());
+        for (_, bcp_cal, path) in self.paths.iter() {
+            let cal = Some((*bcp_cal).into());
             res.extend(
                 get_langid_subdirectories(&path.join("main"))?
                     .map(|(l, _)| l)

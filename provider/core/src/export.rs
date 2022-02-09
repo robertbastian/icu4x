@@ -65,7 +65,7 @@ pub fn export_from_iterable<P, E, M>(
 ) -> Result<(), DataError>
 where
     M: DataMarker,
-    P: DynProvider<M> + IterableProvider + ?Sized,
+    P: DynProvider<M> + IterableProvider<M> + ?Sized,
     E: DataExporter<M> + ?Sized,
 {
     let it = provider.supported_options_for_key(resc_key)?;
