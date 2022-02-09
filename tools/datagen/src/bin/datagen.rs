@@ -10,6 +10,7 @@ use icu_provider::either::EitherProvider;
 use icu_provider::export::DataExporter;
 use icu_provider::filter::Filterable;
 use icu_provider::hello_world::{HelloWorldProvider, HelloWorldV1Marker};
+use icu_provider::iter::IterableProvider;
 use icu_provider::prelude::*;
 use icu_provider::serde::SerializeMarker;
 use icu_provider_blob::export::BlobExporter;
@@ -33,7 +34,6 @@ use std::io::BufRead;
 use std::path::PathBuf;
 use std::str::FromStr;
 use writeable::Writeable;
-use icu_provider::iter::IterableProvider;
 
 fn main() -> eyre::Result<()> {
     let matches = App::new("ICU4X Data Exporter")
@@ -254,14 +254,13 @@ fn main() -> eyre::Result<()> {
         .value_of("FORMAT")
         .expect("Option has default value");
 
-
-
     if !(matches.is_present("ALL_KEYS")
-    || matches.is_present("KEYS")
-    || matches.is_present("KEY_FILE")
-    || matches.is_present("TEST_KEYS")
-    || matches.is_present("HELLO_WORLD")) {
-        return Ok(())
+        || matches.is_present("KEYS")
+        || matches.is_present("KEY_FILE")
+        || matches.is_present("TEST_KEYS")
+        || matches.is_present("HELLO_WORLD"))
+    {
+        return Ok(());
     }
 
     let locales_vec = if let Some(locale_strs) = matches.values_of("LOCALES") {
@@ -306,21 +305,25 @@ fn main() -> eyre::Result<()> {
         EitherProvider::B(raw_provider)
     };
 
-    let mut selected_keys = matches.values_of("KEYS")
+    let mut selected_keys = matches
+        .values_of("KEYS")
         .map(|keys| keys.map(Cow::Borrowed).collect::<HashSet<_>>());
-    
+
     if let Some(key_file_path) = matches.value_of_os("KEY_FILE") {
         let file = File::open(key_file_path)
             .with_context(|| key_file_path.to_string_lossy().into_owned())?;
         for line in io::BufReader::new(file).lines() {
-            let line_string =
-                line.with_context(|| key_file_path.to_string_lossy().into_owned())?;
-                selected_keys.get_or_insert_with(Default::default).insert(Cow::Owned(line_string));
+            let line_string = line.with_context(|| key_file_path.to_string_lossy().into_owned())?;
+            selected_keys
+                .get_or_insert_with(Default::default)
+                .insert(Cow::Owned(line_string));
         }
     }
 
     if matches.is_present("HELLO_WORLD") {
-        selected_keys.get_or_insert_with(Default::default).insert(HelloWorldV1Marker::KEY.writeable_to_string());
+        selected_keys
+            .get_or_insert_with(Default::default)
+            .insert(HelloWorldV1Marker::KEY.writeable_to_string());
     }
 
     let mut keys = Vec::new();
@@ -331,7 +334,10 @@ fn main() -> eyre::Result<()> {
     keys.push(HelloWorldV1Marker::KEY);
 
     if let Some(selected_keys) = selected_keys {
-        keys = keys.into_iter().filter(|k| selected_keys.contains(&*k.writeable_to_string())).collect();
+        keys = keys
+            .into_iter()
+            .filter(|k| selected_keys.contains(&*k.writeable_to_string()))
+            .collect();
     }
 
     for key in keys {
@@ -436,7 +442,9 @@ fn get_blob_exporter(matches: &ArgMatches) -> eyre::Result<BlobExporter<'static>
     Ok(BlobExporter::new_with_sink(sink))
 }
 
-fn cldr_providers(matches: &ArgMatches) -> eyre::Result<Vec<Box<dyn IterableProvider<SerializeMarker>>>> {
+fn cldr_providers(
+    matches: &ArgMatches,
+) -> eyre::Result<Vec<Box<dyn IterableProvider<SerializeMarker>>>> {
     let locale_subset = matches.value_of("CLDR_LOCALE_SUBSET").unwrap_or("full");
     let cldr_paths = if let Some(tag) = matches.value_of("CLDR_TAG") {
         CldrDownloader::try_new_from_github(
@@ -476,10 +484,12 @@ fn props_providers(
     } else {
         eyre::bail!("Value for --uprops-root must be specified",)
     };
-    
+
     Ok(vec![
         Box::new(PropertiesDataProvider::try_new(&toml_root)?),
-        Box::new(EnumeratedPropertyCodePointTrieProvider::try_new(&toml_root)?),
+        Box::new(EnumeratedPropertyCodePointTrieProvider::try_new(
+            &toml_root,
+        )?),
         Box::new(ScriptExtensionsPropertyProvider::try_new(&toml_root)?),
     ])
 }
