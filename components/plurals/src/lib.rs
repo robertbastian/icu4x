@@ -80,8 +80,8 @@ use icu_locid::Locale;
 use icu_provider::prelude::*;
 pub use operands::PluralOperands;
 use provider::CardinalV1Marker;
-use provider::OrdinalV1Marker;
 use provider::ErasedPluralRulesV1Marker;
+use provider::OrdinalV1Marker;
 use rules::runtime::test_rule;
 
 /// A type of a plural rule which can be associated with the [`PluralRules`] struct.

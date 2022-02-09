@@ -139,8 +139,7 @@ impl IterableResourceProvider<DecimalSymbolsV1Marker> for NumbersProvider {
         &self,
     ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
         Ok(Box::new(
-            get_langid_subdirectories(&self.numbers_path)?
-                .map(Into::<ResourceOptions>::into),
+            get_langid_subdirectories(&self.numbers_path)?.map(Into::<ResourceOptions>::into),
         ))
     }
 }

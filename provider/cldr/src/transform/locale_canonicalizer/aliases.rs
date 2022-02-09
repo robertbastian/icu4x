@@ -32,15 +32,6 @@ impl TryFrom<&CldrPaths> for AliasesProvider {
     }
 }
 
-// impl TryFrom<&'_ str> for AliasesProvider {
-//     type Error = serde_json::error::Error;
-//     /// Attempt to parse a JSON string.
-//     fn try_from(s: &'_ str) -> Result<Self, Self::Error> {
-//         let data: cldr_serde::aliases::Resource = serde_json::from_str(s)?;
-//         Ok(Self { data })
-//     }
-// }
-
 impl ResourceProvider<AliasesV1Marker> for AliasesProvider {
     fn load_resource(&self, req: &DataRequest) -> Result<DataResponse<AliasesV1Marker>, DataError> {
         let langid = &req.options.langid;

@@ -11,7 +11,7 @@ use alloc::boxed::Box;
 ///
 /// Implementing this trait means that a data provider knows all of the data it can successfully
 /// return from a load request.
-pub trait IterableProvider<M: DataMarker> {
+pub trait IterableProvider<M: DataMarker>: DynProvider<M> {
     /// Given a [`ResourceKey`], returns a boxed iterator over [`ResourceOptions`].
     fn supported_options_for_key(
         &self,
@@ -25,5 +25,7 @@ pub trait IterableProvider<M: DataMarker> {
 /// return from a load request.
 pub trait IterableResourceProvider<M: ResourceMarker> {
     /// Returns a boxed iterator over [`ResourceOptions`].
-    fn supported_options(&self) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError>;
+    fn supported_options(
+        &self,
+    ) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError>;
 }

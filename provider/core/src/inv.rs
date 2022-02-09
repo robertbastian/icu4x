@@ -59,7 +59,11 @@ where
     }
 }
 
-impl<M: DataMarker> IterableProvider<M> for InvariantDataProvider {
+impl<M> IterableProvider<M> for InvariantDataProvider
+where
+    M: DataMarker,
+    M::Yokeable: Default,
+{
     fn supported_options_for_key(
         &self,
         _resc_key: &ResourceKey,

@@ -49,8 +49,7 @@ pub fn get_langid_subdirectory(
     langid: &LanguageIdentifier,
 ) -> Result<Option<PathBuf>, Error> {
     get_langid_subdirectories_internal(root).map(|iter| {
-        iter
-            .filter(|(langid2, _)| langid2 == langid)
+        iter.filter(|(langid2, _)| langid2 == langid)
             .next()
             .map(|(_, path)| path)
     })

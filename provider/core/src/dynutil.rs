@@ -237,7 +237,7 @@ macro_rules! impl_dyn_provider {
             fn supported_options_for_key(&self, key: &$crate::ResourceKey) -> Result<Box<dyn Iterator<Item = ResourceOptions> + '_>, DataError> {
                 match key {
                     $(
-                        &<$struct_m as $crate::ResourceMarker>::KEY => 
+                        &<$struct_m as $crate::ResourceMarker>::KEY =>
                                 $crate::iter::IterableResourceProvider::<$struct_m>::supported_options(self)
                     ),+,
                     _ => Err($crate::DataErrorKind::MissingResourceKey.with_key(*key))

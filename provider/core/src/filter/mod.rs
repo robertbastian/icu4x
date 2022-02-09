@@ -143,7 +143,7 @@ impl<M, D, F> IterableProvider<M> for RequestFilterDataProvider<D, F>
 where
     F: Fn(&DataRequest) -> bool,
     D: IterableProvider<M>,
-    M: DataMarker
+    M: DataMarker,
 {
     fn supported_options_for_key(
         &self,

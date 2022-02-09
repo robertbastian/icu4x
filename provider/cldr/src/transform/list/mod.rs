@@ -16,7 +16,6 @@ use std::path::PathBuf;
 /// A data provider reading from CLDR JSON list rule files.
 #[derive(Debug)]
 pub struct ListProvider {
-    // data: LiteMap<LanguageIdentifier, cldr_serde::list_patterns::LangListPatterns>,
     cldr_misc: PathBuf,
     uprops_path: PathBuf,
 }
