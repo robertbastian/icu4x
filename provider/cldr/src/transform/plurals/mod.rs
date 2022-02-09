@@ -68,21 +68,18 @@ impl PluralsProvider {
     }
 }
 
-impl DynProvider<PluralRulesV1Marker> for PluralsProvider {
-    fn load_payload(
-        &self,
-        key: ResourceKey,
-        req: &DataRequest,
-    ) -> Result<DataResponse<PluralRulesV1Marker>, DataError> {
-        let cldr_rules = self.get_rules_for(&key)?;
+impl<M: ResourceMarker<Yokeable = PluralRulesV1<'static>>> ResourceProvider<M> for PluralsProvider {
+    fn load_resource(&self, req: &DataRequest) -> Result<DataResponse<M>, DataError> {
         // TODO: Implement language fallback?
         let langid = req
             .get_langid()
-            .ok_or_else(|| DataErrorKind::NeedsLocale.with_req(key, req))?;
-        let r = match cldr_rules.0.get(langid) {
-            Some(v) => v,
-            None => return Err(DataErrorKind::MissingLocale.with_req(key, req)),
-        };
+            .ok_or_else(|| DataErrorKind::NeedsLocale.with_req(M::KEY, req))?;
+
+        let cldr_rules = self.get_rules_for(&M::KEY)?;
+        let r = cldr_rules
+            .0
+            .get(langid)
+            .ok_or_else(|| DataErrorKind::MissingLocale.with_req(M::KEY, req))?;
         let metadata = DataResponseMetadata::default();
         // TODO(#1109): Set metadata.data_langid correctly.
         Ok(DataResponse {
@@ -92,9 +89,11 @@ impl DynProvider<PluralRulesV1Marker> for PluralsProvider {
     }
 }
 
-icu_provider::impl_dyn_provider!(PluralsProvider, {
-    _ => PluralRulesV1Marker,
-}, SERDE_SE);
+icu_provider::impl_dyn_provider!(
+    PluralsProvider,
+    [OrdinalV1Marker, CardinalV1Marker,],
+    SERDE_SE
+);
 
 impl IterableProvider for PluralsProvider {
     fn supported_options_for_key(

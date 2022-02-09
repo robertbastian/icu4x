@@ -48,7 +48,7 @@ impl ResourceProvider<DateSymbolsV1Marker> for DateSymbolsProvider {
             })?;
         Ok(DataResponse {
             metadata,
-            payload: Some(DataPayload::from_owned(convert_dates(dates, calendar))),
+            payload: Some(DataPayload::from_owned(convert_dates(&dates, calendar))),
         })
     }
 }

@@ -44,7 +44,7 @@ impl ResourceProvider<DatePatternsV1Marker> for DatePatternsProvider {
         // TODO(#1109): Set metadata.data_langid correctly.
         Ok(DataResponse {
             metadata,
-            payload: Some(DataPayload::from_owned(DatePatternsV1::from(dates))),
+            payload: Some(DataPayload::from_owned(DatePatternsV1::from(&dates))),
         })
     }
 }

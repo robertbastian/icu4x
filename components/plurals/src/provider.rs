@@ -14,7 +14,7 @@ use icu_provider::yoke;
 ///
 /// More information: <https://unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules>
 #[icu_provider::data_struct(
-    PluralRulesV1Marker,
+    ErasedPluralRulesV1Marker,
     CardinalV1Marker = "plurals/cardinal@1",
     OrdinalV1Marker = "plurals/ordinal@1"
 )]
