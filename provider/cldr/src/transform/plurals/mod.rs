@@ -20,9 +20,9 @@ pub struct PluralsProvider {
     ordinal_rules: Option<cldr_serde::plurals::Rules>,
 }
 
-impl TryFrom<&dyn CldrPaths> for PluralsProvider {
+impl TryFrom<&CldrPaths> for PluralsProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let cardinal_rules = {
             let path = cldr_paths
                 .cldr_core()?
@@ -135,7 +135,7 @@ fn test_basic() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = PluralsProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+    let provider = PluralsProvider::try_from(&cldr_paths).unwrap();
 
     // Spot-check locale 'cs' since it has some interesting entries
     let cs_rules: DataPayload<PluralRulesV1Marker> = provider

@@ -26,14 +26,14 @@ macro_rules! cldr_json_data_provider {
     ($($ident: ident: $type: ty,)+) => {
         #[derive(Debug)]
         pub struct CldrJsonDataProvider<'a> {
-            pub cldr_paths: &'a dyn CldrPaths,
+            pub cldr_paths: &'a CldrPaths,
             $(
                 $ident: LazyCldrProvider<$type>,
             )+
         }
 
         impl<'a> CldrJsonDataProvider<'a> {
-            pub fn new(cldr_paths: &'a dyn CldrPaths) -> Self {
+            pub fn new(cldr_paths: &'a CldrPaths) -> Self {
                 CldrJsonDataProvider {
                     cldr_paths,
                     $(

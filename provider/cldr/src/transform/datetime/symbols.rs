@@ -21,9 +21,9 @@ use tinystr::{tinystr16, TinyStr16};
 #[derive(PartialEq, Debug)]
 pub struct DateSymbolsProvider(CommonDateProvider);
 
-impl TryFrom<&dyn CldrPaths> for DateSymbolsProvider {
+impl TryFrom<&CldrPaths> for DateSymbolsProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         CommonDateProvider::try_from(cldr_paths).map(DateSymbolsProvider)
     }
 }
@@ -229,7 +229,7 @@ fn test_basic() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = DateSymbolsProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+    let provider = DateSymbolsProvider::try_from(&cldr_paths).unwrap();
 
     let cs_dates: DataPayload<DateSymbolsV1Marker> = provider
         .load_resource(&DataRequest {
@@ -256,7 +256,7 @@ fn unalias_contexts() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = DateSymbolsProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+    let provider = DateSymbolsProvider::try_from(&cldr_paths).unwrap();
 
     let cs_dates: DataPayload<DateSymbolsV1Marker> = provider
         .load_resource(&DataRequest {

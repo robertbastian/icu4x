@@ -20,13 +20,13 @@ pub struct CommonDateProvider {
     data: LiteMap<&'static str, LiteMap<LanguageIdentifier, cldr_serde::ca::Dates>>,
 }
 
-impl TryFrom<&dyn CldrPaths> for CommonDateProvider {
+impl TryFrom<&CldrPaths> for CommonDateProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let mut data = LiteMap::new();
 
         // Raise an error if Gregorian paths are not available
-        let _ = cldr_paths.cldr_dates("gregory")?;
+        let _ = cldr_paths.cldr_dates_gregorian()?;
 
         for (cldr_cal, bcp_cal, path) in cldr_paths.cldr_dates_all() {
             let mut cal_data = LiteMap::new();

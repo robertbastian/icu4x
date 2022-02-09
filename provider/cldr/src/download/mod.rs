@@ -2,9 +2,9 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
-mod cldr_allinone;
+mod downloader;
 mod error;
 mod io_util;
 
-pub use cldr_allinone::CldrAllInOneDownloader;
+pub use downloader::CldrDownloader;
 pub use error::Error;

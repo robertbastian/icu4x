@@ -23,12 +23,12 @@ pub struct TimeZonesProvider {
     data: LiteMap<LanguageIdentifier, cldr_serde::time_zone_names::LangTimeZones>,
 }
 
-impl TryFrom<&dyn CldrPaths> for TimeZonesProvider {
+impl TryFrom<&CldrPaths> for TimeZonesProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let mut data = LiteMap::new();
 
-        let path = cldr_paths.cldr_dates("gregory")?.join("main");
+        let path = cldr_paths.cldr_dates_gregorian()?.join("main");
 
         let locale_dirs = get_langid_subdirectories(&path)?;
 
@@ -145,7 +145,7 @@ mod tests {
         use icu_locid_macros::langid;
 
         let cldr_paths = crate::cldr_paths::for_test();
-        let provider = TimeZonesProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+        let provider = TimeZonesProvider::try_from(&cldr_paths).unwrap();
 
         let time_zone_formats: DataPayload<TimeZoneFormatsV1Marker> = provider
             .load_resource(&DataRequest {

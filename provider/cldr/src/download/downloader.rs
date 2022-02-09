@@ -7,7 +7,7 @@
 
 use super::error::Error;
 use super::io_util;
-use crate::CldrPathsAllInOne;
+use crate::CldrPaths;
 use std::path::PathBuf;
 
 /// Implementation of CldrPaths that downloads CLDR data directories on demand.
@@ -19,30 +19,31 @@ use std::path::PathBuf;
 /// # Examples
 ///
 /// ```no_run because we don't want to download
-/// use std::boxed::Box;
 /// use icu_provider_cldr::CldrPaths;
-/// use icu_provider_cldr::download::CldrAllInOneDownloader;
+/// use icu_provider_cldr::download::CldrDownloader;
 
-/// let downloader = CldrAllInOneDownloader::try_new_from_github("38.1.0", "modern")
+/// let downloader = CldrDownloader::try_new_from_github("38.1.0", "modern")
 ///     .expect("Cache directory not found");
 ///
-/// let paths: Box<dyn CldrPaths> = Box::new(downloader.download(None)
-///     .expect("The data should download successfully"));
+/// let paths: CldrPaths = downloader.download(None).expect("The data should download successfully");
 /// ```
 #[derive(Debug)]
-pub struct CldrAllInOneDownloader {
+pub struct CldrDownloader {
     /// Directory where downloaded files are stored
-    pub cache_dir: PathBuf,
+    cache_dir: PathBuf,
 
     /// The URL to the remote zip file
-    pub url: String,
+    url: String,
 
     /// CLDR JSON locale subset: "full" or "modern"
-    pub locale_subset: String,
+    locale_subset: String,
+
+    // The uprops root to be set on CldrPaths output
+    uprops_root: Option<PathBuf>,
 }
 
-impl CldrAllInOneDownloader {
-    /// Creates a [`CldrAllInOneDownloader`] that downloads files to the system cache directory as
+impl CldrDownloader {
+    /// Creates a [`CldrDownloader`] that downloads files to the system cache directory as
     /// determined by [`dirs::cache_dir()`](dirs::cache_dir()).
     ///
     /// Arguments:
@@ -51,7 +52,11 @@ impl CldrAllInOneDownloader {
     ///    such as "38.1.0"
     /// - `locale_subset`: either "modern" (fewer locales, smaller download) or "full" (more
     ///   locales, larger download)
-    pub fn try_new_from_github(github_tag: &str, locale_subset: &str) -> Result<Self, Error> {
+    pub fn try_new_from_github(
+        github_tag: &str,
+        locale_subset: &str,
+        uprops_root: Option<PathBuf>,
+    ) -> Result<Self, Error> {
         Ok(Self {
             cache_dir: dirs::cache_dir()
                 .ok_or(Error::NoCacheDir)?
@@ -62,16 +67,17 @@ impl CldrAllInOneDownloader {
                 github_tag, github_tag, locale_subset
             ),
             locale_subset: locale_subset.to_string(),
+            uprops_root,
         })
     }
 
-    pub fn download(self, uprops_root: Option<PathBuf>) -> Result<CldrPathsAllInOne, Error> {
+    pub fn download(self) -> Result<CldrPaths, Error> {
         // TODO(#297): Implement this async.
         let downloaded = io_util::download_and_unzip(&self.url, &self.cache_dir)?;
-        Ok(CldrPathsAllInOne {
+        Ok(CldrPaths {
             cldr_json_root: downloaded,
             locale_subset: self.locale_subset,
-            uprops_root,
+            uprops_root: self.uprops_root,
         })
     }
 }

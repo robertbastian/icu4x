@@ -25,9 +25,9 @@ pub struct NumbersProvider {
     cldr_numbers_data: LiteMap<LanguageIdentifier, cldr_serde::numbers::LangNumbers>,
 }
 
-impl TryFrom<&dyn CldrPaths> for NumbersProvider {
+impl TryFrom<&CldrPaths> for NumbersProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         // Load common numbering system data:
         let cldr_numbering_systems_data: cldr_serde::numbering_systems::Resource = {
             let path = cldr_paths
@@ -187,7 +187,7 @@ fn test_basic() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = NumbersProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+    let provider = NumbersProvider::try_from(&cldr_paths).unwrap();
 
     let ar_decimal: DataPayload<DecimalSymbolsV1Marker> = provider
         .load_resource(&DataRequest {

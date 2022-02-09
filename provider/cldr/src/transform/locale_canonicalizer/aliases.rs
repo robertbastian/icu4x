@@ -20,9 +20,9 @@ pub struct AliasesProvider {
     data: cldr_serde::aliases::Resource,
 }
 
-impl TryFrom<&dyn CldrPaths> for AliasesProvider {
+impl TryFrom<&CldrPaths> for AliasesProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let data: cldr_serde::aliases::Resource = {
             let path = cldr_paths
                 .cldr_core()?
@@ -300,7 +300,7 @@ fn test_basic() {
     use std::str::FromStr;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = AliasesProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+    let provider = AliasesProvider::try_from(&cldr_paths).unwrap();
     let data: DataPayload<AliasesV1Marker> = provider
         .load_resource(&DataRequest::default())
         .unwrap()

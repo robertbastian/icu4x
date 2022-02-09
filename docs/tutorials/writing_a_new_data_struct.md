@@ -197,9 +197,9 @@ struct FooProvider {
     // ...
 }
 
-impl TryFrom<&dyn CldrPaths> for FooProvider {
+impl TryFrom<&CldrPaths> for FooProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         // CLDR providers are constructed from CldrPaths, which gives you
         // access to raw CLDR JSON data.
     }

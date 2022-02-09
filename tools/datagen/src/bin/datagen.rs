@@ -13,10 +13,9 @@ use icu_provider::hello_world::{HelloWorldProvider, HelloWorldV1Marker};
 use icu_provider::prelude::*;
 use icu_provider::serde::SerializeMarker;
 use icu_provider_blob::export::BlobExporter;
-use icu_provider_cldr::download::CldrAllInOneDownloader;
+use icu_provider_cldr::download::CldrDownloader;
 use icu_provider_cldr::CldrJsonDataProvider;
 use icu_provider_cldr::CldrPaths;
-use icu_provider_cldr::CldrPathsAllInOne;
 use icu_provider_cldr::KeyedDataProvider;
 use icu_provider_fs::export::fs_exporter;
 use icu_provider_fs::export::serializers;
@@ -399,28 +398,30 @@ fn export_cldr(
     allowed_keys: Option<&HashSet<Cow<str>>>,
 ) -> eyre::Result<()> {
     let locale_subset = matches.value_of("CLDR_LOCALE_SUBSET").unwrap_or("full");
-    let cldr_paths: Box<dyn CldrPaths> = if let Some(tag) = matches.value_of("CLDR_TAG") {
-        Box::new(
-            CldrAllInOneDownloader::try_new_from_github(tag, locale_subset)?
-                .download(matches.value_of("UPROPS_ROOT").map(PathBuf::from))?,
-        )
+    let cldr_paths = if let Some(tag) = matches.value_of("CLDR_TAG") {
+        CldrDownloader::try_new_from_github(
+            tag,
+            locale_subset,
+            matches.value_of("UPROPS_ROOT").map(PathBuf::from),
+        )?
+        .download()?
     } else if let Some(path) = matches.value_of("CLDR_ROOT") {
-        Box::new(CldrPathsAllInOne {
+        CldrPaths {
             cldr_json_root: PathBuf::from(path),
             locale_subset: locale_subset.to_string(),
             uprops_root: matches.value_of("UPROPS_ROOT").map(PathBuf::from),
-        })
+        }
     } else if matches.is_present("INPUT_FROM_TESTDATA") {
-        Box::new(CldrPathsAllInOne {
+        CldrPaths {
             cldr_json_root: icu_testdata::paths::cldr_json_root(),
             locale_subset: "full".to_string(),
             uprops_root: Some(icu_testdata::paths::uprops_toml_root()),
-        })
+        }
     } else {
         eyre::bail!("Either --cldr-tag or --cldr-root must be specified",)
     };
 
-    let raw_provider = CldrJsonDataProvider::new(cldr_paths.as_ref());
+    let raw_provider = CldrJsonDataProvider::new(&cldr_paths);
     let provider: EitherProvider<_, _> = if let Some(allowlist) = allowed_locales {
         let filtered_provider = raw_provider
             .filterable("icu4x-datagen langid allowlist")

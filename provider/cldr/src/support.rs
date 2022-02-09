@@ -39,14 +39,14 @@ where
     T: DynProvider<SerializeMarker>
         + IterableProvider
         + KeyedDataProvider
-        + TryFrom<&'b dyn CldrPaths, Error = crate::error::Error>,
+        + TryFrom<&'b CldrPaths, Error = crate::error::Error>,
 {
     /// Call [`DataProvider::load_payload()`], initializing `T` if necessary.
     pub fn try_load_serde(
         &self,
         key: ResourceKey,
         req: &DataRequest,
-        cldr_paths: &'b dyn CldrPaths,
+        cldr_paths: &'b CldrPaths,
     ) -> Result<Option<DataResponse<SerializeMarker>>, DataError> {
         if !T::supported_keys().contains(&key) {
             return Ok(None);
@@ -72,7 +72,7 @@ where
     pub fn try_supported_options(
         &self,
         key: &ResourceKey,
-        cldr_paths: &'b dyn CldrPaths,
+        cldr_paths: &'b CldrPaths,
     ) -> Result<Option<Vec<ResourceOptions>>, DataError> {
         if !T::supported_keys().contains(key) {
             return Ok(None);

@@ -21,9 +21,9 @@ pub struct LikelySubtagsProvider {
     data: cldr_serde::likely_subtags::Resource,
 }
 
-impl TryFrom<&dyn CldrPaths> for LikelySubtagsProvider {
+impl TryFrom<&CldrPaths> for LikelySubtagsProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let data: cldr_serde::likely_subtags::Resource = {
             let path = cldr_paths
                 .cldr_core()?
@@ -149,7 +149,7 @@ fn test_basic() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = LikelySubtagsProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+    let provider = LikelySubtagsProvider::try_from(&cldr_paths).unwrap();
     let result: DataPayload<LikelySubtagsV1Marker> = provider
         .load_resource(&Default::default())
         .unwrap()

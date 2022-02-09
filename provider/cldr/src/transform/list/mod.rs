@@ -21,9 +21,9 @@ pub struct ListProvider {
     uprops_path: std::path::PathBuf,
 }
 
-impl TryFrom<&dyn CldrPaths> for ListProvider {
+impl TryFrom<&CldrPaths> for ListProvider {
     type Error = crate::error::Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let mut data = LiteMap::new();
         for dir in get_langid_subdirectories(&cldr_paths.cldr_misc()?.join("main"))? {
             let path = dir.join("listPatterns.json");
@@ -190,7 +190,7 @@ mod tests {
     macro_rules! test {
         ($langid:literal, $type:ident, $(($input:expr, $output:literal),)+) => {
             let cldr_paths = crate::cldr_paths::for_test();
-            let provider = ListProvider::try_from(&cldr_paths as &dyn CldrPaths).unwrap();
+            let provider = ListProvider::try_from(&cldr_paths).unwrap();
             let f = ListFormatter::$type(langid!($langid), &provider, ListStyle::Wide).unwrap();
             $(
                 assert_writeable_eq!(f.format($input.iter()), $output);

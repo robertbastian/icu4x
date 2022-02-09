@@ -20,9 +20,9 @@ use std::convert::TryFrom;
 #[derive(PartialEq, Debug)]
 pub struct DateSkeletonPatternsProvider(CommonDateProvider);
 
-impl TryFrom<&dyn CldrPaths> for DateSkeletonPatternsProvider {
+impl TryFrom<&CldrPaths> for DateSkeletonPatternsProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         CommonDateProvider::try_from(cldr_paths).map(DateSkeletonPatternsProvider)
     }
 }
@@ -149,8 +149,8 @@ fn test_datetime_skeletons() {
     use icu_plurals::PluralCategory;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = DateSkeletonPatternsProvider::try_from(&cldr_paths as &dyn CldrPaths)
-        .expect("Failed to retrieve provider");
+    let provider =
+        DateSkeletonPatternsProvider::try_from(&cldr_paths).expect("Failed to retrieve provider");
 
     let skeletons: DataPayload<DateSkeletonPatternsV1Marker> = provider
         .load_resource(&DataRequest {

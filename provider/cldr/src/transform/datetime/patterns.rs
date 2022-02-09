@@ -21,9 +21,9 @@ use std::convert::TryFrom;
 #[derive(PartialEq, Debug)]
 pub struct DatePatternsProvider(CommonDateProvider);
 
-impl TryFrom<&dyn CldrPaths> for DatePatternsProvider {
+impl TryFrom<&CldrPaths> for DatePatternsProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         CommonDateProvider::try_from(cldr_paths).map(DatePatternsProvider)
     }
 }
@@ -261,8 +261,8 @@ fn test_basic() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = DatePatternsProvider::try_from(&cldr_paths as &dyn CldrPaths)
-        .expect("Failed to retrieve provider");
+    let provider =
+        DatePatternsProvider::try_from(&cldr_paths).expect("Failed to retrieve provider");
 
     let cs_dates: DataPayload<DatePatternsV1Marker> = provider
         .load_resource(&DataRequest {
@@ -284,8 +284,8 @@ fn test_with_numbering_system() {
     use icu_locid_macros::langid;
 
     let cldr_paths = crate::cldr_paths::for_test();
-    let provider = DatePatternsProvider::try_from(&cldr_paths as &dyn CldrPaths)
-        .expect("Failed to retrieve provider");
+    let provider =
+        DatePatternsProvider::try_from(&cldr_paths).expect("Failed to retrieve provider");
 
     let cs_dates: DataPayload<DatePatternsV1Marker> = provider
         .load_resource(&DataRequest {

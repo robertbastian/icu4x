@@ -28,9 +28,9 @@ pub struct JapaneseErasProvider {
     data: LiteMap<EraStartDate, TinyStr16>,
 }
 
-impl TryFrom<&dyn CldrPaths> for JapaneseErasProvider {
+impl TryFrom<&CldrPaths> for JapaneseErasProvider {
     type Error = Error;
-    fn try_from(cldr_paths: &dyn CldrPaths) -> Result<Self, Self::Error> {
+    fn try_from(cldr_paths: &CldrPaths) -> Result<Self, Self::Error> {
         let mut historical_data = LiteMap::new();
         let mut data = LiteMap::new();
 
@@ -38,7 +38,7 @@ impl TryFrom<&dyn CldrPaths> for JapaneseErasProvider {
         // in the `en` locale. We load this data to construct era codes but
         // actual user code only needs to load the data for the locales it cares about.
         let era_names_path = cldr_paths
-            .cldr_dates("japanese")?
+            .cldr_dates_japanese()?
             .join("main")
             .join("en")
             .join("ca-japanese.json");
