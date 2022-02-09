@@ -32,5 +32,5 @@ pub mod download;
 
 pub use cldr_paths::CldrPaths;
 pub use error::Error as CldrError;
-pub use transform::CldrJsonDataProvider;
+pub use transform::cldr_providers;
 pub use transform::ALL_KEYS;

@@ -142,6 +142,7 @@ mod resource;
 #[cfg(feature = "serde")]
 pub mod serde;
 pub mod struct_provider;
+pub mod union_;
 
 #[cfg(feature = "macros")]
 pub use icu_provider_macros::data_struct;
