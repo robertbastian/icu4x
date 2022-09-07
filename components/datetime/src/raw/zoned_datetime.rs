@@ -13,10 +13,7 @@ use icu_plurals::{provider::OrdinalV1Marker, PluralRules};
 use icu_provider::prelude::*;
 
 use crate::{
-    format::{
-        datetime,
-        zoned_datetime::{self, FormattedZonedDateTime},
-    },
+    format::{datetime, zoned_datetime::FormattedZonedDateTime},
     input::{DateTimeInput, TimeZoneInput},
     input::{ExtractedDateTimeInput, ExtractedTimeZoneInput},
     pattern::runtime::PatternPlurals,
@@ -31,6 +28,7 @@ use crate::{
     time_zone::{TimeZoneFormatter, TimeZoneFormatterOptions},
     DateTimeFormatterError,
 };
+use writeable::Writeable;
 
 /// This is the internal "raw" version of [crate::ZonedDateTimeFormatter], i.e. a version of ZonedDateTimeFormatter
 /// without the generic parameter. The actual implementation of [crate::ZonedDateTimeFormatter] should live here.
@@ -147,18 +145,6 @@ impl ZonedDateTimeFormatter {
         }
     }
 
-    /// Takes a mutable reference to anything that implements the [`Write`](std::fmt::Write) trait
-    /// and a [`ZonedDateTimeInput`] implementer, then populates the buffer with a formatted value.
-    #[inline(never)]
-    pub fn format_to_write(
-        &self,
-        w: &mut impl core::fmt::Write,
-        date: &impl DateTimeInput,
-        time_zone: &impl TimeZoneInput,
-    ) -> core::fmt::Result {
-        zoned_datetime::write_pattern(self, date, time_zone, w).map_err(|_| core::fmt::Error)
-    }
-
     /// Takes a [`ZonedDateTimeInput`] implementer and returns it formatted as a string.
     #[inline]
     pub fn format_to_string(
@@ -166,8 +152,6 @@ impl ZonedDateTimeFormatter {
         date: &impl DateTimeInput,
         time_zone: &impl TimeZoneInput,
     ) -> String {
-        let mut s = String::new();
-        let _ = self.format_to_write(&mut s, date, time_zone);
-        s
+        self.format(date, time_zone).write_to_string().into_owned()
     }
 }
