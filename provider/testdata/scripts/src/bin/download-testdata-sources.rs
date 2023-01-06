@@ -12,16 +12,7 @@ use std::{io::Read, path::PathBuf};
 use tokio::{fs, io::AsyncWriteExt};
 use zip::ZipArchive;
 
-#[derive(Debug, serde::Deserialize)]
-struct GlobMetadata {
-    cldr_json_glob: Vec<String>,
-    icuexportdata_glob: Vec<String>,
-}
-
-fn load_sources() -> GlobMetadata {
-    #[allow(clippy::unwrap_used)] // the TOML source is a constant
-    toml::from_str(include_str!("../../globs.toml")).unwrap()
-}
+include!("../../globs.rs.data");
 
 #[derive(Clone)]
 struct CldrJsonDownloader<'a> {
@@ -35,7 +26,7 @@ struct CldrJsonDownloader<'a> {
     pub client: reqwest::Client,
 }
 
-fn expand_paths(in_paths: Vec<String>) -> Vec<String> {
+fn expand_paths(in_paths: &[&str]) -> Vec<String> {
     let mut paths = vec![];
     for pattern in in_paths {
         if pattern.contains("$LOCALES") {
@@ -46,7 +37,7 @@ fn expand_paths(in_paths: Vec<String>) -> Vec<String> {
             paths.push(pattern.replace("$LOCALES", "root"));
         } else {
             // No variable in pattern
-            paths.push(pattern)
+            paths.push(pattern.to_string())
         }
     }
     paths
@@ -224,11 +215,9 @@ async fn main() -> eyre::Result<()> {
         ))
         .build()?;
 
-    let tag = icu_testdata::versions::cldr_tag();
-
     let cldr_downloader = &CldrJsonDownloader {
         repo_owner_and_name: "unicode-org/cldr-json",
-        tag: &tag,
+        tag: icu_testdata::versions::cldr_tag(),
         root_dir: output_path.clone().join("cldr"),
         client: client.clone(),
     };
@@ -241,7 +230,7 @@ async fn main() -> eyre::Result<()> {
             )
         })?;
 
-    stream::iter(expand_paths(load_sources().cldr_json_glob))
+    stream::iter(expand_paths(CLDR_JSON_GLOB))
         .map(Ok)
         .try_for_each_concurrent(http_concurrency, |path| async move {
             log::info!("Downloading: {}", path);
@@ -249,11 +238,9 @@ async fn main() -> eyre::Result<()> {
         })
         .await?;
 
-    let tag = icu_testdata::versions::icu_tag();
-
     let icued_downloader = IcuExportDataDownloader {
         repo_owner_and_name: "unicode-org/icu",
-        tag: &tag,
+        tag: icu_testdata::versions::icu_tag(),
         root_dir: output_path.clone().join("icuexport"),
     };
     fs::remove_dir_all(&icued_downloader.root_dir)
@@ -267,7 +254,7 @@ async fn main() -> eyre::Result<()> {
 
     let mut icued_unzipper = icued_downloader.download(&client).await?;
 
-    let all_paths = expand_paths(load_sources().icuexportdata_glob);
+    let all_paths = expand_paths(ICUEXPORTDATA_GLOB);
     for path in all_paths {
         log::info!("Unzipping: {}", path);
         icued_unzipper.unzip(&path).await?;

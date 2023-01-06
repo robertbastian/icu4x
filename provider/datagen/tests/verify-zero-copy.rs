@@ -43,8 +43,6 @@ fn main() {
     // manually drop to avoid dhat from printing stats at the end
     let _profiler = ManuallyDrop::new(dhat::Profiler::new_heap());
 
-    let selected_locales = icu_testdata::locales();
-
     let converter = DatagenProvider {
         source: SourceData::default()
             .with_cldr(
@@ -56,7 +54,7 @@ fn main() {
             .unwrap(),
     }
     .filterable("icu4x-datagen locales")
-    .filter_by_langid_allowlist_strict(&selected_locales);
+    .filter_by_langid_allowlist_strict(icu_testdata::locales());
 
     let provider = icu_testdata::buffer_no_fallback();
 
