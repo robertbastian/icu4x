@@ -26,7 +26,7 @@ $ cargo run --bin --features=bin icu4x-testdata-download-sources
 ### Regenerating data
 
 ```bash
-$ cargo run --bin --features=bin icu4x-testdata-datagen
+$ cargo run --bin make-testdata
 ```
 
 ## Examples
