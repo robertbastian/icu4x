@@ -44,7 +44,8 @@ multiple crates), then name of the module and then the name of the test, in this
 ### Detailed Benchmarks
 
 If more detailed benchmarks drilling into various facets of the component are needed, they should be put
-behind `bench` flag and in the same benchmark naming scheme.
+behind `bench` cfg-feature and in the same benchmark naming scheme. `bench` should not be a cargo feature,
+as those are visible to users.
 
 For example:
   - `plurals/parser/lexing`
@@ -56,7 +57,7 @@ For example:
   - `plurals/pluralrules/select`
 
 This allows a user to incorporate `cargo bench` into their change->test->change cycle, while allowing them
-to drill into a more detailed view of the performance impact if needed by calling `cargo bench operands --features bench`.
+to drill into a more detailed view of the performance impact if needed by calling `RUSTFLAGS="--cfg feature=\"bench\"" cargo bench operands`.
 
 ### Wall time vs. Count of instructions
 
