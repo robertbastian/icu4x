@@ -16,6 +16,14 @@ pub struct ListFormatter {
     length: ListLength,
 }
 
+impl core::fmt::Debug for ListFormatter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ListFormatter")
+            .field("length", &self.length)
+            .finish()
+    }
+}
+
 macro_rules! constructor {
     ($name: ident, $name_any: ident, $name_buffer: ident, $marker: ty, $doc: literal) => {
         #[doc = concat!("Creates a new [`ListFormatter`] that produces a ", $doc, "-type list.\n\nSee the [CLDR spec]",
