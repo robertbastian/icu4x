@@ -397,7 +397,7 @@ mod test {
     #[test]
     fn test_warehouse_owned_dyn_erased() {
         let warehouse = get_warehouse(DATA);
-        let hello_data = get_payload_v1(&warehouse.as_any_provider().as_downcasting()).unwrap();
+        let hello_data = get_payload_v1(&warehouse.as_downcasting()).unwrap();
         assert!(matches!(
             hello_data.get(),
             HelloWorldV1 {
@@ -422,7 +422,7 @@ mod test {
     #[test]
     fn test_warehouse_owned_dyn_erased_alt() {
         let warehouse = get_warehouse(DATA);
-        let response = get_payload_alt(&warehouse.as_any_provider().as_downcasting());
+        let response = get_payload_alt(&warehouse.as_downcasting());
         assert!(matches!(
             response,
             Err(DataError {
@@ -449,7 +449,7 @@ mod test {
     fn test_provider2_dyn_erased() {
         let warehouse = get_warehouse(DATA);
         let provider = DataProvider2::from(warehouse);
-        let hello_data = get_payload_v1(&provider.as_any_provider().as_downcasting()).unwrap();
+        let hello_data = get_payload_v1(&provider.as_downcasting()).unwrap();
         assert!(matches!(
             hello_data.get(),
             HelloWorldV1 {
@@ -462,7 +462,7 @@ mod test {
     fn test_provider2_dyn_erased_alt() {
         let warehouse = get_warehouse(DATA);
         let provider = DataProvider2::from(warehouse);
-        let hello_data = get_payload_alt(&provider.as_any_provider().as_downcasting()).unwrap();
+        let hello_data = get_payload_alt(&provider.as_downcasting()).unwrap();
         assert!(matches!(hello_data.get(), HelloAlt { .. }));
     }
 
@@ -493,8 +493,8 @@ mod test {
         let warehouse = get_warehouse(DATA);
         let provider = DataProvider2::from(warehouse);
         // Request is for v2, but type argument is for v1
-        let response: Result<DataResponse<HelloWorldV1Marker>, DataError> = AnyProvider::load_any(
-            &provider.as_any_provider(),
+        let response: Result<DataResponse<HelloWorldV1Marker>, DataError> = DynamicDataProvider::<AnyMarker>::load_data(
+            &provider,
             HELLO_ALT_KEY,
             Default::default(),
         )
@@ -533,6 +533,6 @@ mod test {
     fn test_v1_v2_dyn_erased() {
         let warehouse = get_warehouse(DATA);
         let provider = DataProvider2::from(warehouse);
-        check_v1_v2(&provider.as_any_provider().as_downcasting());
+        check_v1_v2(&provider.as_downcasting());
     }
 }

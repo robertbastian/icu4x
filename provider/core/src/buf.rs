@@ -4,7 +4,9 @@
 
 //! Traits for data providers that produce opaque buffers.
 
-use crate::prelude::*;
+use yoke::Yoke;
+
+use crate::{prelude::*, response::{DataPayloadInner, SelectedRc}, Cart};
 
 /// [`DataMarker`] for raw buffers. Returned by [`BufferProvider`].
 ///
@@ -16,6 +18,31 @@ pub struct BufferMarker;
 
 impl DataMarker for BufferMarker {
     type Yokeable = &'static [u8];
+}
+
+impl DataPayload<BufferMarker> {
+    /// Converts an owned byte buffer into a `DataPayload<BufferMarker>`.
+    pub fn from_owned_buffer(buffer: Box<[u8]>) -> Self {
+        let yoke = Yoke::attach_to_cart(SelectedRc::new(buffer), |b| &**b)
+            .wrap_cart_in_option()
+            .convert_cart_into_option_pointer();
+        Self(DataPayloadInner::Yoke(yoke))
+    }
+
+    /// Converts a yoked byte buffer into a `DataPayload<BufferMarker>`.
+    pub fn from_yoked_buffer(yoke: Yoke<&'static [u8], Option<Cart>>) -> Self {
+        let yoke = Cart::unwrap_cart(yoke);
+        Self(DataPayloadInner::Yoke(
+            yoke.convert_cart_into_option_pointer(),
+        ))
+    }
+
+    /// Converts a static byte buffer into a `DataPayload<BufferMarker>`.
+    pub fn from_static_buffer(buffer: &'static [u8]) -> Self {
+        Self(DataPayloadInner::Yoke(
+            Yoke::new_owned(buffer).convert_cart_into_option_pointer(),
+        ))
+    }
 }
 
 /// A data provider that returns opaque bytes.

@@ -638,8 +638,8 @@ mod tests {
         keys: Vec<DataKey>,
     }
 
-    impl AnyProvider for RejectByKeyProvider {
-        fn load_any(&self, key: DataKey, _: DataRequest) -> Result<AnyResponse, DataError> {
+    impl DynamicDataProvider<AnyMarker> for RejectByKeyProvider {
+        fn load_data(&self, key: DataKey, _: DataRequest) -> Result<DataResponse<AnyMarker>, DataError> {
             use alloc::borrow::Cow;
 
             println!("{:#?}", key);

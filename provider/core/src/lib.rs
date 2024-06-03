@@ -177,11 +177,9 @@ pub use icu_provider_macros::data_struct;
 
 // Reexports from public modules
 pub use crate::any::AnyMarker;
-pub use crate::any::AnyPayload;
+pub use crate::any::AnyYokeable;
 pub use crate::any::AnyProvider;
-pub use crate::any::AnyResponse;
 pub use crate::any::AsDowncastingAnyProvider;
-pub use crate::any::AsDynamicDataProviderAnyMarkerWrap;
 pub use crate::any::MaybeSendSync;
 pub use crate::buf::BufferMarker;
 pub use crate::buf::BufferProvider;
@@ -198,18 +196,14 @@ pub mod prelude {
     #[doc(no_inline)]
     pub use crate::AnyMarker;
     #[doc(no_inline)]
-    pub use crate::AnyPayload;
+    pub use crate::AnyYokeable;
     #[doc(no_inline)]
     pub use crate::AnyProvider;
-    #[doc(no_inline)]
-    pub use crate::AnyResponse;
     #[doc(no_inline)]
     #[cfg(feature = "serde")]
     pub use crate::AsDeserializingBufferProvider;
     #[doc(no_inline)]
     pub use crate::AsDowncastingAnyProvider;
-    #[doc(no_inline)]
-    pub use crate::AsDynamicDataProviderAnyMarkerWrap;
     #[doc(no_inline)]
     pub use crate::BoundDataProvider;
     #[doc(no_inline)]

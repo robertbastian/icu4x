@@ -12,7 +12,7 @@ pub mod ffi {
     #[cfg(feature = "icu_decimal")]
     use crate::errors::ffi::ICU4XError;
     use alloc::boxed::Box;
-    use icu_provider::AnyPayload;
+    use icu_provider::AnyYokeable;
     #[cfg(feature = "icu_decimal")]
     use icu_provider::DataPayload;
 
@@ -21,7 +21,7 @@ pub mod ffi {
     ///
     /// This can be used to construct a StructDataProvider.
     #[diplomat::attr(*, disable)]
-    pub struct ICU4XDataStruct(pub(crate) AnyPayload);
+    pub struct ICU4XDataStruct(pub(crate) AnyYokeable);
 
     impl ICU4XDataStruct {
         /// Construct a new DecimalSymbolsV1 data struct.

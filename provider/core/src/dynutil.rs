@@ -153,10 +153,10 @@ macro_rules! impl_casting_upcast {
 /// };
 ///
 /// // Successful because the key matches:
-/// HelloWorldProvider.as_any_provider().load_any(HelloWorldV1Marker::KEY, req).unwrap();
+/// DynamicDataProvider::<AnyMarker>::load_data(&HelloWorldProvider, HelloWorldV1Marker::KEY, req).unwrap();
 ///
 /// // Because of the wildcard, any key actually works:
-/// HelloWorldProvider.as_any_provider().load_any(icu_provider::data_key!("dummy@1"), req).unwrap();
+/// DynamicDataProvider::<AnyMarker>::load_data(&HelloWorldProvider, icu_provider::data_key!("dummy@1"), req).unwrap();
 /// ```
 ///
 /// [`DynamicDataProvider`]: crate::DynamicDataProvider

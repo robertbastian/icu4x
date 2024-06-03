@@ -52,7 +52,7 @@ pub struct AnyPayloadProvider {
     /// [`DataErrorKind::MissingDataKey`].
     key: DataKey,
     /// The [`AnyPayload`] to return on matching requests.
-    data: AnyPayload,
+    data: DataPayload<AnyMarker>,
 }
 
 impl AnyPayloadProvider {
@@ -68,7 +68,7 @@ impl AnyPayloadProvider {
     pub fn from_static<M: KeyedDataMarker>(data: &'static M::Yokeable) -> Self {
         AnyPayloadProvider {
             key: M::KEY,
-            data: AnyPayload::from_static_ref(data),
+            data: AnyYokeable::from_static_ref(data),
         }
     }
 
@@ -79,12 +79,18 @@ impl AnyPayloadProvider {
     {
         AnyPayloadProvider {
             key: M::KEY,
-            data: payload.wrap_into_any_payload(),
+            data: AnyYokeable {
+                    inner: match payload.0 {
+                        DataPayloadInner::StaticRef(r) => AnyPayloadInner::StructRef(r),
+                        inner => AnyPayloadInner::PayloadRc(SelectedRc::from(DataPayload<M>(inner))),
+                    },
+                    type_name: core::any::type_name::<M>(),
+                },
         }
     }
 
     /// Creates an `AnyPayloadProvider` from an existing [`AnyPayload`].
-    pub fn from_any_payload<M: KeyedDataMarker>(payload: AnyPayload) -> Self {
+    pub fn from_any_payload<M: KeyedDataMarker>(payload: AnyYokeable) -> Self {
         AnyPayloadProvider {
             key: M::KEY,
             data: payload,
@@ -101,10 +107,10 @@ impl AnyPayloadProvider {
     }
 }
 
-impl AnyProvider for AnyPayloadProvider {
-    fn load_any(&self, key: DataKey, _: DataRequest) -> Result<AnyResponse, DataError> {
+impl DynamicDataProvider<AnyMarker> for AnyPayloadProvider {
+    fn load_data(&self, key: DataKey, _: DataRequest) -> Result<DataResponse<AnyMarker>, DataError> {
         key.match_key(self.key)?;
-        Ok(AnyResponse {
+        Ok(DataResponse {
             metadata: DataResponseMetadata::default(),
             payload: Some(self.data.clone()),
         })

@@ -2,7 +2,6 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
-use crate::buf::BufferMarker;
 use crate::error::{DataError, DataErrorKind};
 use crate::marker::DataMarker;
 use crate::request::DataLocale;
@@ -16,9 +15,9 @@ use yoke::trait_hack::YokeTraitHack;
 use yoke::*;
 
 #[cfg(not(feature = "sync"))]
-use alloc::rc::Rc as SelectedRc;
+pub(crate) use alloc::rc::Rc as SelectedRc;
 #[cfg(feature = "sync")]
-use alloc::sync::Arc as SelectedRc;
+pub(crate) use alloc::sync::Arc as SelectedRc;
 
 /// A response object containing metadata about the returned data.
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -793,31 +792,6 @@ where
         } else {
             Err(DataError::for_type::<M2>().with_str_context(core::any::type_name::<M>()))
         }
-    }
-}
-
-impl DataPayload<BufferMarker> {
-    /// Converts an owned byte buffer into a `DataPayload<BufferMarker>`.
-    pub fn from_owned_buffer(buffer: Box<[u8]>) -> Self {
-        let yoke = Yoke::attach_to_cart(SelectedRc::new(buffer), |b| &**b)
-            .wrap_cart_in_option()
-            .convert_cart_into_option_pointer();
-        Self(DataPayloadInner::Yoke(yoke))
-    }
-
-    /// Converts a yoked byte buffer into a `DataPayload<BufferMarker>`.
-    pub fn from_yoked_buffer(yoke: Yoke<&'static [u8], Option<Cart>>) -> Self {
-        let yoke = Cart::unwrap_cart(yoke);
-        Self(DataPayloadInner::Yoke(
-            yoke.convert_cart_into_option_pointer(),
-        ))
-    }
-
-    /// Converts a static byte buffer into a `DataPayload<BufferMarker>`.
-    pub fn from_static_buffer(buffer: &'static [u8]) -> Self {
-        Self(DataPayloadInner::Yoke(
-            Yoke::new_owned(buffer).convert_cart_into_option_pointer(),
-        ))
     }
 }
 
