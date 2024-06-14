@@ -125,10 +125,10 @@ impl<'data> BlobSchemaV1<'data> {
                     })
                     .ok_or(DataErrorKind::MissingLocale)
             })
-            .map_err(|kind| kind.with_req(marker, req))?;
+            .map_err(|kind| kind.with_dyn_req(marker, req))?;
         self.buffers
             .get(idx)
-            .ok_or_else(|| DataError::custom("Invalid blob bytes").with_req(marker, req))
+            .ok_or_else(|| DataError::custom("Invalid blob bytes").with_dyn_req(marker, req))
     }
 
     #[cfg(feature = "export")]
@@ -220,29 +220,29 @@ impl<'data, LocaleVecFormat: VarZeroVecFormat> BlobSchemaV2<'data, LocaleVecForm
             .markers
             .binary_search(&marker.path.hashed())
             .ok()
-            .ok_or_else(|| DataErrorKind::MissingDataMarker.with_req(marker, req))?;
+            .ok_or_else(|| DataErrorKind::MissingDataMarker.with_dyn_req(marker, req))?;
         if marker.is_singleton && !req.locale.is_empty() {
-            return Err(DataErrorKind::ExtraneousLocale.with_req(marker, req));
+            return Err(DataErrorKind::ExtraneousLocale.with_dyn_req(marker, req));
         }
         let zerotrie = self
             .locales
             .get(marker_index)
-            .ok_or_else(|| DataError::custom("Invalid blob bytes").with_req(marker, req))?;
+            .ok_or_else(|| DataError::custom("Invalid blob bytes").with_dyn_req(marker, req))?;
         let mut cursor = ZeroTrieSimpleAscii::from_store(zerotrie).into_cursor();
         let _infallible_ascii = req.locale.write_to(&mut cursor);
         if !req.marker_attributes.is_empty() {
             let _infallible_ascii = cursor.write_char(REQUEST_SEPARATOR);
             req.marker_attributes
                 .write_to(&mut cursor)
-                .map_err(|_| DataErrorKind::MissingLocale.with_req(marker, req))?;
+                .map_err(|_| DataErrorKind::MissingLocale.with_dyn_req(marker, req))?;
         }
         let blob_index = cursor
             .take_value()
-            .ok_or_else(|| DataErrorKind::MissingLocale.with_req(marker, req))?;
+            .ok_or_else(|| DataErrorKind::MissingLocale.with_dyn_req(marker, req))?;
         let buffer = self
             .buffers
             .get(blob_index)
-            .ok_or_else(|| DataError::custom("Invalid blob bytes").with_req(marker, req))?;
+            .ok_or_else(|| DataError::custom("Invalid blob bytes").with_dyn_req(marker, req))?;
         Ok(buffer)
     }
 

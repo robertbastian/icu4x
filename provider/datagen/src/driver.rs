@@ -657,7 +657,7 @@ impl DatagenDriver {
                             }
                         }
                     }
-                    Err(e) => return Some(Err(e.with_req(marker, req))),
+                    Err(e) => return Some(Err(e.with_dyn_req(marker, req))),
                 }
             }
         };
@@ -678,13 +678,13 @@ impl DatagenDriver {
 
                 let payload = provider
                     .load_data(marker, Default::default())
-                    .map_err(|e| e.with_req(marker, Default::default()))?
+                    .map_err(|e| e.with_dyn_req(marker, Default::default()))?
                     .payload;
 
                 let transform_duration = instant1.elapsed();
 
                 sink.flush_singleton(marker, &payload)
-                    .map_err(|e| e.with_req(marker, Default::default()))?;
+                    .map_err(|e| e.with_dyn_req(marker, Default::default()))?;
 
                 let final_duration = instant1.elapsed();
                 let flush_duration = final_duration - transform_duration;
@@ -754,7 +754,7 @@ impl DatagenDriver {
                             // In Runtime mode the elapsed time is only load_with_fallback.
                             .map(|_| (instant2.elapsed(), locale.write_to_string().into_owned()))
                             .map_err(|e| {
-                                e.with_req(
+                                e.with_dyn_req(
                                     marker,
                                     DataRequest {
                                         locale: &locale,
@@ -962,7 +962,7 @@ fn deduplicate_payloads<const MAXIMAL: bool>(
                 return sink
                     .put_payload(marker, locale, marker_attributes, payload)
                     .map_err(|e| {
-                        e.with_req(
+                        e.with_dyn_req(
                             marker,
                             DataRequest {
                                 locale,
@@ -1005,7 +1005,7 @@ fn deduplicate_payloads<const MAXIMAL: bool>(
             // Did not find a match: export this payload
             sink.put_payload(marker, locale, marker_attributes, payload)
                 .map_err(|e| {
-                    e.with_req(
+                    e.with_dyn_req(
                         marker,
                         DataRequest {
                             locale,

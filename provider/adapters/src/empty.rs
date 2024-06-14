@@ -60,7 +60,7 @@ impl AnyProvider for EmptyDataProvider {
         marker: DataMarkerInfo,
         base_req: DataRequest,
     ) -> Result<AnyResponse, DataError> {
-        Err(self.error_kind.with_req(marker, base_req))
+        Err(self.error_kind.with_dyn_req(marker, base_req))
     }
 }
 
@@ -73,7 +73,7 @@ where
         marker: DataMarkerInfo,
         base_req: DataRequest,
     ) -> Result<DataResponse<M>, DataError> {
-        Err(self.error_kind.with_req(marker, base_req))
+        Err(self.error_kind.with_dyn_req(marker, base_req))
     }
 }
 
@@ -82,7 +82,7 @@ where
     M: DataMarker,
 {
     fn load(&self, base_req: DataRequest) -> Result<DataResponse<M>, DataError> {
-        Err(self.error_kind.with_req(M::INFO, base_req))
+        Err(self.error_kind.with_req::<M>(base_req))
     }
 }
 

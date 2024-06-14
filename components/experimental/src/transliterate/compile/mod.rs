@@ -319,7 +319,7 @@ where
                 exclusive_data.0.remove(req.marker_attributes as &str)
             else {
                 return Err(
-                    DataErrorKind::MissingLocale.with_req(TransliteratorRulesV1Marker::INFO, req)
+                    DataErrorKind::MissingLocale.with_req::<TransliteratorRulesV1Marker>(req)
                 );
             };
 
@@ -332,7 +332,7 @@ where
             )
             .map_err(|e| {
                 e.explain(&source)
-                    .with_req(TransliteratorRulesV1Marker::INFO, req)
+                    .with_req::<TransliteratorRulesV1Marker>(req)
             })?;
 
             let pass1 = pass1::Pass1::run(
@@ -345,7 +345,7 @@ where
             )
             .map_err(|e| {
                 e.explain(&source)
-                    .with_req(TransliteratorRulesV1Marker::INFO, req)
+                    .with_req::<TransliteratorRulesV1Marker>(req)
             })?;
 
             let mut transliterator = pass2::Pass2::run(
@@ -359,7 +359,7 @@ where
             )
             .map_err(|e| {
                 e.explain(&source)
-                    .with_req(TransliteratorRulesV1Marker::INFO, req)
+                    .with_req::<TransliteratorRulesV1Marker>(req)
             })?;
 
             transliterator.visibility = visible;

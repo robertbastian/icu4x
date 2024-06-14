@@ -257,7 +257,7 @@ macro_rules! impl_dynamic_data_provider {
                             })
                         }
                     )+,
-                    _ => Err($crate::DataErrorKind::MissingDataMarker.with_req(marker, req))
+                    _ => Err($crate::DataErrorKind::MissingDataMarker.with_dyn_req(marker, req))
                 }
             }
         }

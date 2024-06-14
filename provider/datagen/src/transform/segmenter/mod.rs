@@ -585,7 +585,7 @@ macro_rules! implement {
                 return Err(DataError::custom(
                     "icu_datagen must be built with use_icu4c or use_wasm to build segmentation rules",
                 )
-                .with_req($marker::INFO, req));
+                .with_req::<$marker>(req));
                 #[cfg(any(feature = "use_wasm", feature = "use_icu4c"))]
                 return {
                     self.check_req::<$marker>(req)?;

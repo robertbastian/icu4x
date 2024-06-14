@@ -45,7 +45,7 @@ macro_rules! __impl_core_helloworld_v1 {
                 if let Some(payload) = lookup(req) {
                     Ok(icu_provider::DataResponse { payload: icu_provider::DataPayload::from_static_ref(payload), metadata: Default::default() })
                 } else {
-                    Err(icu_provider::DataErrorKind::MissingLocale.with_req(<icu_provider::hello_world::HelloWorldV1Marker as icu_provider::DataMarker>::INFO, req))
+                    Err(icu_provider::DataErrorKind::MissingLocale.with_req::<<icu_provider::hello_world::HelloWorldV1Marker as icu_provider::DataMarker>>(req))
                 }
             }
         }

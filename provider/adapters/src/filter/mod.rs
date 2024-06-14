@@ -81,7 +81,7 @@ where
         } else {
             Err(DataErrorKind::FilteredResource
                 .with_str_context(self.filter_name)
-                .with_req(marker, req))
+                .with_dyn_req(marker, req))
         }
     }
 }
@@ -98,7 +98,7 @@ where
         } else {
             Err(DataErrorKind::FilteredResource
                 .with_str_context(self.filter_name)
-                .with_req(M::INFO, req))
+                .with_req::<M>(req))
         }
     }
 }
@@ -114,7 +114,7 @@ where
         } else {
             Err(DataErrorKind::FilteredResource
                 .with_str_context(self.filter_name)
-                .with_req(marker, req))
+                .with_dyn_req(marker, req))
         }
     }
 }

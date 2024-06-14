@@ -171,14 +171,14 @@ where
     ) -> Result<DataResponse<M>, DataError> {
         let buffer_response = self.0.load_data(marker, req)?;
         let buffer_format = buffer_response.metadata.buffer_format.ok_or_else(|| {
-            DataError::custom("BufferProvider didn't set BufferFormat").with_req(marker, req)
+            DataError::custom("BufferProvider didn't set BufferFormat").with_dyn_req(marker, req)
         })?;
         Ok(DataResponse {
             metadata: buffer_response.metadata,
             payload: buffer_response
                 .payload
                 .into_deserialized(buffer_format)
-                .map_err(|e| e.with_req(marker, req))?,
+                .map_err(|e| e.with_dyn_req(marker, req))?,
         })
     }
 }

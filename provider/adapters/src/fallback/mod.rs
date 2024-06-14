@@ -213,7 +213,7 @@ impl<P> LocaleFallbackProvider<P> {
                     // Log the original request rather than the fallback request
                     .map_err(|e| {
                         base_req.metadata.silent = base_silent;
-                        e.with_req(marker, base_req)
+                        e.with_dyn_req(marker, base_req)
                     });
             }
             // If we just checked und, break out of the loop.
@@ -223,7 +223,7 @@ impl<P> LocaleFallbackProvider<P> {
             fallback_iterator.step();
         }
         base_req.metadata.silent = base_silent;
-        Err(DataErrorKind::MissingLocale.with_req(marker, base_req))
+        Err(DataErrorKind::MissingLocale.with_dyn_req(marker, base_req))
     }
 }
 

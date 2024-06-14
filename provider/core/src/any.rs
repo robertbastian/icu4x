@@ -437,7 +437,7 @@ where
         self.0
             .load_any(M::INFO, req)?
             .downcast()
-            .map_err(|e| e.with_req(M::INFO, req))
+            .map_err(|e| e.with_req::<M>(req))
     }
 }
 
@@ -458,7 +458,7 @@ where
         self.0
             .load_any(marker, req)?
             .downcast()
-            .map_err(|e| e.with_req(marker, req))
+            .map_err(|e| e.with_dyn_req(marker, req))
     }
 }
 

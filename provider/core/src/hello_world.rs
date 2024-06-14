@@ -145,7 +145,7 @@ impl DataProvider<HelloWorldV1Marker> for HelloWorldProvider {
                 req.locale.strict_cmp(l.as_bytes()).is_eq() && **a == **req.marker_attributes
             })
             .map(|(_, _, v)| v)
-            .ok_or_else(|| DataErrorKind::MissingLocale.with_req(HelloWorldV1Marker::INFO, req))?;
+            .ok_or_else(|| DataErrorKind::MissingLocale.with_req::<HelloWorldV1Marker>(req))?;
         Ok(DataResponse {
             metadata: Default::default(),
             payload: DataPayload::from_static_str(data),

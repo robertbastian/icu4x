@@ -38,7 +38,7 @@ impl DatagenProvider {
         } else {
             Ok(())
         }
-        .map_err(|e| e.with_req(<M as DataMarker>::INFO, req))
+        .map_err(|e| e.with_req::<M>(req))
     }
 }
 

@@ -153,8 +153,14 @@ impl DataErrorKind {
 
     /// Creates a DataError with a request context.
     #[inline]
-    pub fn with_req(self, marker: DataMarkerInfo, req: DataRequest) -> DataError {
-        self.into_error().with_req(marker, req)
+    pub fn with_dyn_req(self, marker: DataMarkerInfo, req: DataRequest) -> DataError {
+        self.into_error().with_dyn_req(marker, req)
+    }
+
+    /// Creates a DataError with a request context.
+    #[inline]
+    pub fn with_req<M: DataMarker>(self, req: DataRequest) -> DataError {
+        self.into_error().with_req::<M>(req)
     }
 }
 
@@ -205,15 +211,30 @@ impl DataError {
     ///
     /// If the "logging" Cargo feature is enabled, this logs the whole request. Either way,
     /// it returns an error with the data marker portion of the request as context.
-    pub fn with_req(mut self, marker: DataMarkerInfo, req: DataRequest) -> Self {
+    pub fn with_dyn_req(mut self, marker: DataMarkerInfo, req: DataRequest) -> Self {
         if req.metadata.silent {
             self.silent = true;
         }
         // Don't write out a log for MissingDataMarker since there is no context to add
-        if !self.silent && self.kind != DataErrorKind::MissingDataMarker {
+        if !self.silent {
             log::warn!("{} (marker: {}, request: {})", self, marker, req);
         }
         self.with_marker(marker)
+    }
+
+    /// Logs the data error with the given request, returning an error containing the data marker.
+    ///
+    /// If the "logging" Cargo feature is enabled, this logs the whole request. Either way,
+    /// it returns an error with the data marker portion of the request as context.
+    pub fn with_req<M: DataMarker>(mut self, req: DataRequest) -> Self {
+        if req.metadata.silent {
+            self.silent = true;
+        }
+        // Don't write out a log for MissingDataMarker since there is no context to add
+        if !self.silent {
+            log::warn!("{} (marker: {}, request: {})", self, core::any::type_name::<M>(), req);
+        }
+        self.with_marker(M::INFO)
     }
 
     /// Logs the data error with the given context, then return self.

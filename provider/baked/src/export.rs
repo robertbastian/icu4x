@@ -428,7 +428,7 @@ impl DataExporter for BakedExporter {
                             metadata: Default::default(),
                         })
                     } else {
-                        Err(icu_provider::DataErrorKind::ExtraneousLocale.with_req(<#marker_bake as icu_provider::DataMarker>::INFO, req))
+                        Err(icu_provider::DataErrorKind::ExtraneousLocale.with_req::<#marker_bake>(req))
                     }
                 }
             }
@@ -488,7 +488,7 @@ impl DataExporter for BakedExporter {
 
         let (load_body, iterable_body) = if deduplicated_values.is_empty() {
             (
-                quote!(Err(icu_provider::DataErrorKind::MissingLocale.with_req(<#marker_bake as icu_provider::DataMarker>::INFO, req))),
+                quote!(Err(icu_provider::DataErrorKind::MissingLocale.with_req::<#marker_bake>(req))),
                 quote!(Ok(Default::default())),
             )
         } else {
@@ -536,7 +536,7 @@ impl DataExporter for BakedExporter {
                                 metadata: Default::default(),
                             })
                         } else {
-                            Err(icu_provider::DataErrorKind::MissingLocale.with_req(<#marker_bake as icu_provider::DataMarker>::INFO, req))
+                            Err(icu_provider::DataErrorKind::MissingLocale.with_req::<<#marker_bake as icu_provider::DataMarker>>(req))
                         }
                 }
             } else {
@@ -560,7 +560,7 @@ impl DataExporter for BakedExporter {
                                 break payload;
                             }
                             if fallback_iterator.get().is_und() {
-                                return Err(icu_provider::DataErrorKind::MissingLocale.with_req(<#marker_bake as icu_provider::DataMarker>::INFO, req));
+                                return Err(icu_provider::DataErrorKind::MissingLocale.with_req::<#marker_bake>(req));
                             }
                             fallback_iterator.step();
                         }
@@ -710,7 +710,7 @@ impl DataExporter for BakedExporter {
                                         h if h == <#marker_bakes as icu_provider::DataMarker>::INFO.path.hashed() =>
                                             icu_provider::DataProvider::<#marker_bakes>::load(self, req).map(icu_provider::DataResponse::wrap_into_any_response),
                                     )*
-                                    _ => Err(icu_provider::DataErrorKind::MissingDataMarker.with_req(marker, req)),
+                                    _ => Err(icu_provider::DataErrorKind::MissingDataMarker.with_dyn_req(marker, req)),
                                 }
                             }
                         }
