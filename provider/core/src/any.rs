@@ -7,7 +7,6 @@
 use crate::prelude::*;
 use crate::response::DataPayloadInner;
 use core::any::Any;
-use yoke::trait_hack::YokeTraitHack;
 use yoke::Yokeable;
 use zerofrom::ZeroFrom;
 
@@ -95,7 +94,7 @@ impl AnyPayload {
         M::Yokeable: ZeroFrom<'static, M::Yokeable>,
         // For the PayloadRc case:
         M::Yokeable: MaybeSendSync,
-        for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+        for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
     {
         use AnyPayloadInner::*;
         let type_name = self.type_name;
@@ -123,7 +122,7 @@ impl AnyPayload {
         M::Yokeable: ZeroFrom<'static, M::Yokeable>,
         // For the PayloadRc case:
         M::Yokeable: MaybeSendSync,
-        for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+        for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
     {
         self.clone().downcast()
     }
@@ -203,7 +202,7 @@ impl DataPayload<AnyMarker> {
     pub fn downcast<M>(self) -> Result<DataPayload<M>, DataError>
     where
         M: DynamicDataMarker,
-        for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+        for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
         M::Yokeable: ZeroFrom<'static, M::Yokeable>,
         M::Yokeable: MaybeSendSync,
     {
@@ -245,7 +244,7 @@ impl AnyResponse {
     pub fn downcast<M>(self) -> Result<DataResponse<M>, DataError>
     where
         M: DynamicDataMarker,
-        for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+        for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
         M::Yokeable: ZeroFrom<'static, M::Yokeable>,
         M::Yokeable: MaybeSendSync,
     {
@@ -261,7 +260,7 @@ impl AnyResponse {
         M: DynamicDataMarker,
         M::Yokeable: ZeroFrom<'static, M::Yokeable>,
         M::Yokeable: MaybeSendSync,
-        for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+        for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
     {
         Ok(DataResponse {
             metadata: self.metadata.clone(),
@@ -428,7 +427,7 @@ impl<M, P> DataProvider<M> for DowncastingAnyProvider<'_, P>
 where
     P: AnyProvider + ?Sized,
     M: DataMarker,
-    for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
     M::Yokeable: ZeroFrom<'static, M::Yokeable>,
     M::Yokeable: MaybeSendSync,
 {
@@ -445,7 +444,7 @@ impl<M, P> DynamicDataProvider<M> for DowncastingAnyProvider<'_, P>
 where
     P: AnyProvider + ?Sized,
     M: DynamicDataMarker,
-    for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
     M::Yokeable: ZeroFrom<'static, M::Yokeable>,
     M::Yokeable: MaybeSendSync,
 {

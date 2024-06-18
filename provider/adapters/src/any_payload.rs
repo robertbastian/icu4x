@@ -5,7 +5,6 @@
 //! Data provider always serving the same struct.
 
 use icu_provider::prelude::*;
-use yoke::trait_hack::YokeTraitHack;
 use yoke::Yokeable;
 use zerofrom::ZeroFrom;
 
@@ -121,7 +120,7 @@ impl AnyProvider for AnyPayloadProvider {
 impl<M> DataProvider<M> for AnyPayloadProvider
 where
     M: DataMarker,
-    for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: Clone,
+    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Clone,
     M::Yokeable: ZeroFrom<'static, M::Yokeable>,
     M::Yokeable: icu_provider::MaybeSendSync,
 {

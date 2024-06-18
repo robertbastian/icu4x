@@ -8,7 +8,6 @@ use crate::dynutil::UpcastDataPayload;
 use crate::prelude::*;
 use alloc::boxed::Box;
 use databake::{Bake, CrateEnv, TokenStream};
-use yoke::trait_hack::YokeTraitHack;
 use yoke::*;
 
 trait ExportableDataPayload {
@@ -23,8 +22,7 @@ trait ExportableDataPayload {
 
 impl<M: DynamicDataMarker> ExportableDataPayload for DataPayload<M>
 where
-    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Bake + serde::Serialize,
-    for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: PartialEq,
+    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Bake + serde::Serialize + PartialEq,
 {
     fn bake_yoke(&self, ctx: &CrateEnv) -> TokenStream {
         self.get().bake(ctx)
@@ -85,8 +83,7 @@ impl<M> UpcastDataPayload<M> for ExportMarker
 where
     M: DynamicDataMarker,
     M::Yokeable: Sync + Send,
-    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Bake + serde::Serialize,
-    for<'a> YokeTraitHack<<M::Yokeable as Yokeable<'a>>::Output>: PartialEq,
+    for<'a> <M::Yokeable as Yokeable<'a>>::Output: Bake + serde::Serialize + PartialEq,
 {
     fn upcast(other: DataPayload<M>) -> DataPayload<ExportMarker> {
         DataPayload::from_owned(ExportBox {

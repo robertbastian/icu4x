@@ -2,6 +2,8 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
+//! * This hack is only required on compiler versions below 1.78 *
+//!
 //! Workarounds for adding trait bounds to `yoke` objects.
 //!
 //! # Trait bounds in Yoke
@@ -290,6 +292,7 @@ use core::mem;
 #[allow(clippy::exhaustive_structs)] // newtype
 pub struct YokeTraitHack<T>(pub T);
 
+#[allow(deprecated)]
 impl<'a, T> YokeTraitHack<&'a T> {
     /// Converts from `YokeTraitHack<&T>` to `&YokeTraitHack<T>`.
     ///
