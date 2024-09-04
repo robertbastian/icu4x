@@ -190,15 +190,12 @@ impl SentenceSegmenter {
                     let mut metadata = DataRequestMetadata::default();
                     metadata.silent = true;
                     metadata
-                },            };
-            match provider.load(req) {
-                Ok(response) => Some(response.payload),
-                Err(DataError {
-                    kind: DataErrorKind::IdentifierNotFound,
-                    ..
-                }) => None,
-                Err(e) => return Err(e),
-            }
+                },
+            };
+            provider
+                .load(req)
+                .allow_identifier_not_found()?
+                .map(|r| r.payload)
         } else {
             None
         };

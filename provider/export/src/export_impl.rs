@@ -102,8 +102,8 @@ impl ExportDriver {
                     ),
                     metadata,
                 };
-                match provider.load_data(marker, req) {
-                    Ok(data_response) => {
+                match provider.load_data(marker, req).allow_identifier_not_found() {
+                    Ok(Some(data_response)) => {
                         if let Some(iter) = locale_iter.as_ref() {
                             if iter.get().is_default() && !id.locale.is_default() {
                                 log::debug!("Falling back to und: {marker:?}/{}", id.locale);
@@ -111,10 +111,7 @@ impl ExportDriver {
                         }
                         return Some(Ok(data_response.payload));
                     }
-                    Err(DataError {
-                        kind: DataErrorKind::IdentifierNotFound,
-                        ..
-                    }) => {
+                    Ok(None) => {
                         if let Some(iter) = locale_iter.as_mut() {
                             if iter.get().is_default() {
                                 log::debug!("Could not find data for: {marker:?}/{}", id.locale);
