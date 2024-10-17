@@ -79,7 +79,7 @@ zip = { workspace = true, features = ["deflate"], optional = true }
 [dev-dependencies]
 elsa = { workspace = true }
 icu = { path = "../../components/icu" }
-postcard = { workspace = true }
+postcard = { workspace = true, features = ["alloc"] }
 simple_logger = { workspace = true }
 
 [features]

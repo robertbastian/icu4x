@@ -107,6 +107,7 @@ pub mod prelude {
 }
 
 use icu_provider::prelude::*;
+use std::collections::HashSet;
 use std::path::Path;
 
 #[cfg(feature = "rayon")]
@@ -192,6 +193,33 @@ macro_rules! cb {
                 Some(Ok(marker)) => Some(marker)
             }
         }
+
+        fn markers_from_bin_inner(bytes: &[u8]) -> HashSet<DataMarkerInfo> {
+            use memchr::memmem::*;
+
+            find_iter(bytes, &icu_provider::LEADING_TAG)
+                .filter_map(|tag_offset| {
+                    dbg!(tag_offset);
+                    let hash_offset = tag_offset + icu_provider::LEADING_TAG.len();
+                    bytes.get(hash_offset..hash_offset + 4)
+                })
+                .filter_map(|hash| {
+                    dbg!(hash);
+                    $(
+                        if hash == <$marker>::INFO.path.hashed().to_bytes() {
+                            return Some(<$marker>::INFO);
+                        }
+                    )+
+                    $(
+                        #[cfg(feature = "experimental_components")]
+                        if hash == <$emarker>::INFO.path.hashed().to_bytes() {
+                            return Some(<$emarker>::INFO);
+                        }
+                    )+
+                    None
+                })
+                .collect()
+        }
     }
 }
 icu_registry::registry!(cb);
@@ -205,15 +233,15 @@ icu_registry::registry!(cb);
 /// ```
 /// # use icu_provider::DataMarker;
 /// assert_eq!(
-///     icu_datagen::markers(&["list/and@1", "list/or@1"]),
-///     vec![
+///     icu_datagen::markers(["list/and@1", "list/or@1"]),
+///     HashSet::from_iter([
 ///         icu::list::provider::AndListV1Marker::INFO,
 ///         icu::list::provider::OrListV1Marker::INFO,
-///     ],
+///     ]),
 /// );
 /// ```
-pub fn markers<S: AsRef<str>>(strings: &[S]) -> Vec<DataMarkerInfo> {
-    strings.iter().filter_map(crate::marker).collect()
+pub fn markers<S: AsRef<str>>(strings: impl IntoIterator<Item = S>) -> HashSet<DataMarkerInfo> {
+    strings.into_iter().filter_map(crate::marker).collect()
 }
 
 /// Parses a compiled binary and returns a list of [`DataMarkerInfo`]s that it uses *at runtime*.
@@ -231,63 +259,36 @@ pub fn markers<S: AsRef<str>>(strings: &[S]) -> Vec<DataMarkerInfo> {
 /// # fn main() -> Result<(), Box<dyn std::error::Error>> {
 /// assert_eq!(
 ///     icu_datagen::markers_from_bin("target/release/my-app")?,
-///     vec![
+///     HashSet::from_iter([
 ///         icu::list::provider::AndListV1Marker::INFO,
 ///         icu::list::provider::OrListV1Marker::INFO,
-///     ],
+///     ]),
 /// );
 /// # Ok(())
 /// # }
 /// ```
 //  Supports the hello world marker
-pub fn markers_from_bin<P: AsRef<Path>>(path: P) -> std::io::Result<Vec<DataMarkerInfo>> {
+pub fn markers_from_bin<P: AsRef<Path>>(path: P) -> std::io::Result<HashSet<DataMarkerInfo>> {
     let file = std::fs::read(path.as_ref())?;
     let file = file.as_slice();
 
     Ok(markers_from_bin_inner(file))
 }
 
-fn markers_from_bin_inner(bytes: &[u8]) -> Vec<DataMarkerInfo> {
-    use memchr::memmem::*;
-
-    const LEADING_TAG: &[u8] = icu_provider::leading_tag!().as_bytes();
-    const TRAILING_TAG: &[u8] = icu_provider::trailing_tag!().as_bytes();
-
-    let trailing_tag = Finder::new(TRAILING_TAG);
-
-    let mut result: Vec<DataMarkerInfo> = find_iter(bytes, LEADING_TAG)
-        .map(|tag_position| tag_position + LEADING_TAG.len())
-        .map(|marker_start| &bytes[marker_start..])
-        .filter_map(move |marker_fragment| {
-            trailing_tag
-                .find(marker_fragment)
-                .map(|end| &marker_fragment[..end])
-        })
-        .map(std::str::from_utf8)
-        .filter_map(Result::ok)
-        .filter_map(crate::marker)
-        .collect();
-
-    result.sort();
-    result.dedup();
-
-    result
-}
-
 #[test]
 fn test_markers() {
     assert_eq!(
-        markers(&[
+        markers([
             "list/and@1",
             "datetime/gregory/datelengths@1",
             "decimal/symbols@1",
             "trash",
         ]),
-        vec![
+        HashSet::from_iter([
             icu::list::provider::AndListV1Marker::INFO,
             icu::datetime::provider::calendar::GregorianDateLengthsV1Marker::INFO,
             icu::decimal::provider::DecimalSymbolsV1Marker::INFO,
-        ]
+        ])
     );
 }
 
@@ -295,7 +296,7 @@ fn test_markers() {
 fn test_markers_from_bin() {
     assert_eq!(
         markers_from_bin_inner(include_bytes!("../tests/data/tutorial_buffer.wasm")),
-        vec![
+        HashSet::from_iter([
             icu::datetime::provider::calendar::GregorianDateLengthsV1Marker::INFO,
             icu::datetime::provider::calendar::GregorianDateSymbolsV1Marker::INFO,
             icu::datetime::provider::calendar::TimeLengthsV1Marker::INFO,
@@ -303,6 +304,6 @@ fn test_markers_from_bin() {
             icu::calendar::provider::WeekDataV1Marker::INFO,
             icu::decimal::provider::DecimalSymbolsV1Marker::INFO,
             icu::plurals::provider::OrdinalV1Marker::INFO,
-        ]
+        ])
     );
 }

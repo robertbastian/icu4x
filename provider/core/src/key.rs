@@ -12,46 +12,74 @@ use core::ops::Deref;
 use writeable::{LengthHint, Writeable};
 use zerovec::ule::*;
 
-#[doc(hidden)] // macro
-#[macro_export]
-macro_rules! leading_tag {
-    () => {
-        "\nicu4x_key_tag"
-    };
-}
+/// 128-bit magic number
+pub const LEADING_TAG: [u8; 16] = *b"icu4x_marker_tag";
 
-#[doc(hidden)] // macro
-#[macro_export]
-macro_rules! trailing_tag {
-    () => {
-        "\n"
-    };
-}
-
-#[doc(hidden)] // macro
-#[macro_export]
-macro_rules! tagged {
-    ($without_tags:expr) => {
-        concat!(
-            $crate::leading_tag!(),
-            $without_tags,
-            $crate::trailing_tag!()
-        )
-    };
-}
-
-/// A compact hash of a [`DataMarkerInfo`]. Useful for keys in maps.
+/// A compact hash of a [`DataMarkerInfo`]. Useful for markers in maps.
 ///
 /// The hash will be stable over time within major releases.
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Copy, Clone, Hash, ULE)]
+#[derive(Debug, Eq, Copy, Clone)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[repr(transparent)]
-pub struct DataMarkerPathHash([u8; 4]);
+pub struct DataMarkerPathHash([u8; 20]);
 
 impl DataMarkerPathHash {
+    const fn new(path: &str) -> Self {
+        Self::tagged(fxhash_32(path.as_bytes()).to_le_bytes())
+    }
+
+    const fn tagged(hash: [u8; 4]) -> Self {
+        Self([
+            LEADING_TAG[0],
+            LEADING_TAG[1],
+            LEADING_TAG[2],
+            LEADING_TAG[3],
+            LEADING_TAG[4],
+            LEADING_TAG[5],
+            LEADING_TAG[6],
+            LEADING_TAG[7],
+            LEADING_TAG[8],
+            LEADING_TAG[9],
+            LEADING_TAG[10],
+            LEADING_TAG[11],
+            LEADING_TAG[12],
+            LEADING_TAG[13],
+            LEADING_TAG[14],
+            LEADING_TAG[15],
+            hash[0],
+            hash[1],
+            hash[2],
+            hash[3],
+        ])
+    }
+
     /// Gets the hash value as a byte array.
     pub const fn to_bytes(self) -> [u8; 4] {
-        self.0
+        [self.0[16], self.0[17], self.0[18], self.0[19]]
+    }
+}
+
+impl PartialEq for DataMarkerPathHash {
+    fn eq(&self, other: &Self) -> bool {
+        self.to_bytes() == other.to_bytes()
+    }
+}
+
+impl PartialOrd for DataMarkerPathHash {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
+        Some(self.to_bytes().cmp(&other.to_bytes()))
+    }
+}
+
+impl Ord for DataMarkerPathHash {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+        self.to_bytes().cmp(&other.to_bytes())
+    }
+}
+
+impl core::hash::Hash for DataMarkerPathHash {
+    fn hash<H: core::hash::Hasher>(&self, state: &mut H) {
+        self.to_bytes().hash(state)
     }
 }
 
@@ -72,7 +100,7 @@ impl DataMarkerPathHash {
 ///    the benefit of a cryptographically secure algorithm
 // The indexing operations in this function have been reviewed in detail and won't panic.
 #[allow(clippy::indexing_slicing)]
-const fn fxhash_32(bytes: &[u8], ignore_leading: usize, ignore_trailing: usize) -> u32 {
+const fn fxhash_32(bytes: &[u8]) -> u32 {
     // This code is adapted from https://github.com/rust-lang/rustc-hash,
     // whose license text is reproduced below.
     //
@@ -86,10 +114,6 @@ const fn fxhash_32(bytes: &[u8], ignore_leading: usize, ignore_trailing: usize) 
     // option. This file may not be copied, modified, or distributed
     // except according to those terms.
 
-    if ignore_leading + ignore_trailing >= bytes.len() {
-        return 0;
-    }
-
     #[inline]
     const fn hash_word_32(mut hash: u32, word: u32) -> u32 {
         const ROTATE: u32 = 5;
@@ -100,11 +124,10 @@ const fn fxhash_32(bytes: &[u8], ignore_leading: usize, ignore_trailing: usize) 
         hash
     }
 
-    let mut cursor = ignore_leading;
-    let end = bytes.len() - ignore_trailing;
+    let mut cursor = 0;
     let mut hash = 0;
 
-    while end - cursor >= 4 {
+    while bytes.len() - cursor >= 4 {
         let word = u32::from_le_bytes([
             bytes[cursor],
             bytes[cursor + 1],
@@ -115,13 +138,13 @@ const fn fxhash_32(bytes: &[u8], ignore_leading: usize, ignore_trailing: usize) 
         cursor += 4;
     }
 
-    if end - cursor >= 2 {
+    if bytes.len() - cursor >= 2 {
         let word = u16::from_le_bytes([bytes[cursor], bytes[cursor + 1]]);
         hash = hash_word_32(hash, word as u32);
         cursor += 2;
     }
 
-    if end - cursor >= 1 {
+    if bytes.len() - cursor >= 1 {
         hash = hash_word_32(hash, bytes[cursor] as u32);
     }
 
@@ -136,14 +159,14 @@ impl<'a> zerovec::maps::ZeroMapKV<'a> for DataMarkerPathHash {
 }
 
 impl AsULE for DataMarkerPathHash {
-    type ULE = Self;
+    type ULE = RawBytesULE<4>;
     #[inline]
     fn to_unaligned(self) -> Self::ULE {
-        self
+        RawBytesULE(self.to_bytes())
     }
     #[inline]
     fn from_unaligned(unaligned: Self::ULE) -> Self {
-        unaligned
+        Self::tagged(unaligned.0)
     }
 }
 
@@ -168,30 +191,28 @@ unsafe impl EqULE for DataMarkerPathHash {}
 /// ```
 #[derive(Debug, Copy, Clone, Eq)]
 pub struct DataMarkerPath {
-    // This string literal is wrapped in leading_tag!() and trailing_tag!() to make it detectable
-    // in a compiled binary.
-    tagged: &'static str,
+    path: &'static str,
     hash: DataMarkerPathHash,
 }
 
 impl PartialEq for DataMarkerPath {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        self.hash == other.hash && self.tagged == other.tagged
+        self.hash == other.hash && self.path == other.path
     }
 }
 
 impl Ord for DataMarkerPath {
     #[inline]
     fn cmp(&self, other: &Self) -> core::cmp::Ordering {
-        self.tagged.cmp(other.tagged)
+        self.path.cmp(other.path)
     }
 }
 
 impl PartialOrd for DataMarkerPath {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
-        Some(self.tagged.cmp(other.tagged))
+        Some(self.path.cmp(other.path))
     }
 }
 
@@ -207,55 +228,7 @@ impl DataMarkerPath {
     // macro use
     // Error is a str of the expected character class and the index where it wasn't encountered
     // The indexing operations in this function have been reviewed in detail and won't panic.
-    #[allow(clippy::indexing_slicing)]
-    pub const fn construct_internal(tagged: &'static str) -> Result<Self, (&'static str, usize)> {
-        if tagged.len() < leading_tag!().len() + trailing_tag!().len() {
-            return Err(("tag", 0));
-        }
-        // Start and end of the untagged part
-        let start = leading_tag!().len();
-        let end = tagged.len() - trailing_tag!().len();
-
-        // Check tags
-        let mut i = 0;
-        while i < leading_tag!().len() {
-            if tagged.as_bytes()[i] != leading_tag!().as_bytes()[i] {
-                return Err(("tag", 0));
-            }
-            i += 1;
-        }
-        i = 0;
-        while i < trailing_tag!().len() {
-            if tagged.as_bytes()[end + i] != trailing_tag!().as_bytes()[i] {
-                return Err(("tag", end + 1));
-            }
-            i += 1;
-        }
-
-        match Self::validate_path_manual_slice(tagged, start, end) {
-            Ok(()) => (),
-            Err(e) => return Err(e),
-        };
-
-        let hash = DataMarkerPathHash(
-            fxhash_32(
-                tagged.as_bytes(),
-                leading_tag!().len(),
-                trailing_tag!().len(),
-            )
-            .to_le_bytes(),
-        );
-
-        Ok(Self { tagged, hash })
-    }
-
-    const fn validate_path_manual_slice(
-        path: &'static str,
-        start: usize,
-        end: usize,
-    ) -> Result<(), (&'static str, usize)> {
-        debug_assert!(start <= end);
-        debug_assert!(end <= path.len());
+    pub const fn construct_internal(path: &'static str) -> Result<Self, (&'static str, usize)> {
         // Regex: [a-zA-Z0-9_][a-zA-Z0-9_/]*@[0-9]+
         enum State {
             Empty,
@@ -264,10 +237,10 @@ impl DataMarkerPath {
             Version,
         }
         use State::*;
-        let mut i = start;
+        let mut i = 0;
         let mut state = Empty;
         loop {
-            let byte = if i < end {
+            let byte = if i < path.len() {
                 #[allow(clippy::indexing_slicing)] // protected by debug assertion
                 Some(path.as_bytes()[i])
             } else {
@@ -279,9 +252,7 @@ impl DataMarkerPath {
                 (Body, Some(b'@')) => At,
                 (At | Version, Some(b'0'..=b'9')) => Version,
                 // One of these cases will be hit at the latest when i == end, so the loop converges.
-                (Version, None) => {
-                    return Ok(());
-                }
+                (Version, None) => break,
 
                 (Empty, _) => return Err(("[a-zA-Z0-9_]", i)),
                 (Body, _) => return Err(("[a-zA-z0-9_/@]", i)),
@@ -290,18 +261,10 @@ impl DataMarkerPath {
             };
             i += 1;
         }
-    }
 
-    /// Gets the path as a static string slice.
-    #[inline]
-    pub const fn get(self) -> &'static str {
-        unsafe {
-            // Safe due to invariant that self.path is tagged correctly
-            core::str::from_utf8_unchecked(core::slice::from_raw_parts(
-                self.tagged.as_ptr().add(leading_tag!().len()),
-                self.tagged.len() - trailing_tag!().len() - leading_tag!().len(),
-            ))
-        }
+        let hash = DataMarkerPathHash::new(path);
+
+        Ok(Self { path, hash })
     }
 
     /// Gets a platform-independent hash of a [`DataMarkerPath`].
@@ -329,7 +292,7 @@ impl Deref for DataMarkerPath {
     type Target = str;
     #[inline]
     fn deref(&self) -> &Self::Target {
-        self.get()
+        self.path
     }
 }
 
@@ -424,19 +387,18 @@ impl DataMarkerInfo {
 macro_rules! data_marker_path {
     ($path:expr) => {{
         // Force the DataMarkerInfo into a const context
-        const X: $crate::DataMarkerPath =
-            match $crate::DataMarkerPath::construct_internal($crate::tagged!($path)) {
-                Ok(path) => path,
-                #[allow(clippy::panic)] // Const context
-                Err(_) => panic!(concat!("Invalid path: ", $path)),
-                // TODO Once formatting is const:
-                // Err((expected, index)) => panic!(
-                //     "Invalid resource key {:?}: expected {:?}, found {:?} ",
-                //     $path,
-                //     expected,
-                //     $crate::tagged!($path).get(index..))
-                // );
-            };
+        const X: $crate::DataMarkerPath = match $crate::DataMarkerPath::construct_internal($path) {
+            Ok(path) => path,
+            #[allow(clippy::panic)] // Const context
+            Err(_) => panic!(concat!("Invalid path: ", $path)),
+            // TODO Once formatting is const:
+            // Err((expected, index)) => panic!(
+            //     "Invalid data marker path {:?}: expected {:?}, found {:?} ",
+            //     $path,
+            //     expected,
+            //     $path.get(index..))
+            // );
+        };
         X
     }};
 }
@@ -460,7 +422,7 @@ impl Writeable for DataMarkerInfo {
     }
 
     fn write_to_string(&self) -> Cow<str> {
-        Cow::Borrowed(self.path.get())
+        Cow::Borrowed(&*self.path)
     }
 }
 
@@ -469,89 +431,72 @@ writeable::impl_display_with_writeable!(DataMarkerInfo);
 #[test]
 fn test_path_syntax() {
     // Valid paths:
-    DataMarkerPath::construct_internal(tagged!("hello/world@1")).unwrap();
-    DataMarkerPath::construct_internal(tagged!("hello/world/foo@1")).unwrap();
-    DataMarkerPath::construct_internal(tagged!("hello/world@999")).unwrap();
-    DataMarkerPath::construct_internal(tagged!("hello_world/foo@1")).unwrap();
-    DataMarkerPath::construct_internal(tagged!("hello_458/world@1")).unwrap();
-    DataMarkerPath::construct_internal(tagged!("hello_world@1")).unwrap();
+    DataMarkerPath::construct_internal("hello/world@1").unwrap();
+    DataMarkerPath::construct_internal("hello/world/foo@1").unwrap();
+    DataMarkerPath::construct_internal("hello/world@999").unwrap();
+    DataMarkerPath::construct_internal("hello_world/foo@1").unwrap();
+    DataMarkerPath::construct_internal("hello_458/world@1").unwrap();
+    DataMarkerPath::construct_internal("hello_world@1").unwrap();
 
     // No version:
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("hello/world"),),
-        Err((
-            "[a-zA-z0-9_/@]",
-            concat!(leading_tag!(), "hello/world").len()
-        ))
+        DataMarkerPath::construct_internal("hello/world"),
+        Err(("[a-zA-z0-9_/@]", "hello/world".len()))
     );
 
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("hello/world@"),),
-        Err(("[0-9]", concat!(leading_tag!(), "hello/world@").len()))
+        DataMarkerPath::construct_internal("hello/world@"),
+        Err(("[0-9]", "hello/world@".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("hello/world@foo"),),
-        Err(("[0-9]", concat!(leading_tag!(), "hello/world@").len()))
+        DataMarkerPath::construct_internal("hello/world@foo"),
+        Err(("[0-9]", "hello/world@".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("hello/world@1foo"),),
-        Err(("[0-9]", concat!(leading_tag!(), "hello/world@1").len()))
+        DataMarkerPath::construct_internal("hello/world@1foo"),
+        Err(("[0-9]", "hello/world@1".len()))
     );
 
     // Meta no longer accepted:
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[R]"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[R]"),
+        Err(("[0-9]", "foo@1".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[u-ca]"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[u-ca]"),
+        Err(("[0-9]", "foo@1".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[R][u-ca]"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[R][u-ca]"),
+        Err(("[0-9]", "foo@1".len()))
     );
 
     // Invalid meta:
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[U]"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[U]"),
+        Err(("[0-9]", "foo@1".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[uca]"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[uca]"),
+        Err(("[0-9]", "foo@1".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[u-"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[u-"),
+        Err(("[0-9]", "foo@1".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[u-caa]"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[u-caa]"),
+        Err(("[0-9]", "foo@1".len()))
     );
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("foo@1[R"),),
-        Err(("[0-9]", concat!(leading_tag!(), "foo@1").len()))
+        DataMarkerPath::construct_internal("foo@1[R"),
+        Err(("[0-9]", "foo@1".len()))
     );
 
     // Invalid characters:
     assert_eq!(
-        DataMarkerPath::construct_internal(tagged!("你好/世界@1"),),
-        Err(("[a-zA-Z0-9_]", leading_tag!().len()))
-    );
-
-    // Invalid tag:
-    assert_eq!(
-        DataMarkerPath::construct_internal(concat!("hello/world@1", trailing_tag!()),),
-        Err(("tag", 0))
-    );
-    assert_eq!(
-        DataMarkerPath::construct_internal(concat!(leading_tag!(), "hello/world@1"),),
-        Err(("tag", concat!(leading_tag!(), "hello/world@1").len()))
-    );
-    assert_eq!(
-        DataMarkerPath::construct_internal("hello/world@1",),
-        Err(("tag", 0))
+        DataMarkerPath::construct_internal("你好/世界@1"),
+        Err(("[a-zA-Z0-9_]", 0))
     );
 }
 
@@ -609,15 +554,15 @@ fn test_path_hash() {
     for cas in [
         TestCase {
             path: data_marker_path!("core/cardinal@1"),
-            hash: DataMarkerPathHash([172, 207, 42, 236]),
+            hash: DataMarkerPathHash::tagged([172, 207, 42, 236]),
         },
         TestCase {
             path: data_marker_path!("core/maxlengthsubcatg@1"),
-            hash: DataMarkerPathHash([193, 6, 79, 61]),
+            hash: DataMarkerPathHash::tagged([193, 6, 79, 61]),
         },
         TestCase {
             path: data_marker_path!("core/cardinal@65535"),
-            hash: DataMarkerPathHash([176, 131, 182, 223]),
+            hash: DataMarkerPathHash::tagged([176, 131, 182, 223]),
         },
     ] {
         assert_eq!(cas.hash, cas.path.hashed(), "{}", &cas.path as &str);

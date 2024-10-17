@@ -151,6 +151,7 @@ pub use crate::error::DataErrorKind;
 pub use crate::key::DataMarkerInfo;
 pub use crate::key::DataMarkerPath;
 pub use crate::key::DataMarkerPathHash;
+pub use crate::key::LEADING_TAG;
 pub use crate::request::DataLocale;
 pub use crate::request::DataMarkerAttributes;
 pub use crate::request::DataRequest;
