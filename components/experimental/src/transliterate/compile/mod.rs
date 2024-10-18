@@ -113,9 +113,31 @@ impl RuleCollection {
         reverse: bool,
         visible: bool,
     ) {
+        if id.to_string() == "byn-Latn-t-byn-ethi-m0-xaleget" {
+            // Backreference error
+            return;
+        }
         self.data.borrow_mut().0.insert(
             id.to_string().to_ascii_lowercase(),
-            (source, reverse, visible),
+            (
+                source
+                    // Declares a sequence of Unicode sets instead of a Unicode set
+                    .replace(
+                        "$initialPunct = [:Ps:][:Pi:];",
+                        "$initialPunct = [[:Ps:][:Pi:]];",
+                    )
+                    // I'm not sure why this errors
+                    .replace("ə̃ {ə̃}+ → ə̃;", "")
+                    // This does not escape the $, so the = is interpreted as a variable name
+                    .replace(r#"$="#, r#"\$="#)
+                    // Incorrect casing, we're strict
+                    .replace("script=", "Script=")
+                    .replace("ideographic:", "Ideographic:")
+                    .replace("cased:", "Cased:")
+                    .replace("case-ignorable:", "Case_Ignorable:"),
+                reverse,
+                visible,
+            ),
         );
         self.register_aliases(id, aliases)
     }
@@ -608,7 +630,7 @@ mod tests {
     use crate::transliterate::provider as ds;
     use icu_locale_core::locale;
     use std::collections::HashSet;
-    use zerovec::VarZeroVec;
+    use zerovec::{vecs::Index32, VarZeroVec};
 
     fn parse_set(source: &str) -> super::parse::UnicodeSet {
         crate::unicodeset_parse::parse_unstable(source, &icu_properties::provider::Baked)
@@ -730,7 +752,7 @@ mod tests {
                 replacer: Cow::Borrowed("splitsuprulegroups"),
             }];
 
-            let expected_rule_group_list: Vec<VarZeroVec<'_, ds::RuleULE>> = vec![
+            let expected_rule_group_list: Vec<VarZeroVec<'_, ds::RuleULE, Index32>> = vec![
                 VarZeroVec::from(&expected_rule_group1),
                 VarZeroVec::from(&expected_rule_group2),
                 VarZeroVec::new(), // empty rule group after the last transform rule
@@ -820,7 +842,7 @@ mod tests {
                 },
             ];
 
-            let expected_rule_group_list: Vec<VarZeroVec<'_, ds::RuleULE>> =
+            let expected_rule_group_list: Vec<VarZeroVec<'_, ds::RuleULE, Index32>> =
                 vec![VarZeroVec::from(&expected_rule_group1), VarZeroVec::new()];
 
             let expected_compounds = vec![
