@@ -14,6 +14,7 @@ use crate::transliterate::transliterator::hardcoded::Case;
 use alloc::boxed::Box;
 use alloc::string::{String, ToString};
 use alloc::vec::Vec;
+use zerovec::vecs::Index32;
 use core::fmt::Debug;
 use core::ops::Range;
 use icu_collections::codepointinvlist::CodePointInversionList;
@@ -499,11 +500,11 @@ impl SimpleId<'_> {
 }
 
 struct RuleGroup<'a> {
-    rules: &'a VarZeroSlice<RuleULE>,
+    rules: &'a VarZeroSlice<RuleULE, Index32>,
 }
 
 impl<'a> RuleGroup<'a> {
-    fn from(rules: &'a VarZeroSlice<RuleULE>) -> Self {
+    fn from(rules: &'a VarZeroSlice<RuleULE, Index32>) -> Self {
         Self { rules }
     }
 
