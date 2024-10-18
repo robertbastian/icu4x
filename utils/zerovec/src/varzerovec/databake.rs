@@ -2,7 +2,7 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
-use crate::{ule::VarULE, VarZeroSlice, VarZeroVec, varzerovec::VarZeroVecFormat};
+use crate::{ule::VarULE, varzerovec::VarZeroVecFormat, VarZeroSlice, VarZeroVec};
 use databake::*;
 
 impl<T: VarULE + ?Sized, F: VarZeroVecFormat> Bake for VarZeroVec<'_, T, F> {

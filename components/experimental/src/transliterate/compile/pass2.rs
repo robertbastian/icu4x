@@ -253,7 +253,8 @@ impl<'a, 'p> Pass2<'a, 'p> {
             curr_segment: 0,
         };
         let mut compiled_transform_groups: Vec<VarZeroVec<'static, ds::SimpleIdULE>> = Vec::new();
-        let mut compiled_conversion_groups: Vec<VarZeroVec<'static, ds::RuleULE, Index32>> = Vec::new();
+        let mut compiled_conversion_groups: Vec<VarZeroVec<'static, ds::RuleULE, Index32>> =
+            Vec::new();
 
         for (transform_group, conversion_group) in pass1.groups {
             let compiled_transform_group: Vec<_> = transform_group

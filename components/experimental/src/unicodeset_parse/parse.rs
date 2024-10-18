@@ -1468,10 +1468,7 @@ where
         self.single_set.add_range(match name {
             "ARABIC" => '\u{0600}'..'\u{06FF}',
             "thaana" => '\u{0780}'..'\u{07BF}',
-            _ => {
-                println!("Skipping :block={name}:");
-                return Ok(());
-            }
+            _ => return Ok(()),
         });
         Ok(())
     }
