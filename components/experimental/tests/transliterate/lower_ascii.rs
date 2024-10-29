@@ -13,14 +13,23 @@ use icu_locale::LanguageIdentifier;
 use icu_provider::prelude::*;
 
 struct TransliteratorMultiSourceProvider<'a>(
-    RuleCollectionProvider<'a, icu_properties::provider::Baked, icu_normalizer::provider::Baked>,
+    RuleCollectionProvider<
+        'a,
+        icu_properties::provider::Baked,
+        icu_normalizer::provider::Baked,
+        icu_locale::provider::Baked,
+    >,
 );
 
 impl<'a, M> DataProvider<M> for TransliteratorMultiSourceProvider<'a>
 where
     M: DataMarker,
-    RuleCollectionProvider<'a, icu_properties::provider::Baked, icu_normalizer::provider::Baked>:
-        DataProvider<M>,
+    RuleCollectionProvider<
+        'a,
+        icu_properties::provider::Baked,
+        icu_normalizer::provider::Baked,
+        icu_locale::provider::Baked,
+    >: DataProvider<M>,
 {
     fn load(&self, req: DataRequest) -> Result<DataResponse<M>, DataError> {
         println!("{:?} {req:?}", M::INFO);
@@ -84,7 +93,8 @@ fn test_lower_ascii() {
     let provider = TransliteratorMultiSourceProvider(collection.as_provider());
     let t = Transliterator::try_new_with_override_unstable(
         &provider,
-        &provider,
+        &icu_normalizer::provider::Baked,
+        &icu_locale::provider::Baked,
         &"und-t-und-x0-lowascii".parse().unwrap(),
         |locale| {
             if locale.normalizing_eq("und-t-und-x0-lower") {
