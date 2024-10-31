@@ -30,13 +30,6 @@
     ],
     [
       [
-        4,
-        "Standard"
-      ],
-      "Afghanistan Time"
-    ],
-    [
-      [
         5,
         "Standard"
       ],
@@ -254,20 +247,6 @@
     ],
     [
       [
-        24,
-        "Standard"
-      ],
-      "Australian Central Western Standard Time"
-    ],
-    [
-      [
-        24,
-        "Daylight"
-      ],
-      "Australian Central Western Daylight Time"
-    ],
-    [
-      [
         25,
         "Standard"
       ],
@@ -324,13 +303,6 @@
     ],
     [
       [
-        31,
-        "Standard"
-      ],
-      "Bolivia Time"
-    ],
-    [
-      [
         32,
         "Standard"
       ],
@@ -345,24 +317,10 @@
     ],
     [
       [
-        33,
-        "Standard"
-      ],
-      "Brunei Time"
-    ],
-    [
-      [
         34,
         "Standard"
       ],
       "Casey Time"
-    ],
-    [
-      [
-        35,
-        "Daylight"
-      ],
-      "Cape Verde Summer Time"
     ],
     [
       [
@@ -398,55 +356,6 @@
         "Daylight"
       ],
       "China Daylight Time"
-    ],
-    [
-      [
-        40,
-        "Standard"
-      ],
-      "Christmas Island Time"
-    ],
-    [
-      [
-        41,
-        "Standard"
-      ],
-      "Cocos Islands Time"
-    ],
-    [
-      [
-        42,
-        "Daylight"
-      ],
-      "Colombia Summer Time"
-    ],
-    [
-      [
-        43,
-        "Daylight"
-      ],
-      "Cook Islands Summer Time"
-    ],
-    [
-      [
-        45,
-        "Standard"
-      ],
-      "Davis Time"
-    ],
-    [
-      [
-        46,
-        "Standard"
-      ],
-      "Dumont d’Urville Time"
-    ],
-    [
-      [
-        47,
-        "Daylight"
-      ],
-      "Easter Island Summer Time"
     ],
     [
       [
@@ -513,34 +422,6 @@
     ],
     [
       [
-        54,
-        "Daylight"
-      ],
-      "Falkland Islands Summer Time"
-    ],
-    [
-      [
-        55,
-        "Daylight"
-      ],
-      "Fiji Summer Time"
-    ],
-    [
-      [
-        56,
-        "Standard"
-      ],
-      "French Guiana Time"
-    ],
-    [
-      [
-        57,
-        "Standard"
-      ],
-      "French Southern & Antarctic Time"
-    ],
-    [
-      [
         58,
         "Standard"
       ],
@@ -548,24 +429,10 @@
     ],
     [
       [
-        59,
-        "Standard"
-      ],
-      "Gambier Time"
-    ],
-    [
-      [
         60,
         "Daylight"
       ],
       "Georgia Summer Time"
-    ],
-    [
-      [
-        61,
-        "Standard"
-      ],
-      "Gilbert Islands Time"
     ],
     [
       [
@@ -618,13 +485,6 @@
     ],
     [
       [
-        67,
-        "Standard"
-      ],
-      "Guyana Time"
-    ],
-    [
-      [
         68,
         "Standard"
       ],
@@ -636,20 +496,6 @@
         "Daylight"
       ],
       "Hawaii-Aleutian Daylight Time"
-    ],
-    [
-      [
-        69,
-        "Daylight"
-      ],
-      "Hong Kong Summer Time"
-    ],
-    [
-      [
-        70,
-        "Daylight"
-      ],
-      "Hovd Summer Time"
     ],
     [
       [
@@ -671,20 +517,6 @@
         "Standard"
       ],
       "Indochina Time"
-    ],
-    [
-      [
-        74,
-        "Standard"
-      ],
-      "Eastern Indonesia Time"
-    ],
-    [
-      [
-        75,
-        "Standard"
-      ],
-      "Indian Ocean Time"
     ],
     [
       [
@@ -730,13 +562,6 @@
     ],
     [
       [
-        82,
-        "Daylight"
-      ],
-      "Kamchatka Summer Time"
-    ],
-    [
-      [
         83,
         "Standard"
       ],
@@ -765,13 +590,6 @@
     ],
     [
       [
-        86,
-        "Standard"
-      ],
-      "Kosrae Time"
-    ],
-    [
-      [
         87,
         "Standard"
       ],
@@ -797,13 +615,6 @@
         "Standard"
       ],
       "Lanka Time"
-    ],
-    [
-      [
-        90,
-        "Standard"
-      ],
-      "Line Islands Time"
     ],
     [
       [
@@ -856,34 +667,6 @@
     ],
     [
       [
-        96,
-        "Standard"
-      ],
-      "Maldives Time"
-    ],
-    [
-      [
-        97,
-        "Standard"
-      ],
-      "Marquesas Time"
-    ],
-    [
-      [
-        98,
-        "Daylight"
-      ],
-      "Mauritius Summer Time"
-    ],
-    [
-      [
-        99,
-        "Standard"
-      ],
-      "Mawson Time"
-    ],
-    [
-      [
         100,
         "Standard"
       ],
@@ -905,13 +688,6 @@
     ],
     [
       [
-        102,
-        "Daylight"
-      ],
-      "Ulaanbaatar Summer Time"
-    ],
-    [
-      [
         103,
         "Standard"
       ],
@@ -923,48 +699,6 @@
         "Daylight"
       ],
       "Moscow Summer Time"
-    ],
-    [
-      [
-        104,
-        "Standard"
-      ],
-      "Myanmar Time"
-    ],
-    [
-      [
-        105,
-        "Standard"
-      ],
-      "Nauru Time"
-    ],
-    [
-      [
-        106,
-        "Daylight"
-      ],
-      "New Caledonia Summer Time"
-    ],
-    [
-      [
-        107,
-        "Standard"
-      ],
-      "Nepal Time"
-    ],
-    [
-      [
-        108,
-        "Standard"
-      ],
-      "Newfoundland Standard Time"
-    ],
-    [
-      [
-        108,
-        "Daylight"
-      ],
-      "Newfoundland Daylight Time"
     ],
     [
       [
@@ -982,24 +716,10 @@
     ],
     [
       [
-        110,
-        "Standard"
-      ],
-      "Niue Time"
-    ],
-    [
-      [
         111,
         "Standard"
       ],
       "Northern Mariana Islands Time"
-    ],
-    [
-      [
-        113,
-        "Daylight"
-      ],
-      "Fernando de Noronha Summer Time"
     ],
     [
       [
@@ -1017,13 +737,6 @@
     ],
     [
       [
-        115,
-        "Daylight"
-      ],
-      "Omsk Summer Time"
-    ],
-    [
-      [
         116,
         "Daylight"
       ],
@@ -1031,66 +744,10 @@
     ],
     [
       [
-        117,
-        "Standard"
-      ],
-      "Palau Time"
-    ],
-    [
-      [
         118,
         "Standard"
       ],
       "Papua New Guinea Time"
-    ],
-    [
-      [
-        119,
-        "Daylight"
-      ],
-      "Paraguay Summer Time"
-    ],
-    [
-      [
-        120,
-        "Daylight"
-      ],
-      "Peru Summer Time"
-    ],
-    [
-      [
-        121,
-        "Standard"
-      ],
-      "Philippine Standard Time"
-    ],
-    [
-      [
-        121,
-        "Daylight"
-      ],
-      "Philippine Summer Time"
-    ],
-    [
-      [
-        122,
-        "Standard"
-      ],
-      "Phoenix Islands Time"
-    ],
-    [
-      [
-        124,
-        "Standard"
-      ],
-      "Pitcairn Time"
-    ],
-    [
-      [
-        125,
-        "Standard"
-      ],
-      "Pohnpei Time"
     ],
     [
       [
@@ -1105,27 +762,6 @@
         "Daylight"
       ],
       "Qyzylorda Summer Time"
-    ],
-    [
-      [
-        128,
-        "Standard"
-      ],
-      "Réunion Time"
-    ],
-    [
-      [
-        129,
-        "Standard"
-      ],
-      "Rothera Time"
-    ],
-    [
-      [
-        130,
-        "Daylight"
-      ],
-      "Sakhalin Summer Time"
     ],
     [
       [
@@ -1150,45 +786,10 @@
     ],
     [
       [
-        133,
-        "Standard"
-      ],
-      "Seychelles Time"
-    ],
-    [
-      [
-        135,
-        "Standard"
-      ],
-      "South Georgia Time"
-    ],
-    [
-      [
-        136,
-        "Standard"
-      ],
-      "Solomon Islands Time"
-    ],
-    [
-      [
         137,
         "Standard"
       ],
       "Suriname Time"
-    ],
-    [
-      [
-        138,
-        "Standard"
-      ],
-      "Syowa Time"
-    ],
-    [
-      [
-        139,
-        "Standard"
-      ],
-      "Tahiti Time"
     ],
     [
       [
@@ -1199,45 +800,10 @@
     ],
     [
       [
-        142,
-        "Standard"
-      ],
-      "Tokelau Time"
-    ],
-    [
-      [
-        143,
-        "Daylight"
-      ],
-      "Tonga Summer Time"
-    ],
-    [
-      [
-        144,
-        "Standard"
-      ],
-      "Chuuk Time"
-    ],
-    [
-      [
         145,
         "Daylight"
       ],
       "Turkmenistan Summer Time"
-    ],
-    [
-      [
-        146,
-        "Standard"
-      ],
-      "Tuvalu Time"
-    ],
-    [
-      [
-        147,
-        "Daylight"
-      ],
-      "Uruguay Summer Time"
     ],
     [
       [
@@ -1255,20 +821,6 @@
     ],
     [
       [
-        149,
-        "Daylight"
-      ],
-      "Vanuatu Summer Time"
-    ],
-    [
-      [
-        150,
-        "Standard"
-      ],
-      "Venezuela Time"
-    ],
-    [
-      [
         151,
         "Standard"
       ],
@@ -1280,34 +832,6 @@
         "Daylight"
       ],
       "Vladivostok Summer Time"
-    ],
-    [
-      [
-        152,
-        "Daylight"
-      ],
-      "Volgograd Summer Time"
-    ],
-    [
-      [
-        153,
-        "Standard"
-      ],
-      "Vostok Time"
-    ],
-    [
-      [
-        154,
-        "Standard"
-      ],
-      "Wake Island Time"
-    ],
-    [
-      [
-        155,
-        "Standard"
-      ],
-      "Wallis & Futuna Time"
     ],
     [
       [
@@ -1341,10 +865,220 @@
   "overrides": [
     [
       [
+        "afkbl",
+        "Standard"
+      ],
+      "Afghanistan Time"
+    ],
+    [
+      [
+        "aqdav",
+        "Standard"
+      ],
+      "Davis Time"
+    ],
+    [
+      [
+        "aqddu",
+        "Standard"
+      ],
+      "Dumont d’Urville Time"
+    ],
+    [
+      [
+        "aqmaw",
+        "Standard"
+      ],
+      "Mawson Time"
+    ],
+    [
+      [
+        "aqrot",
+        "Standard"
+      ],
+      "Rothera Time"
+    ],
+    [
+      [
+        "aqsyw",
+        "Standard"
+      ],
+      "Syowa Time"
+    ],
+    [
+      [
+        "aqvos",
+        "Standard"
+      ],
+      "Vostok Time"
+    ],
+    [
+      [
+        "aueuc",
+        "Standard"
+      ],
+      "Australian Central Western Standard Time"
+    ],
+    [
+      [
+        "aueuc",
+        "Daylight"
+      ],
+      "Australian Central Western Daylight Time"
+    ],
+    [
+      [
+        "bnbwn",
+        "Standard"
+      ],
+      "Brunei Time"
+    ],
+    [
+      [
+        "bolpb",
+        "Standard"
+      ],
+      "Bolivia Time"
+    ],
+    [
+      [
+        "brfen",
+        "Daylight"
+      ],
+      "Fernando de Noronha Summer Time"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "Newfoundland Standard Time"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "Newfoundland Daylight Time"
+    ],
+    [
+      [
+        "cccck",
+        "Standard"
+      ],
+      "Cocos Islands Time"
+    ],
+    [
+      [
+        "ckrar",
+        "Daylight"
+      ],
+      "Cook Islands Summer Time"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "Easter Island Summer Time"
+    ],
+    [
+      [
+        "cobog",
+        "Daylight"
+      ],
+      "Colombia Summer Time"
+    ],
+    [
+      [
+        "cvrai",
+        "Daylight"
+      ],
+      "Cape Verde Summer Time"
+    ],
+    [
+      [
+        "cxxch",
+        "Standard"
+      ],
+      "Christmas Island Time"
+    ],
+    [
+      [
+        "fjsuv",
+        "Daylight"
+      ],
+      "Fiji Summer Time"
+    ],
+    [
+      [
+        "fkpsy",
+        "Daylight"
+      ],
+      "Falkland Islands Summer Time"
+    ],
+    [
+      [
+        "fmksa",
+        "Standard"
+      ],
+      "Kosrae Time"
+    ],
+    [
+      [
+        "fmpni",
+        "Standard"
+      ],
+      "Pohnpei Time"
+    ],
+    [
+      [
+        "fmtkk",
+        "Standard"
+      ],
+      "Chuuk Time"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
       "British Summer Time"
+    ],
+    [
+      [
+        "gfcay",
+        "Standard"
+      ],
+      "French Guiana Time"
+    ],
+    [
+      [
+        "gsgrv",
+        "Standard"
+      ],
+      "South Georgia Time"
+    ],
+    [
+      [
+        "gygeo",
+        "Standard"
+      ],
+      "Guyana Time"
+    ],
+    [
+      [
+        "hkhkg",
+        "Daylight"
+      ],
+      "Hong Kong Summer Time"
+    ],
+    [
+      [
+        "iddjj",
+        "Standard"
+      ],
+      "Eastern Indonesia Time"
     ],
     [
       [
@@ -1355,10 +1089,276 @@
     ],
     [
       [
+        "iodga",
+        "Standard"
+      ],
+      "Indian Ocean Time"
+    ],
+    [
+      [
+        "kicxi",
+        "Standard"
+      ],
+      "Line Islands Time"
+    ],
+    [
+      [
+        "kipho",
+        "Standard"
+      ],
+      "Phoenix Islands Time"
+    ],
+    [
+      [
+        "kitrw",
+        "Standard"
+      ],
+      "Gilbert Islands Time"
+    ],
+    [
+      [
+        "mmrgn",
+        "Standard"
+      ],
+      "Myanmar Time"
+    ],
+    [
+      [
+        "mnhvd",
+        "Daylight"
+      ],
+      "Hovd Summer Time"
+    ],
+    [
+      [
+        "mnuln",
+        "Daylight"
+      ],
+      "Ulaanbaatar Summer Time"
+    ],
+    [
+      [
+        "muplu",
+        "Daylight"
+      ],
+      "Mauritius Summer Time"
+    ],
+    [
+      [
+        "mvmle",
+        "Standard"
+      ],
+      "Maldives Time"
+    ],
+    [
+      [
+        "ncnou",
+        "Daylight"
+      ],
+      "New Caledonia Summer Time"
+    ],
+    [
+      [
+        "npktm",
+        "Standard"
+      ],
+      "Nepal Time"
+    ],
+    [
+      [
+        "nrinu",
+        "Standard"
+      ],
+      "Nauru Time"
+    ],
+    [
+      [
+        "nuiue",
+        "Standard"
+      ],
+      "Niue Time"
+    ],
+    [
+      [
+        "pelim",
+        "Daylight"
+      ],
+      "Peru Summer Time"
+    ],
+    [
+      [
+        "pfgmr",
+        "Standard"
+      ],
+      "Gambier Time"
+    ],
+    [
+      [
+        "pfnhv",
+        "Standard"
+      ],
+      "Marquesas Time"
+    ],
+    [
+      [
+        "pfppt",
+        "Standard"
+      ],
+      "Tahiti Time"
+    ],
+    [
+      [
+        "phmnl",
+        "Standard"
+      ],
+      "Philippine Standard Time"
+    ],
+    [
+      [
+        "phmnl",
+        "Daylight"
+      ],
+      "Philippine Summer Time"
+    ],
+    [
+      [
+        "pnpcn",
+        "Standard"
+      ],
+      "Pitcairn Time"
+    ],
+    [
+      [
+        "pwror",
+        "Standard"
+      ],
+      "Palau Time"
+    ],
+    [
+      [
+        "pyasu",
+        "Daylight"
+      ],
+      "Paraguay Summer Time"
+    ],
+    [
+      [
+        "rereu",
+        "Standard"
+      ],
+      "Réunion Time"
+    ],
+    [
+      [
+        "ruoms",
+        "Daylight"
+      ],
+      "Omsk Summer Time"
+    ],
+    [
+      [
+        "rupkc",
+        "Daylight"
+      ],
+      "Kamchatka Summer Time"
+    ],
+    [
+      [
+        "ruuus",
+        "Daylight"
+      ],
+      "Sakhalin Summer Time"
+    ],
+    [
+      [
+        "ruvog",
+        "Daylight"
+      ],
+      "Volgograd Summer Time"
+    ],
+    [
+      [
+        "sbhir",
+        "Standard"
+      ],
+      "Solomon Islands Time"
+    ],
+    [
+      [
+        "scmaw",
+        "Standard"
+      ],
+      "Seychelles Time"
+    ],
+    [
+      [
+        "tfpfr",
+        "Standard"
+      ],
+      "French Southern & Antarctic Time"
+    ],
+    [
+      [
+        "tkfko",
+        "Standard"
+      ],
+      "Tokelau Time"
+    ],
+    [
+      [
+        "totbu",
+        "Daylight"
+      ],
+      "Tonga Summer Time"
+    ],
+    [
+      [
+        "tvfun",
+        "Standard"
+      ],
+      "Tuvalu Time"
+    ],
+    [
+      [
+        "umawk",
+        "Standard"
+      ],
+      "Wake Island Time"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "Coordinated Universal Time"
+    ],
+    [
+      [
+        "uymvd",
+        "Daylight"
+      ],
+      "Uruguay Summer Time"
+    ],
+    [
+      [
+        "veccs",
+        "Standard"
+      ],
+      "Venezuela Time"
+    ],
+    [
+      [
+        "vuvli",
+        "Daylight"
+      ],
+      "Vanuatu Summer Time"
+    ],
+    [
+      [
+        "wfmau",
+        "Standard"
+      ],
+      "Wallis & Futuna Time"
     ]
   ]
 }

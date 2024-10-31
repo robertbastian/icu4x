@@ -28,7 +28,7 @@ pub(crate) struct Caches {
     bcp47_to_canonical_iana: Cache<BTreeMap<TimeZone, String>>,
     metazone_to_short: Cache<(BTreeMap<String, MetazoneId>, u64)>,
     primary_zones: Cache<BTreeMap<TimeZone, Region>>,
-    mz_period: Cache<MetazonePeriod<'static>>,
+    mz_period_and_useless_mzs: Cache<(MetazonePeriod<'static>, BTreeMap<MetazoneId, TimeZone>)>,
     offset_period: Cache<ZoneOffsetPeriod<'static>>,
     reverse_metazones: Cache<BTreeMap<MetazoneId, Vec<TimeZone>>>,
 }
@@ -39,7 +39,7 @@ impl SourceDataProvider {
             .tz_caches
             .reverse_metazones
             .get_or_init(|| {
-                let mz_period = self.metazone_period()?;
+                let mz_period = &self.metazone_period_and_useless_mzs()?.0;
                 let mut reverse_metazones = BTreeMap::<MetazoneId, Vec<TimeZone>>::new();
                 for cursor in mz_period.list.iter0() {
                     let tz = *cursor.key0();
@@ -330,7 +330,7 @@ mod tests {
                 .unwrap()
         );
 
-        let metazone_period = provider.metazone_period().unwrap();
+        let metazone_period = &provider.metazone_period_and_useless_mzs().unwrap().0;
 
         let metazone_now = |bcp47| {
             metazone_period
