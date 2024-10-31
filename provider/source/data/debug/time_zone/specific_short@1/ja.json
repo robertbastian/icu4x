@@ -1,21 +1,20 @@
 {
-  "defaults": [
+  "defaults": {},
+  "overrides": [
     [
       [
-        "japa",
+        "jptyo",
         "Standard"
       ],
       "JST"
     ],
     [
       [
-        "japa",
+        "jptyo",
         "Daylight"
       ],
       "JDT"
-    ]
-  ],
-  "overrides": [
+    ],
     [
       [
         "utc",

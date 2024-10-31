@@ -30,13 +30,6 @@
     ],
     [
       [
-        "afgh",
-        "Standard"
-      ],
-      "hora de Afganistán"
-    ],
-    [
-      [
         "afso",
         "Standard"
       ],
@@ -156,20 +149,6 @@
     ],
     [
       [
-        "apia",
-        "Standard"
-      ],
-      "hora estándar de Apia"
-    ],
-    [
-      [
-        "apia",
-        "Daylight"
-      ],
-      "horario de verano de Apia"
-    ],
-    [
-      [
         "aqta",
         "Standard"
       ],
@@ -268,20 +247,6 @@
     ],
     [
       [
-        "aucw",
-        "Standard"
-      ],
-      "hora estándar de Australia centroccidental"
-    ],
-    [
-      [
-        "aucw",
-        "Daylight"
-      ],
-      "hora de verano de Australia centroccidental"
-    ],
-    [
-      [
         "auea",
         "Standard"
       ],
@@ -331,13 +296,6 @@
     ],
     [
       [
-        "boli",
-        "Standard"
-      ],
-      "hora de Bolivia"
-    ],
-    [
-      [
         "bras",
         "Standard"
       ],
@@ -349,13 +307,6 @@
         "Daylight"
       ],
       "hora de verano de Brasilia"
-    ],
-    [
-      [
-        "brun",
-        "Standard"
-      ],
-      "hora de Brunéi"
     ],
     [
       [
@@ -391,55 +342,6 @@
         "Daylight"
       ],
       "hora de verano de China"
-    ],
-    [
-      [
-        "chri",
-        "Standard"
-      ],
-      "hora de la Isla de Navidad"
-    ],
-    [
-      [
-        "coco",
-        "Standard"
-      ],
-      "hora de Islas Cocos"
-    ],
-    [
-      [
-        "cook",
-        "Standard"
-      ],
-      "hora estándar de las islas Cook"
-    ],
-    [
-      [
-        "cook",
-        "Daylight"
-      ],
-      "hora de verano media de las islas Cook"
-    ],
-    [
-      [
-        "davi",
-        "Standard"
-      ],
-      "hora de Davis"
-    ],
-    [
-      [
-        "dumo",
-        "Standard"
-      ],
-      "hora de Dumont-d’Urville"
-    ],
-    [
-      [
-        "east",
-        "Daylight"
-      ],
-      "hora de verano de la Isla de Pascua"
     ],
     [
       [
@@ -506,52 +408,10 @@
     ],
     [
       [
-        "falk",
-        "Standard"
-      ],
-      "hora estándar de las Islas Malvinas"
-    ],
-    [
-      [
-        "falk",
-        "Daylight"
-      ],
-      "hora de verano de las Islas Malvinas"
-    ],
-    [
-      [
-        "frgu",
-        "Standard"
-      ],
-      "hora de la Guayana Francesa"
-    ],
-    [
-      [
-        "frso",
-        "Standard"
-      ],
-      "hora de las Tierras Australes y Antárticas Francesas"
-    ],
-    [
-      [
         "gala",
         "Standard"
       ],
       "hora de Galápagos"
-    ],
-    [
-      [
-        "gamb",
-        "Standard"
-      ],
-      "hora de Gambier"
-    ],
-    [
-      [
-        "giis",
-        "Standard"
-      ],
-      "hora de Islas Gilbert"
     ],
     [
       [
@@ -597,13 +457,6 @@
     ],
     [
       [
-        "guya",
-        "Standard"
-      ],
-      "hora de Guyana"
-    ],
-    [
-      [
         "haal",
         "Standard"
       ],
@@ -636,20 +489,6 @@
         "Standard"
       ],
       "hora de Indochina"
-    ],
-    [
-      [
-        "inea",
-        "Standard"
-      ],
-      "hora de Indonesia oriental"
-    ],
-    [
-      [
-        "inoc",
-        "Standard"
-      ],
-      "hora del océano Índico"
     ],
     [
       [
@@ -723,13 +562,6 @@
     ],
     [
       [
-        "kosr",
-        "Standard"
-      ],
-      "hora de Kosrae"
-    ],
-    [
-      [
         "kras",
         "Standard"
       ],
@@ -755,13 +587,6 @@
         "Standard"
       ],
       "Hora de Sri Lanka"
-    ],
-    [
-      [
-        "liis",
-        "Standard"
-      ],
-      "hora de las Espóradas Ecuatoriales"
     ],
     [
       [
@@ -807,27 +632,6 @@
     ],
     [
       [
-        "mald",
-        "Standard"
-      ],
-      "hora de Maldivas"
-    ],
-    [
-      [
-        "marq",
-        "Standard"
-      ],
-      "hora de Marquesas"
-    ],
-    [
-      [
-        "maws",
-        "Standard"
-      ],
-      "hora de Mawson"
-    ],
-    [
-      [
         "mepa",
         "Standard"
       ],
@@ -863,41 +667,6 @@
     ],
     [
       [
-        "myan",
-        "Standard"
-      ],
-      "hora de Myanmar (Birmania)"
-    ],
-    [
-      [
-        "naur",
-        "Standard"
-      ],
-      "hora de Nauru"
-    ],
-    [
-      [
-        "nepa",
-        "Standard"
-      ],
-      "hora de Nepal"
-    ],
-    [
-      [
-        "newf",
-        "Standard"
-      ],
-      "hora estándar de Terranova"
-    ],
-    [
-      [
-        "newf",
-        "Daylight"
-      ],
-      "hora de verano de Terranova"
-    ],
-    [
-      [
         "neze",
         "Standard"
       ],
@@ -912,45 +681,10 @@
     ],
     [
       [
-        "niue",
-        "Standard"
-      ],
-      "hora de Niue"
-    ],
-    [
-      [
         "noma",
         "Standard"
       ],
       "Hora de las Islas Marianas del Norte"
-    ],
-    [
-      [
-        "norf",
-        "Standard"
-      ],
-      "hora estándar de la Isla Norfolk"
-    ],
-    [
-      [
-        "norf",
-        "Daylight"
-      ],
-      "hora de verano de la Isla Norfolk"
-    ],
-    [
-      [
-        "noro",
-        "Standard"
-      ],
-      "hora estándar de Fernando de Noronha"
-    ],
-    [
-      [
-        "noro",
-        "Daylight"
-      ],
-      "hora de verano de Fernando de Noronha"
     ],
     [
       [
@@ -968,38 +702,10 @@
     ],
     [
       [
-        "pala",
-        "Standard"
-      ],
-      "hora de Palaos"
-    ],
-    [
-      [
         "pang",
         "Standard"
       ],
       "hora de Papúa Nueva Guinea"
-    ],
-    [
-      [
-        "phis",
-        "Standard"
-      ],
-      "hora de las Islas Fénix"
-    ],
-    [
-      [
-        "pitc",
-        "Standard"
-      ],
-      "hora de Pitcairn"
-    ],
-    [
-      [
-        "pona",
-        "Standard"
-      ],
-      "hora de Pohnpei"
     ],
     [
       [
@@ -1024,20 +730,6 @@
     ],
     [
       [
-        "reun",
-        "Standard"
-      ],
-      "hora de Reunión"
-    ],
-    [
-      [
-        "roth",
-        "Standard"
-      ],
-      "hora de Rothera"
-    ],
-    [
-      [
         "samo",
         "Standard"
       ],
@@ -1052,34 +744,6 @@
     ],
     [
       [
-        "seyc",
-        "Standard"
-      ],
-      "hora de Seychelles"
-    ],
-    [
-      [
-        "sing",
-        "Standard"
-      ],
-      "hora de Singapur"
-    ],
-    [
-      [
-        "soge",
-        "Standard"
-      ],
-      "hora de Georgia del Sur"
-    ],
-    [
-      [
-        "solo",
-        "Standard"
-      ],
-      "hora de Islas Salomón"
-    ],
-    [
-      [
         "suri",
         "Standard"
       ],
@@ -1087,59 +751,10 @@
     ],
     [
       [
-        "syow",
-        "Standard"
-      ],
-      "hora de Syowa"
-    ],
-    [
-      [
-        "tahi",
-        "Standard"
-      ],
-      "hora de Tahití"
-    ],
-    [
-      [
-        "taip",
-        "Standard"
-      ],
-      "hora estándar de Taipéi"
-    ],
-    [
-      [
-        "taip",
-        "Daylight"
-      ],
-      "hora de verano de Taipéi"
-    ],
-    [
-      [
         "taji",
         "Standard"
       ],
       "hora de Tayikistán"
-    ],
-    [
-      [
-        "toke",
-        "Standard"
-      ],
-      "hora de Tokelau"
-    ],
-    [
-      [
-        "truk",
-        "Standard"
-      ],
-      "hora de Chuuk"
-    ],
-    [
-      [
-        "tuva",
-        "Standard"
-      ],
-      "hora de Tuvalu"
     ],
     [
       [
@@ -1157,13 +772,6 @@
     ],
     [
       [
-        "vene",
-        "Standard"
-      ],
-      "hora de Venezuela"
-    ],
-    [
-      [
         "vlad",
         "Standard"
       ],
@@ -1175,27 +783,6 @@
         "Daylight"
       ],
       "hora de verano de Vladivostok"
-    ],
-    [
-      [
-        "vost",
-        "Standard"
-      ],
-      "hora de Vostok"
-    ],
-    [
-      [
-        "wake",
-        "Standard"
-      ],
-      "hora de Isla Wake"
-    ],
-    [
-      [
-        "wall",
-        "Standard"
-      ],
-      "hora de Wallis y Futuna"
     ],
     [
       [
@@ -1222,10 +809,213 @@
   "overrides": [
     [
       [
+        "afkbl",
+        "Standard"
+      ],
+      "hora de Afganistán"
+    ],
+    [
+      [
+        "aqdav",
+        "Standard"
+      ],
+      "hora de Davis"
+    ],
+    [
+      [
+        "aqddu",
+        "Standard"
+      ],
+      "hora de Dumont-d’Urville"
+    ],
+    [
+      [
+        "aqmaw",
+        "Standard"
+      ],
+      "hora de Mawson"
+    ],
+    [
+      [
+        "aqrot",
+        "Standard"
+      ],
+      "hora de Rothera"
+    ],
+    [
+      [
+        "aqsyw",
+        "Standard"
+      ],
+      "hora de Syowa"
+    ],
+    [
+      [
+        "aqvos",
+        "Standard"
+      ],
+      "hora de Vostok"
+    ],
+    [
+      [
+        "aueuc",
+        "Standard"
+      ],
+      "hora estándar de Australia centroccidental"
+    ],
+    [
+      [
+        "aueuc",
+        "Daylight"
+      ],
+      "hora de verano de Australia centroccidental"
+    ],
+    [
+      [
+        "bnbwn",
+        "Standard"
+      ],
+      "hora de Brunéi"
+    ],
+    [
+      [
+        "bolpb",
+        "Standard"
+      ],
+      "hora de Bolivia"
+    ],
+    [
+      [
+        "brfen",
+        "Standard"
+      ],
+      "hora estándar de Fernando de Noronha"
+    ],
+    [
+      [
+        "brfen",
+        "Daylight"
+      ],
+      "hora de verano de Fernando de Noronha"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "hora estándar de Terranova"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "hora de verano de Terranova"
+    ],
+    [
+      [
+        "cccck",
+        "Standard"
+      ],
+      "hora de Islas Cocos"
+    ],
+    [
+      [
+        "ckrar",
+        "Standard"
+      ],
+      "hora estándar de las islas Cook"
+    ],
+    [
+      [
+        "ckrar",
+        "Daylight"
+      ],
+      "hora de verano media de las islas Cook"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "hora de verano de la Isla de Pascua"
+    ],
+    [
+      [
+        "cxxch",
+        "Standard"
+      ],
+      "hora de la Isla de Navidad"
+    ],
+    [
+      [
+        "fkpsy",
+        "Standard"
+      ],
+      "hora estándar de las Islas Malvinas"
+    ],
+    [
+      [
+        "fkpsy",
+        "Daylight"
+      ],
+      "hora de verano de las Islas Malvinas"
+    ],
+    [
+      [
+        "fmksa",
+        "Standard"
+      ],
+      "hora de Kosrae"
+    ],
+    [
+      [
+        "fmpni",
+        "Standard"
+      ],
+      "hora de Pohnpei"
+    ],
+    [
+      [
+        "fmtkk",
+        "Standard"
+      ],
+      "hora de Chuuk"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
       "hora de verano británica"
+    ],
+    [
+      [
+        "gfcay",
+        "Standard"
+      ],
+      "hora de la Guayana Francesa"
+    ],
+    [
+      [
+        "gsgrv",
+        "Standard"
+      ],
+      "hora de Georgia del Sur"
+    ],
+    [
+      [
+        "gygeo",
+        "Standard"
+      ],
+      "hora de Guyana"
+    ],
+    [
+      [
+        "iddjj",
+        "Standard"
+      ],
+      "hora de Indonesia oriental"
     ],
     [
       [
@@ -1236,10 +1026,220 @@
     ],
     [
       [
+        "iodga",
+        "Standard"
+      ],
+      "hora del océano Índico"
+    ],
+    [
+      [
+        "kicxi",
+        "Standard"
+      ],
+      "hora de las Espóradas Ecuatoriales"
+    ],
+    [
+      [
+        "kipho",
+        "Standard"
+      ],
+      "hora de las Islas Fénix"
+    ],
+    [
+      [
+        "kitrw",
+        "Standard"
+      ],
+      "hora de Islas Gilbert"
+    ],
+    [
+      [
+        "mmrgn",
+        "Standard"
+      ],
+      "hora de Myanmar (Birmania)"
+    ],
+    [
+      [
+        "mvmle",
+        "Standard"
+      ],
+      "hora de Maldivas"
+    ],
+    [
+      [
+        "nfnlk",
+        "Standard"
+      ],
+      "hora estándar de la Isla Norfolk"
+    ],
+    [
+      [
+        "nfnlk",
+        "Daylight"
+      ],
+      "hora de verano de la Isla Norfolk"
+    ],
+    [
+      [
+        "npktm",
+        "Standard"
+      ],
+      "hora de Nepal"
+    ],
+    [
+      [
+        "nrinu",
+        "Standard"
+      ],
+      "hora de Nauru"
+    ],
+    [
+      [
+        "nuiue",
+        "Standard"
+      ],
+      "hora de Niue"
+    ],
+    [
+      [
+        "pfgmr",
+        "Standard"
+      ],
+      "hora de Gambier"
+    ],
+    [
+      [
+        "pfnhv",
+        "Standard"
+      ],
+      "hora de Marquesas"
+    ],
+    [
+      [
+        "pfppt",
+        "Standard"
+      ],
+      "hora de Tahití"
+    ],
+    [
+      [
+        "pnpcn",
+        "Standard"
+      ],
+      "hora de Pitcairn"
+    ],
+    [
+      [
+        "pwror",
+        "Standard"
+      ],
+      "hora de Palaos"
+    ],
+    [
+      [
+        "rereu",
+        "Standard"
+      ],
+      "hora de Reunión"
+    ],
+    [
+      [
+        "sbhir",
+        "Standard"
+      ],
+      "hora de Islas Salomón"
+    ],
+    [
+      [
+        "scmaw",
+        "Standard"
+      ],
+      "hora de Seychelles"
+    ],
+    [
+      [
+        "sgsin",
+        "Standard"
+      ],
+      "hora de Singapur"
+    ],
+    [
+      [
+        "tfpfr",
+        "Standard"
+      ],
+      "hora de las Tierras Australes y Antárticas Francesas"
+    ],
+    [
+      [
+        "tkfko",
+        "Standard"
+      ],
+      "hora de Tokelau"
+    ],
+    [
+      [
+        "tvfun",
+        "Standard"
+      ],
+      "hora de Tuvalu"
+    ],
+    [
+      [
+        "twtpe",
+        "Standard"
+      ],
+      "hora estándar de Taipéi"
+    ],
+    [
+      [
+        "twtpe",
+        "Daylight"
+      ],
+      "hora de verano de Taipéi"
+    ],
+    [
+      [
+        "umawk",
+        "Standard"
+      ],
+      "hora de Isla Wake"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "hora universal coordinada"
+    ],
+    [
+      [
+        "veccs",
+        "Standard"
+      ],
+      "hora de Venezuela"
+    ],
+    [
+      [
+        "wfmau",
+        "Standard"
+      ],
+      "hora de Wallis y Futuna"
+    ],
+    [
+      [
+        "wsapw",
+        "Standard"
+      ],
+      "hora estándar de Apia"
+    ],
+    [
+      [
+        "wsapw",
+        "Daylight"
+      ],
+      "horario de verano de Apia"
     ]
   ]
 }

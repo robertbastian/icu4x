@@ -30,13 +30,6 @@
     ],
     [
       [
-        "afgh",
-        "Standard"
-      ],
-      "Afganistan Saati"
-    ],
-    [
-      [
         "afso",
         "Standard"
       ],
@@ -142,20 +135,6 @@
     ],
     [
       [
-        "apia",
-        "Standard"
-      ],
-      "Apia Standart Saati"
-    ],
-    [
-      [
-        "apia",
-        "Daylight"
-      ],
-      "Apia Yaz Saati"
-    ],
-    [
-      [
         "arab",
         "Standard"
       ],
@@ -226,20 +205,6 @@
     ],
     [
       [
-        "aucw",
-        "Standard"
-      ],
-      "İç Batı Avustralya Standart Saati"
-    ],
-    [
-      [
-        "aucw",
-        "Daylight"
-      ],
-      "İç Batı Avustralya Yaz Saati"
-    ],
-    [
-      [
         "auea",
         "Standard"
       ],
@@ -289,13 +254,6 @@
     ],
     [
       [
-        "boli",
-        "Standard"
-      ],
-      "Bolivya Saati"
-    ],
-    [
-      [
         "bras",
         "Standard"
       ],
@@ -310,31 +268,10 @@
     ],
     [
       [
-        "brun",
-        "Standard"
-      ],
-      "Brunei Darü’s-Selam Saati"
-    ],
-    [
-      [
         "case",
         "Standard"
       ],
       "Casey Saati"
-    ],
-    [
-      [
-        "cave",
-        "Standard"
-      ],
-      "Cape Verde Standart Saati"
-    ],
-    [
-      [
-        "cave",
-        "Daylight"
-      ],
-      "Cape Verde Yaz Saati"
     ],
     [
       [
@@ -370,41 +307,6 @@
         "Daylight"
       ],
       "Çin Yaz Saati"
-    ],
-    [
-      [
-        "chri",
-        "Standard"
-      ],
-      "Christmas Adası Saati"
-    ],
-    [
-      [
-        "coco",
-        "Standard"
-      ],
-      "Cocos Adaları Saati"
-    ],
-    [
-      [
-        "cook",
-        "Daylight"
-      ],
-      "Cook Adaları Yarı Yaz Saati"
-    ],
-    [
-      [
-        "davi",
-        "Standard"
-      ],
-      "Davis Saati"
-    ],
-    [
-      [
-        "dumo",
-        "Standard"
-      ],
-      "Dumont-d’Urville Saati"
     ],
     [
       [
@@ -471,38 +373,10 @@
     ],
     [
       [
-        "frgu",
-        "Standard"
-      ],
-      "Fransız Guyanası Saati"
-    ],
-    [
-      [
-        "frso",
-        "Standard"
-      ],
-      "Fransız Güney ve Antarktika Saati"
-    ],
-    [
-      [
         "gala",
         "Standard"
       ],
       "Galapagos Saati"
-    ],
-    [
-      [
-        "gamb",
-        "Standard"
-      ],
-      "Gambier Saati"
-    ],
-    [
-      [
-        "giis",
-        "Standard"
-      ],
-      "Gilbert Adaları Saati"
     ],
     [
       [
@@ -541,13 +415,6 @@
     ],
     [
       [
-        "guya",
-        "Standard"
-      ],
-      "Guyana Saati"
-    ],
-    [
-      [
         "haal",
         "Standard"
       ],
@@ -580,20 +447,6 @@
         "Standard"
       ],
       "Hindiçin Saati"
-    ],
-    [
-      [
-        "inea",
-        "Standard"
-      ],
-      "Doğu Endonezya Saati"
-    ],
-    [
-      [
-        "inoc",
-        "Standard"
-      ],
-      "Hint Okyanusu Saati"
     ],
     [
       [
@@ -639,20 +492,6 @@
     ],
     [
       [
-        "kamc",
-        "Standard"
-      ],
-      "Petropavlovsk-Kamçatski Standart Saati"
-    ],
-    [
-      [
-        "kamc",
-        "Daylight"
-      ],
-      "Petropavlovsk-Kamçatski Yaz Saati"
-    ],
-    [
-      [
         "kawe",
         "Standard"
       ],
@@ -678,13 +517,6 @@
         "Daylight"
       ],
       "Kore Yaz Saati"
-    ],
-    [
-      [
-        "kosr",
-        "Standard"
-      ],
-      "Kosrae Saati"
     ],
     [
       [
@@ -716,13 +548,6 @@
     ],
     [
       [
-        "liis",
-        "Standard"
-      ],
-      "Line Adaları Saati"
-    ],
-    [
-      [
         "maga",
         "Standard"
       ],
@@ -748,27 +573,6 @@
         "Standard"
       ],
       "Malezya Saati"
-    ],
-    [
-      [
-        "mald",
-        "Standard"
-      ],
-      "Maldivler Saati"
-    ],
-    [
-      [
-        "marq",
-        "Standard"
-      ],
-      "Markiz Adaları Saati"
-    ],
-    [
-      [
-        "maws",
-        "Standard"
-      ],
-      "Mawson Saati"
     ],
     [
       [
@@ -807,41 +611,6 @@
     ],
     [
       [
-        "myan",
-        "Standard"
-      ],
-      "Myanmar Saati"
-    ],
-    [
-      [
-        "naur",
-        "Standard"
-      ],
-      "Nauru Saati"
-    ],
-    [
-      [
-        "nepa",
-        "Standard"
-      ],
-      "Nepal Saati"
-    ],
-    [
-      [
-        "newf",
-        "Standard"
-      ],
-      "Newfoundland Standart Saati"
-    ],
-    [
-      [
-        "newf",
-        "Daylight"
-      ],
-      "Newfoundland Yaz Saati"
-    ],
-    [
-      [
         "neze",
         "Standard"
       ],
@@ -856,31 +625,10 @@
     ],
     [
       [
-        "niue",
-        "Standard"
-      ],
-      "Niue Saati"
-    ],
-    [
-      [
         "noma",
         "Standard"
       ],
       "Kuzey Mariana Adaları Saati"
-    ],
-    [
-      [
-        "noro",
-        "Standard"
-      ],
-      "Fernando de Noronha Standart Saati"
-    ],
-    [
-      [
-        "noro",
-        "Daylight"
-      ],
-      "Fernando de Noronha Yaz Saati"
     ],
     [
       [
@@ -898,13 +646,6 @@
     ],
     [
       [
-        "pala",
-        "Standard"
-      ],
-      "Palau Saati"
-    ],
-    [
-      [
         "pang",
         "Standard"
       ],
@@ -912,45 +653,10 @@
     ],
     [
       [
-        "phis",
-        "Standard"
-      ],
-      "Phoenix Adaları Saati"
-    ],
-    [
-      [
-        "pitc",
-        "Standard"
-      ],
-      "Pitcairn Saati"
-    ],
-    [
-      [
-        "pona",
-        "Standard"
-      ],
-      "Ponape Saati"
-    ],
-    [
-      [
         "pyon",
         "Standard"
       ],
       "Pyongyang Saati"
-    ],
-    [
-      [
-        "reun",
-        "Standard"
-      ],
-      "Reunion Saati"
-    ],
-    [
-      [
-        "roth",
-        "Standard"
-      ],
-      "Rothera Saati"
     ],
     [
       [
@@ -968,27 +674,6 @@
     ],
     [
       [
-        "seyc",
-        "Standard"
-      ],
-      "Seyşeller Saati"
-    ],
-    [
-      [
-        "soge",
-        "Standard"
-      ],
-      "Güney Georgia Saati"
-    ],
-    [
-      [
-        "solo",
-        "Standard"
-      ],
-      "Solomon Adaları Saati"
-    ],
-    [
-      [
         "suri",
         "Standard"
       ],
@@ -996,59 +681,10 @@
     ],
     [
       [
-        "syow",
-        "Standard"
-      ],
-      "Showa Saati"
-    ],
-    [
-      [
-        "tahi",
-        "Standard"
-      ],
-      "Tahiti Saati"
-    ],
-    [
-      [
-        "taip",
-        "Standard"
-      ],
-      "Taipei Standart Saati"
-    ],
-    [
-      [
-        "taip",
-        "Daylight"
-      ],
-      "Taipei Yaz Saati"
-    ],
-    [
-      [
         "taji",
         "Standard"
       ],
       "Tacikistan Saati"
-    ],
-    [
-      [
-        "toke",
-        "Standard"
-      ],
-      "Tokelau Saati"
-    ],
-    [
-      [
-        "truk",
-        "Standard"
-      ],
-      "Chuuk Saati"
-    ],
-    [
-      [
-        "tuva",
-        "Standard"
-      ],
-      "Tuvalu Saati"
     ],
     [
       [
@@ -1066,13 +702,6 @@
     ],
     [
       [
-        "vene",
-        "Standard"
-      ],
-      "Venezuela Saati"
-    ],
-    [
-      [
         "vlad",
         "Standard"
       ],
@@ -1084,27 +713,6 @@
         "Daylight"
       ],
       "Vladivostok Yaz Saati"
-    ],
-    [
-      [
-        "vost",
-        "Standard"
-      ],
-      "Vostok Saati"
-    ],
-    [
-      [
-        "wake",
-        "Standard"
-      ],
-      "Wake Adası Saati"
-    ],
-    [
-      [
-        "wall",
-        "Standard"
-      ],
-      "Wallis ve Futuna Saati"
     ],
     [
       [
@@ -1131,10 +739,199 @@
   "overrides": [
     [
       [
+        "afkbl",
+        "Standard"
+      ],
+      "Afganistan Saati"
+    ],
+    [
+      [
+        "aqdav",
+        "Standard"
+      ],
+      "Davis Saati"
+    ],
+    [
+      [
+        "aqddu",
+        "Standard"
+      ],
+      "Dumont-d’Urville Saati"
+    ],
+    [
+      [
+        "aqmaw",
+        "Standard"
+      ],
+      "Mawson Saati"
+    ],
+    [
+      [
+        "aqrot",
+        "Standard"
+      ],
+      "Rothera Saati"
+    ],
+    [
+      [
+        "aqsyw",
+        "Standard"
+      ],
+      "Showa Saati"
+    ],
+    [
+      [
+        "aqvos",
+        "Standard"
+      ],
+      "Vostok Saati"
+    ],
+    [
+      [
+        "aueuc",
+        "Standard"
+      ],
+      "İç Batı Avustralya Standart Saati"
+    ],
+    [
+      [
+        "aueuc",
+        "Daylight"
+      ],
+      "İç Batı Avustralya Yaz Saati"
+    ],
+    [
+      [
+        "bnbwn",
+        "Standard"
+      ],
+      "Brunei Darü’s-Selam Saati"
+    ],
+    [
+      [
+        "bolpb",
+        "Standard"
+      ],
+      "Bolivya Saati"
+    ],
+    [
+      [
+        "brfen",
+        "Standard"
+      ],
+      "Fernando de Noronha Standart Saati"
+    ],
+    [
+      [
+        "brfen",
+        "Daylight"
+      ],
+      "Fernando de Noronha Yaz Saati"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "Newfoundland Standart Saati"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "Newfoundland Yaz Saati"
+    ],
+    [
+      [
+        "cccck",
+        "Standard"
+      ],
+      "Cocos Adaları Saati"
+    ],
+    [
+      [
+        "ckrar",
+        "Daylight"
+      ],
+      "Cook Adaları Yarı Yaz Saati"
+    ],
+    [
+      [
+        "cvrai",
+        "Standard"
+      ],
+      "Cape Verde Standart Saati"
+    ],
+    [
+      [
+        "cvrai",
+        "Daylight"
+      ],
+      "Cape Verde Yaz Saati"
+    ],
+    [
+      [
+        "cxxch",
+        "Standard"
+      ],
+      "Christmas Adası Saati"
+    ],
+    [
+      [
+        "fmksa",
+        "Standard"
+      ],
+      "Kosrae Saati"
+    ],
+    [
+      [
+        "fmpni",
+        "Standard"
+      ],
+      "Ponape Saati"
+    ],
+    [
+      [
+        "fmtkk",
+        "Standard"
+      ],
+      "Chuuk Saati"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
       "İngiltere Yaz Saati"
+    ],
+    [
+      [
+        "gfcay",
+        "Standard"
+      ],
+      "Fransız Guyanası Saati"
+    ],
+    [
+      [
+        "gsgrv",
+        "Standard"
+      ],
+      "Güney Georgia Saati"
+    ],
+    [
+      [
+        "gygeo",
+        "Standard"
+      ],
+      "Guyana Saati"
+    ],
+    [
+      [
+        "iddjj",
+        "Standard"
+      ],
+      "Doğu Endonezya Saati"
     ],
     [
       [
@@ -1145,10 +942,213 @@
     ],
     [
       [
+        "iodga",
+        "Standard"
+      ],
+      "Hint Okyanusu Saati"
+    ],
+    [
+      [
+        "kicxi",
+        "Standard"
+      ],
+      "Line Adaları Saati"
+    ],
+    [
+      [
+        "kipho",
+        "Standard"
+      ],
+      "Phoenix Adaları Saati"
+    ],
+    [
+      [
+        "kitrw",
+        "Standard"
+      ],
+      "Gilbert Adaları Saati"
+    ],
+    [
+      [
+        "mmrgn",
+        "Standard"
+      ],
+      "Myanmar Saati"
+    ],
+    [
+      [
+        "mvmle",
+        "Standard"
+      ],
+      "Maldivler Saati"
+    ],
+    [
+      [
+        "npktm",
+        "Standard"
+      ],
+      "Nepal Saati"
+    ],
+    [
+      [
+        "nrinu",
+        "Standard"
+      ],
+      "Nauru Saati"
+    ],
+    [
+      [
+        "nuiue",
+        "Standard"
+      ],
+      "Niue Saati"
+    ],
+    [
+      [
+        "pfgmr",
+        "Standard"
+      ],
+      "Gambier Saati"
+    ],
+    [
+      [
+        "pfnhv",
+        "Standard"
+      ],
+      "Markiz Adaları Saati"
+    ],
+    [
+      [
+        "pfppt",
+        "Standard"
+      ],
+      "Tahiti Saati"
+    ],
+    [
+      [
+        "pnpcn",
+        "Standard"
+      ],
+      "Pitcairn Saati"
+    ],
+    [
+      [
+        "pwror",
+        "Standard"
+      ],
+      "Palau Saati"
+    ],
+    [
+      [
+        "rereu",
+        "Standard"
+      ],
+      "Reunion Saati"
+    ],
+    [
+      [
+        "rupkc",
+        "Standard"
+      ],
+      "Petropavlovsk-Kamçatski Standart Saati"
+    ],
+    [
+      [
+        "rupkc",
+        "Daylight"
+      ],
+      "Petropavlovsk-Kamçatski Yaz Saati"
+    ],
+    [
+      [
+        "sbhir",
+        "Standard"
+      ],
+      "Solomon Adaları Saati"
+    ],
+    [
+      [
+        "scmaw",
+        "Standard"
+      ],
+      "Seyşeller Saati"
+    ],
+    [
+      [
+        "tfpfr",
+        "Standard"
+      ],
+      "Fransız Güney ve Antarktika Saati"
+    ],
+    [
+      [
+        "tkfko",
+        "Standard"
+      ],
+      "Tokelau Saati"
+    ],
+    [
+      [
+        "tvfun",
+        "Standard"
+      ],
+      "Tuvalu Saati"
+    ],
+    [
+      [
+        "twtpe",
+        "Standard"
+      ],
+      "Taipei Standart Saati"
+    ],
+    [
+      [
+        "twtpe",
+        "Daylight"
+      ],
+      "Taipei Yaz Saati"
+    ],
+    [
+      [
+        "umawk",
+        "Standard"
+      ],
+      "Wake Adası Saati"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "Eş Güdümlü Evrensel Zaman"
+    ],
+    [
+      [
+        "veccs",
+        "Standard"
+      ],
+      "Venezuela Saati"
+    ],
+    [
+      [
+        "wfmau",
+        "Standard"
+      ],
+      "Wallis ve Futuna Saati"
+    ],
+    [
+      [
+        "wsapw",
+        "Standard"
+      ],
+      "Apia Standart Saati"
+    ],
+    [
+      [
+        "wsapw",
+        "Daylight"
+      ],
+      "Apia Yaz Saati"
     ]
   ]
 }

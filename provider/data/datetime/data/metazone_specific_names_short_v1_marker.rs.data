@@ -5,7 +5,7 @@
 ///
 /// Using this implementation will embed the following data in the binary's data segment:
 /// * 648B for the lookup data structure (134 data identifiers)
-/// * 11620B[^1] for the actual data (59 unique structs)
+/// * 11860B[^1] for the actual data (59 unique structs)
 ///
 /// [^1]: these numbers can be smaller in practice due to linker deduplication
 #[doc(hidden)]
@@ -152,11 +152,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"auce\0auce\x01aucw\0aucw\x01auea\0auea\x01auwe\0auwe\x01gulf\0loho\0loho\x01mgmt\0neze\0neze\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x0E\0\x04\0\x08\0\r\0\x12\0\x16\0\x1A\0\x1E\0\"\0)\0-\x001\x004\08\0ACSTACDTACWSTACWDTAESTAEDTAWSTAWDTGulf STLHSTLHDTGMTNZSTNZDT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"auce\0auce\x01auea\0auea\x01auwe\0auwe\x01gulf\0loho\0loho\x01mgmt\0neze\0neze\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x0C\0\x04\0\x08\0\x0C\0\x10\0\x14\0\x18\0\x1F\0#\0'\0*\0.\0ACSTACDTAESTAEDTAWSTAWDTGulf STLHSTLHDTGMTNZSTNZDT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"aueuc\0\0\0\0aueuc\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x05\0\n\0ACWSTACWDTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -172,11 +172,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"afgh\0alas\0alas\x01amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01atla\0atla\x01aucw\0aucw\x01auea\0auea\x01auwe\0auwe\x01bang\0bhut\0bras\x01brun\0chat\0chat\x01chri\0coco\0colo\x01east\0east\x01eati\0ecua\0falk\x01gala\0gulf\0guya\0haal\0haal\x01ince\0indi\0indo\0inea\0inwe\0iran\0iran\x01mala\0mald\0mgmt\0nepa\0newf\0newf\x01paki\0para\x01pimi\0pimi\x01urug\0urug\x01vene\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b":\0\x03\0\x07\0\x0B\0\x0E\0\x11\0\x14\0\x17\0\x1A\0\x1D\0 \0#\0&\0)\0.\x003\x007\0;\0?\0C\0F\0I\0M\0P\0U\0Z\0]\0`\0d\0h\0m\0p\0s\0w\0{\0\x84\0\x87\0\x8B\0\x8F\0\x93\0\x96\0\x99\0\x9C\0\x9F\0\xA3\0\xA7\0\xAA\0\xAD\0\xB0\0\xB3\0\xB6\0\xB9\0\xBC\0\xC0\0\xC4\0\xC8\0\xCB\0\xCF\0AFTAKSTAKDTCSTCDTESTEDTMSTMDTPSTPDTASTADTACWSTACWDTAESTAEDTAWSTAWDTBSTBTTBRSTBNTCHASTCHADTCXTCCTCOSTEASTEASSTTLTECTFKSTGALTGulf TimeGYTHASTHADTWITAISTICTWITWIBIRSTIRDTMYTMVTGMTNPTNSTNDTPKTPYSTPMSTPMDTUYTUYSTVET") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"alas\0alas\x01amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01atla\0atla\x01auea\0auea\x01auwe\0auwe\x01bang\0bhut\0bras\x01eati\0ecua\0gala\0gulf\0haal\0haal\x01ince\0indi\0indo\0inwe\0mala\0mgmt\0paki\0pimi\0pimi\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\"\0\x04\0\x08\0\x0B\0\x0E\0\x11\0\x14\0\x17\0\x1A\0\x1D\0 \0#\0&\0*\0.\x002\x006\09\0<\0@\0C\0F\0J\0S\0W\0[\0_\0b\0e\0h\0k\0n\0q\0u\0AKSTAKDTCSTCDTESTEDTMSTMDTPSTPDTASTADTAESTAEDTAWSTAWDTBSTBTTBRSTTLTECTGALTGulf TimeHASTHADTWITAISTICTWIBMYTGMTPKTPMSTPMDT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"ushnl\0\0\0\0ushnl\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x06\0HSTHDTUTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"afkbl\0\0\0\0aueuc\0\0\0\0aueuc\0\0\0\x01bnbwn\0\0\0\0casjf\0\0\0\0casjf\0\0\0\x01cccck\0\0\0\0clipc\0\0\0\0clipc\0\0\0\x01cobog\0\0\0\x01cxxch\0\0\0\0fkpsy\0\0\0\x01gygeo\0\0\0\0iddjj\0\0\0\0irthr\0\0\0\0irthr\0\0\0\x01mvmle\0\0\0\0npktm\0\0\0\0nzcht\0\0\0\0nzcht\0\0\0\x01pyasu\0\0\0\x01ushnl\0\0\0\0ushnl\0\0\0\x01utc\0\0\0\0\0\0uymvd\0\0\0\0uymvd\0\0\0\x01veccs\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x1B\0\x03\0\x08\0\r\0\x10\0\x13\0\x16\0\x19\0\x1D\0\"\0&\0)\0-\x000\x003\x007\0;\0>\0A\0F\0K\0O\0R\0U\0X\0[\0_\0AFTACWSTACWDTBNTNSTNDTCCTEASTEASSTCOSTCXTFKSTGYTWITIRSTIRDTMVTNPTCHASTCHADTPYSTHSTHDTUTCUYTUYSTVET") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -202,31 +202,31 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"guya\0mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0GYTGMT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0GMT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"gygeo\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0GYTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"hoko\0hoko\x01mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x07\0HKTHKSTGMT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0GMT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"hkhkg\0\0\0\0hkhkg\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x07\0HKTHKSTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"ince\0inea\0inwe\0mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x04\0\x07\0\n\0WITAWITWIBGMT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"ince\0inwe\0mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x04\0\x07\0WITAWIBGMT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"iddjj\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0WITUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -252,11 +252,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"hoko\0hoko\x01maca\0maca\x01mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x03\0\x07\0\n\0\r\0HKTHKSTMSTMDTGMT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"maca\0maca\x01mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x06\0MSTMDTGMT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"hkhkg\0\0\0\0hkhkg\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x07\0HKTHKSTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -272,21 +272,21 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"auce\0auce\x01aucw\0aucw\x01auea\0auea\x01auwe\0auwe\x01chat\0chat\x01loho\0loho\x01mgmt\0neze\0neze\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x0F\0\x04\0\x08\0\r\0\x12\0\x16\0\x1A\0\x1E\0\"\0'\0,\x000\x004\x007\0;\0ACSTACDTACWSTACWDTAESTAEDTAWSTAWDTCHASTCHADTLHSTLHDTGMTNZSTNZDT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"auce\0auce\x01auea\0auea\x01auwe\0auwe\x01loho\0loho\x01mgmt\0neze\0neze\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x0B\0\x04\0\x08\0\x0C\0\x10\0\x14\0\x18\0\x1C\0 \0#\0'\0ACSTACDTAESTAEDTAWSTAWDTLHSTLHDTGMTNZSTNZDT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"aueuc\0\0\0\0aueuc\0\0\0\x01nzcht\0\0\0\0nzcht\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x05\0\n\0\x0F\0\x14\0ACWSTACWDTCHASTCHADTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"mala\0mgmt\0sing\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x06\0MYTGMTSGT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"mala\0mgmt\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0MYTGMT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"sgsin\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0SGTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -312,11 +312,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"boli\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0BOT") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"bolpb\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0BOTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -332,11 +332,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"colo\0colo\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0COTCOST") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"cobog\0\0\0\0cobog\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x07\0COTCOSTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -352,31 +352,31 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"peru\0peru\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0PETPEST") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"pelim\0\0\0\0pelim\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x07\0PETPESTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"urug\0urug\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0UYTUYST") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0uymvd\0\0\0\0uymvd\0\0\0\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x06\0UTCUYTUYST") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"vene\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0VET") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0veccs\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0UTCVET") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -402,21 +402,21 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01newf\0newf\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\n\0\x03\0\x06\0\t\0\x0C\0\x0F\0\x12\0\x15\0\x18\0\x1B\0HNCHACHNEHAEHNRHARHNPHAPHNTHAT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x08\0\x03\0\x06\0\t\0\x0C\0\x0F\0\x12\0\x15\0HNCHACHNEHAEHNRHARHNPHAP") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"casjf\0\0\0\0casjf\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x06\0HNTHATUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"frgu\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0GFT") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"gfcay\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0GFTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -452,21 +452,21 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"alas\0alas\x01amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01atla\0atla\x01cuba\0cuba\x01grea\0grea\x01haal\0haal\x01ince\0inea\0inwe\0newf\0newf\x01pimi\0pimi\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x19\0\x04\0\x08\0\x0B\0\x0E\0\x11\0\x14\0\x17\0\x1A\0\x1D\0 \0#\0&\x000\0:\0>\0B\0F\0J\0N\0Q\0T\0W\0Z\0^\0AKSTAKDTCSTCDTESTEDTMSTMDTPSTPDTASTADTCST (Kuba)CDT (Kuba)EGSTEGDTHASTHADTWITAWITWIBNSTNDTPMSTPMDT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"alas\0alas\x01amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01atla\0atla\x01grea\0grea\x01haal\0haal\x01ince\0inwe\0pimi\0pimi\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x14\0\x04\0\x08\0\x0B\0\x0E\0\x11\0\x14\0\x17\0\x1A\0\x1D\0 \0#\0&\0*\0.\x002\x006\0:\0=\0A\0AKSTAKDTCSTCDTESTEDTMSTMDTPSTPDTASTADTEGSTEGDTHASTHADTWITAWIBPMSTPMDT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"casjf\0\0\0\0casjf\0\0\0\x01cuhav\0\0\0\0cuhav\0\0\0\x01iddjj\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x03\0\x06\0\x10\0\x1A\0\x1D\0NSTNDTCST (Kuba)CDT (Kuba)WITUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"japa\0japa\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0JSTJDT") })
+                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"jptyo\0\0\0\0jptyo\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x03\0\x06\0JSTJDTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -492,11 +492,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"alas\0alas\x01amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01atla\0atla\x01cuba\0cuba\x01grea\0grea\x01grwe\0grwe\x01haal\0haal\x01newf\0newf\x01yuko\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x17\0\x04\0\x08\0\x0B\0\x0E\0\x11\0\x14\0\x18\0\x1C\0\x1F\0\"\0%\0(\0+\0.\x002\x006\0;\0@\0D\0H\0L\0P\0SSAKSHAKSSNSHNSSRSHRSS\xC3\x87SH\xC3\x87SSPSHPSSASHASSKSHKSSGRSHGRSSGROSHGROSSHASHHASSNFSHNFSY") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"alas\0alas\x01amce\0amce\x01amea\0amea\x01ammo\0ammo\x01ampa\0ampa\x01atla\0atla\x01grea\0grea\x01grwe\0grwe\x01haal\0haal\x01yuko\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x13\0\x04\0\x08\0\x0B\0\x0E\0\x11\0\x14\0\x18\0\x1C\0\x1F\0\"\0%\0(\0,\x000\x005\0:\0>\0B\0SSAKSHAKSSNSHNSSRSHRSS\xC3\x87SH\xC3\x87SSPSHPSSASHASSGRSHGRSSGROSHGROSSHASHHASY") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0SGH") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"casjf\0\0\0\0casjf\0\0\0\x01cuhav\0\0\0\0cuhav\0\0\0\x01utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x04\0\x08\0\x0B\0\x0E\0SSNFSHNFSSKSHKSGH") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
@@ -592,11 +592,11 @@ macro_rules! __impl_metazone_specific_names_short_v1_marker {
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {
                         defaults: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"mala\0sing\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0MYTSGT") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"mala\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0MYT") })
                         },
                         overrides: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0UTC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"sgsin\0\0\0\0utc\0\0\0\0\0\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x03\0SGTUTC") })
                         },
                     },
                     icu::datetime::provider::time_zones::MetazoneSpecificNamesV1 {

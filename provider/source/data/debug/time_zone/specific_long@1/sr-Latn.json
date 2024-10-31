@@ -30,13 +30,6 @@
     ],
     [
       [
-        "afgh",
-        "Standard"
-      ],
-      "Avganistan vreme"
-    ],
-    [
-      [
         "afso",
         "Standard"
       ],
@@ -170,20 +163,6 @@
     ],
     [
       [
-        "apia",
-        "Standard"
-      ],
-      "Apija, standardno vreme"
-    ],
-    [
-      [
-        "apia",
-        "Daylight"
-      ],
-      "Apija, letnje vreme"
-    ],
-    [
-      [
         "aqta",
         "Standard"
       ],
@@ -282,20 +261,6 @@
     ],
     [
       [
-        "aucw",
-        "Standard"
-      ],
-      "Australijsko centralno zapadno standardno vreme"
-    ],
-    [
-      [
-        "aucw",
-        "Daylight"
-      ],
-      "Australijsko centralno zapadno letnje vreme"
-    ],
-    [
-      [
         "auea",
         "Standard"
       ],
@@ -331,13 +296,6 @@
     ],
     [
       [
-        "boli",
-        "Standard"
-      ],
-      "Bolivija vreme"
-    ],
-    [
-      [
         "bras",
         "Standard"
       ],
@@ -349,13 +307,6 @@
         "Daylight"
       ],
       "Brazilija, letnje vreme"
-    ],
-    [
-      [
-        "brun",
-        "Standard"
-      ],
-      "Brunej Darusalum vreme"
     ],
     [
       [
@@ -391,62 +342,6 @@
         "Daylight"
       ],
       "Kina, letnje vreme"
-    ],
-    [
-      [
-        "chri",
-        "Standard"
-      ],
-      "Božićno ostrvo vreme"
-    ],
-    [
-      [
-        "coco",
-        "Standard"
-      ],
-      "Kokos (Keling) Ostrva vreme"
-    ],
-    [
-      [
-        "cook",
-        "Standard"
-      ],
-      "Kukova ostrva, standardno vreme"
-    ],
-    [
-      [
-        "cook",
-        "Daylight"
-      ],
-      "Kukova ostrva, polu-letnje vreme"
-    ],
-    [
-      [
-        "davi",
-        "Standard"
-      ],
-      "Dejvis vreme"
-    ],
-    [
-      [
-        "dumo",
-        "Standard"
-      ],
-      "Dimon d’Urvil vreme"
-    ],
-    [
-      [
-        "east",
-        "Standard"
-      ],
-      "Uskršnja ostrva, standardno vreme"
-    ],
-    [
-      [
-        "east",
-        "Daylight"
-      ],
-      "Uskršnja ostrva, letnje vreme"
     ],
     [
       [
@@ -513,52 +408,10 @@
     ],
     [
       [
-        "falk",
-        "Standard"
-      ],
-      "Folklandska Ostrva, standardno vreme"
-    ],
-    [
-      [
-        "falk",
-        "Daylight"
-      ],
-      "Folklandska Ostrva, letnje vreme"
-    ],
-    [
-      [
-        "frgu",
-        "Standard"
-      ],
-      "Francuska Gvajana vreme"
-    ],
-    [
-      [
-        "frso",
-        "Standard"
-      ],
-      "Francusko južno i antarktičko vreme"
-    ],
-    [
-      [
         "gala",
         "Standard"
       ],
       "Galapagos vreme"
-    ],
-    [
-      [
-        "gamb",
-        "Standard"
-      ],
-      "Gambije vreme"
-    ],
-    [
-      [
-        "giis",
-        "Standard"
-      ],
-      "Gilbert ostrva vreme"
     ],
     [
       [
@@ -604,13 +457,6 @@
     ],
     [
       [
-        "guya",
-        "Standard"
-      ],
-      "Gvajana vreme"
-    ],
-    [
-      [
         "haal",
         "Standard"
       ],
@@ -622,20 +468,6 @@
         "Daylight"
       ],
       "Havajsko-aleutsko letnje vreme"
-    ],
-    [
-      [
-        "hoko",
-        "Standard"
-      ],
-      "Hong Kong, standardno vreme"
-    ],
-    [
-      [
-        "hoko",
-        "Daylight"
-      ],
-      "Hong Kong, letnje vreme"
     ],
     [
       [
@@ -657,20 +489,6 @@
         "Standard"
       ],
       "Indokina vreme"
-    ],
-    [
-      [
-        "inea",
-        "Standard"
-      ],
-      "Istočno-indonezijsko vreme"
-    ],
-    [
-      [
-        "inoc",
-        "Standard"
-      ],
-      "Indijsko okeansko vreme"
     ],
     [
       [
@@ -709,38 +527,10 @@
     ],
     [
       [
-        "japa",
-        "Standard"
-      ],
-      "Japansko standardno vreme"
-    ],
-    [
-      [
-        "japa",
-        "Daylight"
-      ],
-      "Japansko letnje vreme"
-    ],
-    [
-      [
         "kaea",
         "Standard"
       ],
       "Istočno-kazahstansko vreme"
-    ],
-    [
-      [
-        "kamc",
-        "Standard"
-      ],
-      "Petropavlovsko-kamčatsko standardno vreme"
-    ],
-    [
-      [
-        "kamc",
-        "Daylight"
-      ],
-      "Petropavlovsko-kamčatsko letnje računanje vremena"
     ],
     [
       [
@@ -772,13 +562,6 @@
     ],
     [
       [
-        "kosr",
-        "Standard"
-      ],
-      "Košre vreme"
-    ],
-    [
-      [
         "kras",
         "Standard"
       ],
@@ -804,13 +587,6 @@
         "Standard"
       ],
       "Šri Lanka vreme"
-    ],
-    [
-      [
-        "liis",
-        "Standard"
-      ],
-      "Ostrva Lajn vreme"
     ],
     [
       [
@@ -870,27 +646,6 @@
     ],
     [
       [
-        "mald",
-        "Standard"
-      ],
-      "Maldivi vreme"
-    ],
-    [
-      [
-        "marq",
-        "Standard"
-      ],
-      "Markiz vreme"
-    ],
-    [
-      [
-        "maws",
-        "Standard"
-      ],
-      "Moson vreme"
-    ],
-    [
-      [
         "mepa",
         "Standard"
       ],
@@ -926,41 +681,6 @@
     ],
     [
       [
-        "myan",
-        "Standard"
-      ],
-      "Mijanmar vreme"
-    ],
-    [
-      [
-        "naur",
-        "Standard"
-      ],
-      "Nauru vreme"
-    ],
-    [
-      [
-        "nepa",
-        "Standard"
-      ],
-      "Nepal vreme"
-    ],
-    [
-      [
-        "newf",
-        "Standard"
-      ],
-      "Njufaundlend, standardno vreme"
-    ],
-    [
-      [
-        "newf",
-        "Daylight"
-      ],
-      "Njufaundlend, letnje vreme"
-    ],
-    [
-      [
         "neze",
         "Standard"
       ],
@@ -975,45 +695,10 @@
     ],
     [
       [
-        "niue",
-        "Standard"
-      ],
-      "Niue vreme"
-    ],
-    [
-      [
         "noma",
         "Standard"
       ],
       "Severna Marijanska Ostrva vreme"
-    ],
-    [
-      [
-        "norf",
-        "Standard"
-      ],
-      "Norfolk Ostrvo, standardno vreme"
-    ],
-    [
-      [
-        "norf",
-        "Daylight"
-      ],
-      "Norfolk Ostrvo, letnje vreme"
-    ],
-    [
-      [
-        "noro",
-        "Standard"
-      ],
-      "Fernando de Noronja, standardno vreme"
-    ],
-    [
-      [
-        "noro",
-        "Daylight"
-      ],
-      "Fernando de Noronja, letnje vreme"
     ],
     [
       [
@@ -1031,38 +716,10 @@
     ],
     [
       [
-        "pala",
-        "Standard"
-      ],
-      "Palau vreme"
-    ],
-    [
-      [
         "pang",
         "Standard"
       ],
       "Papua Nova Gvineja vreme"
-    ],
-    [
-      [
-        "phis",
-        "Standard"
-      ],
-      "Feniks ostrva vreme"
-    ],
-    [
-      [
-        "pitc",
-        "Standard"
-      ],
-      "Pitkern vreme"
-    ],
-    [
-      [
-        "pona",
-        "Standard"
-      ],
-      "Ponpej vreme"
     ],
     [
       [
@@ -1084,20 +741,6 @@
         "Daylight"
       ],
       "Kizilorda letnje računanje vremena"
-    ],
-    [
-      [
-        "reun",
-        "Standard"
-      ],
-      "Reinion vreme"
-    ],
-    [
-      [
-        "roth",
-        "Standard"
-      ],
-      "Rotera vreme"
     ],
     [
       [
@@ -1129,27 +772,6 @@
     ],
     [
       [
-        "seyc",
-        "Standard"
-      ],
-      "Sejšeli vreme"
-    ],
-    [
-      [
-        "soge",
-        "Standard"
-      ],
-      "Južna Džordžija vreme"
-    ],
-    [
-      [
-        "solo",
-        "Standard"
-      ],
-      "Solomonska Ostrva vreme"
-    ],
-    [
-      [
         "suri",
         "Standard"
       ],
@@ -1157,59 +779,10 @@
     ],
     [
       [
-        "syow",
-        "Standard"
-      ],
-      "Šova vreme"
-    ],
-    [
-      [
-        "tahi",
-        "Standard"
-      ],
-      "Tahiti vreme"
-    ],
-    [
-      [
-        "taip",
-        "Standard"
-      ],
-      "Tajpej, standardno vreme"
-    ],
-    [
-      [
-        "taip",
-        "Daylight"
-      ],
-      "Tajpej, letnje vreme"
-    ],
-    [
-      [
         "taji",
         "Standard"
       ],
       "Tadžikistan vreme"
-    ],
-    [
-      [
-        "toke",
-        "Standard"
-      ],
-      "Tokelau vreme"
-    ],
-    [
-      [
-        "truk",
-        "Standard"
-      ],
-      "Čuuk vreme"
-    ],
-    [
-      [
-        "tuva",
-        "Standard"
-      ],
-      "Tuvalu vreme"
     ],
     [
       [
@@ -1227,13 +800,6 @@
     ],
     [
       [
-        "vene",
-        "Standard"
-      ],
-      "Venecuela vreme"
-    ],
-    [
-      [
         "vlad",
         "Standard"
       ],
@@ -1245,27 +811,6 @@
         "Daylight"
       ],
       "Vladivostok, letnje vreme"
-    ],
-    [
-      [
-        "vost",
-        "Standard"
-      ],
-      "Vostok vreme"
-    ],
-    [
-      [
-        "wake",
-        "Standard"
-      ],
-      "Vejk ostrvo vreme"
-    ],
-    [
-      [
-        "wall",
-        "Standard"
-      ],
-      "Valis i Futuna Ostrva vreme"
     ],
     [
       [
@@ -1292,10 +837,234 @@
   "overrides": [
     [
       [
+        "afkbl",
+        "Standard"
+      ],
+      "Avganistan vreme"
+    ],
+    [
+      [
+        "aqdav",
+        "Standard"
+      ],
+      "Dejvis vreme"
+    ],
+    [
+      [
+        "aqddu",
+        "Standard"
+      ],
+      "Dimon d’Urvil vreme"
+    ],
+    [
+      [
+        "aqmaw",
+        "Standard"
+      ],
+      "Moson vreme"
+    ],
+    [
+      [
+        "aqrot",
+        "Standard"
+      ],
+      "Rotera vreme"
+    ],
+    [
+      [
+        "aqsyw",
+        "Standard"
+      ],
+      "Šova vreme"
+    ],
+    [
+      [
+        "aqvos",
+        "Standard"
+      ],
+      "Vostok vreme"
+    ],
+    [
+      [
+        "aueuc",
+        "Standard"
+      ],
+      "Australijsko centralno zapadno standardno vreme"
+    ],
+    [
+      [
+        "aueuc",
+        "Daylight"
+      ],
+      "Australijsko centralno zapadno letnje vreme"
+    ],
+    [
+      [
+        "bnbwn",
+        "Standard"
+      ],
+      "Brunej Darusalum vreme"
+    ],
+    [
+      [
+        "bolpb",
+        "Standard"
+      ],
+      "Bolivija vreme"
+    ],
+    [
+      [
+        "brfen",
+        "Standard"
+      ],
+      "Fernando de Noronja, standardno vreme"
+    ],
+    [
+      [
+        "brfen",
+        "Daylight"
+      ],
+      "Fernando de Noronja, letnje vreme"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "Njufaundlend, standardno vreme"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "Njufaundlend, letnje vreme"
+    ],
+    [
+      [
+        "cccck",
+        "Standard"
+      ],
+      "Kokos (Keling) Ostrva vreme"
+    ],
+    [
+      [
+        "ckrar",
+        "Standard"
+      ],
+      "Kukova ostrva, standardno vreme"
+    ],
+    [
+      [
+        "ckrar",
+        "Daylight"
+      ],
+      "Kukova ostrva, polu-letnje vreme"
+    ],
+    [
+      [
+        "clipc",
+        "Standard"
+      ],
+      "Uskršnja ostrva, standardno vreme"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "Uskršnja ostrva, letnje vreme"
+    ],
+    [
+      [
+        "cxxch",
+        "Standard"
+      ],
+      "Božićno ostrvo vreme"
+    ],
+    [
+      [
+        "fkpsy",
+        "Standard"
+      ],
+      "Folklandska Ostrva, standardno vreme"
+    ],
+    [
+      [
+        "fkpsy",
+        "Daylight"
+      ],
+      "Folklandska Ostrva, letnje vreme"
+    ],
+    [
+      [
+        "fmksa",
+        "Standard"
+      ],
+      "Košre vreme"
+    ],
+    [
+      [
+        "fmpni",
+        "Standard"
+      ],
+      "Ponpej vreme"
+    ],
+    [
+      [
+        "fmtkk",
+        "Standard"
+      ],
+      "Čuuk vreme"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
       "Britanija, letnje vreme"
+    ],
+    [
+      [
+        "gfcay",
+        "Standard"
+      ],
+      "Francuska Gvajana vreme"
+    ],
+    [
+      [
+        "gsgrv",
+        "Standard"
+      ],
+      "Južna Džordžija vreme"
+    ],
+    [
+      [
+        "gygeo",
+        "Standard"
+      ],
+      "Gvajana vreme"
+    ],
+    [
+      [
+        "hkhkg",
+        "Standard"
+      ],
+      "Hong Kong, standardno vreme"
+    ],
+    [
+      [
+        "hkhkg",
+        "Daylight"
+      ],
+      "Hong Kong, letnje vreme"
+    ],
+    [
+      [
+        "iddjj",
+        "Standard"
+      ],
+      "Istočno-indonezijsko vreme"
     ],
     [
       [
@@ -1306,10 +1075,241 @@
     ],
     [
       [
+        "iodga",
+        "Standard"
+      ],
+      "Indijsko okeansko vreme"
+    ],
+    [
+      [
+        "jptyo",
+        "Standard"
+      ],
+      "Japansko standardno vreme"
+    ],
+    [
+      [
+        "jptyo",
+        "Daylight"
+      ],
+      "Japansko letnje vreme"
+    ],
+    [
+      [
+        "kicxi",
+        "Standard"
+      ],
+      "Ostrva Lajn vreme"
+    ],
+    [
+      [
+        "kipho",
+        "Standard"
+      ],
+      "Feniks ostrva vreme"
+    ],
+    [
+      [
+        "kitrw",
+        "Standard"
+      ],
+      "Gilbert ostrva vreme"
+    ],
+    [
+      [
+        "mmrgn",
+        "Standard"
+      ],
+      "Mijanmar vreme"
+    ],
+    [
+      [
+        "mvmle",
+        "Standard"
+      ],
+      "Maldivi vreme"
+    ],
+    [
+      [
+        "nfnlk",
+        "Standard"
+      ],
+      "Norfolk Ostrvo, standardno vreme"
+    ],
+    [
+      [
+        "nfnlk",
+        "Daylight"
+      ],
+      "Norfolk Ostrvo, letnje vreme"
+    ],
+    [
+      [
+        "npktm",
+        "Standard"
+      ],
+      "Nepal vreme"
+    ],
+    [
+      [
+        "nrinu",
+        "Standard"
+      ],
+      "Nauru vreme"
+    ],
+    [
+      [
+        "nuiue",
+        "Standard"
+      ],
+      "Niue vreme"
+    ],
+    [
+      [
+        "pfgmr",
+        "Standard"
+      ],
+      "Gambije vreme"
+    ],
+    [
+      [
+        "pfnhv",
+        "Standard"
+      ],
+      "Markiz vreme"
+    ],
+    [
+      [
+        "pfppt",
+        "Standard"
+      ],
+      "Tahiti vreme"
+    ],
+    [
+      [
+        "pnpcn",
+        "Standard"
+      ],
+      "Pitkern vreme"
+    ],
+    [
+      [
+        "pwror",
+        "Standard"
+      ],
+      "Palau vreme"
+    ],
+    [
+      [
+        "rereu",
+        "Standard"
+      ],
+      "Reinion vreme"
+    ],
+    [
+      [
+        "rupkc",
+        "Standard"
+      ],
+      "Petropavlovsko-kamčatsko standardno vreme"
+    ],
+    [
+      [
+        "rupkc",
+        "Daylight"
+      ],
+      "Petropavlovsko-kamčatsko letnje računanje vremena"
+    ],
+    [
+      [
+        "sbhir",
+        "Standard"
+      ],
+      "Solomonska Ostrva vreme"
+    ],
+    [
+      [
+        "scmaw",
+        "Standard"
+      ],
+      "Sejšeli vreme"
+    ],
+    [
+      [
+        "tfpfr",
+        "Standard"
+      ],
+      "Francusko južno i antarktičko vreme"
+    ],
+    [
+      [
+        "tkfko",
+        "Standard"
+      ],
+      "Tokelau vreme"
+    ],
+    [
+      [
+        "tvfun",
+        "Standard"
+      ],
+      "Tuvalu vreme"
+    ],
+    [
+      [
+        "twtpe",
+        "Standard"
+      ],
+      "Tajpej, standardno vreme"
+    ],
+    [
+      [
+        "twtpe",
+        "Daylight"
+      ],
+      "Tajpej, letnje vreme"
+    ],
+    [
+      [
+        "umawk",
+        "Standard"
+      ],
+      "Vejk ostrvo vreme"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "Koordinisano univerzalno vreme"
+    ],
+    [
+      [
+        "veccs",
+        "Standard"
+      ],
+      "Venecuela vreme"
+    ],
+    [
+      [
+        "wfmau",
+        "Standard"
+      ],
+      "Valis i Futuna Ostrva vreme"
+    ],
+    [
+      [
+        "wsapw",
+        "Standard"
+      ],
+      "Apija, standardno vreme"
+    ],
+    [
+      [
+        "wsapw",
+        "Daylight"
+      ],
+      "Apija, letnje vreme"
     ]
   ]
 }

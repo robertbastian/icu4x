@@ -23,7 +23,7 @@ pub(crate) struct Caches {
     bcp47_to_canonical_iana: OnceLock<Result<BTreeMap<TimeZoneBcp47Id, String>, DataError>>,
     metazone_to_short: OnceLock<Result<BTreeMap<String, MetazoneId>, DataError>>,
     primary_zones: OnceLock<Result<BTreeMap<TimeZoneBcp47Id, Region>, DataError>>,
-    mz_period: OnceLock<Result<MetazonePeriodV1<'static>, DataError>>,
+    mz_period_and_useless_mzs: OnceLock<Result<(MetazonePeriodV1<'static>, BTreeMap<MetazoneId, TimeZoneBcp47Id>), DataError>>,
     offset_period: OnceLock<Result<ZoneOffsetPeriodV1<'static>, DataError>>,
     reverse_metazones: OnceLock<Result<BTreeMap<MetazoneId, Vec<TimeZoneBcp47Id>>, DataError>>,
 }
@@ -34,7 +34,7 @@ impl SourceDataProvider {
             .tz_caches
             .reverse_metazones
             .get_or_init(|| {
-                let mz_period = self.metazone_period()?;
+                let mz_period = &self.metazone_period_and_useless_mzs()?.0;
                 let mut reverse_metazones = BTreeMap::<MetazoneId, Vec<TimeZoneBcp47Id>>::new();
                 for cursor in mz_period.0.iter0() {
                     let tz = *cursor.key0();
