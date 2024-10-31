@@ -107,27 +107,6 @@
     ],
     [
       [
-        14,
-        "Standard"
-      ],
-      "Anadir standardno vreme"
-    ],
-    [
-      [
-        15,
-        "Standard"
-      ],
-      "Apija, standardno vreme"
-    ],
-    [
-      [
-        15,
-        "Daylight"
-      ],
-      "Apija, letnje vreme"
-    ],
-    [
-      [
         18,
         "Standard"
       ],
@@ -170,13 +149,6 @@
     ],
     [
       [
-        24,
-        "Standard"
-      ],
-      "Australijsko centralno zapadno standardno vreme"
-    ],
-    [
-      [
         25,
         "Standard"
       ],
@@ -212,38 +184,10 @@
     ],
     [
       [
-        38,
-        "Standard"
-      ],
-      "Čile, standardno vreme"
-    ],
-    [
-      [
         39,
         "Standard"
       ],
       "Kinesko standardno vreme"
-    ],
-    [
-      [
-        43,
-        "Standard"
-      ],
-      "Kukova ostrva, standardno vreme"
-    ],
-    [
-      [
-        47,
-        "Standard"
-      ],
-      "Uskršnja ostrva, standardno vreme"
-    ],
-    [
-      [
-        47,
-        "Daylight"
-      ],
-      "Uskršnja ostrva, letnje vreme"
     ],
     [
       [
@@ -289,13 +233,6 @@
     ],
     [
       [
-        54,
-        "Standard"
-      ],
-      "Folklandska Ostrva, standardno vreme"
-    ],
-    [
-      [
         62,
         "Standard"
       ],
@@ -324,59 +261,10 @@
     ],
     [
       [
-        68,
-        "Standard"
-      ],
-      "Havajsko-aleutsko standardno vreme"
-    ],
-    [
-      [
-        68,
-        "Daylight"
-      ],
-      "Havajsko-aleutsko letnje vreme"
-    ],
-    [
-      [
-        69,
-        "Standard"
-      ],
-      "Hong Kong, standardno vreme"
-    ],
-    [
-      [
         78,
         "Standard"
       ],
       "Irkuck, standardno vreme"
-    ],
-    [
-      [
-        79,
-        "Standard"
-      ],
-      "Izraelsko standardno vreme"
-    ],
-    [
-      [
-        79,
-        "Daylight"
-      ],
-      "Izraelsko letnje vreme"
-    ],
-    [
-      [
-        80,
-        "Standard"
-      ],
-      "Japansko standardno vreme"
-    ],
-    [
-      [
-        82,
-        "Standard"
-      ],
-      "Petropavlovsko-kamčatsko standardno vreme"
     ],
     [
       [
@@ -391,20 +279,6 @@
         "Standard"
       ],
       "Krasnojarsk, standardno vreme"
-    ],
-    [
-      [
-        91,
-        "Standard"
-      ],
-      "Lord Hov, standardno vreme"
-    ],
-    [
-      [
-        91,
-        "Daylight"
-      ],
-      "Lord Hov, letnje vreme"
     ],
     [
       [
@@ -429,20 +303,6 @@
     ],
     [
       [
-        108,
-        "Standard"
-      ],
-      "Njufaundlend, standardno vreme"
-    ],
-    [
-      [
-        108,
-        "Daylight"
-      ],
-      "Njufaundlend, letnje vreme"
-    ],
-    [
-      [
         109,
         "Standard"
       ],
@@ -457,45 +317,10 @@
     ],
     [
       [
-        112,
-        "Standard"
-      ],
-      "Norfolk Ostrvo, standardno vreme"
-    ],
-    [
-      [
-        112,
-        "Daylight"
-      ],
-      "Norfolk Ostrvo, letnje vreme"
-    ],
-    [
-      [
-        113,
-        "Standard"
-      ],
-      "Fernando de Noronja, standardno vreme"
-    ],
-    [
-      [
-        131,
-        "Standard"
-      ],
-      "Samara standardno vreme"
-    ],
-    [
-      [
         132,
         "Standard"
       ],
       "Samoa, standardno vreme"
-    ],
-    [
-      [
-        140,
-        "Standard"
-      ],
-      "Tajpej, standardno vreme"
     ],
     [
       [
@@ -522,10 +347,94 @@
   "overrides": [
     [
       [
+        "aueuc",
+        "Standard"
+      ],
+      "Australijsko centralno zapadno standardno vreme"
+    ],
+    [
+      [
+        "auldh",
+        "Standard"
+      ],
+      "Lord Hov, standardno vreme"
+    ],
+    [
+      [
+        "auldh",
+        "Daylight"
+      ],
+      "Lord Hov, letnje vreme"
+    ],
+    [
+      [
+        "brfen",
+        "Standard"
+      ],
+      "Fernando de Noronja, standardno vreme"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "Njufaundlend, standardno vreme"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "Njufaundlend, letnje vreme"
+    ],
+    [
+      [
+        "ckrar",
+        "Standard"
+      ],
+      "Kukova ostrva, standardno vreme"
+    ],
+    [
+      [
+        "clipc",
+        "Standard"
+      ],
+      "Uskršnja ostrva, standardno vreme"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "Uskršnja ostrva, letnje vreme"
+    ],
+    [
+      [
+        "clscl",
+        "Standard"
+      ],
+      "Čile, standardno vreme"
+    ],
+    [
+      [
+        "fkpsy",
+        "Standard"
+      ],
+      "Folklandska Ostrva, standardno vreme"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
       "Britanija, letnje vreme"
+    ],
+    [
+      [
+        "hkhkg",
+        "Standard"
+      ],
+      "Hong Kong, standardno vreme"
     ],
     [
       [
@@ -536,10 +445,101 @@
     ],
     [
       [
+        "jeruslm",
+        "Standard"
+      ],
+      "Izraelsko standardno vreme"
+    ],
+    [
+      [
+        "jeruslm",
+        "Daylight"
+      ],
+      "Izraelsko letnje vreme"
+    ],
+    [
+      [
+        "jptyo",
+        "Standard"
+      ],
+      "Japansko standardno vreme"
+    ],
+    [
+      [
+        "nfnlk",
+        "Standard"
+      ],
+      "Norfolk Ostrvo, standardno vreme"
+    ],
+    [
+      [
+        "nfnlk",
+        "Daylight"
+      ],
+      "Norfolk Ostrvo, letnje vreme"
+    ],
+    [
+      [
+        "rudyr",
+        "Standard"
+      ],
+      "Anadir standardno vreme"
+    ],
+    [
+      [
+        "rukuf",
+        "Standard"
+      ],
+      "Samara standardno vreme"
+    ],
+    [
+      [
+        "rupkc",
+        "Standard"
+      ],
+      "Petropavlovsko-kamčatsko standardno vreme"
+    ],
+    [
+      [
+        "twtpe",
+        "Standard"
+      ],
+      "Tajpej, standardno vreme"
+    ],
+    [
+      [
+        "usadk",
+        "Standard"
+      ],
+      "Havajsko-aleutsko standardno vreme"
+    ],
+    [
+      [
+        "usadk",
+        "Daylight"
+      ],
+      "Havajsko-aleutsko letnje vreme"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "Koordinisano univerzalno vreme"
+    ],
+    [
+      [
+        "wsapw",
+        "Standard"
+      ],
+      "Apija, standardno vreme"
+    ],
+    [
+      [
+        "wsapw",
+        "Daylight"
+      ],
+      "Apija, letnje vreme"
     ]
   ],
   "use_standard": [

@@ -649,9 +649,10 @@ impl DataProvider<MetazoneGenericNamesLongV1> for SourceDataProvider {
         let bcp47_tzid_data = self.iana_to_bcp47_map()?;
         let (meta_zone_id_data, checksum) = self.metazone_to_id_map()?;
         let reverse_metazones = self.reverse_metazones()?;
+        let useless_metazones = self.useless_metazones()?;
         let locations = self.calculate_locations(req.id.locale)?.0;
 
-        let defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, true)
+        let mut defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, true)
             .filter_map(|(mz, zf)| {
                 let v = zf.0.get("generic")?.as_str();
 
@@ -676,16 +677,26 @@ impl DataProvider<MetazoneGenericNamesLongV1> for SourceDataProvider {
                     Some((mz, v))
                 }
             })
-            .collect();
-        let overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, true)
+            .collect::<BTreeMap<_, _>>();
+
+        let mut overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, true)
             .filter_map(|(tz, zf)| Some((tz, zf.0.get("generic")?.as_str())))
-            .collect();
+            .collect::<BTreeMap<_, _>>();
+
+        defaults.retain(|mz, value| {
+            if let Some(&tz) = useless_metazones.get(mz) {
+                overrides.insert(tz, value);
+                false
+            } else {
+                true
+            }
+        });
 
         Ok(DataResponse {
             metadata: DataResponseMetadata::default().with_checksum(checksum),
             payload: DataPayload::from_owned(MetazoneGenericNames {
-                defaults,
-                overrides,
+                defaults: defaults.into_iter().collect(),
+                overrides: overrides.into_iter().collect(),
             }),
         })
     }
@@ -712,9 +723,10 @@ impl DataProvider<MetazoneStandardNamesLongV1> for SourceDataProvider {
         let bcp47_tzid_data = self.iana_to_bcp47_map()?;
         let (meta_zone_id_data, checksum) = self.metazone_to_id_map()?;
         let reverse_metazones = self.reverse_metazones()?;
+        let useless_metazones = self.useless_metazones()?;
         let locations = self.calculate_locations(req.id.locale)?.0;
 
-        let defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, true)
+        let mut defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, true)
             .filter_map(|(mz, zf)| {
                 // Add the standard name if the generic name does not exist
                 let v = (!zf.0.contains_key("generic"))
@@ -743,16 +755,25 @@ impl DataProvider<MetazoneStandardNamesLongV1> for SourceDataProvider {
                     Some((mz, v))
                 }
             })
-            .collect();
-        let overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, true)
+            .collect::<BTreeMap<_, _>>();
+        let mut overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, true)
             .filter_map(|(tz, zf)| Some((tz, zf.0.get("standard")?.as_str())))
-            .collect();
+            .collect::<BTreeMap<_, _>>();
+
+        defaults.retain(|mz, value| {
+            if let Some(&tz) = useless_metazones.get(mz) {
+                overrides.insert(tz, value);
+                false
+            } else {
+                true
+            }
+        });
 
         Ok(DataResponse {
             metadata: DataResponseMetadata::default().with_checksum(checksum),
             payload: DataPayload::from_owned(MetazoneGenericNames {
-                defaults,
-                overrides,
+                defaults: defaults.into_iter().collect(),
+                overrides: overrides.into_iter().collect(),
             }),
         })
     }
@@ -780,6 +801,7 @@ impl DataProvider<MetazoneSpecificNamesLongV1> for SourceDataProvider {
         let bcp47_tzid_data = self.iana_to_bcp47_map()?;
         let (meta_zone_id_data, checksum) = self.metazone_to_id_map()?;
         let reverse_metazones = self.reverse_metazones()?;
+        let useless_metazones = self.useless_metazones()?;
         let locations = &self.calculate_locations(req.id.locale)?.0;
 
         let mut defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, true)
@@ -832,15 +854,24 @@ impl DataProvider<MetazoneSpecificNamesLongV1> for SourceDataProvider {
                 true
             }
         });
-        let overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, true)
+        let mut overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, true)
             .flat_map(|(tz, zf)| zone_variant_convert(zf).map(move |(zv, v)| ((tz, zv), v)))
-            .collect();
+            .collect::<BTreeMap<_, _>>();
+
+        defaults.retain(|((mz, variant), value)| {
+            if let Some(&tz) = useless_metazones.get(mz) {
+                overrides.insert((tz, *variant), value);
+                false
+            } else {
+                true
+            }
+        });
 
         Ok(DataResponse {
             metadata: DataResponseMetadata::default().with_checksum(checksum),
             payload: DataPayload::from_owned(MetazoneSpecificNames {
                 defaults: defaults.into_iter().collect(),
-                overrides,
+                overrides: overrides.into_iter().collect(),
                 use_standard: use_standard.into_iter().collect(),
             }),
         })
@@ -867,19 +898,29 @@ impl DataProvider<MetazoneGenericNamesShortV1> for SourceDataProvider {
             .time_zone_names;
         let bcp47_tzid_data = self.iana_to_bcp47_map()?;
         let (meta_zone_id_data, checksum) = self.metazone_to_id_map()?;
+        let useless_metazones = self.useless_metazones()?;
 
-        let defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, false)
+        let mut defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, false)
             .flat_map(|(mz, zf)| zone_variant_fallback(zf).map(move |v| (mz, v)))
-            .collect();
-        let overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, false)
+            .collect::<BTreeMap<_, _>>();
+        let mut overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, false)
             .flat_map(|(tz, zf)| zone_variant_fallback(zf).map(move |v| (tz, v)))
-            .collect();
+            .collect::<BTreeMap<_, _>>();
+
+        defaults.retain(|mz, value| {
+            if let Some(&tz) = useless_metazones.get(mz) {
+                overrides.insert(tz, value);
+                false
+            } else {
+                true
+            }
+        });
 
         Ok(DataResponse {
             metadata: DataResponseMetadata::default().with_checksum(checksum),
             payload: DataPayload::from_owned(MetazoneGenericNames {
-                defaults,
-                overrides,
+                defaults: defaults.into_iter().collect(),
+                overrides: overrides.into_iter().collect(),
             }),
         })
     }
@@ -905,19 +946,29 @@ impl DataProvider<MetazoneSpecificNamesShortV1> for SourceDataProvider {
 
         let bcp47_tzid_data = self.iana_to_bcp47_map()?;
         let (meta_zone_id_data, checksum) = self.metazone_to_id_map()?;
+        let useless_metazones = self.useless_metazones()?;
 
-        let defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, false)
+        let mut defaults = iter_mz_defaults(time_zone_names_resource, meta_zone_id_data, false)
             .flat_map(|(mz, zf)| zone_variant_convert(zf).map(move |(zv, v)| ((mz, zv), v)))
-            .collect();
-        let overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, false)
+            .collect::<BTreeMap<_, _>>();
+        let mut overrides = iter_mz_overrides(time_zone_names_resource, bcp47_tzid_data, false)
             .flat_map(|(tz, zf)| zone_variant_convert(zf).map(move |(zv, v)| ((tz, zv), v)))
-            .collect();
+            .collect::<BTreeMap<_, _>>();
+
+        defaults.retain(|(mz, variant), value| {
+            if let Some(&tz) = useless_metazones.get(mz) {
+                overrides.insert((tz, *variant), value);
+                false
+            } else {
+                true
+            }
+        });
 
         Ok(DataResponse {
             metadata: DataResponseMetadata::default().with_checksum(checksum),
             payload: DataPayload::from_owned(MetazoneSpecificNames {
-                defaults,
-                overrides,
+                defaults: defaults.into_iter().collect(),
+                overrides: overrides.into_iter().collect(),
                 use_standard: Default::default(),
             }),
         })

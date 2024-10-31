@@ -12,11 +12,9 @@
     "19": "Argentina Time",
     "22": "Atlantic Time",
     "23": "Australian Central Time",
-    "24": "Australian Central Western Time",
     "25": "Australian Eastern Time",
     "26": "Australian Western Time",
     "32": "Brasilia Time",
-    "38": "Chile Time",
     "39": "China Time",
     "50": "Central European Time",
     "51": "Eastern European Time",
@@ -24,20 +22,23 @@
     "62": "East Greenland Time",
     "63": "Greenland Time",
     "64": "West Greenland Time",
-    "68": "Hawaii-Aleutian Time",
     "78": "Irkutsk Time",
     "85": "Korean Time",
     "87": "Krasnoyarsk Time",
-    "91": "Lord Howe Time",
     "100": "Mexican Pacific Time",
     "103": "Moscow Time",
-    "108": "Newfoundland Time",
     "109": "New Zealand Time",
-    "121": "Philippine Time",
     "132": "American Samoa Time",
     "148": "Uzbekistan Time",
     "151": "Vladivostok Time",
     "156": "Yakutsk Time"
   },
-  "overrides": {}
+  "overrides": {
+    "aueuc": "Australian Central Western Time",
+    "auldh": "Lord Howe Time",
+    "casjf": "Newfoundland Time",
+    "clscl": "Chile Time",
+    "phmnl": "Philippine Time",
+    "usadk": "Hawaii-Aleutian Time"
+  }
 }

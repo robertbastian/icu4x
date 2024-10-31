@@ -86,20 +86,6 @@
     ],
     [
       [
-        68,
-        "Standard"
-      ],
-      "HAST"
-    ],
-    [
-      [
-        68,
-        "Daylight"
-      ],
-      "HADT"
-    ],
-    [
-      [
         101,
         "Standard"
       ],
@@ -107,6 +93,20 @@
     ]
   ],
   "overrides": [
+    [
+      [
+        "usadk",
+        "Standard"
+      ],
+      "HAST"
+    ],
+    [
+      [
+        "usadk",
+        "Daylight"
+      ],
+      "HADT"
+    ],
     [
       [
         "ushnl",

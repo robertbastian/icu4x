@@ -6,10 +6,10 @@
     "12": "MT",
     "13": "PT",
     "22": "AT",
-    "68": "HAT",
     "101": "GMT"
   },
   "overrides": {
+    "usadk": "HAT",
     "ushnl": "HST",
     "utc": "UTC"
   }

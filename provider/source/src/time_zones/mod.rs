@@ -35,6 +35,7 @@ pub(crate) struct Caches {
     mz_period: Cache<MetazonePeriod<'static>>,
     offset_period: Cache<<TimeZoneOffsetsV1 as DynamicDataMarker>::DataStruct>,
     reverse_metazones: Cache<BTreeMap<(MetazoneId, MzMembership), Vec<TimeZone>>>,
+    useless_metazones: Cache<BTreeMap<MetazoneId, TimeZone>>,
 }
 
 #[derive(PartialEq, Eq, Ord, PartialOrd, Clone, Copy, Debug)]
@@ -121,6 +122,41 @@ impl SourceDataProvider {
                     }
                 }
                 Ok(reverse_metazones)
+            })
+            .as_ref()
+            .map_err(|&e| e)
+    }
+
+    fn useless_metazones(&self) -> Result<&BTreeMap<MetazoneId, TimeZone>, DataError> {
+        self.cldr()?
+            .tz_caches
+            .useless_metazones
+            .get_or_init(|| {
+                let reverse = self.reverse_metazones()?;
+                let mz_period = self.metazone_period()?;
+
+                let mut useless_mzs = BTreeMap::new();
+
+                for ((mz, _membership), tzs) in reverse {
+                    if tzs.len() == 1 {
+                        // There's only one TZ that has ever been in the MZ
+                        let &tz = tzs.first().unwrap();
+                        if mz_period
+                            .list
+                            .get0(&tz)
+                            .unwrap()
+                            .iter1_copied()
+                            .filter_map(|(_, maybe_mz)| maybe_mz.into())
+                            .count()
+                            == 1
+                        {
+                            // The TZ has only ever been in one MZ
+                            useless_mzs.insert(*mz, tz);
+                        }
+                    }
+                }
+
+                Ok(useless_mzs)
             })
             .as_ref()
             .map_err(|&e| e)

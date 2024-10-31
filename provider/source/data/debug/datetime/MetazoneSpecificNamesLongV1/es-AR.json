@@ -107,27 +107,6 @@
     ],
     [
       [
-        14,
-        "Standard"
-      ],
-      "hora estándar de Anadyr"
-    ],
-    [
-      [
-        15,
-        "Standard"
-      ],
-      "hora estándar de Apia"
-    ],
-    [
-      [
-        15,
-        "Daylight"
-      ],
-      "horario de verano de Apia"
-    ],
-    [
-      [
         18,
         "Standard"
       ],
@@ -170,13 +149,6 @@
     ],
     [
       [
-        24,
-        "Standard"
-      ],
-      "hora estándar de Australia centroccidental"
-    ],
-    [
-      [
         25,
         "Standard"
       ],
@@ -198,20 +170,6 @@
     ],
     [
       [
-        28,
-        "Standard"
-      ],
-      "hora estándar de las Azores"
-    ],
-    [
-      [
-        28,
-        "Daylight"
-      ],
-      "hora de verano de las Azores"
-    ],
-    [
-      [
         32,
         "Standard"
       ],
@@ -226,31 +184,10 @@
     ],
     [
       [
-        38,
-        "Standard"
-      ],
-      "hora estándar de Chile"
-    ],
-    [
-      [
         39,
         "Standard"
       ],
       "hora estándar de China"
-    ],
-    [
-      [
-        43,
-        "Standard"
-      ],
-      "hora estándar de las islas Cook"
-    ],
-    [
-      [
-        47,
-        "Daylight"
-      ],
-      "hora de verano de la Isla de Pascua"
     ],
     [
       [
@@ -296,13 +233,6 @@
     ],
     [
       [
-        54,
-        "Standard"
-      ],
-      "hora estándar de las Islas Malvinas"
-    ],
-    [
-      [
         62,
         "Standard"
       ],
@@ -328,20 +258,6 @@
         "Daylight"
       ],
       "hora de verano de Groenlandia occidental"
-    ],
-    [
-      [
-        68,
-        "Standard"
-      ],
-      "hora estándar de Hawái-Aleutianas"
-    ],
-    [
-      [
-        68,
-        "Daylight"
-      ],
-      "hora de verano de Hawái-Aleutianas"
     ],
     [
       [
@@ -387,20 +303,6 @@
     ],
     [
       [
-        108,
-        "Standard"
-      ],
-      "hora estándar de Terranova"
-    ],
-    [
-      [
-        108,
-        "Daylight"
-      ],
-      "hora de verano de Terranova"
-    ],
-    [
-      [
         109,
         "Standard"
       ],
@@ -415,31 +317,10 @@
     ],
     [
       [
-        112,
-        "Standard"
-      ],
-      "hora estándar de la Isla Norfolk"
-    ],
-    [
-      [
-        112,
-        "Daylight"
-      ],
-      "hora de verano de la Isla Norfolk"
-    ],
-    [
-      [
         132,
         "Standard"
       ],
       "hora estándar de Samoa"
-    ],
-    [
-      [
-        140,
-        "Standard"
-      ],
-      "hora estándar de Taipéi"
     ],
     [
       [
@@ -466,6 +347,55 @@
   "overrides": [
     [
       [
+        "aueuc",
+        "Standard"
+      ],
+      "hora estándar de Australia centroccidental"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "hora estándar de Terranova"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "hora de verano de Terranova"
+    ],
+    [
+      [
+        "ckrar",
+        "Standard"
+      ],
+      "hora estándar de las islas Cook"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "hora de verano de la Isla de Pascua"
+    ],
+    [
+      [
+        "clscl",
+        "Standard"
+      ],
+      "hora estándar de Chile"
+    ],
+    [
+      [
+        "fkpsy",
+        "Standard"
+      ],
+      "hora estándar de las Islas Malvinas"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
@@ -480,10 +410,80 @@
     ],
     [
       [
+        "nfnlk",
+        "Standard"
+      ],
+      "hora estándar de la Isla Norfolk"
+    ],
+    [
+      [
+        "nfnlk",
+        "Daylight"
+      ],
+      "hora de verano de la Isla Norfolk"
+    ],
+    [
+      [
+        "ptpdl",
+        "Standard"
+      ],
+      "hora estándar de las Azores"
+    ],
+    [
+      [
+        "ptpdl",
+        "Daylight"
+      ],
+      "hora de verano de las Azores"
+    ],
+    [
+      [
+        "rudyr",
+        "Standard"
+      ],
+      "hora estándar de Anadyr"
+    ],
+    [
+      [
+        "twtpe",
+        "Standard"
+      ],
+      "hora estándar de Taipéi"
+    ],
+    [
+      [
+        "usadk",
+        "Standard"
+      ],
+      "hora estándar de Hawái-Aleutianas"
+    ],
+    [
+      [
+        "usadk",
+        "Daylight"
+      ],
+      "hora de verano de Hawái-Aleutianas"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "hora universal coordinada"
+    ],
+    [
+      [
+        "wsapw",
+        "Standard"
+      ],
+      "hora estándar de Apia"
+    ],
+    [
+      [
+        "wsapw",
+        "Daylight"
+      ],
+      "horario de verano de Apia"
     ]
   ],
   "use_standard": [

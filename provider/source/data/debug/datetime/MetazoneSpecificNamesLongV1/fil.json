@@ -100,27 +100,6 @@
     ],
     [
       [
-        14,
-        "Standard"
-      ],
-      "Standard Time sa Anadyr"
-    ],
-    [
-      [
-        15,
-        "Standard"
-      ],
-      "Standard na Oras sa Apia"
-    ],
-    [
-      [
-        15,
-        "Daylight"
-      ],
-      "Daylight Time sa Apia"
-    ],
-    [
-      [
         18,
         "Standard"
       ],
@@ -163,13 +142,6 @@
     ],
     [
       [
-        24,
-        "Standard"
-      ],
-      "Standard Time ng Gitnang Kanluran ng Australia"
-    ],
-    [
-      [
         25,
         "Standard"
       ],
@@ -191,20 +163,6 @@
     ],
     [
       [
-        27,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Azerbaijan"
-    ],
-    [
-      [
-        28,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Azores"
-    ],
-    [
-      [
         32,
         "Standard"
       ],
@@ -219,52 +177,10 @@
     ],
     [
       [
-        37,
-        "Daylight"
-      ],
-      "Daylight Time sa Chatham"
-    ],
-    [
-      [
-        38,
-        "Standard"
-      ],
-      "Standard na Oras sa Chile"
-    ],
-    [
-      [
-        38,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Chile"
-    ],
-    [
-      [
         39,
         "Standard"
       ],
       "Standard na Oras sa China"
-    ],
-    [
-      [
-        44,
-        "Daylight"
-      ],
-      "Daylight na Oras sa Cuba"
-    ],
-    [
-      [
-        47,
-        "Standard"
-      ],
-      "Standard na Oras sa Easter Island"
-    ],
-    [
-      [
-        47,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Easter Island"
     ],
     [
       [
@@ -310,13 +226,6 @@
     ],
     [
       [
-        55,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Fiji"
-    ],
-    [
-      [
         62,
         "Standard"
       ],
@@ -345,52 +254,10 @@
     ],
     [
       [
-        68,
-        "Standard"
-      ],
-      "Standard na Oras sa Hawaii-Aleutian"
-    ],
-    [
-      [
-        68,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Hawaii-Aleutian"
-    ],
-    [
-      [
-        70,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Hovd"
-    ],
-    [
-      [
-        77,
-        "Daylight"
-      ],
-      "Daylight Time sa Iran"
-    ],
-    [
-      [
         78,
         "Standard"
       ],
       "Standard na Oras sa Irkutsk"
-    ],
-    [
-      [
-        79,
-        "Daylight"
-      ],
-      "Daylight Time sa Israel"
-    ],
-    [
-      [
-        82,
-        "Standard"
-      ],
-      "Standard Time sa Petropavlovsk-Kamchatski"
     ],
     [
       [
@@ -408,13 +275,6 @@
     ],
     [
       [
-        91,
-        "Daylight"
-      ],
-      "Daylight Time sa Lorde Howe"
-    ],
-    [
-      [
         100,
         "Standard"
       ],
@@ -429,38 +289,10 @@
     ],
     [
       [
-        102,
-        "Standard"
-      ],
-      "Standard na Oras sa Ulan Bator"
-    ],
-    [
-      [
-        102,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Ulan Bator"
-    ],
-    [
-      [
         103,
         "Standard"
       ],
       "Standard na Oras sa Moscow"
-    ],
-    [
-      [
-        108,
-        "Standard"
-      ],
-      "Standard na Oras sa Newfoundland"
-    ],
-    [
-      [
-        108,
-        "Daylight"
-      ],
-      "Daylight na Oras sa Newfoundland"
     ],
     [
       [
@@ -478,59 +310,10 @@
     ],
     [
       [
-        112,
-        "Daylight"
-      ],
-      "Daylight Time sa Norfolk Island"
-    ],
-    [
-      [
-        119,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Paraguay"
-    ],
-    [
-      [
-        123,
-        "Standard"
-      ],
-      "Standard na Oras sa Saint Pierre & Miquelon"
-    ],
-    [
-      [
-        123,
-        "Daylight"
-      ],
-      "Daylight na Oras sa Saint Pierre & Miquelon"
-    ],
-    [
-      [
-        131,
-        "Standard"
-      ],
-      "Standard Time sa Samara"
-    ],
-    [
-      [
         132,
         "Standard"
       ],
       "Standard na Oras sa Samoa"
-    ],
-    [
-      [
-        140,
-        "Standard"
-      ],
-      "Standard na Oras sa Taipei"
-    ],
-    [
-      [
-        143,
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Tonga"
     ],
     [
       [
@@ -557,6 +340,83 @@
   "overrides": [
     [
       [
+        "aueuc",
+        "Standard"
+      ],
+      "Standard Time ng Gitnang Kanluran ng Australia"
+    ],
+    [
+      [
+        "auldh",
+        "Daylight"
+      ],
+      "Daylight Time sa Lorde Howe"
+    ],
+    [
+      [
+        "azbak",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Azerbaijan"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "Standard na Oras sa Newfoundland"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "Daylight na Oras sa Newfoundland"
+    ],
+    [
+      [
+        "clipc",
+        "Standard"
+      ],
+      "Standard na Oras sa Easter Island"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Easter Island"
+    ],
+    [
+      [
+        "clscl",
+        "Standard"
+      ],
+      "Standard na Oras sa Chile"
+    ],
+    [
+      [
+        "clscl",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Chile"
+    ],
+    [
+      [
+        "cuhav",
+        "Daylight"
+      ],
+      "Daylight na Oras sa Cuba"
+    ],
+    [
+      [
+        "fjsuv",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Fiji"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
@@ -571,10 +431,150 @@
     ],
     [
       [
+        "irthr",
+        "Daylight"
+      ],
+      "Daylight Time sa Iran"
+    ],
+    [
+      [
+        "jeruslm",
+        "Daylight"
+      ],
+      "Daylight Time sa Israel"
+    ],
+    [
+      [
+        "mnhvd",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Hovd"
+    ],
+    [
+      [
+        "mnuln",
+        "Standard"
+      ],
+      "Standard na Oras sa Ulan Bator"
+    ],
+    [
+      [
+        "mnuln",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Ulan Bator"
+    ],
+    [
+      [
+        "nfnlk",
+        "Daylight"
+      ],
+      "Daylight Time sa Norfolk Island"
+    ],
+    [
+      [
+        "nzcht",
+        "Daylight"
+      ],
+      "Daylight Time sa Chatham"
+    ],
+    [
+      [
+        "pmmqc",
+        "Standard"
+      ],
+      "Standard na Oras sa Saint Pierre & Miquelon"
+    ],
+    [
+      [
+        "pmmqc",
+        "Daylight"
+      ],
+      "Daylight na Oras sa Saint Pierre & Miquelon"
+    ],
+    [
+      [
+        "ptpdl",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Azores"
+    ],
+    [
+      [
+        "pyasu",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Paraguay"
+    ],
+    [
+      [
+        "rudyr",
+        "Standard"
+      ],
+      "Standard Time sa Anadyr"
+    ],
+    [
+      [
+        "rukuf",
+        "Standard"
+      ],
+      "Standard Time sa Samara"
+    ],
+    [
+      [
+        "rupkc",
+        "Standard"
+      ],
+      "Standard Time sa Petropavlovsk-Kamchatski"
+    ],
+    [
+      [
+        "totbu",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Tonga"
+    ],
+    [
+      [
+        "twtpe",
+        "Standard"
+      ],
+      "Standard na Oras sa Taipei"
+    ],
+    [
+      [
+        "usadk",
+        "Standard"
+      ],
+      "Standard na Oras sa Hawaii-Aleutian"
+    ],
+    [
+      [
+        "usadk",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Hawaii-Aleutian"
+    ],
+    [
+      [
         "utc",
         "Standard"
       ],
       "Coordinated Universal Time"
+    ],
+    [
+      [
+        "wsapw",
+        "Standard"
+      ],
+      "Standard na Oras sa Apia"
+    ],
+    [
+      [
+        "wsapw",
+        "Daylight"
+      ],
+      "Daylight Time sa Apia"
     ]
   ],
   "use_standard": [

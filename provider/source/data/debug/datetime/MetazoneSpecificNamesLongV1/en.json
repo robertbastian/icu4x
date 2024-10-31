@@ -149,13 +149,6 @@
     ],
     [
       [
-        24,
-        "Standard"
-      ],
-      "Australian Central Western Standard Time"
-    ],
-    [
-      [
         25,
         "Standard"
       ],
@@ -177,20 +170,6 @@
     ],
     [
       [
-        27,
-        "Daylight"
-      ],
-      "Azerbaijan Summer Time"
-    ],
-    [
-      [
-        28,
-        "Daylight"
-      ],
-      "Azores Summer Time"
-    ],
-    [
-      [
         32,
         "Standard"
       ],
@@ -205,31 +184,10 @@
     ],
     [
       [
-        38,
-        "Standard"
-      ],
-      "Chile Standard Time"
-    ],
-    [
-      [
-        38,
-        "Daylight"
-      ],
-      "Chile Summer Time"
-    ],
-    [
-      [
         39,
         "Standard"
       ],
       "China Standard Time"
-    ],
-    [
-      [
-        47,
-        "Daylight"
-      ],
-      "Easter Island Summer Time"
     ],
     [
       [
@@ -275,13 +233,6 @@
     ],
     [
       [
-        55,
-        "Daylight"
-      ],
-      "Fiji Summer Time"
-    ],
-    [
-      [
         62,
         "Standard"
       ],
@@ -324,27 +275,6 @@
     ],
     [
       [
-        68,
-        "Standard"
-      ],
-      "Hawaii-Aleutian Standard Time"
-    ],
-    [
-      [
-        68,
-        "Daylight"
-      ],
-      "Hawaii-Aleutian Daylight Time"
-    ],
-    [
-      [
-        70,
-        "Daylight"
-      ],
-      "Hovd Summer Time"
-    ],
-    [
-      [
         78,
         "Standard"
       ],
@@ -366,20 +296,6 @@
     ],
     [
       [
-        91,
-        "Standard"
-      ],
-      "Lord Howe Standard Time"
-    ],
-    [
-      [
-        91,
-        "Daylight"
-      ],
-      "Lord Howe Daylight Time"
-    ],
-    [
-      [
         100,
         "Standard"
       ],
@@ -394,31 +310,10 @@
     ],
     [
       [
-        102,
-        "Daylight"
-      ],
-      "Ulaanbaatar Summer Time"
-    ],
-    [
-      [
         103,
         "Standard"
       ],
       "Moscow Standard Time"
-    ],
-    [
-      [
-        108,
-        "Standard"
-      ],
-      "Newfoundland Standard Time"
-    ],
-    [
-      [
-        108,
-        "Daylight"
-      ],
-      "Newfoundland Daylight Time"
     ],
     [
       [
@@ -436,31 +331,10 @@
     ],
     [
       [
-        119,
-        "Daylight"
-      ],
-      "Paraguay Summer Time"
-    ],
-    [
-      [
-        121,
-        "Standard"
-      ],
-      "Philippine Standard Time"
-    ],
-    [
-      [
         132,
         "Standard"
       ],
       "American Samoa Standard Time"
-    ],
-    [
-      [
-        143,
-        "Daylight"
-      ],
-      "Tonga Summer Time"
     ],
     [
       [
@@ -487,6 +361,76 @@
   "overrides": [
     [
       [
+        "aueuc",
+        "Standard"
+      ],
+      "Australian Central Western Standard Time"
+    ],
+    [
+      [
+        "auldh",
+        "Standard"
+      ],
+      "Lord Howe Standard Time"
+    ],
+    [
+      [
+        "auldh",
+        "Daylight"
+      ],
+      "Lord Howe Daylight Time"
+    ],
+    [
+      [
+        "azbak",
+        "Daylight"
+      ],
+      "Azerbaijan Summer Time"
+    ],
+    [
+      [
+        "casjf",
+        "Standard"
+      ],
+      "Newfoundland Standard Time"
+    ],
+    [
+      [
+        "casjf",
+        "Daylight"
+      ],
+      "Newfoundland Daylight Time"
+    ],
+    [
+      [
+        "clipc",
+        "Daylight"
+      ],
+      "Easter Island Summer Time"
+    ],
+    [
+      [
+        "clscl",
+        "Standard"
+      ],
+      "Chile Standard Time"
+    ],
+    [
+      [
+        "clscl",
+        "Daylight"
+      ],
+      "Chile Summer Time"
+    ],
+    [
+      [
+        "fjsuv",
+        "Daylight"
+      ],
+      "Fiji Summer Time"
+    ],
+    [
+      [
         "gblon",
         "Daylight"
       ],
@@ -498,6 +442,62 @@
         "Daylight"
       ],
       "Irish Standard Time"
+    ],
+    [
+      [
+        "mnhvd",
+        "Daylight"
+      ],
+      "Hovd Summer Time"
+    ],
+    [
+      [
+        "mnuln",
+        "Daylight"
+      ],
+      "Ulaanbaatar Summer Time"
+    ],
+    [
+      [
+        "phmnl",
+        "Standard"
+      ],
+      "Philippine Standard Time"
+    ],
+    [
+      [
+        "ptpdl",
+        "Daylight"
+      ],
+      "Azores Summer Time"
+    ],
+    [
+      [
+        "pyasu",
+        "Daylight"
+      ],
+      "Paraguay Summer Time"
+    ],
+    [
+      [
+        "totbu",
+        "Daylight"
+      ],
+      "Tonga Summer Time"
+    ],
+    [
+      [
+        "usadk",
+        "Standard"
+      ],
+      "Hawaii-Aleutian Standard Time"
+    ],
+    [
+      [
+        "usadk",
+        "Daylight"
+      ],
+      "Hawaii-Aleutian Daylight Time"
     ],
     [
       [
