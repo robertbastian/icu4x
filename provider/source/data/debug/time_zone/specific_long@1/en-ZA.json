@@ -198,13 +198,6 @@
     ],
     [
       [
-        "arme",
-        "Daylight"
-      ],
-      "Armenia Summer Time"
-    ],
-    [
-      [
         "arwe",
         "Standard"
       ],
@@ -275,24 +268,10 @@
     ],
     [
       [
-        "azer",
-        "Daylight"
-      ],
-      "Azerbaijan Summer Time"
-    ],
-    [
-      [
         "azor",
         "Daylight"
       ],
       "Azores Summer Time"
-    ],
-    [
-      [
-        "bang",
-        "Daylight"
-      ],
-      "Bangladesh Summer Time"
     ],
     [
       [
@@ -426,13 +405,6 @@
         "Standard"
       ],
       "Galapagos Time"
-    ],
-    [
-      [
-        "geor",
-        "Daylight"
-      ],
-      "Georgia Summer Time"
     ],
     [
       [
@@ -604,13 +576,6 @@
     ],
     [
       [
-        "kyrg",
-        "Standard"
-      ],
-      "Kyrgyzstan Time"
-    ],
-    [
-      [
         "lank",
         "Standard"
       ],
@@ -723,13 +688,6 @@
     ],
     [
       [
-        "paki",
-        "Daylight"
-      ],
-      "Pakistan Summer Time"
-    ],
-    [
-      [
         "pang",
         "Standard"
       ],
@@ -769,27 +727,6 @@
         "Daylight"
       ],
       "Samoa Daylight Time"
-    ],
-    [
-      [
-        "suri",
-        "Standard"
-      ],
-      "Suriname Time"
-    ],
-    [
-      [
-        "taji",
-        "Standard"
-      ],
-      "Tajikistan Time"
-    ],
-    [
-      [
-        "turk",
-        "Daylight"
-      ],
-      "Turkmenistan Summer Time"
     ],
     [
       [
@@ -835,13 +772,6 @@
     ],
     [
       [
-        "yeka",
-        "Daylight"
-      ],
-      "Yekaterinburg Summer Time"
-    ],
-    [
-      [
         "yuko",
         "Standard"
       ],
@@ -855,6 +785,13 @@
         "Standard"
       ],
       "Afghanistan Time"
+    ],
+    [
+      [
+        "amevn",
+        "Daylight"
+      ],
+      "Armenia Summer Time"
     ],
     [
       [
@@ -911,6 +848,20 @@
         "Daylight"
       ],
       "Australian Central Western Daylight Time"
+    ],
+    [
+      [
+        "azbak",
+        "Daylight"
+      ],
+      "Azerbaijan Summer Time"
+    ],
+    [
+      [
+        "bddac",
+        "Daylight"
+      ],
+      "Bangladesh Summer Time"
     ],
     [
       [
@@ -1047,6 +998,13 @@
     ],
     [
       [
+        "getbs",
+        "Daylight"
+      ],
+      "Georgia Summer Time"
+    ],
+    [
+      [
         "gfcay",
         "Standard"
       ],
@@ -1093,6 +1051,13 @@
         "Standard"
       ],
       "Indian Ocean Time"
+    ],
+    [
+      [
+        "kgfru",
+        "Standard"
+      ],
+      "Kyrgyzstan Time"
     ],
     [
       [
@@ -1222,6 +1187,13 @@
     ],
     [
       [
+        "pkkhi",
+        "Daylight"
+      ],
+      "Pakistan Summer Time"
+    ],
+    [
+      [
         "pnpcn",
         "Standard"
       ],
@@ -1285,6 +1257,13 @@
     ],
     [
       [
+        "ruyek",
+        "Daylight"
+      ],
+      "Yekaterinburg Summer Time"
+    ],
+    [
+      [
         "sbhir",
         "Standard"
       ],
@@ -1299,6 +1278,13 @@
     ],
     [
       [
+        "srpbm",
+        "Standard"
+      ],
+      "Suriname Time"
+    ],
+    [
+      [
         "tfpfr",
         "Standard"
       ],
@@ -1306,10 +1292,24 @@
     ],
     [
       [
+        "tjdyu",
+        "Standard"
+      ],
+      "Tajikistan Time"
+    ],
+    [
+      [
         "tkfko",
         "Standard"
       ],
       "Tokelau Time"
+    ],
+    [
+      [
+        "tmasb",
+        "Daylight"
+      ],
+      "Turkmenistan Summer Time"
     ],
     [
       [

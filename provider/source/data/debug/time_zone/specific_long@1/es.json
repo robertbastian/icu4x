@@ -205,20 +205,6 @@
     ],
     [
       [
-        "arme",
-        "Standard"
-      ],
-      "hora estándar de Armenia"
-    ],
-    [
-      [
-        "arme",
-        "Daylight"
-      ],
-      "hora de verano de Armenia"
-    ],
-    [
-      [
         "arwe",
         "Standard"
       ],
@@ -289,20 +275,6 @@
     ],
     [
       [
-        "azer",
-        "Standard"
-      ],
-      "hora estándar de Azerbaiyán"
-    ],
-    [
-      [
-        "azer",
-        "Daylight"
-      ],
-      "hora de verano de Azerbaiyán"
-    ],
-    [
-      [
         "azor",
         "Standard"
       ],
@@ -314,20 +286,6 @@
         "Daylight"
       ],
       "hora de verano de las Azores"
-    ],
-    [
-      [
-        "bang",
-        "Standard"
-      ],
-      "hora estándar de Bangladés"
-    ],
-    [
-      [
-        "bang",
-        "Daylight"
-      ],
-      "hora de verano de Bangladés"
     ],
     [
       [
@@ -454,20 +412,6 @@
         "Standard"
       ],
       "hora de Galápagos"
-    ],
-    [
-      [
-        "geor",
-        "Standard"
-      ],
-      "hora estándar de Georgia"
-    ],
-    [
-      [
-        "geor",
-        "Daylight"
-      ],
-      "hora de verano de Georgia"
     ],
     [
       [
@@ -632,13 +576,6 @@
     ],
     [
       [
-        "kyrg",
-        "Standard"
-      ],
-      "hora de Kirguistán"
-    ],
-    [
-      [
         "lank",
         "Standard"
       ],
@@ -772,20 +709,6 @@
     ],
     [
       [
-        "paki",
-        "Standard"
-      ],
-      "hora estándar de Pakistán"
-    ],
-    [
-      [
-        "paki",
-        "Daylight"
-      ],
-      "hora de verano de Pakistán"
-    ],
-    [
-      [
         "pang",
         "Standard"
       ],
@@ -856,34 +779,6 @@
     ],
     [
       [
-        "suri",
-        "Standard"
-      ],
-      "hora de Surinam"
-    ],
-    [
-      [
-        "taji",
-        "Standard"
-      ],
-      "hora de Tayikistán"
-    ],
-    [
-      [
-        "turk",
-        "Standard"
-      ],
-      "hora estándar de Turkmenistán"
-    ],
-    [
-      [
-        "turk",
-        "Daylight"
-      ],
-      "hora de verano de Turkmenistán"
-    ],
-    [
-      [
         "uzbe",
         "Standard"
       ],
@@ -926,20 +821,6 @@
     ],
     [
       [
-        "yeka",
-        "Standard"
-      ],
-      "hora estándar de Ekaterimburgo"
-    ],
-    [
-      [
-        "yeka",
-        "Daylight"
-      ],
-      "hora de verano de Ekaterimburgo"
-    ],
-    [
-      [
         "yuko",
         "Standard"
       ],
@@ -953,6 +834,20 @@
         "Standard"
       ],
       "hora de Afganistán"
+    ],
+    [
+      [
+        "amevn",
+        "Standard"
+      ],
+      "hora estándar de Armenia"
+    ],
+    [
+      [
+        "amevn",
+        "Daylight"
+      ],
+      "hora de verano de Armenia"
     ],
     [
       [
@@ -1009,6 +904,34 @@
         "Daylight"
       ],
       "hora de verano de Australia centroccidental"
+    ],
+    [
+      [
+        "azbak",
+        "Standard"
+      ],
+      "hora estándar de Azerbaiyán"
+    ],
+    [
+      [
+        "azbak",
+        "Daylight"
+      ],
+      "hora de verano de Azerbaiyán"
+    ],
+    [
+      [
+        "bddac",
+        "Standard"
+      ],
+      "hora estándar de Bangladés"
+    ],
+    [
+      [
+        "bddac",
+        "Daylight"
+      ],
+      "hora de verano de Bangladés"
     ],
     [
       [
@@ -1194,6 +1117,20 @@
     ],
     [
       [
+        "getbs",
+        "Standard"
+      ],
+      "hora estándar de Georgia"
+    ],
+    [
+      [
+        "getbs",
+        "Daylight"
+      ],
+      "hora de verano de Georgia"
+    ],
+    [
+      [
         "gfcay",
         "Standard"
       ],
@@ -1275,6 +1212,13 @@
         "Daylight"
       ],
       "hora de verano de Japón"
+    ],
+    [
+      [
+        "kgfru",
+        "Standard"
+      ],
+      "hora de Kirguistán"
     ],
     [
       [
@@ -1467,6 +1411,20 @@
     ],
     [
       [
+        "pkkhi",
+        "Standard"
+      ],
+      "hora estándar de Pakistán"
+    ],
+    [
+      [
+        "pkkhi",
+        "Daylight"
+      ],
+      "hora de verano de Pakistán"
+    ],
+    [
+      [
         "pnpcn",
         "Standard"
       ],
@@ -1558,6 +1516,20 @@
     ],
     [
       [
+        "ruyek",
+        "Standard"
+      ],
+      "hora estándar de Ekaterimburgo"
+    ],
+    [
+      [
+        "ruyek",
+        "Daylight"
+      ],
+      "hora de verano de Ekaterimburgo"
+    ],
+    [
+      [
         "sbhir",
         "Standard"
       ],
@@ -1579,6 +1551,13 @@
     ],
     [
       [
+        "srpbm",
+        "Standard"
+      ],
+      "hora de Surinam"
+    ],
+    [
+      [
         "tfpfr",
         "Standard"
       ],
@@ -1586,10 +1565,31 @@
     ],
     [
       [
+        "tjdyu",
+        "Standard"
+      ],
+      "hora de Tayikistán"
+    ],
+    [
+      [
         "tkfko",
         "Standard"
       ],
       "hora de Tokelau"
+    ],
+    [
+      [
+        "tmasb",
+        "Standard"
+      ],
+      "hora estándar de Turkmenistán"
+    ],
+    [
+      [
+        "tmasb",
+        "Daylight"
+      ],
+      "hora de verano de Turkmenistán"
     ],
     [
       [

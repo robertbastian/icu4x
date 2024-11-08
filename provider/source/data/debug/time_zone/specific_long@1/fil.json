@@ -163,13 +163,6 @@
     ],
     [
       [
-        "arme",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Armenia"
-    ],
-    [
-      [
         "arwe",
         "Standard"
       ],
@@ -240,24 +233,10 @@
     ],
     [
       [
-        "azer",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Azerbaijan"
-    ],
-    [
-      [
         "azor",
         "Daylight"
       ],
       "Oras sa Tag-init ng Azores"
-    ],
-    [
-      [
-        "bang",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Bangladesh"
     ],
     [
       [
@@ -384,13 +363,6 @@
         "Standard"
       ],
       "Oras sa Galapagos"
-    ],
-    [
-      [
-        "geor",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Georgia"
     ],
     [
       [
@@ -548,13 +520,6 @@
     ],
     [
       [
-        "kyrg",
-        "Standard"
-      ],
-      "Oras sa Kyrgystan"
-    ],
-    [
-      [
         "loho",
         "Daylight"
       ],
@@ -653,13 +618,6 @@
     ],
     [
       [
-        "paki",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Pakistan"
-    ],
-    [
-      [
         "pang",
         "Standard"
       ],
@@ -716,27 +674,6 @@
     ],
     [
       [
-        "suri",
-        "Standard"
-      ],
-      "Oras sa Suriname"
-    ],
-    [
-      [
-        "taji",
-        "Standard"
-      ],
-      "Oras sa Tajikistan"
-    ],
-    [
-      [
-        "turk",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Turkmenistan"
-    ],
-    [
-      [
         "uzbe",
         "Standard"
       ],
@@ -779,13 +716,6 @@
     ],
     [
       [
-        "yeka",
-        "Daylight"
-      ],
-      "Oras sa Tag-init ng Yekaterinburg"
-    ],
-    [
-      [
         "yuko",
         "Standard"
       ],
@@ -799,6 +729,13 @@
         "Standard"
       ],
       "Oras sa Afghanistan"
+    ],
+    [
+      [
+        "amevn",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Armenia"
     ],
     [
       [
@@ -855,6 +792,20 @@
         "Daylight"
       ],
       "Daylight Time sa Gitnang Kanlurang Australia"
+    ],
+    [
+      [
+        "azbak",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Azerbaijan"
+    ],
+    [
+      [
+        "bddac",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Bangladesh"
     ],
     [
       [
@@ -998,6 +949,13 @@
     ],
     [
       [
+        "getbs",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Georgia"
+    ],
+    [
+      [
         "gfcay",
         "Standard"
       ],
@@ -1058,6 +1016,13 @@
         "Daylight"
       ],
       "Daylight Time sa Japan"
+    ],
+    [
+      [
+        "kgfru",
+        "Standard"
+      ],
+      "Oras sa Kyrgystan"
     ],
     [
       [
@@ -1201,6 +1166,13 @@
     ],
     [
       [
+        "pkkhi",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Pakistan"
+    ],
+    [
+      [
         "pnpcn",
         "Standard"
       ],
@@ -1264,6 +1236,13 @@
     ],
     [
       [
+        "ruyek",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Yekaterinburg"
+    ],
+    [
+      [
         "sbhir",
         "Standard"
       ],
@@ -1278,6 +1257,13 @@
     ],
     [
       [
+        "srpbm",
+        "Standard"
+      ],
+      "Oras sa Suriname"
+    ],
+    [
+      [
         "tfpfr",
         "Standard"
       ],
@@ -1285,10 +1271,24 @@
     ],
     [
       [
+        "tjdyu",
+        "Standard"
+      ],
+      "Oras sa Tajikistan"
+    ],
+    [
+      [
         "tkfko",
         "Standard"
       ],
       "Oras sa Tokelau"
+    ],
+    [
+      [
+        "tmasb",
+        "Daylight"
+      ],
+      "Oras sa Tag-init ng Turkmenistan"
     ],
     [
       [
