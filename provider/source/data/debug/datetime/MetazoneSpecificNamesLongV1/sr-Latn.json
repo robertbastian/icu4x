@@ -576,13 +576,6 @@
     ],
     [
       [
-        88,
-        "Standard"
-      ],
-      "Kirgistan vreme"
-    ],
-    [
-      [
         89,
         "Standard"
       ],
@@ -769,20 +762,6 @@
         "Daylight"
       ],
       "Samoa, letnje vreme"
-    ],
-    [
-      [
-        137,
-        "Standard"
-      ],
-      "Surinam vreme"
-    ],
-    [
-      [
-        141,
-        "Standard"
-      ],
-      "Tadžikistan vreme"
     ],
     [
       [
@@ -1096,6 +1075,13 @@
     ],
     [
       [
+        "kgfru",
+        "Standard"
+      ],
+      "Kirgistan vreme"
+    ],
+    [
+      [
         "kicxi",
         "Standard"
       ],
@@ -1236,10 +1222,24 @@
     ],
     [
       [
+        "srpbm",
+        "Standard"
+      ],
+      "Surinam vreme"
+    ],
+    [
+      [
         "tfpfr",
         "Standard"
       ],
       "Francusko južno i antarktičko vreme"
+    ],
+    [
+      [
+        "tjdyu",
+        "Standard"
+      ],
+      "Tadžikistan vreme"
     ],
     [
       [

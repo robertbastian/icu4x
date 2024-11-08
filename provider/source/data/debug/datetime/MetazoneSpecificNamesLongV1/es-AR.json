@@ -576,13 +576,6 @@
     ],
     [
       [
-        88,
-        "Standard"
-      ],
-      "hora de Kirguistán"
-    ],
-    [
-      [
         89,
         "Standard"
       ],
@@ -741,20 +734,6 @@
         "Daylight"
       ],
       "hora de verano de Samoa"
-    ],
-    [
-      [
-        137,
-        "Standard"
-      ],
-      "hora de Surinam"
-    ],
-    [
-      [
-        141,
-        "Standard"
-      ],
-      "hora de Tayikistán"
     ],
     [
       [
@@ -1019,6 +998,13 @@
     ],
     [
       [
+        "kgfru",
+        "Standard"
+      ],
+      "hora de Kirguistán"
+    ],
+    [
+      [
         "kicxi",
         "Standard"
       ],
@@ -1152,10 +1138,24 @@
     ],
     [
       [
+        "srpbm",
+        "Standard"
+      ],
+      "hora de Surinam"
+    ],
+    [
+      [
         "tfpfr",
         "Standard"
       ],
       "hora de las Tierras Australes y Antárticas Francesas"
+    ],
+    [
+      [
+        "tjdyu",
+        "Standard"
+      ],
+      "hora de Tayikistán"
     ],
     [
       [

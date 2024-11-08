@@ -534,13 +534,6 @@
     ],
     [
       [
-        88,
-        "Standard"
-      ],
-      "Kırgızistan Saati"
-    ],
-    [
-      [
         89,
         "Standard"
       ],
@@ -671,20 +664,6 @@
         "Daylight"
       ],
       "Samoa Yaz Saati"
-    ],
-    [
-      [
-        137,
-        "Standard"
-      ],
-      "Surinam Saati"
-    ],
-    [
-      [
-        141,
-        "Standard"
-      ],
-      "Tacikistan Saati"
     ],
     [
       [
@@ -935,6 +914,13 @@
     ],
     [
       [
+        "kgfru",
+        "Standard"
+      ],
+      "Kırgızistan Saati"
+    ],
+    [
+      [
         "kicxi",
         "Standard"
       ],
@@ -1061,10 +1047,24 @@
     ],
     [
       [
+        "srpbm",
+        "Standard"
+      ],
+      "Surinam Saati"
+    ],
+    [
+      [
         "tfpfr",
         "Standard"
       ],
       "Fransız Güney ve Antarktika Saati"
+    ],
+    [
+      [
+        "tjdyu",
+        "Standard"
+      ],
+      "Tacikistan Saati"
     ],
     [
       [
