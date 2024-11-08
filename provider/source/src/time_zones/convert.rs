@@ -671,6 +671,21 @@ impl DataProvider<MetazoneGenericNamesLongV1Marker> for SourceDataProvider {
             .flat_map(|(mz, zf)| zone_variant_fallback(zf).map(move |v| (mz, v)))
         {
             if let Some(&tz) = useless_mz.get(&mz) {
+                if req.id.locale == &icu::locale::locale!("en").into() {
+                    let zone_val = time_zone_names_resource
+                        .region_format
+                        .0
+                        .interpolate([locations.get(&tz).unwrap()])
+                        .to_string();
+                    println!(
+                        "{}TZ {:?} ({}) in MZ {:?} ({})",
+                        if zone_val != name { "! " } else { "  " },
+                        tz.0,
+                        zone_val,
+                        mz.0,
+                        name
+                    );
+                }
                 overrides.insert(tz, name);
             } else if let Some(_) = reverse_metazones.get(&mz) {
                 defaults.insert(mz, name);
