@@ -8,8 +8,8 @@
 #include <icu4x/TimeFormatter.hpp>
 #include <icu4x/Logger.hpp>
 #include <icu4x/TimeZoneInfo.hpp>
-#include <icu4x/TimeZoneIdMapper.hpp>
-#include <icu4x/TimeZoneIdMapperWithFastCanonicalization.hpp>
+#include <icu4x/IanaMapper.hpp>
+#include <icu4x/IanaMapperWithFastCanonicalization.hpp>
 #include <icu4x/GregorianZonedDateTimeFormatter.hpp>
 #include <icu4x/ZonedDateTimeFormatter.hpp>
 
@@ -64,24 +64,24 @@ int main() {
         return 1;
     }
 
-    std::unique_ptr<TimeZoneIdMapper> mapper = TimeZoneIdMapper::create();
-    std::string normalized_iana_id = mapper->normalize_iana("America/CHICAGO").ok().value().value();
+    std::unique_ptr<IanaMapper> mapper = IanaMapper::create();
+    std::string normalized_iana_id = mapper->normalize("America/CHICAGO").ok().value().value();
     if (normalized_iana_id != "America/Chicago") {
         std::cout << "Time zone ID does not normalize: " << normalized_iana_id << std::endl;
         return 1;
     }
-    std::string canonicalied_iana_id = mapper->canonicalize_iana("Asia/Calcutta").ok().value().value();
+    std::string canonicalied_iana_id = mapper->canonicalize("Asia/Calcutta").ok().value().value();
     if (canonicalied_iana_id != "Asia/Kolkata") {
         std::cout << "Time zone ID does not canonicalize: " << canonicalied_iana_id << std::endl;
         return 1;
     }
-    std::string slow_recovered_iana_id = mapper->find_canonical_iana_from_bcp47("uschi").value();
+    std::string slow_recovered_iana_id = mapper->find_canonical_iana("uschi").value();
     if (slow_recovered_iana_id != "America/Chicago") {
         std::cout << "Time zone ID does not roundtrip (slow): " << slow_recovered_iana_id << std::endl;
         return 1;
     }
-    std::unique_ptr<TimeZoneIdMapperWithFastCanonicalization> reverse_mapper = TimeZoneIdMapperWithFastCanonicalization::create();
-    std::string fast_recovered_iana_id = reverse_mapper->canonical_iana_from_bcp47("uschi").value();
+    std::unique_ptr<IanaMapperWithFastCanonicalization> reverse_mapper = IanaMapperWithFastCanonicalization::create();
+    std::string fast_recovered_iana_id = reverse_mapper->find_canonical_iana("uschi").value();
     if (fast_recovered_iana_id != "America/Chicago") {
         std::cout << "Time zone ID does not roundtrip (fast): " << fast_recovered_iana_id << std::endl;
         return 1;

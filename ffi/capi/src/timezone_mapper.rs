@@ -19,91 +19,91 @@ pub mod ffi {
     /// This mapper supports two-way mapping, but it is optimized for the case of IANA to BCP-47.
     /// It also supports normalizing and canonicalizing the IANA strings.
     #[diplomat::opaque]
-    #[diplomat::rust_link(icu::timezone::TimeZoneIdMapper, Struct)]
-    #[diplomat::rust_link(icu::timezone::TimeZoneIdMapper::as_borrowed, FnInStruct, hidden)]
-    #[diplomat::rust_link(icu::timezone::TimeZoneIdMapperBorrowed, Struct, hidden)]
-    #[diplomat::rust_link(icu::timezone::TimeZoneIdMapperBorrowed::new, FnInStruct, hidden)]
+    #[diplomat::rust_link(icu::timezone::IanaMapper, Struct)]
+    #[diplomat::rust_link(icu::timezone::IanaMapper::as_borrowed, FnInStruct, hidden)]
+    #[diplomat::rust_link(icu::timezone::IanaMapperBorrowed, Struct, hidden)]
+    #[diplomat::rust_link(icu::timezone::IanaMapperBorrowed::new, FnInStruct, hidden)]
     #[diplomat::rust_link(icu::timezone::NormalizedIana, Struct, hidden)]
-    pub struct TimeZoneIdMapper(pub icu_timezone::TimeZoneIdMapper);
+    pub struct IanaMapper(pub icu_timezone::IanaMapper);
 
-    impl TimeZoneIdMapper {
-        /// Create a new [`TimeZoneIdMapper`] using compiled data
-        #[diplomat::rust_link(icu::timezone::TimeZoneIdMapper::new, FnInStruct)]
+    impl IanaMapper {
+        /// Create a new [`IanaMapper`] using compiled data
+        #[diplomat::rust_link(icu::timezone::IanaMapper::new, FnInStruct)]
         #[diplomat::attr(auto, constructor)]
         #[cfg(feature = "compiled_data")]
-        pub fn create() -> Box<TimeZoneIdMapper> {
-            Box::new(TimeZoneIdMapper(
-                icu_timezone::TimeZoneIdMapper::new().static_to_owned(),
+        pub fn create() -> Box<IanaMapper> {
+            Box::new(IanaMapper(
+                icu_timezone::IanaMapper::new().static_to_owned(),
             ))
         }
 
-        /// Create a new [`TimeZoneIdMapper`] using a particular data source
-        #[diplomat::rust_link(icu::timezone::TimeZoneIdMapper::new, FnInStruct)]
+        /// Create a new [`IanaMapper`] using a particular data source
+        #[diplomat::rust_link(icu::timezone::IanaMapper::new, FnInStruct)]
         #[diplomat::attr(all(supports = fallible_constructors, supports = named_constructors), named_constructor = "with_provider")]
         #[cfg(feature = "buffer_provider")]
         pub fn create_with_provider(
             provider: &DataProvider,
-        ) -> Result<Box<TimeZoneIdMapper>, DataError> {
-            Ok(Box::new(TimeZoneIdMapper(
-                icu_timezone::TimeZoneIdMapper::try_new_with_buffer_provider(provider.get()?)?,
+        ) -> Result<Box<IanaMapper>, DataError> {
+            Ok(Box::new(IanaMapper(
+                icu_timezone::IanaMapper::try_new_with_buffer_provider(provider.get()?)?,
             )))
         }
 
-        #[diplomat::rust_link(icu::timezone::TimeZoneIdMapperBorrowed::iana_to_bcp47, FnInStruct)]
+        #[diplomat::rust_link(icu::timezone::IanaMapperBorrowed::get, FnInStruct)]
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperBorrowed::iana_bytes_to_bcp47,
+            icu::timezone::IanaMapperBorrowed::get_utf8,
             FnInStruct,
             hidden
         )]
-        pub fn iana_to_bcp47(
+        pub fn get(
             &self,
             value: &DiplomatStr,
             write: &mut diplomat_runtime::DiplomatWrite,
         ) {
             let handle = self.0.as_borrowed();
-            let bcp47 = handle.iana_bytes_to_bcp47(value);
+            let bcp47 = handle.get_utf8(value);
             let _infallible = bcp47.0.write_to(write);
         }
 
-        #[diplomat::rust_link(icu::timezone::TimeZoneIdMapperBorrowed::normalize_iana, FnInStruct)]
-        pub fn normalize_iana(
+        #[diplomat::rust_link(icu::timezone::IanaMapperBorrowed::normalize, FnInStruct)]
+        pub fn normalize(
             &self,
             value: &str,
             write: &mut diplomat_runtime::DiplomatWrite,
         ) -> Option<()> {
             let handle = self.0.as_borrowed();
-            let iana = handle.normalize_iana(value)?;
+            let iana = handle.normalize(value)?;
             let _infallible = iana.0.write_to(write);
             Some(())
         }
 
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperBorrowed::canonicalize_iana,
+            icu::timezone::IanaMapperBorrowed::canonicalize,
             FnInStruct
         )]
-        pub fn canonicalize_iana(
+        pub fn canonicalize(
             &self,
             value: &str,
             write: &mut diplomat_runtime::DiplomatWrite,
         ) -> Option<()> {
             let handle = self.0.as_borrowed();
-            let iana = handle.canonicalize_iana(value)?;
+            let iana = handle.canonicalize(value)?;
             let _infallible = iana.0.write_to(write);
             Some(())
         }
 
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperBorrowed::find_canonical_iana_from_bcp47,
+            icu::timezone::IanaMapperBorrowed::find_canonical_iana,
             FnInStruct
         )]
-        pub fn find_canonical_iana_from_bcp47(
+        pub fn find_canonical_iana(
             &self,
             value: &DiplomatStr,
             write: &mut diplomat_runtime::DiplomatWrite,
         ) -> Option<()> {
             let handle = self.0.as_borrowed();
             let iana = TinyAsciiStr::try_from_utf8(value).ok().and_then(|s| {
-                handle.find_canonical_iana_from_bcp47(icu_timezone::TimeZoneBcp47Id(s))
+                handle.find_canonical_iana(icu_timezone::TimeZone(s))
             })?;
             let _infallible = iana.write_to(write);
             Some(())
@@ -115,87 +115,87 @@ pub mod ffi {
     /// This mapper supports two-way mapping, but it is optimized for the case of IANA to BCP-47.
     /// It also supports normalizing and canonicalizing the IANA strings.
     #[diplomat::opaque]
-    #[diplomat::rust_link(icu::timezone::TimeZoneIdMapperWithFastCanonicalization, Struct)]
+    #[diplomat::rust_link(icu::timezone::IanaMapperWithFastCanonicalization, Struct)]
     #[diplomat::rust_link(
-        icu::timezone::TimeZoneIdMapperWithFastCanonicalization::as_borrowed,
+        icu::timezone::IanaMapperWithFastCanonicalization::as_borrowed,
         FnInStruct,
         hidden
     )]
     #[diplomat::rust_link(
-        icu::timezone::TimeZoneIdMapperWithFastCanonicalization::inner,
+        icu::timezone::IanaMapperWithFastCanonicalization::inner,
         FnInStruct,
         hidden
     )]
     #[diplomat::rust_link(
-        icu::timezone::TimeZoneIdMapperWithFastCanonicalizationBorrowed,
+        icu::timezone::IanaMapperWithFastCanonicalizationBorrowed,
         Struct,
         hidden
     )]
     #[diplomat::rust_link(
-        icu::timezone::TimeZoneIdMapperWithFastCanonicalizationBorrowed::inner,
+        icu::timezone::IanaMapperWithFastCanonicalizationBorrowed::inner,
         FnInStruct,
         hidden
     )]
-    pub struct TimeZoneIdMapperWithFastCanonicalization(
-        pub icu_timezone::TimeZoneIdMapperWithFastCanonicalization<icu_timezone::TimeZoneIdMapper>,
+    pub struct IanaMapperWithFastCanonicalization(
+        pub icu_timezone::IanaMapperWithFastCanonicalization<icu_timezone::IanaMapper>,
     );
 
-    impl TimeZoneIdMapperWithFastCanonicalization {
-        /// Create a new [`TimeZoneIdMapperWithFastCanonicalization`] using compiled data
+    impl IanaMapperWithFastCanonicalization {
+        /// Create a new [`IanaMapperWithFastCanonicalization`] using compiled data
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperWithFastCanonicalization::new,
+            icu::timezone::IanaMapperWithFastCanonicalization::new,
             FnInStruct
         )]
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperWithFastCanonicalizationBorrowed::new,
+            icu::timezone::IanaMapperWithFastCanonicalizationBorrowed::new,
             FnInStruct
         )]
         #[diplomat::attr(auto, constructor)]
         #[cfg(feature = "compiled_data")]
-        pub fn create() -> Box<TimeZoneIdMapperWithFastCanonicalization> {
-            Box::new(TimeZoneIdMapperWithFastCanonicalization(
-                icu_timezone::TimeZoneIdMapperWithFastCanonicalization::new().static_to_owned(),
+        pub fn create() -> Box<IanaMapperWithFastCanonicalization> {
+            Box::new(IanaMapperWithFastCanonicalization(
+                icu_timezone::IanaMapperWithFastCanonicalization::new().static_to_owned(),
             ))
         }
-        /// Create a new [`TimeZoneIdMapperWithFastCanonicalization`] using a particular data source
+        /// Create a new [`IanaMapperWithFastCanonicalization`] using a particular data source
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperWithFastCanonicalization::new,
+            icu::timezone::IanaMapperWithFastCanonicalization::new,
             FnInStruct
         )]
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperWithFastCanonicalizationBorrowed::new,
+            icu::timezone::IanaMapperWithFastCanonicalizationBorrowed::new,
             FnInStruct
         )]
         #[diplomat::attr(all(supports = fallible_constructors, supports = named_constructors), named_constructor = "with_provider")]
         #[cfg(feature = "buffer_provider")]
         pub fn create_with_provider(
             provider: &DataProvider,
-        ) -> Result<Box<TimeZoneIdMapperWithFastCanonicalization>, DataError> {
-            Ok(Box::new(TimeZoneIdMapperWithFastCanonicalization(
-                icu_timezone::TimeZoneIdMapperWithFastCanonicalization::try_new_with_buffer_provider(provider.get()?)?,
+        ) -> Result<Box<IanaMapperWithFastCanonicalization>, DataError> {
+            Ok(Box::new(IanaMapperWithFastCanonicalization(
+                icu_timezone::IanaMapperWithFastCanonicalization::try_new_with_buffer_provider(provider.get()?)?,
             )))
         }
 
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperWithFastCanonicalizationBorrowed::canonicalize_iana,
+            icu::timezone::IanaMapperWithFastCanonicalizationBorrowed::canonicalize,
             FnInStruct
         )]
-        pub fn canonicalize_iana(
+        pub fn canonicalize(
             &self,
             value: &str,
             write: &mut diplomat_runtime::DiplomatWrite,
         ) -> Option<()> {
             let handle = self.0.as_borrowed();
-            let iana = handle.canonicalize_iana(value)?;
+            let iana = handle.canonicalize(value)?;
             let _infallible = iana.0.write_to(write);
             Some(())
         }
 
         #[diplomat::rust_link(
-            icu::timezone::TimeZoneIdMapperWithFastCanonicalizationBorrowed::canonical_iana_from_bcp47,
+            icu::timezone::IanaMapperWithFastCanonicalizationBorrowed::find_canonical_iana,
             FnInStruct
         )]
-        pub fn canonical_iana_from_bcp47(
+        pub fn find_canonical_iana(
             &self,
             value: &DiplomatStr,
             write: &mut diplomat_runtime::DiplomatWrite,
@@ -203,8 +203,8 @@ pub mod ffi {
             let handle = self.0.as_borrowed();
             let iana = TinyAsciiStr::try_from_utf8(value)
                 .ok()
-                .map(icu_timezone::TimeZoneBcp47Id)
-                .and_then(|t| handle.canonical_iana_from_bcp47(t))?;
+                .map(icu_timezone::TimeZone)
+                .and_then(|t| handle.find_canonical_iana(t))?;
             let _infallible = iana.write_to(write);
             Some(())
         }

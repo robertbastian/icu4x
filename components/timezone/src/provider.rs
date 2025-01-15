@@ -71,9 +71,9 @@ pub const MARKERS: &[DataMarkerInfo] = &[
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_timezone::provider))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-pub struct TimeZoneBcp47Id(pub TinyAsciiStr<8>);
+pub struct TimeZone(pub TinyAsciiStr<8>);
 
-impl TimeZoneBcp47Id {
+impl TimeZone {
     /// The synthetic `Etc/Unknown` time zone.
     ///
     /// This is the result of parsing unknown zones. It's important that such parsing does not
@@ -83,7 +83,7 @@ impl TimeZoneBcp47Id {
     }
 }
 
-impl Deref for TimeZoneBcp47Id {
+impl Deref for TimeZone {
     type Target = TinyAsciiStr<8>;
 
     fn deref(&self) -> &Self::Target {
@@ -91,7 +91,7 @@ impl Deref for TimeZoneBcp47Id {
     }
 }
 
-impl AsULE for TimeZoneBcp47Id {
+impl AsULE for TimeZone {
     type ULE = Self;
 
     #[inline]
@@ -105,11 +105,11 @@ impl AsULE for TimeZoneBcp47Id {
     }
 }
 
-impl<'a> zerovec::maps::ZeroMapKV<'a> for TimeZoneBcp47Id {
-    type Container = ZeroVec<'a, TimeZoneBcp47Id>;
-    type Slice = ZeroSlice<TimeZoneBcp47Id>;
-    type GetType = TimeZoneBcp47Id;
-    type OwnedType = TimeZoneBcp47Id;
+impl<'a> zerovec::maps::ZeroMapKV<'a> for TimeZone {
+    type Container = ZeroVec<'a, TimeZone>;
+    type Slice = ZeroSlice<TimeZone>;
+    type GetType = TimeZone;
+    type OwnedType = TimeZone;
 }
 
 /// Storage type for storing UTC offsets as eights of an hour.
@@ -147,8 +147,32 @@ pub struct ZoneOffsetPeriodV1<'data>(
     #[cfg_attr(feature = "serde", serde(borrow))]
     pub  ZeroMap2d<
         'data,
-        TimeZoneBcp47Id,
+        TimeZone,
         IsoMinutesSinceEpoch,
         (EighthsOfHourOffset, EighthsOfHourOffset),
     >,
 );
+
+/// A time zone variant, representing the currently observed relative offset.
+///
+/// The semantics vary from time zone to time zone and could represent concepts
+/// such as Standard time, Daylight time, Summer time, or Ramadan time.
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[zerovec::make_ule(TimeZoneVariantULE)]
+#[repr(u8)]
+#[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
+#[cfg_attr(feature = "datagen", databake(path = icu_timezone))]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize))]
+#[non_exhaustive]
+pub enum TimeZoneVariant {
+    /// The variant corresponding to `"standard"` in CLDR.
+    ///
+    /// The semantics vary from time zone to time zone. The time zone display
+    /// name of this variant may or may not be called "Standard Time".
+    Standard = 0,
+    /// The variant corresponding to `"daylight"` in CLDR.
+    ///
+    /// The semantics vary from time zone to time zone. The time zone display
+    /// name of this variant may or may not be called "Daylight Time".
+    Daylight = 1,
+}

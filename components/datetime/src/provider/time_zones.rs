@@ -13,7 +13,7 @@ use zerovec::{
     ZeroMap, ZeroMap2d, ZeroSlice, ZeroVec,
 };
 
-use icu_timezone::{provider::IsoMinutesSinceEpoch, TimeZoneBcp47Id, ZoneVariant};
+use icu_timezone::{provider::IsoMinutesSinceEpoch, TimeZone, TimeZoneVariant};
 
 /// Time zone type aliases for cleaner code
 pub(crate) mod tz {
@@ -84,7 +84,7 @@ pub struct TimeZoneEssentialsV1<'data> {
 pub struct LocationsV1<'data> {
     /// Per-zone location display name
     #[cfg_attr(feature = "serde", serde(borrow))]
-    pub locations: ZeroMap<'data, TimeZoneBcp47Id, str>,
+    pub locations: ZeroMap<'data, TimeZone, str>,
     /// The format string for a region's generic time.
     #[cfg_attr(
         feature = "serde",
@@ -146,7 +146,7 @@ pub struct MetazoneGenericNamesV1<'data> {
     pub defaults: ZeroMap<'data, MetazoneId, str>,
     /// The override mapping between timezone id and localized metazone name.
     #[cfg_attr(feature = "serde", serde(borrow))]
-    pub overrides: ZeroMap<'data, TimeZoneBcp47Id, str>,
+    pub overrides: ZeroMap<'data, TimeZone, str>,
 }
 
 /// An ICU4X mapping to specific metazone names.
@@ -170,10 +170,10 @@ pub struct MetazoneGenericNamesV1<'data> {
 pub struct MetazoneSpecificNamesV1<'data> {
     /// The default mapping between metazone id and localized metazone name.
     #[cfg_attr(feature = "serde", serde(borrow))]
-    pub defaults: ZeroMap<'data, (MetazoneId, ZoneVariant), str>,
+    pub defaults: ZeroMap<'data, (MetazoneId, TimeZoneVariant), str>,
     /// The override mapping between timezone id and localized metazone name.
     #[cfg_attr(feature = "serde", serde(borrow))]
-    pub overrides: ZeroMap<'data, (TimeZoneBcp47Id, ZoneVariant), str>,
+    pub overrides: ZeroMap<'data, (TimeZone, TimeZoneVariant), str>,
 }
 
 /// Metazone ID in a compact format
@@ -233,5 +233,5 @@ pub struct MetazonePeriodV1<'data>(
     /// The default mapping between period and metazone id. The second level key is a wall-clock time represented as
     /// the number of minutes since the local [`EPOCH`](icu_timezone::provider::EPOCH). It represents when the metazone started to be used.
     #[cfg_attr(feature = "serde", serde(borrow))]
-    pub ZeroMap2d<'data, TimeZoneBcp47Id, IsoMinutesSinceEpoch, Option<MetazoneId>>,
+    pub ZeroMap2d<'data, TimeZone, IsoMinutesSinceEpoch, Option<MetazoneId>>,
 );

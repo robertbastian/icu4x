@@ -8,7 +8,7 @@ use icu_calendar::{
 };
 use icu_timezone::{
     types::{IsoHour, IsoMinute, IsoSecond, NanoSecond},
-    DateTime, Time, TimeZoneBcp47Id, TimeZoneInfo, TimeZoneModel, UtcOffset, ZoneVariant,
+    DateTime, Time, TimeZone, TimeZoneInfo, TimeZoneModel, UtcOffset, TimeZoneVariant,
     ZonedDateTime,
 };
 
@@ -240,22 +240,22 @@ where
     }
 }
 
-impl<C: Calendar, A: AsCalendar<Calendar = C>, Z> GetField<TimeZoneBcp47Id> for ZonedDateTime<A, Z>
+impl<C: Calendar, A: AsCalendar<Calendar = C>, Z> GetField<TimeZone> for ZonedDateTime<A, Z>
 where
-    Z: GetField<TimeZoneBcp47Id>,
+    Z: GetField<TimeZone>,
 {
     #[inline]
-    fn get_field(&self) -> TimeZoneBcp47Id {
+    fn get_field(&self) -> TimeZone {
         self.zone.get_field()
     }
 }
 
-impl<C: Calendar, A: AsCalendar<Calendar = C>, Z> GetField<ZoneVariant> for ZonedDateTime<A, Z>
+impl<C: Calendar, A: AsCalendar<Calendar = C>, Z> GetField<TimeZoneVariant> for ZonedDateTime<A, Z>
 where
-    Z: GetField<ZoneVariant>,
+    Z: GetField<TimeZoneVariant>,
 {
     #[inline]
-    fn get_field(&self) -> ZoneVariant {
+    fn get_field(&self) -> TimeZoneVariant {
         self.zone.get_field()
     }
 }
@@ -282,12 +282,12 @@ impl GetField<Option<UtcOffset>> for UtcOffset {
 
 impl<O: TimeZoneModel> UnstableSealed for TimeZoneInfo<O> {}
 
-impl<O> GetField<TimeZoneBcp47Id> for TimeZoneInfo<O>
+impl<O> GetField<TimeZone> for TimeZoneInfo<O>
 where
     O: TimeZoneModel,
 {
     #[inline]
-    fn get_field(&self) -> TimeZoneBcp47Id {
+    fn get_field(&self) -> TimeZone {
         self.time_zone_id()
     }
 }
@@ -302,12 +302,12 @@ where
     }
 }
 
-impl<O> GetField<ZoneVariant> for TimeZoneInfo<O>
+impl<O> GetField<TimeZoneVariant> for TimeZoneInfo<O>
 where
-    O: TimeZoneModel<ZoneVariant = ZoneVariant>,
+    O: TimeZoneModel<TimeZoneVariant = TimeZoneVariant>,
 {
     #[inline]
-    fn get_field(&self) -> ZoneVariant {
+    fn get_field(&self) -> TimeZoneVariant {
         self.zone_variant()
     }
 }

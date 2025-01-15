@@ -4,7 +4,7 @@
 
 use crate::SourceDataProvider;
 use icu::timezone::provider::names::*;
-use icu::timezone::TimeZoneBcp47Id;
+use icu::timezone::TimeZone;
 use icu_provider::prelude::*;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
@@ -18,8 +18,8 @@ impl DataProvider<IanaToBcp47MapV3Marker> for SourceDataProvider {
         let iana2bcp = &self.compute_bcp47_tzids_btreemap()?;
 
         // Sort and deduplicate the BCP-47 IDs:
-        let bcp_set: BTreeSet<TimeZoneBcp47Id> = iana2bcp.values().copied().collect();
-        let bcp47_ids: ZeroVec<TimeZoneBcp47Id> = bcp_set.into_iter().collect();
+        let bcp_set: BTreeSet<TimeZone> = iana2bcp.values().copied().collect();
+        let bcp47_ids: ZeroVec<TimeZone> = bcp_set.into_iter().collect();
         let bcp47_ids_checksum = compute_bcp47_ids_hash(&bcp47_ids);
 
         // Get the canonical IANA names.
@@ -80,7 +80,7 @@ impl DataProvider<Bcp47ToIanaMapV1Marker> for SourceDataProvider {
         // Note: The BTreeMap retains the order of the aliases, which is important for establishing
         // the canonical order of the IANA names.
         let bcp2iana = &self.compute_canonical_tzids_btreemap()?;
-        let bcp47_ids: ZeroVec<TimeZoneBcp47Id> = bcp2iana.keys().copied().collect();
+        let bcp47_ids: ZeroVec<TimeZone> = bcp2iana.keys().copied().collect();
         let bcp47_ids_checksum = compute_bcp47_ids_hash(&bcp47_ids);
 
         // Make the VarZeroVec of canonical IANA names.
@@ -109,7 +109,7 @@ fn create_hasher() -> impl std::hash::Hasher {
     twox_hash::XxHash64::with_seed(0)
 }
 
-fn compute_bcp47_ids_hash(bcp47_ids: &ZeroSlice<TimeZoneBcp47Id>) -> u64 {
+fn compute_bcp47_ids_hash(bcp47_ids: &ZeroSlice<TimeZone>) -> u64 {
     let mut hasher = create_hasher();
     hasher.write(bcp47_ids.as_bytes());
     hasher.finish()
@@ -117,10 +117,10 @@ fn compute_bcp47_ids_hash(bcp47_ids: &ZeroSlice<TimeZoneBcp47Id>) -> u64 {
 
 #[test]
 fn test_compute_bcp47_ids_hash() {
-    let bcp47_ids: ZeroVec<TimeZoneBcp47Id> = [
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "aedxb")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "brfor")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "usinvev")),
+    let bcp47_ids: ZeroVec<TimeZone> = [
+        TimeZone(tinystr::tinystr!(8, "aedxb")),
+        TimeZone(tinystr::tinystr!(8, "brfor")),
+        TimeZone(tinystr::tinystr!(8, "usinvev")),
     ]
     .into_iter()
     .collect();
@@ -140,10 +140,10 @@ fn test_compute_bcp47_ids_hash() {
 
     // Checksum 3: hashing of a ZeroVec in a different order
     // (should not equal 1)
-    let bcp47_ids_rev: ZeroVec<TimeZoneBcp47Id> = [
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "usinvev")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "aedxb")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "brfor")),
+    let bcp47_ids_rev: ZeroVec<TimeZone> = [
+        TimeZone(tinystr::tinystr!(8, "usinvev")),
+        TimeZone(tinystr::tinystr!(8, "aedxb")),
+        TimeZone(tinystr::tinystr!(8, "brfor")),
     ]
     .into_iter()
     .collect();
@@ -152,10 +152,10 @@ fn test_compute_bcp47_ids_hash() {
 
     // Checksum 4: moving letters between the elements should change the hash
     // (should not equal 1)
-    let bcp47_ids_roll: ZeroVec<TimeZoneBcp47Id> = [
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "aedx")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "bbrfor")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "usinvev")),
+    let bcp47_ids_roll: ZeroVec<TimeZone> = [
+        TimeZone(tinystr::tinystr!(8, "aedx")),
+        TimeZone(tinystr::tinystr!(8, "bbrfor")),
+        TimeZone(tinystr::tinystr!(8, "usinvev")),
     ]
     .into_iter()
     .collect();
@@ -164,11 +164,11 @@ fn test_compute_bcp47_ids_hash() {
 
     // Checksum 5: empty strings at the end should change the hash
     // (should not equal 1)
-    let bcp47_ids_empty_end: ZeroVec<TimeZoneBcp47Id> = [
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "aedxb")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "brfor")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "usinvev")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "")),
+    let bcp47_ids_empty_end: ZeroVec<TimeZone> = [
+        TimeZone(tinystr::tinystr!(8, "aedxb")),
+        TimeZone(tinystr::tinystr!(8, "brfor")),
+        TimeZone(tinystr::tinystr!(8, "usinvev")),
+        TimeZone(tinystr::tinystr!(8, "")),
     ]
     .into_iter()
     .collect();
@@ -177,11 +177,11 @@ fn test_compute_bcp47_ids_hash() {
 
     // Checksum 6: empty strings in the middle should change the hash
     // (should not equal 1 or 5)
-    let bcp47_ids_empty_middle: ZeroVec<TimeZoneBcp47Id> = [
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "aedxb")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "brfor")),
-        TimeZoneBcp47Id(tinystr::tinystr!(8, "usinvev")),
+    let bcp47_ids_empty_middle: ZeroVec<TimeZone> = [
+        TimeZone(tinystr::tinystr!(8, "aedxb")),
+        TimeZone(tinystr::tinystr!(8, "")),
+        TimeZone(tinystr::tinystr!(8, "brfor")),
+        TimeZone(tinystr::tinystr!(8, "usinvev")),
     ]
     .into_iter()
     .collect();
@@ -203,22 +203,22 @@ fn test_compute_bcp47_ids_hash() {
 
 /// Tests that all IANA time zone IDs normalize and canonicalize to their correct form.
 #[test]
-fn test_normalize_canonicalize_iana_coverage() {
+fn test_normalize_canonicalize_coverage() {
     let provider = crate::SourceDataProvider::new_testing();
 
     let iana2bcp = &provider.compute_bcp47_tzids_btreemap().unwrap();
 
-    let mapper = icu::timezone::TimeZoneIdMapper::try_new_unstable(&provider).unwrap();
+    let mapper = icu::timezone::IanaMapper::try_new_unstable(&provider).unwrap();
     let mapper = mapper.as_borrowed();
 
     for iana_id in iana2bcp.keys() {
-        let normalized = mapper.normalize_iana(iana_id).unwrap().0;
+        let normalized = mapper.normalize(iana_id).unwrap().0;
         assert_eq!(&normalized, iana_id);
     }
 
     let bcp2iana = &provider.compute_canonical_tzids_btreemap().unwrap();
     for (iana_id, bcp47_id) in iana2bcp.iter() {
-        let canonicalized = mapper.canonicalize_iana(iana_id).unwrap().0;
+        let canonicalized = mapper.canonicalize(iana_id).unwrap().0;
         assert_eq!(&canonicalized, bcp2iana.get(bcp47_id).unwrap());
     }
 }

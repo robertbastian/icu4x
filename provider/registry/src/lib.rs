@@ -197,7 +197,7 @@ macro_rules! registry(
             icu::segmenter::provider::WordBreakDataOverrideV1Marker = "segmenter/word/override@1",
             icu::segmenter::provider::WordBreakDataV2Marker = "segmenter/word@2",
             icu::timezone::provider::names::Bcp47ToIanaMapV1Marker = "time_zone/bcp47_to_iana@1",
-            icu::timezone::provider::names::IanaToBcp47MapV3Marker = "time_zone/iana_to_bcp47@3",
+            icu::timezone::provider::names::IanaToBcp47MapV3Marker = "time_zone/get@3",
             icu::timezone::provider::windows::WindowsZonesToBcp47MapV1Marker = "time_zone/windows_zones_to_bcp47@1",
             icu::datetime::provider::neo::WeekdayNamesV1Marker = "datetime/names/weekdays@1",
             icu::datetime::provider::neo::DayPeriodNamesV1Marker = "datetime/names/dayperiods@1",

@@ -19,7 +19,7 @@ use icu_provider::{marker::NeverMarker, prelude::*};
 use icu_timezone::scaffold::IntoOption;
 use icu_timezone::{
     types::{IsoHour, IsoMinute, IsoSecond, NanoSecond},
-    Time, TimeZoneBcp47Id, UtcOffset, ZoneVariant,
+    Time, TimeZone, UtcOffset, TimeZoneVariant,
 };
 
 // TODO: Add WeekCalculator and FixedDecimalFormatter optional bindings here
@@ -96,11 +96,11 @@ pub trait TimeMarkers: UnstableSealed {
 /// This is a sealed trait implemented on field set markers.
 pub trait ZoneMarkers: UnstableSealed {
     /// Marker for resolving the time zone id input field.
-    type TimeZoneIdInput: IntoOption<TimeZoneBcp47Id>;
+    type TimeZoneIdInput: IntoOption<TimeZone>;
     /// Marker for resolving the time zone offset input field.
     type TimeZoneOffsetInput: IntoOption<UtcOffset>;
     /// Marker for resolving the time zone variant input field.
-    type TimeZoneVariantInput: IntoOption<ZoneVariant>;
+    type TimeZoneVariantInput: IntoOption<TimeZoneVariant>;
     /// Marker for resolving the time zone non-location display names, which depend on the datetime.
     type TimeZoneLocalTimeInput: IntoOption<(Date<Iso>, Time)>;
     /// Marker for loading core time zone data.
@@ -583,13 +583,13 @@ macro_rules! datetime_marker_helper {
         NanoSecond
     };
     (@input/timezone/id, yes) => {
-        TimeZoneBcp47Id
+        TimeZone
     };
     (@input/timezone/offset, yes) => {
         Option<UtcOffset>
     };
     (@input/timezone/variant, yes) => {
-        ZoneVariant
+        TimeZoneVariant
     };
     (@input/timezone/local_time, yes) => {
         (Date<Iso>, Time)

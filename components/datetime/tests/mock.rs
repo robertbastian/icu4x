@@ -5,7 +5,7 @@
 //! Some useful parsing functions for tests.
 
 use icu_calendar::Gregorian;
-use icu_timezone::{models, TimeZoneInfo, ZoneVariant, ZonedDateTime, ZonedDateTimeParser};
+use icu_timezone::{models, TimeZoneInfo, TimeZoneVariant, ZonedDateTime, ZonedDateTimeParser};
 
 /// Parse a [`DateTime`] and [`TimeZoneInfo`] from a string.
 ///
@@ -37,7 +37,7 @@ pub fn parse_zoned_gregorian_from_str(
                         date: zdt.date,
                         time: zdt.time,
                         // For fixture tests, set the zone variant to standard here
-                        zone: zdt.zone.with_zone_variant(ZoneVariant::Standard),
+                        zone: zdt.zone.with_zone_variant(TimeZoneVariant::Standard),
                     }
                 }
                 Err(e) => panic!("could not parse input: {input}: {e:?}"),

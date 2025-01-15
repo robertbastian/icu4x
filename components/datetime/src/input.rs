@@ -11,7 +11,7 @@ use icu_calendar::{Date, Iso};
 use icu_timezone::scaffold::IntoOption;
 use icu_timezone::{
     types::{IsoHour, IsoMinute, IsoSecond, NanoSecond},
-    Time, TimeZoneBcp47Id, UtcOffset, ZoneVariant,
+    Time, TimeZone, UtcOffset, TimeZoneVariant,
 };
 
 // TODO(#2630) fix up imports to directly import from icu_calendar
@@ -28,9 +28,9 @@ pub(crate) struct ExtractedInput {
     pub(crate) minute: Option<IsoMinute>,
     pub(crate) second: Option<IsoSecond>,
     pub(crate) nanosecond: Option<NanoSecond>,
-    pub(crate) time_zone_id: Option<TimeZoneBcp47Id>,
+    pub(crate) time_zone_id: Option<TimeZone>,
     pub(crate) offset: Option<UtcOffset>,
-    pub(crate) zone_variant: Option<ZoneVariant>,
+    pub(crate) zone_variant: Option<TimeZoneVariant>,
     pub(crate) local_time: Option<(Date<Iso>, Time)>,
 }
 

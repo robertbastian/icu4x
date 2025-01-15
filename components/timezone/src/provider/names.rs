@@ -12,7 +12,7 @@
 //!
 //! Read more about data providers: [`icu_provider`]
 
-use crate::TimeZoneBcp47Id;
+use crate::TimeZone;
 use icu_provider::prelude::*;
 use zerotrie::ZeroAsciiIgnoreCaseTrie;
 use zerovec::{VarZeroVec, ZeroVec};
@@ -38,7 +38,7 @@ pub const NON_REGION_CITY_PREFIX: u8 = b'_';
 #[derive(Debug, Clone, PartialEq)]
 #[icu_provider::data_struct(marker(
     IanaToBcp47MapV3Marker,
-    "time_zone/iana_to_bcp47@3",
+    "time_zone/get@3",
     singleton
 ))]
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
@@ -59,9 +59,9 @@ pub struct IanaToBcp47MapV3<'data> {
     pub map: ZeroAsciiIgnoreCaseTrie<ZeroVec<'data, u8>>,
     /// A sorted list of BCP-47 time zone identifiers.
     #[cfg_attr(feature = "serde", serde(borrow))]
-    // Note: this is 9739B as `ZeroVec<TimeZoneBcp47Id>` (`ZeroVec<TinyStr8>`)
+    // Note: this is 9739B as `ZeroVec<TimeZone>` (`ZeroVec<TinyStr8>`)
     // and 9335B as `VarZeroVec<str>`
-    pub bcp47_ids: ZeroVec<'data, TimeZoneBcp47Id>,
+    pub bcp47_ids: ZeroVec<'data, TimeZone>,
     /// An XxHash64 checksum of [`Self::bcp47_ids`].
     pub bcp47_ids_checksum: u64,
 }

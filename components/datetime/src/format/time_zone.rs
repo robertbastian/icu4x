@@ -12,13 +12,13 @@ use fixed_decimal::SignedFixedDecimal;
 use icu_calendar::{Date, Iso};
 use icu_decimal::FixedDecimalFormatter;
 use icu_timezone::provider::EPOCH;
-use icu_timezone::{Time, TimeZoneBcp47Id, UtcOffset, ZoneVariant};
+use icu_timezone::{Time, TimeZone, UtcOffset, TimeZoneVariant};
 use writeable::Writeable;
 
 impl crate::provider::time_zones::MetazonePeriodV1<'_> {
     fn resolve(
         &self,
-        time_zone_id: TimeZoneBcp47Id,
+        time_zone_id: TimeZone,
         (date, time): (Date<Iso>, Time),
     ) -> Option<MetazoneId> {
         let cursor = self.0.get0(&time_zone_id)?;
@@ -369,8 +369,8 @@ impl FormatTimeZone for SpecificLocationFormat {
         };
 
         match zone_variant {
-            ZoneVariant::Standard => &locations.pattern_standard,
-            ZoneVariant::Daylight => &locations.pattern_daylight,
+            TimeZoneVariant::Standard => &locations.pattern_standard,
+            TimeZoneVariant::Daylight => &locations.pattern_daylight,
             // Compiles out due to tilde dependency on `icu_timezone`
             _ => unreachable!(),
         }
@@ -631,7 +631,7 @@ impl FormatTimeZone for Bcp47IdFormat {
     ) -> Result<Result<(), FormatTimeZoneError>, fmt::Error> {
         let time_zone_id = input
             .time_zone_id
-            .unwrap_or(TimeZoneBcp47Id(tinystr::tinystr!(8, "unk")));
+            .unwrap_or(TimeZone(tinystr::tinystr!(8, "unk")));
 
         sink.write_str(&time_zone_id)?;
 

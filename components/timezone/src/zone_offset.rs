@@ -3,27 +3,27 @@
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
 use crate::provider::{ZoneOffsetPeriodV1Marker, EPOCH};
-use crate::{Time, TimeZoneBcp47Id, UtcOffset};
+use crate::{Time, TimeZone, UtcOffset};
 use icu_calendar::Date;
 use icu_calendar::Iso;
 use icu_provider::prelude::*;
 
-/// [`ZoneOffsetCalculator`] uses data from the [data provider] to calculate time zone offsets.
+/// [`UtcOffsetCalculator`] determines time zone offsets.
 ///
 /// [data provider]: icu_provider
 #[derive(Debug)]
-pub struct ZoneOffsetCalculator {
+pub struct UtcOffsetCalculator {
     pub(super) offset_period: DataPayload<ZoneOffsetPeriodV1Marker>,
 }
 
 #[cfg(feature = "compiled_data")]
-impl Default for ZoneOffsetCalculator {
+impl Default for UtcOffsetCalculator {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl ZoneOffsetCalculator {
+impl UtcOffsetCalculator {
     /// Constructs a `ZoneOffsetCalculator` using compiled data.
     ///
     /// ✨ *Enabled with the `compiled_data` Cargo feature.*
@@ -32,7 +32,7 @@ impl ZoneOffsetCalculator {
     #[cfg(feature = "compiled_data")]
     #[inline]
     pub const fn new() -> Self {
-        ZoneOffsetCalculator {
+        UtcOffsetCalculator {
             offset_period: DataPayload::from_static_ref(
                 crate::provider::Baked::SINGLETON_ZONE_OFFSET_PERIOD_V1_MARKER,
             ),
@@ -66,7 +66,7 @@ impl ZoneOffsetCalculator {
     /// ```
     /// use icu::calendar::Date;
     /// use icu::timezone::Time;
-    /// use icu::timezone::TimeZoneBcp47Id;
+    /// use icu::timezone::TimeZone;
     /// use icu::timezone::UtcOffset;
     /// use icu::timezone::ZoneOffsetCalculator;
     /// use tinystr::tinystr;
@@ -76,7 +76,7 @@ impl ZoneOffsetCalculator {
     /// // America/Denver observes DST
     /// let offsets = zoc
     ///     .compute_offsets_from_time_zone(
-    ///         TimeZoneBcp47Id(tinystr!(8, "usden")),
+    ///         TimeZone(tinystr!(8, "usden")),
     ///         (Date::try_new_iso(2024, 1, 1).unwrap(), Time::midnight()),
     ///     )
     ///     .unwrap();
@@ -92,7 +92,7 @@ impl ZoneOffsetCalculator {
     /// // America/Phoenix does not
     /// let offsets = zoc
     ///     .compute_offsets_from_time_zone(
-    ///         TimeZoneBcp47Id(tinystr!(8, "usphx")),
+    ///         TimeZone(tinystr!(8, "usphx")),
     ///         (Date::try_new_iso(2024, 1, 1).unwrap(), Time::midnight()),
     ///     )
     ///     .unwrap();
@@ -104,9 +104,9 @@ impl ZoneOffsetCalculator {
     /// ```
     pub fn compute_offsets_from_time_zone(
         &self,
-        time_zone_id: TimeZoneBcp47Id,
+        time_zone_id: TimeZone,
         (date, time): (Date<Iso>, Time),
-    ) -> Option<ZoneOffsets> {
+    ) -> Option<UtcOffsets> {
         use zerovec::ule::AsULE;
         match self.offset_period.get().0.get0(&time_zone_id) {
             Some(cursor) => {
@@ -121,7 +121,7 @@ impl ZoneOffsetCalculator {
                     }
                 }
                 let offsets = offsets?;
-                Some(ZoneOffsets {
+                Some(UtcOffsets {
                     standard: UtcOffset::from_eighths_of_hour(offsets.0),
                     daylight: (offsets.1 != 0)
                         .then_some(UtcOffset::from_eighths_of_hour(offsets.0 + offsets.1)),
@@ -135,7 +135,7 @@ impl ZoneOffsetCalculator {
 /// Represents the different offsets in use for a time zone
 #[non_exhaustive]
 #[derive(Debug, Clone, Copy)]
-pub struct ZoneOffsets {
+pub struct UtcOffsets {
     /// The standard offset.
     pub standard: UtcOffset,
     /// The daylight-saving offset, if used.

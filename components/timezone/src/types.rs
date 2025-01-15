@@ -505,27 +505,3 @@ impl FromStr for UtcOffset {
         Self::try_from_str(s)
     }
 }
-
-/// A time zone variant, representing the currently observed relative offset.
-///
-/// The semantics vary from time zone to time zone and could represent concepts
-/// such as Standard time, Daylight time, Summer time, or Ramadan time.
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[zerovec::make_ule(ZoneVariantULE)]
-#[repr(u8)]
-#[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
-#[cfg_attr(feature = "datagen", databake(path = icu_timezone))]
-#[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-#[non_exhaustive]
-pub enum ZoneVariant {
-    /// The variant corresponding to `"standard"` in CLDR.
-    ///
-    /// The semantics vary from time zone to time zone. The time zone display
-    /// name of this variant may or may not be called "Standard Time".
-    Standard = 0,
-    /// The variant corresponding to `"daylight"` in CLDR.
-    ///
-    /// The semantics vary from time zone to time zone. The time zone display
-    /// name of this variant may or may not be called "Daylight Time".
-    Daylight = 1,
-}

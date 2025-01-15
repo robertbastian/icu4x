@@ -12,7 +12,7 @@ use icu_calendar::{
 use icu_provider::marker::NeverMarker;
 use icu_timezone::{
     types::{IsoHour, IsoMinute, IsoSecond, NanoSecond},
-    Time, TimeZoneBcp47Id, UtcOffset, ZoneVariant,
+    Time, TimeZone, UtcOffset, TimeZoneVariant,
 };
 
 impl UnstableSealed for DateFieldSet {}
