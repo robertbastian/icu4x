@@ -69,14 +69,18 @@ impl SourceDataProvider {
 
                 let mut bcp47_tzids = BTreeMap::new();
                 for (bcp47_tzid, bcp47_tzid_data) in bcp47_tzids_resource.iter() {
-                    if let Some(alias) = &bcp47_tzid_data.alias {
-                        if bcp47_tzid.as_str() == "unk" {
-                            // ignore the unknown time zone
-                            continue;
-                        }
+                    if bcp47_tzid.as_str() == "unk" {
+                        // ignore the unknown time zone
+                        continue;
+                    } else if let Some(alias) = &bcp47_tzid_data.alias.as_ref().filter(|s| !s.is_empty()) {
                         for data_value in alias.split(' ') {
                             bcp47_tzids.insert(data_value.to_string(), *bcp47_tzid);
                         }
+                    } else {
+                        debug_assert!(
+                            bcp47_tzid_data.deprecated == Some(true),
+                            "Could not find IANA for non-deprecated bcp47 time zone: {bcp47_tzid:?}"
+                        );
                     }
                 }
                 Ok(bcp47_tzids)
@@ -108,8 +112,6 @@ impl SourceDataProvider {
                 for (bcp47_tzid, bcp47_tzid_data) in bcp47_tzids_resource.iter() {
                     if bcp47_tzid.as_str() == "unk" {
                         // ignore the unknown time zone
-                    } else if Some(true) == bcp47_tzid_data.deprecated {
-                        // skip
                     } else if let Some(iana) = &bcp47_tzid_data.iana {
                         canonical_tzids.insert(*bcp47_tzid, iana.clone());
                     } else if let Some(iana) = &bcp47_tzid_data
@@ -120,8 +122,8 @@ impl SourceDataProvider {
                         canonical_tzids.insert(*bcp47_tzid, String::from(*iana));
                     } else {
                         debug_assert!(
-                            false,
-                            "Could not find canonical IANA for bcp47 time zone: {bcp47_tzid:?}"
+                            bcp47_tzid_data.deprecated == Some(true),
+                            "Could not find canonical IANA for non-deprecated bcp47 time zone: {bcp47_tzid:?}"
                         );
                     }
                 }
@@ -189,9 +191,6 @@ impl SourceDataProvider {
 
                 Ok(bcp47_tzids
                     .iter()
-                    // Montreal is meant to be deprecated, but pre-43 the deprecation
-                    // fallback was not set, which is why it might show up here.
-                    .filter(|(bcp47, _)| bcp47.0 != "camtr")
                     .filter_map(|(bcp47, canonical_iana)| {
                         Some((
                             *bcp47,
