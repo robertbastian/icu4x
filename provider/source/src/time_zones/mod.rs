@@ -6,6 +6,7 @@ use crate::cldr_serde;
 use crate::IterableDataProviderCached;
 use crate::SourceDataProvider;
 use icu::datetime::provider::time_zones::*;
+use icu::locale::subtags::region;
 use icu::timezone::provider::*;
 use icu_locale_core::subtags::Region;
 use icu_provider::prelude::*;
@@ -26,6 +27,7 @@ pub(crate) struct Caches {
     mz_period: OnceLock<Result<MetazonePeriodV1<'static>, DataError>>,
     offset_period: OnceLock<Result<ZoneOffsetPeriodV1<'static>, DataError>>,
     reverse_metazones: OnceLock<Result<BTreeMap<MetazoneId, Vec<TimeZoneBcp47Id>>, DataError>>,
+    id_to_region: OnceLock<Result<BTreeMap<TimeZoneBcp47Id, Region>, DataError>>,
 }
 
 impl SourceDataProvider {
@@ -182,30 +184,103 @@ impl SourceDataProvider {
                     .collect::<BTreeMap<_, _>>();
 
                 let bcp47_tzids = self.bcp47_to_canonical_iana_map()?;
+                let ids_to_region = self.id_to_region_map()?;
 
-                let zone_tab = self.tzdb()?.zone_tab()?;
                 let mut zones_per_region: BTreeMap<icu::locale::subtags::Region, usize> =
                     BTreeMap::new();
-
-                for &region in bcp47_tzids.values().flat_map(|iana| zone_tab.get(iana)) {
+                for &region in bcp47_tzids.keys().flat_map(|id| ids_to_region.get(id)) {
                     *zones_per_region.entry(region).or_default() += 1;
                 }
+
+                let single_zone_regions = ids_to_region
+                    .iter()
+                    .filter(|&(_, region)| zones_per_region[region] == 1)
+                    .collect::<BTreeMap<_, _>>();
 
                 Ok(bcp47_tzids
                     .iter()
                     .filter_map(|(bcp47, canonical_iana)| {
                         Some((
                             *bcp47,
-                            primary_zones.get(canonical_iana).copied().or_else(|| {
-                                let region = *zone_tab.get(canonical_iana)?;
-                                if zones_per_region.get(&region).copied().unwrap_or_default() > 1 {
-                                    return None;
-                                }
-                                Some(region)
-                            })?,
+                            primary_zones
+                                .get(canonical_iana)
+                                .copied()
+                                .or_else(|| single_zone_regions.get(bcp47).copied().copied())?,
                         ))
                     })
                     .collect())
+            })
+            .as_ref()
+            .map_err(|&e| e)
+    }
+
+    fn id_to_region_map(&self) -> Result<&BTreeMap<TimeZoneBcp47Id, Region>, DataError> {
+        self.cldr()?
+            .tz_caches
+            .id_to_region
+            .get_or_init(|| {
+                let bcp47_tzids_resource = &self
+                    .cldr()?
+                    .bcp47()
+                    .read_and_parse::<cldr_serde::time_zones::bcp47_tzid::Resource>(
+                        "timezone.json",
+                    )?
+                    .keyword
+                    .u
+                    .time_zones
+                    .values;
+
+                let mut result = BTreeMap::new();
+                for (&bcp47_tzid, bcp47_tzid_data) in bcp47_tzids_resource.iter() {
+                    if bcp47_tzid.as_str() == "unk" {
+                        // ignore the unknown time zone
+                        continue;
+                    }
+
+                    // TODO: remove backfill
+                    match bcp47_tzid.as_str() {
+                        // region= backfill
+                        "ancur" => {
+                            result.insert(bcp47_tzid, region!("CW"));
+                            continue;
+                        }
+                        "fimhq" => {
+                            result.insert(bcp47_tzid, region!("AX"));
+                            continue;
+                        }
+                        "gpmsb" => {
+                            result.insert(bcp47_tzid, region!("MF"));
+                            continue;
+                        }
+                        "gpsbh" => {
+                            result.insert(bcp47_tzid, region!("BL"));
+                            continue;
+                        }
+                        "gaza" | "gazastrp" | "hebron" => {
+                            result.insert(bcp47_tzid, region!("PS"));
+                            continue;
+                        }
+                        "jeruslm" => {
+                            result.insert(bcp47_tzid, region!("IL"));
+                            continue;
+                        }
+                        id if id.starts_with("utc") => continue,
+                        "gmt" | "cst6cdt" | "est5edt" | "mst7mdt" | "pst8pdt" => continue,
+                        _ => {}
+                    }
+
+                    if Some(true) == bcp47_tzid_data.noregion {
+                        // skip
+                    } else if let Some(region) = bcp47_tzid_data.region {
+                        result.insert(bcp47_tzid, region);
+                    } else {
+                        result.insert(
+                            bcp47_tzid,
+                            bcp47_tzid.0.resize::<2>().as_str().parse().unwrap(),
+                        );
+                    }
+                }
+                Ok(result)
             })
             .as_ref()
             .map_err(|&e| e)
