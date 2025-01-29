@@ -28111,7 +28111,7 @@ time_zone/generic_short@1, yrl, -> kgp
 time_zone/generic_short@1, zh-Hant, 176B, 84B, 1944b724241800b8
 time_zone/generic_short@1, zh-SG, -> ta-MY
 time_zone/locations@1, <lookup>, 1097B, 218 identifiers
-time_zone/locations@1, <total>, 915317B, 887492B, 204 unique payloads
+time_zone/locations@1, <total>, 915221B, 887396B, 204 unique payloads
 time_zone/locations@1, af, 3713B, 3577B, a071e30ab7ab165a
 time_zone/locations@1, ak, 5721B, 5585B, 7d9ea0d2c9013218
 time_zone/locations@1, am, 218B, 80B, 8ba0fd77e5364c34
@@ -28126,7 +28126,7 @@ time_zone/locations@1, be, 9984B, 9848B, 6decef0a444f19b7
 time_zone/locations@1, bg, 6946B, 6810B, b46c277823632747
 time_zone/locations@1, bgc, 7704B, 7568B, d8adcd7b6771db8e
 time_zone/locations@1, bho, 7708B, 7572B, d9e66a5bf273a913
-time_zone/locations@1, blo, 8753B, 8617B, 47d9c7ff28ceb291
+time_zone/locations@1, blo, 8736B, 8600B, 480c46f92bc292bf
 time_zone/locations@1, bn, 226B, 88B, f226d6cac1ae6f55
 time_zone/locations@1, br, 3184B, 3048B, 43c7e2088327a7b2
 time_zone/locations@1, brx, 14037B, 13901B, c85f967653c16414
@@ -28137,7 +28137,7 @@ time_zone/locations@1, ceb, 520B, 383B, 83a6b1d9f75608f5
 time_zone/locations@1, chr, 230B, 92B, 78eea54b8119b2
 time_zone/locations@1, cs, 4642B, 4506B, c23ca5cb904ecf88
 time_zone/locations@1, csw, 244B, 106B, f7670f3324d1d69f
-time_zone/locations@1, cv, 4705B, 4569B, 74dfc9d05f1f09d6
+time_zone/locations@1, cv, 4702B, 4566B, 2215b14ee7da2ade
 time_zone/locations@1, cy, 3005B, 2869B, 64d19260b04f9e95
 time_zone/locations@1, da, 2955B, 2819B, 444683afd27f5bbd
 time_zone/locations@1, de, 3521B, 3385B, f6d7e282030e1a96
@@ -28220,10 +28220,10 @@ time_zone/locations@1, kok-Latn, 3332B, 3196B, 2e2c2b73e5b66831
 time_zone/locations@1, ks, 11538B, 11402B, 3f7adf4b3eff37a5
 time_zone/locations@1, ks-Deva, 7749B, 7613B, 9a2fc987a72c05ad
 time_zone/locations@1, ku, 4965B, 4829B, e3213b01fa3f6857
-time_zone/locations@1, kxv, 8405B, 8269B, 956c1a80b051b6ac
-time_zone/locations@1, kxv-Deva, 5881B, 5745B, 755b48e7ffb7a87c
-time_zone/locations@1, kxv-Orya, 10990B, 10854B, 1f9a9efebda9b6a8
-time_zone/locations@1, kxv-Telu, 3941B, 3805B, ec4fe3ca2cee2103
+time_zone/locations@1, kxv, 8387B, 8251B, 163e378de516f31f
+time_zone/locations@1, kxv-Deva, 5875B, 5739B, 5de77c8f1056f616
+time_zone/locations@1, kxv-Orya, 10981B, 10845B, ca57b1f71033a119
+time_zone/locations@1, kxv-Telu, 3932B, 3796B, 66623464008cf75f
 time_zone/locations@1, ky, 5270B, 5134B, 8555bb3646ba9f6c
 time_zone/locations@1, lb, 3251B, 3115B, d12aa8a79f6ed1a4
 time_zone/locations@1, lij, 3332B, 3196B, 8b1ee8d1fd32b22a
@@ -28295,14 +28295,14 @@ time_zone/locations@1, syr, 216B, 78B, a8b49dcfa499e945
 time_zone/locations@1, szl, 3324B, 3188B, 44e9b5cb1f162395
 time_zone/locations@1, ta, 241B, 103B, c47870f5bfe03d00
 time_zone/locations@1, te, 257B, 119B, bb30f7492b216a45
-time_zone/locations@1, tg, 6689B, 6553B, 4dc80f8acf291598
+time_zone/locations@1, tg, 6686B, 6550B, 5eded71d68bac8dd
 time_zone/locations@1, th, 227B, 89B, 110852097909e7de
 time_zone/locations@1, ti, 7540B, 7404B, d1b15856384a923d
 time_zone/locations@1, tk, 7085B, 6949B, a953e43f9b830b02
 time_zone/locations@1, tn, 3277B, 3141B, 182e33cae90eade3
 time_zone/locations@1, to, 5316B, 5180B, 18c0ab5dad38475b
 time_zone/locations@1, tr, 4292B, 4156B, 6bcc3c7c283a209b
-time_zone/locations@1, tt, 4912B, 4776B, 6d375a229d54f48
+time_zone/locations@1, tt, 4909B, 4773B, 493eca105514f0f7
 time_zone/locations@1, ug, 10469B, 10333B, 36349423fff0ce49
 time_zone/locations@1, uk, 8449B, 8313B, 5b22d85e9feb50f4
 time_zone/locations@1, und, 3294B, 3158B, 672b93fa5149a23c
@@ -28310,12 +28310,12 @@ time_zone/locations@1, ur, 10864B, 10728B, fae2fe54bd1735a2
 time_zone/locations@1, ur-IN, 10801B, 10665B, 508da4a32ada1aa8
 time_zone/locations@1, uz, 6757B, 6621B, e151705292ad9faf
 time_zone/locations@1, uz-Cyrl, 7027B, 6891B, 483b99cb64ba9e96
-time_zone/locations@1, vec, 5291B, 5155B, 27336636243ab0a3
+time_zone/locations@1, vec, 5269B, 5133B, 2bade96d73938ff2
 time_zone/locations@1, vi, 2359B, 2223B, 966cdd0472976d45
 time_zone/locations@1, vmw, 3338B, 3202B, ab8c22dd827ad01e
 time_zone/locations@1, wo, 4335B, 4199B, 1064579777161d1d
 time_zone/locations@1, xh, 4899B, 4763B, 10d154e12aa89021
-time_zone/locations@1, xnr, 2496B, 2360B, 1644714f2dab3c55
+time_zone/locations@1, xnr, 2490B, 2354B, 5dd57ee6dab78b85
 time_zone/locations@1, yo, 6748B, 6612B, c83c75e74d15b14b
 time_zone/locations@1, yo-BJ, 6632B, 6496B, 42d6d7926bc6d199
 time_zone/locations@1, yrl, 8374B, 8238B, b56aa17e5aced0ba
@@ -28331,7 +28331,7 @@ time_zone/locations@1, zh-MO, -> zh-HK
 time_zone/locations@1, zh-SG, 213B, 75B, 7d6a3ad8fbe1615
 time_zone/locations@1, zu, 8939B, 8803B, 4ffe068623c9adb7
 time_zone/locations_root@1, <lookup>, 383B, 74 identifiers
-time_zone/locations_root@1, <total>, 434255B, 429767B, 33 unique payloads
+time_zone/locations_root@1, <total>, 434247B, 429759B, 33 unique payloads
 time_zone/locations_root@1, am, 11075B, 10939B, c4b7db670a14b5e3
 time_zone/locations_root@1, ar, 11010B, 10874B, 8ee446c2bbadcd3b
 time_zone/locations_root@1, as, 16430B, 16294B, 9d4142240d9b8f8
@@ -28376,7 +28376,7 @@ time_zone/locations_root@1, mni, -> as
 time_zone/locations_root@1, mr, -> bgc
 time_zone/locations_root@1, my, 17285B, 17149B, ece80a5b31872c34
 time_zone/locations_root@1, ne, -> bgc
-time_zone/locations_root@1, nqo, 12345B, 12209B, 3fd7096b951a4aed
+time_zone/locations_root@1, nqo, 12340B, 12204B, 991699e48cd34f6d
 time_zone/locations_root@1, or, -> kxv-Orya
 time_zone/locations_root@1, pa, 14295B, 14159B, 22a3c88e26f8e2d9
 time_zone/locations_root@1, ps, -> ar
@@ -28389,7 +28389,7 @@ time_zone/locations_root@1, sd, -> ar
 time_zone/locations_root@1, sd-Deva, -> bgc
 time_zone/locations_root@1, si, 16284B, 16148B, 1644128bc9c49af2
 time_zone/locations_root@1, sr, -> be
-time_zone/locations_root@1, syr, 10913B, 10777B, 90933db323d091ce
+time_zone/locations_root@1, syr, 10910B, 10774B, aded41a475d4913b
 time_zone/locations_root@1, ta, 16761B, 16625B, 3df96e2b66415d41
 time_zone/locations_root@1, te, -> kxv-Telu
 time_zone/locations_root@1, tg, -> be
