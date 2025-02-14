@@ -17,6 +17,8 @@ use core::fmt::Debug;
 use core::ops::Range;
 use icu_collections::codepointinvlist::CodePointInversionList;
 use icu_collections::codepointinvliststringlist::CodePointInversionListAndStringList;
+use icu_locale::fallback::LocaleFallbacker;
+use icu_locale::provider::*;
 use icu_locale_core::Locale;
 use icu_normalizer::provider::*;
 use icu_normalizer::{ComposingNormalizer, DecomposingNormalizer};
@@ -242,6 +244,7 @@ impl Transliterator {
         Self::try_new_unstable(
             &crate::provider::Baked,
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             locale,
         )
     }
@@ -255,14 +258,16 @@ impl Transliterator {
         Self::try_new_unstable(
             &provider.as_deserializing(),
             &provider.as_deserializing(),
+            &provider.as_deserializing(),
             locale,
         )
     }
 
     #[doc = icu_provider::gen_buffer_unstable_docs!(UNSTABLE, Self::try_new)]
-    pub fn try_new_unstable<PT, PN>(
+    pub fn try_new_unstable<PT, PN, PL>(
         transliterator_provider: &PT,
         normalizer_provider: &PN,
+        locale_provider: &PL,
         locale: &Locale,
     ) -> Result<Self, DataError>
     where
@@ -273,12 +278,14 @@ impl Transliterator {
             + DataProvider<CompatibilityDecompositionTablesV1>
             + DataProvider<CanonicalCompositionsV1>
             + ?Sized,
+        PL: DataProvider<ParentsV1Marker> + DataProvider<LikelySubtagsForLanguageV1Marker> + ?Sized,
     {
         Self::internal_try_new_with_override_unstable(
             locale,
             None::<&fn(&Locale) -> Option<Result<Box<dyn CustomTransliterator>, DataError>>>,
             transliterator_provider,
             normalizer_provider,
+            || LocaleFallbacker::try_new_unstable(locale_provider),
         )
     }
 
@@ -331,6 +338,7 @@ impl Transliterator {
         Self::try_new_with_override_unstable(
             &crate::provider::Baked,
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             locale,
             lookup,
         )
@@ -349,15 +357,17 @@ impl Transliterator {
         Self::try_new_with_override_unstable(
             &provider.as_deserializing(),
             &provider.as_deserializing(),
+            &provider.as_deserializing(),
             locale,
             lookup,
         )
     }
 
     #[doc = icu_provider::gen_buffer_unstable_docs!(UNSTABLE, Self::try_new_with_override)]
-    pub fn try_new_with_override_unstable<PT, PN, F>(
+    pub fn try_new_with_override_unstable<PT, PN, PL, F>(
         transliterator_provider: &PT,
         normalizer_provider: &PN,
+        locale_provider: &PL,
         locale: &Locale,
         lookup: F,
     ) -> Result<Transliterator, DataError>
@@ -369,6 +379,7 @@ impl Transliterator {
             + DataProvider<CompatibilityDecompositionTablesV1>
             + DataProvider<CanonicalCompositionsV1>
             + ?Sized,
+        PL: DataProvider<ParentsV1Marker> + DataProvider<LikelySubtagsForLanguageV1Marker> + ?Sized,
         F: Fn(&Locale) -> Option<Result<Box<dyn CustomTransliterator>, DataError>>,
     {
         Self::internal_try_new_with_override_unstable(
@@ -376,6 +387,7 @@ impl Transliterator {
             Some(&lookup),
             transliterator_provider,
             normalizer_provider,
+            || LocaleFallbacker::try_new_unstable(locale_provider),
         )
     }
 
@@ -384,6 +396,7 @@ impl Transliterator {
         lookup: Option<&F>,
         transliterator_provider: &PT,
         normalizer_provider: &PN,
+        fallbacker: impl Fn() -> Result<LocaleFallbacker, DataError>,
     ) -> Result<Transliterator, DataError>
     where
         PT: DataProvider<TransliteratorRulesV1> + ?Sized,
@@ -404,6 +417,7 @@ impl Transliterator {
             transliterator_provider,
             normalizer_provider,
             false,
+            fallbacker,
             &mut env,
         )?;
 
@@ -419,6 +433,7 @@ impl Transliterator {
         transliterator_provider: &PT,
         normalizer_provider: &PN,
         allow_internal: bool,
+        fallbacker: impl Fn() -> Result<LocaleFallbacker, DataError>,
         env: &mut LiteMap<String, InternalTransliterator>,
     ) -> Result<DataPayload<TransliteratorRulesV1>, DataError>
     where
@@ -433,9 +448,68 @@ impl Transliterator {
     {
         let req = DataRequest {
             id: DataIdentifierBorrowed::for_marker_attributes(marker_attributes),
-            ..Default::default()
+            metadata: {
+                let mut m = DataRequestMetadata::default();
+                m.silent = true;
+                m
+            },
         };
-        let transliterator = transliterator_provider.load(req)?.payload;
+        let transliterator = if let Some(t) = transliterator_provider.load(req).allow_identifier_not_found()?
+        {
+            t.payload
+        } else {
+            let fallbacker = fallbacker()?;
+            let fallbacker =
+                fallbacker.for_config(TransliteratorRulesV1Marker::INFO.fallback_config);
+
+            let mut transform_extensions = locale.extensions.transform.clone();
+            let mut source_iterator = fallbacker
+                .fallback_for(transform_extensions.lang.take().unwrap_or_default().into());
+            let mut target_iterator = fallbacker.fallback_for(locale.id.clone().into());
+
+            'target: loop {
+                if target_iterator.get().is_default() {
+                    Err(DataErrorKind::IdentifierNotFound
+                        .with_marker(TransliteratorRulesV1Marker::INFO))?;
+                }
+                'source: loop {
+                    if source_iterator.get().is_default() {
+                        break 'source;
+                    }
+                    let mut candidate = target_iterator.get().clone().into_locale();
+                    candidate.extensions.transform = transform_extensions.clone();
+                    candidate.extensions.transform.lang =
+                        Some(icu_locale_core::LanguageIdentifier {
+                            language: source_iterator.get().language,
+                            script: source_iterator.get().script,
+                            region: source_iterator.get().region,
+                            variants: source_iterator
+                                .get()
+                                .variant
+                                .map(icu_locale_core::subtags::Variants::from_variant)
+                                .unwrap_or_default(),
+                        });
+                    if let Ok(t) = Self::load_rbt(
+                        #[allow(clippy::unwrap_used)] // infallible
+                        DataMarkerAttributes::try_from_str(
+                            &candidate.to_string().to_ascii_lowercase(),
+                        )
+                        .unwrap(),
+                        lookup,
+                        transliterator_provider,
+                        normalizer_provider,
+                        false,
+                        true,
+                        &mut env,
+                    ) {
+                        break 'target t;
+                    }
+                    source_iterator.step();
+                }
+                target_iterator.step();
+            }
+        };
+
         if !allow_internal && !transliterator.get().visibility {
             return Err(DataError::custom("internal only transliterator"));
         }
@@ -458,6 +532,7 @@ impl Transliterator {
                             transliterator_provider,
                             normalizer_provider,
                             true,
+                            false,
                             env,
                         ).map(InternalTransliterator::RuleBased)
                     })?;
@@ -1382,6 +1457,7 @@ mod tests {
         let t = Transliterator::try_new_unstable(
             &collection.as_provider(),
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             &"und-x-test".parse().unwrap(),
         )
         .unwrap();
@@ -1412,6 +1488,7 @@ mod tests {
         let t = Transliterator::try_new_unstable(
             &collection.as_provider(),
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             &"und-x-root".parse().unwrap(),
         )
         .unwrap();
@@ -1434,6 +1511,7 @@ mod tests {
         let t = Transliterator::try_new_unstable(
             &collection.as_provider(),
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             &"und-x-test".parse().unwrap(),
         )
         .unwrap();
@@ -1456,6 +1534,7 @@ mod tests {
         let t = Transliterator::try_new_unstable(
             &collection.as_provider(),
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             &"und-x-test".parse().unwrap(),
         )
         .unwrap();
@@ -1468,6 +1547,18 @@ mod tests {
     #[test]
     fn test_de_ascii() {
         let t = Transliterator::try_new(&"de-t-de-d0-ascii".parse().unwrap()).unwrap();
+        let input =
+            "Über ältere Lügner lästern ist sehr a\u{0308}rgerlich. Ja, SEHR ÄRGERLICH! - ꜵ";
+        let output =
+            "Ueber aeltere Luegner laestern ist sehr aergerlich. Ja, SEHR AERGERLICH! - ao";
+        assert_eq!(t.transliterate(input.to_string()), output);
+    }
+
+    #[test]
+    fn test_de_ascii_fallback() {
+        // the actual, existing transliterator has source `und-Latn`. Check that the fallback chain from `fr-CH`
+        // eventually reaches `und-Latn` and gives us the expected transliterator.
+        let t = Transliterator::try_new(&"de-t-fr-ch-d0-ascii".parse().unwrap()).unwrap();
         let input =
             "Über ältere Lügner lästern ist sehr a\u{0308}rgerlich. Ja, SEHR ÄRGERLICH! - ꜵ";
         let output =
@@ -1521,6 +1612,7 @@ mod tests {
         let t = Transliterator::try_new_unstable(
             &collection.as_provider(),
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             &"und-x-test".parse().unwrap(),
         )
         .unwrap();
@@ -1542,6 +1634,7 @@ mod tests {
         let t = Transliterator::try_new_unstable(
             &collection.as_provider(),
             &icu_normalizer::provider::Baked,
+            &icu_locale::provider::Baked,
             &"und-x-test".parse().unwrap(),
         )
         .unwrap();
