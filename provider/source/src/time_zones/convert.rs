@@ -370,23 +370,28 @@ impl SourceDataProvider {
                                                     .any(|y| rule.applies_to_year(y))
                                             })
                                             .map(|rule| {
-                                                (
+                                                let to_year =
                                                     match rule.to_year.unwrap_or(rule.from_year) {
                                                         Year::Minimum => unreachable!(),
-                                                        Year::Maximum => local_end_time,
-                                                        Year::Number(y) => {
+                                                        Year::Maximum => None,
+                                                        Year::Number(y) => Some(y),
+                                                    };
+                                                (
+                                                    to_year
+                                                        .map(|y| {
                                                             (rule.absolute_datetime(
                                                                 y,
                                                                 zone_info.offset,
                                                                 rule.time_to_add,
                                                             ) / 60)
                                                                 as i32
-                                                        }
-                                                    },
+                                                        })
+                                                        .unwrap_or(local_end_time),
+                                                    to_year,
                                                     rule.time_to_add,
                                                 )
                                             })
-                                            .filter(|&(rule_local_end_time, _)| {
+                                            .filter(|&(rule_local_end_time, ..)| {
                                                 // Discard rules from before this zoneinfo (or before the epoch)
                                                 rule_local_end_time
                                                     > data
@@ -396,7 +401,7 @@ impl SourceDataProvider {
                                             })
                                             .collect::<Vec<_>>();
 
-                                        rules.sort_by_key(|&(local_end_time, _)| local_end_time);
+                                        rules.sort_by_key(|&(local_end_time, ..)| local_end_time);
 
                                         if rules.is_empty() {
                                             // No rule applies
@@ -407,7 +412,9 @@ impl SourceDataProvider {
                                                 0,
                                             );
                                         } else {
-                                            for &(local_end_time, dst_offset_relative) in &rules {
+                                            for &(local_end_time, _to_year, dst_offset_relative) in
+                                                &rules
+                                            {
                                                 store_offsets(
                                                     &mut data,
                                                     local_end_time,
@@ -425,6 +432,21 @@ impl SourceDataProvider {
                                                     0,
                                                 );
                                             }
+
+                                        //     if let Some(last_year) = rules.last().unwrap().1 {
+                                        //         if zone_info
+                                        //             .end_time
+                                        //             .is_none_or(|end| end.year() > last_year)
+                                        //         {
+                                        //             // rules end before zoneinfo ends, continue without offset
+                                        //             store_offsets(
+                                        //                 &mut data,
+                                        //                 local_end_time,
+                                        //                 zone_info.offset,
+                                        //                 0,
+                                        //             );
+                                        //         }
+                                        //     }
                                         }
                                     }
                                 }
@@ -433,6 +455,36 @@ impl SourceDataProvider {
                             // Sort descending
                             data.sort_by_key(|(end_time, _)| -*end_time);
                             // Dedup consecutive offsets, keeping higher end time
+                            data.dedup_by_key(|(_, offsets)| *offsets);
+
+                            // Drop DST gaps of less than 1 year
+                            let mut i = 0;
+                            while i < data.len() {
+                                let Some(&prev) = data.get(i.wrapping_sub(1)) else {
+                                    i += 1;
+                                    continue;
+                                };
+                                let this = data[i];
+                                let Some(&next) = data.get(i + 1) else {
+                                    i += 1;
+                                    continue;
+                                };
+
+                                if
+                                // Previous and next have the same offsets
+                                prev.1 == next.1
+                                // This has the same base offset but without DST
+                                && this.1.0 == prev.1.0 && this.1.1.is_zero()
+                                // This is less than a year long
+                                && next.0 - this.0 < 60 * 24 * 365
+                                {
+                                    data.remove(i);
+                                } else {
+                                    i += 1;
+                                }
+                            }
+
+                            // Dedup again
                             data.dedup_by_key(|(_, offsets)| *offsets);
 
                             // Use start times instead of end times
