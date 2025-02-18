@@ -5,7 +5,6 @@
 use crate::cldr_serde;
 use crate::IterableDataProviderCached;
 use crate::SourceDataProvider;
-use core::cmp::Ordering;
 use core::hash::Hash;
 use core::hash::Hasher;
 use icu::datetime::provider::time_zones::*;
@@ -29,9 +28,9 @@ pub(crate) struct Caches {
     bcp47_to_canonical_iana: Cache<BTreeMap<TimeZone, String>>,
     metazone_to_short: Cache<(BTreeMap<String, MetazoneId>, u64)>,
     primary_zones: Cache<BTreeMap<TimeZone, Region>>,
-    mz_period: Cache<MetazonePeriod<'static>>,
+    mz_period: Cache<BTreeMap<TimeZone, BTreeMap<MinutesSinceEpoch, (Option<MetazoneId>, (EighthsOfHourOffset, EighthsOfHourOffset))>>>,
     offset_period: Cache<ZoneOffsetPeriod<'static>>,
-    reverse_metazones: Cache<BTreeMap<(MetazoneId, MzMembership), Vec<TimeZone>>>,
+    reverse_metazones: Cache<BTreeMap<(MetazoneId, MzMembership), Vec<(EighthsOfHourOffset, TimeZone)>>>,
 }
 
 #[derive(PartialEq, Eq, Ord, PartialOrd, Clone, Copy, Debug)]
@@ -43,73 +42,32 @@ enum MzMembership {
 impl SourceDataProvider {
     fn reverse_metazones(
         &self,
-    ) -> Result<&BTreeMap<(MetazoneId, MzMembership), Vec<TimeZone>>, DataError> {
+    ) -> Result<&BTreeMap<(MetazoneId, MzMembership), Vec<(EighthsOfHourOffset, TimeZone)>>, DataError> {
         self.cldr()?
             .tz_caches
             .reverse_metazones
             .get_or_init(|| {
-                let mz_period = self.metazone_period()?;
-                let offset_periods = self.offset_period()?;
-
                 let mut reverse_metazones =
-                    BTreeMap::<(MetazoneId, MzMembership), Vec<TimeZone>>::new();
+                    BTreeMap::<(MetazoneId, MzMembership), Vec<(EighthsOfHourOffset, TimeZone)>>::new();
 
-                for c in mz_period.list.iter0() {
-                    let &tz = c.key0();
-
-                    use zerovec::ule::AsULE;
-                    let mut mzs = c
-                        .into_iter1_copied()
-                        .map(|(k, v)| (MinutesSinceEpoch::from_unaligned(*k), v))
-                        .peekable();
-                    let mut offsets = offset_periods
-                        .0
-                        .get0(&tz)
-                        .unwrap()
-                        .into_iter1_copied()
-                        .map(|(k, v)| (MinutesSinceEpoch::from_unaligned(*k), v))
-                        .peekable();
-
-                    let mut curr_offset = offsets.next().unwrap();
-                    let mut curr_mz = mzs.next().unwrap();
-                    loop {
-                        if let Some(mz) = curr_mz.1 .0 {
+                for (tz, periods) in self.metazone_period()? {
+                    for (_, (mz, offset)) in periods {
+                        if let &Some(mz) = mz {
                             reverse_metazones
-                                .entry((mz, MzMembership::Any))
-                                .or_default()
-                                .push(tz);
+                            .entry((mz, MzMembership::Any))
+                            .or_default()
+                            .push((offset.0, *tz));
                             // The daylight name is only required if a zone usign this metazone actually observes DST
-                            if curr_offset.1 .1 != 0 {
+                            if offset.1 != 0 {
                                 reverse_metazones
                                     .entry((mz, MzMembership::Daylight))
                                     .or_default()
-                                    .push(tz);
+                                    .push((offset.0, *tz));
                             }
-                        }
-
-                        match (offsets.peek().copied(), mzs.peek().copied()) {
-                            (None, None) => break,
-                            (Some(_), None) => {
-                                curr_offset = offsets.next().unwrap();
-                            }
-                            (None, Some(_)) => {
-                                curr_mz = mzs.next().unwrap();
-                            }
-                            (Some(o), Some(m)) => match o.0.cmp(&m.0) {
-                                Ordering::Less => {
-                                    curr_offset = offsets.next().unwrap();
-                                }
-                                Ordering::Greater => {
-                                    curr_mz = mzs.next().unwrap();
-                                }
-                                Ordering::Equal => {
-                                    curr_offset = offsets.next().unwrap();
-                                    curr_mz = mzs.next().unwrap();
-                                }
-                            },
                         }
                     }
                 }
+                dbg!(&reverse_metazones);
                 Ok(reverse_metazones)
             })
             .as_ref()
@@ -401,13 +359,11 @@ mod tests {
 
         let metazone_now = |bcp47| {
             metazone_period
-                .list
-                .get0(&bcp47)
+                .get(&bcp47)
                 .unwrap()
-                .iter1_copied()
+                .values()
                 .last()
                 .unwrap()
-                .1
                  .0
                 .unwrap()
         };

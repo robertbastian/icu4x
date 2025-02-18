@@ -8,6 +8,7 @@ use crate::SourceDataProvider;
 use cldr_serde::time_zones::meta_zones::MetaLocationOrSubRegion;
 use cldr_serde::time_zones::meta_zones::ZonePeriod;
 use cldr_serde::time_zones::time_zone_names::*;
+use zerovec::ule::NichedOption;
 use core::cmp::Ordering;
 use icu::calendar::Date;
 use icu::calendar::Iso;
@@ -24,7 +25,7 @@ use std::borrow::Cow;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use writeable::Writeable;
-use zerovec::ule::NichedOption;
+use zerovec::ule::AsULE;
 
 impl DataProvider<TimeZoneEssentialsV1> for SourceDataProvider {
     fn load(&self, req: DataRequest) -> Result<DataResponse<TimeZoneEssentialsV1>, DataError> {
@@ -187,7 +188,21 @@ impl SourceDataProvider {
         Ok((locations, exemplar_cities))
     }
 
-    pub(super) fn metazone_period(&self) -> Result<&MetazonePeriod<'static>, DataError> {
+    pub(super) fn metazone_period(
+        &self,
+    ) -> Result<
+        &BTreeMap<
+            TimeZone,
+            BTreeMap<
+                MinutesSinceEpoch,
+                (
+                    Option<MetazoneId>,
+                    (EighthsOfHourOffset, EighthsOfHourOffset),
+                ),
+            >,
+        >,
+        DataError,
+    > {
         let metazones = &self
             .cldr()?
             .core()
@@ -198,96 +213,133 @@ impl SourceDataProvider {
             .meta_zones;
         let bcp47_tzid_data = self.iana_to_bcp47_map()?;
         let (meta_zone_id_data, _checksum) = self.metazone_to_id_map()?;
+        let offset_periods = self.offset_period()?;
         self.cldr()?
             .tz_caches
             .mz_period
             .get_or_init(|| {
-                Ok(MetazonePeriod {
-                    list: metazones
-                        .meta_zone_info
-                        .time_zone
-                        .0
-                        .iter()
-                        .flat_map(|(key, zone)| match zone {
-                            ZonePeriod::Region(periods) => vec![(key.to_string(), periods)],
-                            ZonePeriod::LocationOrSubRegion(place) => place
-                                .iter()
-                                .flat_map(move |(key2, location_or_subregion)| {
-                                    match location_or_subregion {
-                                        MetaLocationOrSubRegion::Location(periods) => {
-                                            vec![(format!("{key}/{key2}"), periods)]
-                                        }
-                                        MetaLocationOrSubRegion::SubRegion(subregion) => subregion
-                                            .iter()
-                                            .flat_map(move |(key3, periods)| {
-                                                vec![(format!("{key}/{key2}/{key3}"), periods)]
-                                            })
-                                            .collect::<Vec<_>>(),
+                Ok(metazones
+                    .meta_zone_info
+                    .time_zone
+                    .0
+                    .iter()
+                    .flat_map(|(key, zone)| match zone {
+                        ZonePeriod::Region(periods) => vec![(key.to_string(), periods)],
+                        ZonePeriod::LocationOrSubRegion(place) => place
+                            .iter()
+                            .flat_map(move |(key2, location_or_subregion)| {
+                                match location_or_subregion {
+                                    MetaLocationOrSubRegion::Location(periods) => {
+                                        vec![(format!("{key}/{key2}"), periods)]
                                     }
-                                })
-                                .collect::<Vec<_>>(),
-                        })
-                        .flat_map(|(iana, periods)| {
-                            let &bcp47 = bcp47_tzid_data.get(&iana).unwrap();
-                            periods
-                                .iter()
-                                .flat_map(move |period| {
-                                    fn parse_mzone_date(from: &str) -> (Date<Iso>, Time) {
-                                        // TODO(#2127): Ideally this parsing can move into a library function
-                                        let mut parts = from.split(' ');
-                                        let date = parts.next().unwrap();
-                                        let time = parts.next().unwrap();
-                                        let mut date_parts = date.split('-');
-                                        let year =
-                                            date_parts.next().unwrap().parse::<i32>().unwrap();
-                                        let month =
-                                            date_parts.next().unwrap().parse::<u8>().unwrap();
-                                        let day = date_parts.next().unwrap().parse::<u8>().unwrap();
-                                        let mut time_parts = time.split(':');
-                                        let hour =
-                                            time_parts.next().unwrap().parse::<u8>().unwrap();
-                                        let minute =
-                                            time_parts.next().unwrap().parse::<u8>().unwrap();
+                                    MetaLocationOrSubRegion::SubRegion(subregion) => subregion
+                                        .iter()
+                                        .flat_map(move |(key3, periods)| {
+                                            vec![(format!("{key}/{key2}/{key3}"), periods)]
+                                        })
+                                        .collect::<Vec<_>>(),
+                                }
+                            })
+                            .collect::<Vec<_>>(),
+                    })
+                    .map(|(iana, periods)| {
+                        let &bcp47 = bcp47_tzid_data.get(&iana).unwrap();
+                        let mut mz_periods = periods
+                            .iter()
+                            .flat_map(move |period| {
+                                fn parse_mzone_date(from: &str) -> (Date<Iso>, Time) {
+                                    // TODO(#2127): Ideally this parsing can move into a library function
+                                    let mut parts = from.split(' ');
+                                    let date = parts.next().unwrap();
+                                    let time = parts.next().unwrap();
+                                    let mut date_parts = date.split('-');
+                                    let year = date_parts.next().unwrap().parse::<i32>().unwrap();
+                                    let month = date_parts.next().unwrap().parse::<u8>().unwrap();
+                                    let day = date_parts.next().unwrap().parse::<u8>().unwrap();
+                                    let mut time_parts = time.split(':');
+                                    let hour = time_parts.next().unwrap().parse::<u8>().unwrap();
+                                    let minute = time_parts.next().unwrap().parse::<u8>().unwrap();
 
-                                        (
-                                            Date::try_new_iso(year, month, day).unwrap(),
-                                            Time::try_new(hour, minute, 0, 0).unwrap(),
-                                        )
-                                    }
+                                    (
+                                        Date::try_new_iso(year, month, day).unwrap(),
+                                        Time::try_new(hour, minute, 0, 0).unwrap(),
+                                    )
+                                }
 
-                                    [
-                                        // join the metazone
-                                        Some((
-                                            bcp47,
-                                            MinutesSinceEpoch::from(parse_mzone_date(
-                                                period
-                                                    .uses_meta_zone
-                                                    .from
-                                                    .as_deref()
-                                                    .unwrap_or("1970-01-01 00:00"),
-                                            )),
-                                            NichedOption(
-                                                meta_zone_id_data
-                                                    .get(&period.uses_meta_zone.mzone)
-                                                    .copied(),
-                                            ),
+                                [
+                                    // join the metazone
+                                    Some((
+                                        MinutesSinceEpoch::from(parse_mzone_date(
+                                            period
+                                                .uses_meta_zone
+                                                .from
+                                                .as_deref()
+                                                .unwrap_or("1970-01-01 00:00"),
                                         )),
-                                        // leave the metazone if there's a `to` date
-                                        // because we collect this into a ZeroMap2d, if the next entry starts on the same
-                                        // day that we leave, this entry will be replaced.
-                                        period
-                                            .uses_meta_zone
-                                            .to
-                                            .as_deref()
-                                            .map(parse_mzone_date)
-                                            .map(MinutesSinceEpoch::from)
-                                            .map(|m| (bcp47, m, NichedOption(None))),
-                                    ]
-                                })
-                                .flatten()
-                        })
-                        .collect(),
-                })
+                                        meta_zone_id_data
+                                            .get(&period.uses_meta_zone.mzone)
+                                            .copied(),
+                                    )),
+                                    // leave the metazone if there's a `to` date
+                                    // because we collect this into a ZeroMap2d, if the next entry starts on the same
+                                    // day that we leave, this entry will be replaced.
+                                    period
+                                        .uses_meta_zone
+                                        .to
+                                        .as_deref()
+                                        .map(parse_mzone_date)
+                                        .map(MinutesSinceEpoch::from)
+                                        .map(|m| (m, None)),
+                                ]
+                            })
+                            .flatten()
+                            .peekable();
+
+                        let mut offset_periods = offset_periods
+                            .0
+                            .get0(&bcp47)
+                            .unwrap()
+                            .into_iter1_copied()
+                            .map(|(k, v)| (MinutesSinceEpoch::from_unaligned(*k), v))
+                            .peekable();
+
+                        let mut out = BTreeMap::new();
+
+                        let mut curr_offset = offset_periods.next().unwrap();
+                        let mut curr_mz = mz_periods.next().unwrap();
+
+                        loop {
+                            out.insert(
+                                core::cmp::max(curr_mz.0, curr_offset.0),
+                                (curr_mz.1, curr_offset.1),
+                            );
+
+                            match (offset_periods.peek().copied(), mz_periods.peek().copied()) {
+                                (None, None) => break,
+                                (Some(_), None) => {
+                                    curr_offset = offset_periods.next().unwrap();
+                                }
+                                (None, Some(_)) => {
+                                    curr_mz = mz_periods.next().unwrap();
+                                }
+                                (Some(o), Some(m)) => match o.0.cmp(&m.0) {
+                                    Ordering::Less => {
+                                        curr_offset = offset_periods.next().unwrap();
+                                    }
+                                    Ordering::Greater => {
+                                        curr_mz = mz_periods.next().unwrap();
+                                    }
+                                    Ordering::Equal => {
+                                        curr_offset = offset_periods.next().unwrap();
+                                        curr_mz = mz_periods.next().unwrap();
+                                    }
+                                },
+                            }
+                        }
+
+                        (bcp47, out)
+                    })
+                    .collect())
             })
             .as_ref()
             .map_err(|&e| e)
@@ -433,20 +485,20 @@ impl SourceDataProvider {
                                                 );
                                             }
 
-                                        //     if let Some(last_year) = rules.last().unwrap().1 {
-                                        //         if zone_info
-                                        //             .end_time
-                                        //             .is_none_or(|end| end.year() > last_year)
-                                        //         {
-                                        //             // rules end before zoneinfo ends, continue without offset
-                                        //             store_offsets(
-                                        //                 &mut data,
-                                        //                 local_end_time,
-                                        //                 zone_info.offset,
-                                        //                 0,
-                                        //             );
-                                        //         }
-                                        //     }
+                                            //     if let Some(last_year) = rules.last().unwrap().1 {
+                                            //         if zone_info
+                                            //             .end_time
+                                            //             .is_none_or(|end| end.year() > last_year)
+                                            //         {
+                                            //             // rules end before zoneinfo ends, continue without offset
+                                            //             store_offsets(
+                                            //                 &mut data,
+                                            //                 local_end_time,
+                                            //                 zone_info.offset,
+                                            //                 0,
+                                            //             );
+                                            //         }
+                                            //     }
                                         }
                                     }
                                 }
@@ -651,7 +703,18 @@ impl DataProvider<MetazonePeriodV1> for SourceDataProvider {
 
         Ok(DataResponse {
             metadata: DataResponseMetadata::default().with_checksum(checksum),
-            payload: DataPayload::from_owned(self.metazone_period()?.clone()),
+            payload: DataPayload::from_owned(MetazonePeriod {
+                list: self
+                    .metazone_period()?
+                    .iter()
+                    .flat_map(|(bcp47, periods)| {
+                        let mut periods = periods.iter().collect::<Vec<_>>();
+                        // Dedup consecutive offsets, keeping earlier start time
+                        periods.dedup_by_key(|(_, (mz, (standard_offset, _)))| (*mz, standard_offset));
+                        periods.into_iter().map(|(period, (mz, _))| (*bcp47, *period, NichedOption(*mz)))
+                    })
+                    .collect(),
+            }),
         })
     }
 }
@@ -697,7 +760,7 @@ impl DataProvider<MetazoneGenericNamesLongV1> for SourceDataProvider {
                 // The generic name will be used for all zones using this metazone
                 let tzs = reverse_metazones.get(&(mz, MzMembership::Any))?;
 
-                let same_as_location = tzs.iter().all(|tz| {
+                let same_as_location = tzs.iter().all(|(_, tz)| {
                     let Some(location) = locations.get(tz) else {
                         return false;
                     };
@@ -764,7 +827,7 @@ impl DataProvider<MetazoneGenericStandardNamesLongV1> for SourceDataProvider {
                 // The standard name will be used for all zones using this metazone
                 let tzs = reverse_metazones.get(&(mz, MzMembership::Any))?;
 
-                let same_as_location = tzs.iter().all(|tz| {
+                let same_as_location = tzs.iter().all(|(_, tz)| {
                     let Some(location) = locations.get(tz) else {
                         return false;
                     };
@@ -835,7 +898,7 @@ impl DataProvider<MetazoneSpecificNamesLongV1> for SourceDataProvider {
                         },
                     ))?;
 
-                    let same_as_specific_location = tzs.iter().all(|tz| {
+                    let same_as_specific_location = tzs.iter().all(|(_, tz)| {
                         let Some(location) = locations.get(tz) else {
                             return false;
                         };
