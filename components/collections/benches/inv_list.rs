@@ -2,6 +2,8 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
+#![allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing, missing_docs)] // https://github.com/rust-lang/rust-clippy/issues/13981
+
 use criterion::{criterion_group, criterion_main, Criterion};
 use icu_collections::codepointinvlist::CodePointInversionList;
 use std::char;

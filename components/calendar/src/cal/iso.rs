@@ -434,7 +434,7 @@ mod test {
         assert_eq!(Date::try_new_iso(1983, 2, 2).unwrap().day_of_year().0, 33,);
     }
 
-    fn simple_subtract(a: &Date<Iso>, b: &Date<Iso>) -> DateDuration<Iso> {
+    fn simple_subtract(a: Date<Iso>, b: Date<Iso>) -> DateDuration<Iso> {
         let a = a.inner();
         let b = b.inner();
         DateDuration::new(
@@ -451,14 +451,14 @@ mod test {
         let today_plus_5000 = Date::try_new_iso(2035, 3, 2).unwrap();
         let offset = today.added(DateDuration::new(0, 0, 0, 5000));
         assert_eq!(offset, today_plus_5000);
-        let offset = today.added(simple_subtract(&today_plus_5000, &today));
+        let offset = today.added(simple_subtract(today_plus_5000, today));
         assert_eq!(offset, today_plus_5000);
 
         let today = Date::try_new_iso(2021, 6, 23).unwrap();
         let today_minus_5000 = Date::try_new_iso(2007, 10, 15).unwrap();
         let offset = today.added(DateDuration::new(0, 0, 0, -5000));
         assert_eq!(offset, today_minus_5000);
-        let offset = today.added(simple_subtract(&today_minus_5000, &today));
+        let offset = today.added(simple_subtract(today_minus_5000, today));
         assert_eq!(offset, today_minus_5000);
     }
 

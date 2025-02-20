@@ -13,6 +13,9 @@
 // compared to real Unicode block selection.
 
 #![no_main] // https://github.com/unicode-org/icu4x/issues/395
+
+#![allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing, missing_docs)] // https://github.com/rust-lang/rust-clippy/issues/13981
+
 icu_benchmark_macros::instrument!();
 use icu_benchmark_macros::println;
 

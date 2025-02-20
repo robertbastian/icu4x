@@ -2,6 +2,8 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
+#![allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing, missing_docs)] // https://github.com/rust-lang/rust-clippy/issues/13981
+
 use icu_collections::char16trie::{Char16Trie, TrieResult};
 use zerovec::ZeroVec;
 
@@ -294,11 +296,11 @@ fn months() {
 }
 
 #[derive(serde::Deserialize)]
-pub struct TestFile {
+struct TestFile {
     ucharstrie: Char16TrieVec,
 }
 
 #[derive(serde::Deserialize)]
-pub struct Char16TrieVec {
+struct Char16TrieVec {
     data: Vec<u16>,
 }
