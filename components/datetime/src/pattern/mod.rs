@@ -85,7 +85,7 @@ pub enum PatternLoadError {
     /// This happens for example when trying to load a month field
     /// on a [`FixedCalendarDateTimeNames<Gregorian, ZoneFieldSet>`].
     #[displaydoc("The specific type does not support the field {0:?}.")]
-    TypeTooSpecific(ErrorField),
+    FormatterTooSpecific(ErrorField),
     /// An error arising from the [`data provider`](icu_provider) for loading names.
     #[displaydoc("Problem loading data for field {1:?}: {0}")]
     Data(icu_provider::DataError, ErrorField),

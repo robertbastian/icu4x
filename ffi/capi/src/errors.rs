@@ -96,7 +96,7 @@ pub mod ffi {
 
         UnsupportedLength = 0x8_03,
         DuplicateField = 0x8_09,
-        TypeTooSpecific = 0x8_0A,
+        FormatterTooSpecific = 0x8_0A,
 
         DataMarkerNotFound = 0x01,
         DataIdentifierNotFound = 0x02,
@@ -209,8 +209,8 @@ impl From<icu_datetime::DateTimeFormatterLoadError> for DateTimeFormatterLoadErr
                 icu_datetime::pattern::PatternLoadError::UnsupportedLength(_),
             ) => Self::UnsupportedLength,
             icu_datetime::DateTimeFormatterLoadError::Names(
-                icu_datetime::pattern::PatternLoadError::TypeTooSpecific(_),
-            ) => Self::TypeTooSpecific,
+                icu_datetime::pattern::PatternLoadError::FormatterTooSpecific(_),
+            ) => Self::FormatterTooSpecific,
             icu_datetime::DateTimeFormatterLoadError::Names(
                 icu_datetime::pattern::PatternLoadError::Data(data_error, _),
             ) => data_error.into(),
