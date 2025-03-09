@@ -1,0 +1,7 @@
+::Lower;
+
+::NFD; 
+::[:Nonspacing Mark:] Remove;
+::NFC;
+
+::Latin-ASCII;

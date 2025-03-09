@@ -1,0 +1,6 @@
+{
+  "_visibility": "external",
+  "_aliasBcp47": "de-x-autocomp",
+  "_direction": "forward",
+  "_rulesFile": "Autocomplete-German.txt"
+}
