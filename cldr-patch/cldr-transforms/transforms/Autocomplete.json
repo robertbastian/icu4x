@@ -1,0 +1,7 @@
+{
+  "_visibility": "external",
+  "_aliasBcp47": "und-x-autocomp",
+  "_alias": "Any-Autocomplete",
+  "_direction": "forward",
+  "_rulesFile": "Autocomplete.txt"
+  }
