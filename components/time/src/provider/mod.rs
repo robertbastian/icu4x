@@ -73,6 +73,8 @@ pub const MARKERS: &[DataMarkerInfo] = &[
 /// "Germany Time". On the other hand `Europe/Belfast` and `Europe/London` are the same
 /// CLDR identity ("UK Time").
 ///
+/// See the docs on [`zone`](crate::zone) for more information.
+///
 /// ```
 /// use icu::time::zone::{IanaParser, TimeZone};
 /// use icu::locale::subtags::subtag;
