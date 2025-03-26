@@ -18,7 +18,9 @@ use zerovec::ZeroMap2d;
 #[allow(clippy::exhaustive_structs)]
 pub struct InvalidOffsetError;
 
-/// An offset from Coordinated Universal Time (UTC)
+/// An offset from Coordinated Universal Time (UTC).
+/// 
+/// Supports ±18:00:00.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Default, PartialOrd, Ord)]
 pub struct UtcOffset(i32);
 
