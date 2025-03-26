@@ -52,7 +52,7 @@ pub mod ffi {
         #[diplomat::rust_link(icu::time::Time::midnight, FnInStruct)]
         #[diplomat::attr(all(supports = fallible_constructors, supports = named_constructors), named_constructor)]
         pub fn midnight() -> Result<Box<Time>, CalendarError> {
-            let time = icu_time::Time::midnight();
+            let time = icu_time::Time::start_of_day();
             Ok(Box::new(Time(time)))
         }
 
