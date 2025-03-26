@@ -1787,6 +1787,7 @@ dependencies = [
  "displaydoc",
  "icu",
  "icu_calendar",
+ "icu_locale_core",
  "icu_provider",
  "icu_provider_baked",
  "icu_time_data",

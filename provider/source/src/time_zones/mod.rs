@@ -347,8 +347,8 @@ impl IterableDataProviderCached<TimeZoneOffsetsV1> for SourceDataProvider {
 
 #[cfg(test)]
 mod tests {
+    use icu::locale::subtags::subtag;
     use icu::time::zone::TimeZoneVariant;
-    use tinystr::tinystr;
 
     use super::*;
 
@@ -381,7 +381,7 @@ mod tests {
                 .payload
                 .get()
                 .locations
-                .get(&TimeZone(tinystr!(8, "fmpni")))
+                .get(&TimeZone(subtag!("fmpni")))
                 .unwrap()
         );
         assert_eq!(
@@ -390,7 +390,7 @@ mod tests {
                 .payload
                 .get()
                 .locations
-                .get(&TimeZone(tinystr!(8, "iedub")))
+                .get(&TimeZone(subtag!("iedub")))
                 .unwrap()
         );
 
@@ -401,7 +401,7 @@ mod tests {
                 .payload
                 .get()
                 .locations
-                .get(&TimeZone(tinystr!(8, "itrom")))
+                .get(&TimeZone(subtag!("itrom")))
                 .unwrap()
         );
 
@@ -431,11 +431,11 @@ mod tests {
             generic_names_long
                 .get()
                 .defaults
-                .get(&metazone_now(TimeZone(tinystr!(8, "aueuc"))))
+                .get(&metazone_now(TimeZone(subtag!("aueuc"))))
                 .or_else(|| generic_standard_names_long
                     .get()
                     .defaults
-                    .get(&metazone_now(TimeZone(tinystr!(8, "aueuc")))))
+                    .get(&metazone_now(TimeZone(subtag!("aueuc")))))
                 .unwrap()
         );
         assert_eq!(
@@ -443,11 +443,11 @@ mod tests {
             generic_names_long
                 .get()
                 .overrides
-                .get(&TimeZone(tinystr!(8, "utc")))
+                .get(&TimeZone(subtag!("utc")))
                 .or_else(|| generic_standard_names_long
                     .get()
                     .overrides
-                    .get(&TimeZone(tinystr!(8, "utc"))))
+                    .get(&TimeZone(subtag!("utc"))))
                 .unwrap()
         );
 
@@ -459,13 +459,13 @@ mod tests {
                 .get()
                 .defaults
                 .get(&(
-                    metazone_now(TimeZone(tinystr!(8, "aueuc"))),
+                    metazone_now(TimeZone(subtag!("aueuc"))),
                     TimeZoneVariant::Standard
                 ))
                 .or_else(|| generic_standard_names_long
                     .get()
                     .defaults
-                    .get(&metazone_now(TimeZone(tinystr!(8, "aueuc")))))
+                    .get(&metazone_now(TimeZone(subtag!("aueuc")))))
                 .unwrap()
         );
         assert_eq!(
@@ -473,11 +473,11 @@ mod tests {
             specific_names_long
                 .get()
                 .overrides
-                .get(&(TimeZone(tinystr!(8, "utc")), TimeZoneVariant::Standard))
+                .get(&(TimeZone(subtag!("utc")), TimeZoneVariant::Standard))
                 .or_else(|| generic_standard_names_long
                     .get()
                     .overrides
-                    .get(&TimeZone(tinystr!(8, "utc"))))
+                    .get(&TimeZone(subtag!("utc"))))
                 .unwrap()
         );
 
@@ -489,7 +489,7 @@ mod tests {
                 .payload
                 .get()
                 .defaults
-                .get(&metazone_now(TimeZone(tinystr!(8, "uslax"))))
+                .get(&metazone_now(TimeZone(subtag!("uslax"))))
                 .unwrap()
         );
         assert_eq!(
@@ -498,7 +498,7 @@ mod tests {
                 .payload
                 .get()
                 .overrides
-                .get(&TimeZone(tinystr!(8, "utc")))
+                .get(&TimeZone(subtag!("utc")))
                 .unwrap()
         );
 
@@ -511,7 +511,7 @@ mod tests {
                 .get()
                 .defaults
                 .get(&(
-                    metazone_now(TimeZone(tinystr!(8, "uslax"))),
+                    metazone_now(TimeZone(subtag!("uslax"))),
                     TimeZoneVariant::Daylight
                 ))
                 .unwrap()
@@ -522,7 +522,7 @@ mod tests {
                 .payload
                 .get()
                 .overrides
-                .get(&(TimeZone(tinystr!(8, "utc")), TimeZoneVariant::Standard))
+                .get(&(TimeZone(subtag!("utc")), TimeZoneVariant::Standard))
                 .unwrap()
         );
     }

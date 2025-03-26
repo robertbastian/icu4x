@@ -19,8 +19,9 @@ use crate::Time;
 use calendrical_calculations::rata_die::RataDie;
 use core::ops::Deref;
 use icu_calendar::{Date, Iso};
+use icu_locale_core::subtags::subtag;
+use icu_locale_core::subtags::Subtag;
 use icu_provider::prelude::*;
-use tinystr::TinyAsciiStr;
 use zerovec::maps::ZeroMapKV;
 use zerovec::ule::{AsULE, ULE};
 use zerovec::{ZeroMap2d, ZeroSlice, ZeroVec};
@@ -74,21 +75,21 @@ pub const MARKERS: &[DataMarkerInfo] = &[
 ///
 /// ```
 /// use icu::time::zone::{IanaParser, TimeZone};
-/// use tinystr::tinystr;
+/// use icu::locale::subtags::subtag;
 ///
 /// let parser = IanaParser::new();
-/// assert_eq!(parser.parse("Europe/Oslo"), TimeZone(tinystr!(8, "noosl")));
+/// assert_eq!(parser.parse("Europe/Oslo"), TimeZone(subtag!("noosl")));
 /// assert_eq!(
 ///     parser.parse("Europe/Berlin"),
-///     TimeZone(tinystr!(8, "deber"))
+///     TimeZone(subtag!("deber"))
 /// );
 /// assert_eq!(
 ///     parser.parse("Europe/Belfast"),
-///     TimeZone(tinystr!(8, "gblon"))
+///     TimeZone(subtag!("gblon"))
 /// );
 /// assert_eq!(
 ///     parser.parse("Europe/London"),
-///     TimeZone(tinystr!(8, "gblon"))
+///     TimeZone(subtag!("gblon"))
 /// );
 /// ```
 #[repr(transparent)]
@@ -96,7 +97,7 @@ pub const MARKERS: &[DataMarkerInfo] = &[
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_time::provider))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-pub struct TimeZone(pub TinyAsciiStr<8>);
+pub struct TimeZone(pub Subtag);
 
 impl TimeZone {
     /// The synthetic `Etc/Unknown` time zone.
@@ -104,12 +105,12 @@ impl TimeZone {
     /// This is the result of parsing unknown zones. It's important that such parsing does not
     /// fail, as new zones are added all the time, and ICU4X might not be up to date.
     pub const fn unknown() -> Self {
-        Self(tinystr::tinystr!(8, "unk"))
+        Self(subtag!("unk"))
     }
 }
 
 impl Deref for TimeZone {
-    type Target = TinyAsciiStr<8>;
+    type Target = Subtag;
 
     fn deref(&self) -> &Self::Target {
         &self.0

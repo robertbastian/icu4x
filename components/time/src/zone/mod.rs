@@ -37,8 +37,8 @@
 //! ## Timestamp
 //!
 //! Some time zones change names over time, such as when changing "metazone". For example, Portugal changed from
-//! "Western European Time" to "Central European Time" and back in the 1990s, without changing time zone id
-//! (`Europe/Lisbon`/`ptlis`). Therefore, a timestamp is needed to resolve such generic time zone names.
+//! "Western European Time" to "Central European Time" and back in the 1990s, without changing time zone ID
+//! (`Europe/Lisbon`, `ptlis`). Therefore, a timestamp is needed to resolve such generic time zone names.
 //!
 //! It is not required to set the timestamp on [`TimeZoneInfo`]. If it is not set, some string
 //! formats may be unsupported.
@@ -63,13 +63,13 @@
 //! use icu::time::zone::TimeZoneVariant;
 //! use icu::time::Time;
 //! use icu::time::TimeZone;
-//! use tinystr::tinystr;
+//! use icu::locale::subtags::subtag;
 //!
 //! // Parse the IANA ID
 //! let id = IanaParser::new().parse("America/Chicago");
 //!
 //! // Alternatively, use the BCP47 ID directly
-//! let id = TimeZone(tinystr!(8, "uschi"));
+//! let id = TimeZone(subtag!("uschi"));
 //!
 //! // Create a TimeZoneInfo<Base> by associating the ID with an offset
 //! let time_zone = id.with_offset("-0600".parse().ok());
@@ -103,6 +103,7 @@ pub use windows::WindowsParser;
 use crate::{scaffold::IntoOption, Time};
 use core::fmt;
 use icu_calendar::{Date, Iso};
+use icu_locale_core::subtags::subtag;
 
 /// Time zone data model choices.
 pub mod models {
@@ -242,7 +243,7 @@ impl TimeZoneInfo<models::Base> {
 
     /// Creates a new [`TimeZoneInfo`] for the UTC time zone.
     pub const fn utc() -> Self {
-        TimeZone(tinystr::tinystr!(8, "utc")).with_offset(Some(UtcOffset::zero()))
+        TimeZone(subtag!("utc")).with_offset(Some(UtcOffset::zero()))
     }
 
     /// Sets a local time on this time zone.
