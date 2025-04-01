@@ -45,8 +45,6 @@ pub mod ffi {
         Hebrew = 11,
         /// The kind of a Hijri tabular, civil epoch calendar
         HijriTabularCivil = 12,
-        /// The kind of a Hijri simulated, Mecca calendar
-        HijriSimulatedMecca = 18,
         /// The kind of a Hijri tabular, astronomical epoch calendar
         HijriTabularAstronomical = 14,
         /// The kind of a Hijri Umm al-Qura calendar

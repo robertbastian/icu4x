@@ -12,8 +12,8 @@ use icu_calendar::any_calendar::AnyCalendarKind;
 use icu_calendar::cal::Roc;
 use icu_calendar::cal::{self, Chinese};
 use icu_calendar::cal::{
-    Buddhist, Coptic, Dangi, Ethiopian, Gregorian, Hebrew, HijriSimulated, HijriTabular,
-    HijriUmmAlQura, Indian, Japanese, JapaneseExtended, Persian,
+    Buddhist, Coptic, Dangi, Ethiopian, Gregorian, Hebrew, HijriTabular, HijriUmmAlQura, Indian,
+    Japanese, JapaneseExtended, Persian,
 };
 use icu_calendar::{any_calendar::IntoAnyCalendar, AnyCalendar, AsCalendar, Calendar, Date, Ref};
 use icu_provider::marker::NeverMarker;
@@ -117,13 +117,6 @@ impl CldrCalendar for HijriTabular {
     type SkeletaV1 = HijriDateNeoSkeletonPatternsV1;
 }
 
-impl private::Sealed for HijriSimulated {}
-impl CldrCalendar for HijriSimulated {
-    type YearNamesV1 = HijriYearNamesV1;
-    type MonthNamesV1 = HijriMonthNamesV1;
-    type SkeletaV1 = HijriDateNeoSkeletonPatternsV1;
-}
-
 impl private::Sealed for HijriUmmAlQura {}
 impl CldrCalendar for HijriUmmAlQura {
     type YearNamesV1 = HijriYearNamesV1;
@@ -169,7 +162,6 @@ impl UnstableSealed for Gregorian {}
 impl UnstableSealed for Hebrew {}
 impl UnstableSealed for Indian {}
 impl UnstableSealed for HijriTabular {}
-impl UnstableSealed for HijriSimulated {}
 impl UnstableSealed for HijriUmmAlQura {}
 impl UnstableSealed for Japanese {}
 impl UnstableSealed for JapaneseExtended {}
@@ -264,7 +256,6 @@ impl IntoFormattableAnyCalendar for Gregorian {}
 impl IntoFormattableAnyCalendar for Hebrew {}
 impl IntoFormattableAnyCalendar for Indian {}
 impl IntoFormattableAnyCalendar for HijriTabular {}
-impl IntoFormattableAnyCalendar for HijriSimulated {}
 impl IntoFormattableAnyCalendar for HijriUmmAlQura {}
 impl IntoFormattableAnyCalendar for Japanese {}
 // _NOT_ JapaneseExtended
@@ -284,7 +275,6 @@ pub(crate) enum FormattableAnyCalendarKind {
     Hebrew,
     Indian,
     HijriTabularCivil,
-    // _NOT_ HijriSimulatedMecca
     HijriTabularAstronomical,
     HijriUmmAlQura,
     Japanese,
@@ -307,7 +297,6 @@ impl FormattableAnyCalendarKind {
             Hebrew => Self::Hebrew,
             Indian => Self::Indian,
             HijriTabularCivil => Self::HijriTabularCivil,
-            HijriSimulatedMecca => return None,
             HijriTabularAstronomical => Self::HijriTabularAstronomical,
             HijriUmmAlQura => Self::HijriUmmAlQura,
             Iso => return None,

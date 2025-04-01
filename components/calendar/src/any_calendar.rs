@@ -4,12 +4,10 @@
 
 //! Module for working with multiple calendars at once
 
-use crate::cal::hijri::HijriSimulatedLocation;
 use crate::cal::iso::IsoDateInner;
 use crate::cal::{
     Buddhist, Chinese, Coptic, Dangi, Ethiopian, EthiopianEraStyle, Gregorian, Hebrew,
-    HijriSimulated, HijriTabular, HijriUmmAlQura, Indian, Iso, Japanese, JapaneseExtended, Persian,
-    Roc,
+    HijriTabular, HijriUmmAlQura, Indian, Iso, Japanese, JapaneseExtended, Persian, Roc,
 };
 use crate::error::DateError;
 use crate::{types, AsCalendar, Calendar, Date, DateDuration, DateDurationUnit, Ref};
@@ -93,8 +91,6 @@ pub enum AnyCalendar {
     Indian(Indian),
     /// A [`HijriTabular`], civil epoch calendar
     HijriTabularCivil(HijriTabular),
-    /// A [`HijriSimulated`] calendar
-    HijriSimulated(HijriSimulated),
     /// A [`HijriTabular`], astronomical epoch calendar
     HijriTabularAstronomical(HijriTabular),
     /// A [`HijriUmmAlQura`] calendar
@@ -134,8 +130,6 @@ pub enum AnyDateInner {
     Indian(<Indian as Calendar>::DateInner),
     /// A date for a [`HijriTabular`], civil epoch calendar
     HijriTabularCivil(<HijriTabular as Calendar>::DateInner),
-    /// A date for a [`HijriSimulated`] calendar
-    HijriSimulated(<HijriSimulated as Calendar>::DateInner),
     /// A date for a [`HijriTabular`], astronomical epoch calendar
     HijriTabularAstronomical(<HijriTabular as Calendar>::DateInner),
     /// A date for a [`HijriUmmAlQura`] calendar
@@ -166,10 +160,6 @@ macro_rules! match_cal_and_date {
             (
                 &Self::HijriTabularCivil(ref $cal_matched),
                 &AnyDateInner::HijriTabularCivil(ref $date_matched),
-            ) => $e,
-            (
-                &Self::HijriSimulated(ref $cal_matched),
-                &AnyDateInner::HijriSimulated(ref $date_matched),
             ) => $e,
             (
                 &Self::HijriTabularAstronomical(ref $cal_matched),
@@ -207,7 +197,6 @@ macro_rules! match_cal {
             &Self::Gregorian(ref $cal_matched) => AnyDateInner::Gregorian($e),
             &Self::Hebrew(ref $cal_matched) => AnyDateInner::Hebrew($e),
             &Self::Indian(ref $cal_matched) => AnyDateInner::Indian($e),
-            &Self::HijriSimulated(ref $cal_matched) => AnyDateInner::HijriSimulated($e),
             &Self::HijriTabularCivil(ref $cal_matched) => AnyDateInner::HijriTabularCivil($e),
             &Self::HijriTabularAstronomical(ref $cal_matched) => {
                 AnyDateInner::HijriTabularAstronomical($e)
@@ -289,9 +278,6 @@ impl Calendar for AnyCalendar {
                 c.offset_date(d, offset.cast_unit())
             }
             (Self::HijriTabularCivil(c), AnyDateInner::HijriTabularCivil(ref mut d)) => {
-                c.offset_date(d, offset.cast_unit())
-            }
-            (Self::HijriSimulated(c), AnyDateInner::HijriSimulated(ref mut d)) => {
                 c.offset_date(d, offset.cast_unit())
             }
             (
@@ -404,14 +390,6 @@ impl Calendar for AnyCalendar {
                 .until(d1, d2, c2, largest_unit, smallest_unit)
                 .cast_unit(),
             (
-                Self::HijriSimulated(c1),
-                Self::HijriSimulated(c2),
-                AnyDateInner::HijriSimulated(d1),
-                AnyDateInner::HijriSimulated(d2),
-            ) => c1
-                .until(d1, d2, c2, largest_unit, smallest_unit)
-                .cast_unit(),
-            (
                 Self::HijriTabularAstronomical(c1),
                 Self::HijriTabularAstronomical(c2),
                 AnyDateInner::HijriTabularAstronomical(d1),
@@ -506,7 +484,6 @@ impl Calendar for AnyCalendar {
             Self::Hebrew(_) => "AnyCalendar (Hebrew)",
             Self::Indian(_) => "AnyCalendar (Indian)",
             Self::HijriTabularCivil(_) => "AnyCalendar (Hijri, tabular, civil epoch)",
-            Self::HijriSimulated(_) => "AnyCalendar (Hijri, simulated)",
             Self::HijriTabularAstronomical(_) => "AnyCalendar (Hijri, tabular, astronomical epoch)",
             Self::HijriUmmAlQura(_) => "AnyCalendar (Hijri, Umm al-Qura)",
             Self::Iso(_) => "AnyCalendar (Iso)",
@@ -546,9 +523,6 @@ impl AnyCalendar {
             AnyCalendarKind::Indian => AnyCalendar::Indian(Indian),
             AnyCalendarKind::HijriTabularCivil => {
                 AnyCalendar::HijriTabularCivil(HijriTabular::new_civil_epoch())
-            }
-            AnyCalendarKind::HijriSimulatedMecca => {
-                AnyCalendar::HijriSimulated(HijriSimulated::new_mecca())
             }
             AnyCalendarKind::HijriTabularAstronomical => {
                 AnyCalendar::HijriTabularAstronomical(HijriTabular::new_astronomical_epoch())
@@ -594,9 +568,6 @@ impl AnyCalendar {
             AnyCalendarKind::HijriTabularCivil => {
                 AnyCalendar::HijriTabularCivil(HijriTabular::new_civil_epoch())
             }
-            AnyCalendarKind::HijriSimulatedMecca => AnyCalendar::HijriSimulated(
-                HijriSimulated::try_new_mecca_with_buffer_provider(provider)?,
-            ),
             AnyCalendarKind::HijriTabularAstronomical => {
                 AnyCalendar::HijriTabularAstronomical(HijriTabular::new_astronomical_epoch())
             }
@@ -622,7 +593,6 @@ impl AnyCalendar {
             + DataProvider<crate::provider::CalendarJapaneseExtendedV1>
             + DataProvider<crate::provider::CalendarChineseV1>
             + DataProvider<crate::provider::CalendarDangiV1>
-            + DataProvider<crate::provider::CalendarHijriSimulatedMeccaV1>
             + DataProvider<crate::provider::CalendarHijriUmmalquraV1>
             + ?Sized,
     {
@@ -642,9 +612,6 @@ impl AnyCalendar {
             AnyCalendarKind::Indian => AnyCalendar::Indian(Indian),
             AnyCalendarKind::HijriTabularCivil => {
                 AnyCalendar::HijriTabularCivil(HijriTabular::new_civil_epoch())
-            }
-            AnyCalendarKind::HijriSimulatedMecca => {
-                AnyCalendar::HijriSimulated(HijriSimulated::try_new_mecca_unstable(provider)?)
             }
             AnyCalendarKind::HijriTabularAstronomical => {
                 AnyCalendar::HijriTabularAstronomical(HijriTabular::new_astronomical_epoch())
@@ -676,7 +643,6 @@ impl AnyCalendar {
             Self::Hebrew(_) => AnyCalendarKind::Hebrew,
             Self::Indian(_) => AnyCalendarKind::Indian,
             Self::HijriTabularCivil(_) => AnyCalendarKind::HijriTabularCivil,
-            Self::HijriSimulated(ref h) => IntoAnyCalendar::kind(h),
             Self::HijriTabularAstronomical(_) => AnyCalendarKind::HijriTabularAstronomical,
             Self::HijriUmmAlQura(_) => AnyCalendarKind::HijriUmmAlQura,
             Self::Iso(_) => AnyCalendarKind::Iso,
@@ -714,7 +680,6 @@ impl AnyDateInner {
             AnyDateInner::Hebrew(_) => AnyCalendarKind::Hebrew,
             AnyDateInner::Indian(_) => AnyCalendarKind::Indian,
             AnyDateInner::HijriTabularCivil(_) => AnyCalendarKind::HijriTabularCivil,
-            AnyDateInner::HijriSimulated(_) => AnyCalendarKind::HijriSimulatedMecca,
             AnyDateInner::HijriTabularAstronomical(_) => AnyCalendarKind::HijriTabularAstronomical,
             AnyDateInner::HijriUmmAlQura(_) => AnyCalendarKind::HijriUmmAlQura,
             AnyDateInner::Iso(_) => AnyCalendarKind::Iso,
@@ -750,8 +715,6 @@ pub enum AnyCalendarKind {
     Indian,
     /// The kind of an [`HijriTabular`], civil epoch calendar
     HijriTabularCivil,
-    /// The kind of an [`HijriSimulated`], Mecca calendar
-    HijriSimulatedMecca,
     /// The kind of an [`HijriTabular`], astronomical epoch calendar
     HijriTabularAstronomical,
     /// The kind of an [`HijriUmmAlQura`] calendar
@@ -799,7 +762,6 @@ impl AnyCalendarKind {
             AnyCalendarKind::Hebrew => Hebrew.debug_name(),
             AnyCalendarKind::Indian => Indian.debug_name(),
             AnyCalendarKind::HijriTabularCivil => HijriTabular::new_civil_epoch().debug_name(),
-            AnyCalendarKind::HijriSimulatedMecca => HijriSimulated::DEBUG_NAME,
             AnyCalendarKind::HijriTabularAstronomical => {
                 HijriTabular::new_astronomical_epoch().debug_name()
             }
@@ -833,7 +795,7 @@ impl TryFrom<CalendarAlgorithm> for AnyCalendarKind {
                 Ok(AnyCalendarKind::HijriTabularAstronomical)
             }
             Hijri(Some(HijriCalendarAlgorithm::Civil)) => Ok(AnyCalendarKind::HijriTabularCivil),
-            Hijri(Some(HijriCalendarAlgorithm::Rgsa)) => Ok(AnyCalendarKind::HijriSimulatedMecca),
+            Hijri(Some(HijriCalendarAlgorithm::Rgsa)) => Ok(AnyCalendarKind::HijriUmmAlQura),
             Iso8601 => Ok(AnyCalendarKind::Iso),
             Japanese => Ok(AnyCalendarKind::Japanese),
             Persian => Ok(AnyCalendarKind::Persian),
@@ -1259,45 +1221,6 @@ impl From<HijriTabular> for AnyCalendar {
     }
 }
 
-impl IntoAnyCalendar for HijriSimulated {
-    #[inline]
-    fn to_any(self) -> AnyCalendar {
-        AnyCalendar::HijriSimulated(self)
-    }
-    #[inline]
-    fn kind(&self) -> AnyCalendarKind {
-        match self.location {
-            HijriSimulatedLocation::Mecca => AnyCalendarKind::HijriSimulatedMecca,
-        }
-    }
-    #[inline]
-    fn from_any(any: AnyCalendar) -> Result<Self, AnyCalendar> {
-        if let AnyCalendar::HijriSimulated(cal) = any {
-            Ok(cal)
-        } else {
-            Err(any)
-        }
-    }
-    #[inline]
-    fn from_any_ref(any: &AnyCalendar) -> Option<&Self> {
-        if let AnyCalendar::HijriSimulated(cal) = any {
-            Some(cal)
-        } else {
-            None
-        }
-    }
-    #[inline]
-    fn date_to_any(&self, d: &Self::DateInner) -> AnyDateInner {
-        AnyDateInner::HijriSimulated(*d)
-    }
-}
-
-impl From<HijriSimulated> for AnyCalendar {
-    fn from(value: HijriSimulated) -> AnyCalendar {
-        value.to_any()
-    }
-}
-
 impl IntoAnyCalendar for HijriUmmAlQura {
     #[inline]
     fn to_any(self) -> AnyCalendar {
@@ -1596,7 +1519,6 @@ mod tests {
         let hebrew = AnyCalendar::new(AnyCalendarKind::Hebrew);
         let indian = AnyCalendar::new(AnyCalendarKind::Indian);
         let hijri_civil: AnyCalendar = AnyCalendar::new(AnyCalendarKind::HijriTabularCivil);
-        let hijri_simulated: AnyCalendar = AnyCalendar::new(AnyCalendarKind::HijriSimulatedMecca);
         let hijri_astronomical: AnyCalendar =
             AnyCalendar::new(AnyCalendarKind::HijriTabularAstronomical);
         let hijri_umm_al_qura: AnyCalendar = AnyCalendar::new(AnyCalendarKind::HijriUmmAlQura);
@@ -1614,7 +1536,6 @@ mod tests {
         let hebrew = Ref(&hebrew);
         let indian = Ref(&indian);
         let hijri_civil = Ref(&hijri_civil);
-        let hijri_simulated = Ref(&hijri_simulated);
         let hijri_astronomical = Ref(&hijri_astronomical);
         let hijri_umm_al_qura = Ref(&hijri_umm_al_qura);
         let japanese = Ref(&japanese);
@@ -1913,18 +1834,6 @@ mod tests {
         single_test_roundtrip(roc, "roc", 10, "M05", 3);
         single_test_roundtrip(roc, "roc-inverse", 15, "M01", 10);
         single_test_roundtrip(roc, "roc", 100, "M10", 30);
-
-        single_test_roundtrip(hijri_simulated, "ah", 477, "M03", 1);
-        single_test_roundtrip(hijri_simulated, "ah", 2083, "M07", 21);
-        single_test_roundtrip(hijri_simulated, "ah", 1600, "M12", 20);
-        single_test_error(
-            hijri_simulated,
-            "ah",
-            100,
-            "M9",
-            1,
-            DateError::UnknownMonthCode(MonthCode(tinystr!(4, "M9"))),
-        );
 
         single_test_roundtrip(hijri_civil, "ah", 477, "M03", 1);
         single_test_roundtrip(hijri_civil, "ah", 2083, "M07", 21);

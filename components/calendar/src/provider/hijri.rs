@@ -17,14 +17,6 @@ use zerovec::ule::{AsULE, ULE};
 use zerovec::ZeroVec;
 
 icu_provider::data_marker!(
-    /// Precomputed data for the Hijri obsevational calendar
-    CalendarHijriSimulatedMeccaV1,
-    "calendar/hijri/simulated/mecca/v1",
-    HijriData<'static>,
-    is_singleton = true,
-);
-
-icu_provider::data_marker!(
     /// Precomputed data for the Hijri Umm-Al-Qura calendar
     CalendarHijriUmmalquraV1,
     "calendar/hijri/ummalqura/v1",
