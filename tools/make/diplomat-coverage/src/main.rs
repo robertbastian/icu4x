@@ -99,13 +99,13 @@ fn collect_public_types(krate: &str) -> impl Iterator<Item = (Vec<String>, ast::
         if CRATES.get(krate).is_none() {
             eprintln!("Parsing crate {krate}");
             std::process::Command::new("rustup")
-                .args(["install", "nightly-2024-07-23"])
+                .args(["install", "nightly-2024-09-01"])
                 .output()
                 .expect("failed to install nightly");
             let output = std::process::Command::new("rustup")
                 .args([
                     "run",
-                    "nightly-2024-07-23",
+                    "nightly-2024-09-01",
                     "cargo",
                     "rustdoc",
                     "-p",
