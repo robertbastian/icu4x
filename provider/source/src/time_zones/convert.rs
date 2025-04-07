@@ -737,6 +737,23 @@ impl DataProvider<MetazoneStandardNamesLongV1> for SourceDataProvider {
                 // The standard name will be used for all zones using this metazone
                 let tzs = reverse_metazones.get(&(mz, MzMembership::Any))?;
 
+                if let Some(&tz) = useless_metazones.get(&mz) {
+                    if req.id.locale == &icu::locale::locale!("en").into() {
+                        let zone_val = time_zone_names_resource
+                            .region_format
+                            .interpolate([locations.get(&tz).unwrap()])
+                            .to_string();
+                        println!(
+                            "{}TZ {:?} ({}) in MZ {:?} ({})",
+                            if zone_val != *v { "! " } else { "  " },
+                            tz.0,
+                            zone_val,
+                            mz,
+                            v
+                        );
+                    }
+                }
+
                 let same_as_location = tzs.iter().all(|tz| {
                     let Some(location) = locations.get(tz) else {
                         return false;
