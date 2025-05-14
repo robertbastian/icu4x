@@ -4,14 +4,13 @@ import { DecimalParseError } from "./DecimalParseError.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
-
-/**
- * See the [Rust documentation for `PluralOperands`](https://docs.rs/icu/latest/icu/plurals/struct.PluralOperands.html) for more information.
- */
 const PluralOperands_box_destroy_registry = new FinalizationRegistry((ptr) => {
     wasm.icu4x_PluralOperands_destroy_mv1(ptr);
 });
 
+/**
+ * See the [Rust documentation for `PluralOperands`](https://docs.rs/icu/latest/icu/plurals/struct.PluralOperands.html) for more information.
+ */
 export class PluralOperands {
     // Internal ptr reference:
     #ptr = null;
@@ -35,6 +34,7 @@ export class PluralOperands {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }

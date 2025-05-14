@@ -53,6 +53,7 @@ pub mod ffi {
     #[derive(Debug, PartialEq, Eq)]
     #[diplomat::rust_link(fixed_decimal::LimitError, Struct, compact)]
     #[cfg(feature = "decimal")]
+    #[diplomat::out]
     pub struct DecimalLimitError;
 
     #[derive(Debug, PartialEq, Eq)]
@@ -83,6 +84,7 @@ pub mod ffi {
     #[derive(Debug, PartialEq, Eq)]
     #[diplomat::rust_link(icu::time::zone::InvalidOffsetError, Struct, compact)]
     #[cfg(any(feature = "datetime", feature = "timezone"))]
+    #[diplomat::out]
     pub struct TimeZoneInvalidOffsetError;
 
     #[derive(Debug, PartialEq, Eq)]
@@ -111,6 +113,7 @@ pub mod ffi {
 
     #[cfg(feature = "datetime")]
     #[diplomat::rust_link(icu::datetime::MismatchedCalendarError, Struct)]
+    #[diplomat::out]
     pub struct DateTimeMismatchedCalendarError {
         pub this_kind: CalendarKind,
         pub date_kind: DiplomatOption<CalendarKind>,

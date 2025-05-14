@@ -7,16 +7,15 @@ import { Weekday } from "./Weekday.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
+const Date_box_destroy_registry = new FinalizationRegistry((ptr) => {
+    wasm.icu4x_Date_destroy_mv1(ptr);
+});
 
 /**
  * An ICU4X Date object capable of containing a date for any calendar.
  *
  * See the [Rust documentation for `Date`](https://docs.rs/icu/latest/icu/calendar/struct.Date.html) for more information.
  */
-const Date_box_destroy_registry = new FinalizationRegistry((ptr) => {
-    wasm.icu4x_Date_destroy_mv1(ptr);
-});
-
 export class Date {
     // Internal ptr reference:
     #ptr = null;
@@ -40,6 +39,7 @@ export class Date {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }

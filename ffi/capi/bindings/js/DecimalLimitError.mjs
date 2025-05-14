@@ -3,30 +3,25 @@ import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
 
+
 /**
  * Additional information: [1](https://docs.rs/fixed_decimal/latest/fixed_decimal/struct.LimitError.html)
  */
-
-
 export class DecimalLimitError {
-    /** Create `DecimalLimitError` from an object that contains all of `DecimalLimitError`s fields.
-    * Optional fields do not need to be included in the provided object.
-    */
-    static fromFields(structObj) {
-        return new DecimalLimitError(structObj);
-    }
-
-    #internalConstructor(structObj) {
+    #internalConstructor(structObj, internalConstructor) {
         if (typeof structObj !== "object") {
             throw new Error("DecimalLimitError's constructor takes an object of DecimalLimitError's fields.");
         }
 
+        if (internalConstructor !== diplomatRuntime.internalConstructor) {
+            throw new Error("DecimalLimitError is an out struct and can only be created internally.");
+        }
         return this;
     }
 
 
 
-    constructor(structObj) {
+    constructor(structObj, internalConstructor) {
         return this.#internalConstructor(...arguments)
     }
 }

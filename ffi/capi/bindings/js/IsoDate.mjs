@@ -8,16 +8,15 @@ import { Weekday } from "./Weekday.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
+const IsoDate_box_destroy_registry = new FinalizationRegistry((ptr) => {
+    wasm.icu4x_IsoDate_destroy_mv1(ptr);
+});
 
 /**
  * An ICU4X Date object capable of containing a ISO-8601 date
  *
  * See the [Rust documentation for `Date`](https://docs.rs/icu/latest/icu/calendar/struct.Date.html) for more information.
  */
-const IsoDate_box_destroy_registry = new FinalizationRegistry((ptr) => {
-    wasm.icu4x_IsoDate_destroy_mv1(ptr);
-});
-
 export class IsoDate {
     // Internal ptr reference:
     #ptr = null;
@@ -41,6 +40,7 @@ export class IsoDate {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }
@@ -342,6 +342,11 @@ export class IsoDate {
         }
     }
 
+    /**
+     * Creates a new [`IsoDate`] from the specified date.
+     *
+     * See the [Rust documentation for `try_new_iso`](https://docs.rs/icu/latest/icu/calendar/struct.Date.html#method.try_new_iso) for more information.
+     */
     constructor(year, month, day) {
         if (arguments[0] === diplomatRuntime.exposeConstructor) {
             return this.#internalConstructor(...Array.prototype.slice.call(arguments, 1));

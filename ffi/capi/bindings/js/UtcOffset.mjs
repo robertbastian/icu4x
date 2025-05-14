@@ -3,14 +3,13 @@ import { TimeZoneInvalidOffsetError } from "./TimeZoneInvalidOffsetError.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
-
-/**
- * See the [Rust documentation for `UtcOffset`](https://docs.rs/icu/latest/icu/time/zone/struct.UtcOffset.html) for more information.
- */
 const UtcOffset_box_destroy_registry = new FinalizationRegistry((ptr) => {
     wasm.icu4x_UtcOffset_destroy_mv1(ptr);
 });
 
+/**
+ * See the [Rust documentation for `UtcOffset`](https://docs.rs/icu/latest/icu/time/zone/struct.UtcOffset.html) for more information.
+ */
 export class UtcOffset {
     // Internal ptr reference:
     #ptr = null;
@@ -34,6 +33,7 @@ export class UtcOffset {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }
@@ -54,7 +54,7 @@ export class UtcOffset {
 
         try {
             if (!diplomatReceive.resultFlag) {
-                const cause = TimeZoneInvalidOffsetError.fromFields({}, diplomatRuntime.internalConstructor);
+                const cause = new TimeZoneInvalidOffsetError({}, diplomatRuntime.internalConstructor);
                 throw new globalThis.Error('TimeZoneInvalidOffsetError', { cause });
             }
             return new UtcOffset(diplomatRuntime.internalConstructor, diplomatRuntime.ptrRead(wasm, diplomatReceive.buffer), []);
@@ -83,7 +83,7 @@ export class UtcOffset {
 
         try {
             if (!diplomatReceive.resultFlag) {
-                const cause = TimeZoneInvalidOffsetError.fromFields({}, diplomatRuntime.internalConstructor);
+                const cause = new TimeZoneInvalidOffsetError({}, diplomatRuntime.internalConstructor);
                 throw new globalThis.Error('TimeZoneInvalidOffsetError', { cause });
             }
             return new UtcOffset(diplomatRuntime.internalConstructor, diplomatRuntime.ptrRead(wasm, diplomatReceive.buffer), []);

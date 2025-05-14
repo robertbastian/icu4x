@@ -188,7 +188,7 @@ jobs:
         cd ffi/npm
         make lib/index.mjs
         npm install typedoc@0.26.5 --exact
-        node_modules/typedoc/bin/typedoc lib/index.d.ts --out docs --readme ../../tutorials/using-from-js.md --basePath lib
+        node_modules/typedoc/bin/typedoc lib/index.d.ts --out docs --readme ../../tutorials/using-from-js.md --basePath lib --excludeInternal
         cd ../..
 
     - uses: actions/upload-artifact@v4

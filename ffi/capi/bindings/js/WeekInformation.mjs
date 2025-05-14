@@ -7,16 +7,15 @@ import { WeekdaySetIterator } from "./WeekdaySetIterator.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
+const WeekInformation_box_destroy_registry = new FinalizationRegistry((ptr) => {
+    wasm.icu4x_WeekInformation_destroy_mv1(ptr);
+});
 
 /**
  * A Week calculator, useful to be passed in to `week_of_year()` on Date and DateTime types
  *
  * See the [Rust documentation for `WeekInformation`](https://docs.rs/icu/latest/icu/calendar/week/struct.WeekInformation.html) for more information.
  */
-const WeekInformation_box_destroy_registry = new FinalizationRegistry((ptr) => {
-    wasm.icu4x_WeekInformation_destroy_mv1(ptr);
-});
-
 export class WeekInformation {
     // Internal ptr reference:
     #ptr = null;
@@ -40,6 +39,7 @@ export class WeekInformation {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }
@@ -142,6 +142,11 @@ export class WeekInformation {
         }
     }
 
+    /**
+     * Creates a new [`WeekInformation`] from locale data using compiled data.
+     *
+     * See the [Rust documentation for `try_new`](https://docs.rs/icu/latest/icu/calendar/week/struct.WeekInformation.html#method.try_new) for more information.
+     */
     constructor(locale) {
         if (arguments[0] === diplomatRuntime.exposeConstructor) {
             return this.#internalConstructor(...Array.prototype.slice.call(arguments, 1));

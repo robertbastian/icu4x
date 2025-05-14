@@ -9,14 +9,13 @@ import { YearStyle } from "./YearStyle.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
-
-/**
- * See the [Rust documentation for `FixedCalendarDateTimeFormatter`](https://docs.rs/icu/latest/icu/datetime/struct.FixedCalendarDateTimeFormatter.html) for more information.
- */
 const DateFormatterGregorian_box_destroy_registry = new FinalizationRegistry((ptr) => {
     wasm.icu4x_DateFormatterGregorian_destroy_mv1(ptr);
 });
 
+/**
+ * See the [Rust documentation for `FixedCalendarDateTimeFormatter`](https://docs.rs/icu/latest/icu/datetime/struct.FixedCalendarDateTimeFormatter.html) for more information.
+ */
 export class DateFormatterGregorian {
     // Internal ptr reference:
     #ptr = null;
@@ -40,6 +39,7 @@ export class DateFormatterGregorian {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }

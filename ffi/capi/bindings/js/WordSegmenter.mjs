@@ -6,16 +6,15 @@ import { WordBreakIteratorUtf16 } from "./WordBreakIteratorUtf16.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
+const WordSegmenter_box_destroy_registry = new FinalizationRegistry((ptr) => {
+    wasm.icu4x_WordSegmenter_destroy_mv1(ptr);
+});
 
 /**
  * An ICU4X word-break segmenter, capable of finding word breakpoints in strings.
  *
  * See the [Rust documentation for `WordSegmenter`](https://docs.rs/icu/latest/icu/segmenter/struct.WordSegmenter.html) for more information.
  */
-const WordSegmenter_box_destroy_registry = new FinalizationRegistry((ptr) => {
-    wasm.icu4x_WordSegmenter_destroy_mv1(ptr);
-});
-
 export class WordSegmenter {
     // Internal ptr reference:
     #ptr = null;
@@ -39,6 +38,7 @@ export class WordSegmenter {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }

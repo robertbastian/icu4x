@@ -2,21 +2,12 @@
 import type { pointer, codepoint } from "./diplomat-runtime.d.ts";
 
 
+
 /**
  * Additional information: [1](https://docs.rs/fixed_decimal/latest/fixed_decimal/struct.LimitError.html)
  */
-type DecimalLimitError_obj = {
-};
-
-
-
 export class DecimalLimitError {
-    /** Create `DecimalLimitError` from an object that contains all of `DecimalLimitError`s fields.
-    * Optional fields do not need to be included in the provided object.
-    */
-    static fromFields(structObj : DecimalLimitError_obj) : DecimalLimitError;
+    /** @internal */
+    constructor();
 
-
-
-    constructor(structObj: DecimalLimitError_obj);
 }

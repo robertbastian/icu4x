@@ -10,12 +10,6 @@ export { IsoWeekOfYear } from "./IsoWeekOfYear"
 
 export { DisplayNamesOptions } from "./DisplayNamesOptions"
 
-export { DateTimeMismatchedCalendarError } from "./DateTimeMismatchedCalendarError"
-
-export { DecimalLimitError } from "./DecimalLimitError"
-
-export { TimeZoneInvalidOffsetError } from "./TimeZoneInvalidOffsetError"
-
 export { LocaleFallbackConfig } from "./LocaleFallbackConfig"
 
 export { BidiMirroringGlyph } from "./BidiMirroringGlyph"
@@ -29,6 +23,12 @@ export { CollatorResolvedOptions } from "./CollatorResolvedOptions"
 export { DateTime } from "./DateTime"
 
 export { IsoDateTime } from "./IsoDateTime"
+
+export { DateTimeMismatchedCalendarError } from "./DateTimeMismatchedCalendarError"
+
+export { DecimalLimitError } from "./DecimalLimitError"
+
+export { TimeZoneInvalidOffsetError } from "./TimeZoneInvalidOffsetError"
 
 export { TimeZoneAndCanonical } from "./TimeZoneAndCanonical"
 

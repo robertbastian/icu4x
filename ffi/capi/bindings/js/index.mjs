@@ -8,12 +8,6 @@ export { IsoWeekOfYear } from "./IsoWeekOfYear.mjs"
 
 export { DisplayNamesOptions } from "./DisplayNamesOptions.mjs"
 
-export { DateTimeMismatchedCalendarError } from "./DateTimeMismatchedCalendarError.mjs"
-
-export { DecimalLimitError } from "./DecimalLimitError.mjs"
-
-export { TimeZoneInvalidOffsetError } from "./TimeZoneInvalidOffsetError.mjs"
-
 export { LocaleFallbackConfig } from "./LocaleFallbackConfig.mjs"
 
 export { BidiMirroringGlyph } from "./BidiMirroringGlyph.mjs"
@@ -27,6 +21,12 @@ export { CollatorResolvedOptions } from "./CollatorResolvedOptions.mjs"
 export { DateTime } from "./DateTime.mjs"
 
 export { IsoDateTime } from "./IsoDateTime.mjs"
+
+export { DateTimeMismatchedCalendarError } from "./DateTimeMismatchedCalendarError.mjs"
+
+export { DecimalLimitError } from "./DecimalLimitError.mjs"
+
+export { TimeZoneInvalidOffsetError } from "./TimeZoneInvalidOffsetError.mjs"
 
 export { TimeZoneAndCanonical } from "./TimeZoneAndCanonical.mjs"
 

@@ -6,6 +6,9 @@ import { GeneralCategoryGroup } from "./GeneralCategoryGroup.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
+const CodePointSetData_box_destroy_registry = new FinalizationRegistry((ptr) => {
+    wasm.icu4x_CodePointSetData_destroy_mv1(ptr);
+});
 
 /**
  * An ICU4X Unicode Set Property object, capable of querying whether a code point is contained in a set based on a Unicode property.
@@ -16,10 +19,6 @@ import * as diplomatRuntime from "./diplomat-runtime.mjs";
  *
  * See the [Rust documentation for `CodePointSetDataBorrowed`](https://docs.rs/icu/latest/icu/properties/struct.CodePointSetDataBorrowed.html) for more information.
  */
-const CodePointSetData_box_destroy_registry = new FinalizationRegistry((ptr) => {
-    wasm.icu4x_CodePointSetData_destroy_mv1(ptr);
-});
-
 export class CodePointSetData {
     // Internal ptr reference:
     #ptr = null;
@@ -43,6 +42,7 @@ export class CodePointSetData {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }

@@ -4,38 +4,27 @@ import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
 
+
 /**
  * See the [Rust documentation for `MismatchedCalendarError`](https://docs.rs/icu/latest/icu/datetime/struct.MismatchedCalendarError.html) for more information.
  */
-
-
 export class DateTimeMismatchedCalendarError {
     #thisKind;
     get thisKind() {
         return this.#thisKind;
     }
-    set thisKind(value){
-        this.#thisKind = value;
-    }
     #dateKind;
     get dateKind() {
         return this.#dateKind;
     }
-    set dateKind(value){
-        this.#dateKind = value;
-    }
-    /** Create `DateTimeMismatchedCalendarError` from an object that contains all of `DateTimeMismatchedCalendarError`s fields.
-    * Optional fields do not need to be included in the provided object.
-    */
-    static fromFields(structObj) {
-        return new DateTimeMismatchedCalendarError(structObj);
-    }
-
-    #internalConstructor(structObj) {
+    #internalConstructor(structObj, internalConstructor) {
         if (typeof structObj !== "object") {
             throw new Error("DateTimeMismatchedCalendarError's constructor takes an object of DateTimeMismatchedCalendarError's fields.");
         }
 
+        if (internalConstructor !== diplomatRuntime.internalConstructor) {
+            throw new Error("DateTimeMismatchedCalendarError is an out struct and can only be created internally.");
+        }
         if ("thisKind" in structObj) {
             this.#thisKind = structObj.thisKind;
         } else {
@@ -97,11 +86,11 @@ export class DateTimeMismatchedCalendarError {
         const dateKindDeref = ptr + 4;
         structObj.dateKind = diplomatRuntime.readOption(wasm, dateKindDeref, 4, (wasm, offset) => { const deref = diplomatRuntime.enumDiscriminant(wasm, offset); return new CalendarKind(diplomatRuntime.internalConstructor, deref) });
 
-        return new DateTimeMismatchedCalendarError(structObj);
+        return new DateTimeMismatchedCalendarError(structObj, internalConstructor);
     }
 
 
-    constructor(structObj) {
+    constructor(structObj, internalConstructor) {
         return this.#internalConstructor(...arguments)
     }
 }

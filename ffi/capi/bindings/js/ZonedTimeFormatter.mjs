@@ -11,14 +11,13 @@ import { TimeZoneInfo } from "./TimeZoneInfo.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
-
-/**
- * See the [Rust documentation for `NoCalendarFormatter`](https://docs.rs/icu/latest/icu/datetime/type.NoCalendarFormatter.html) for more information.
- */
 const ZonedTimeFormatter_box_destroy_registry = new FinalizationRegistry((ptr) => {
     wasm.icu4x_ZonedTimeFormatter_destroy_mv1(ptr);
 });
 
+/**
+ * See the [Rust documentation for `NoCalendarFormatter`](https://docs.rs/icu/latest/icu/datetime/type.NoCalendarFormatter.html) for more information.
+ */
 export class ZonedTimeFormatter {
     // Internal ptr reference:
     #ptr = null;
@@ -42,6 +41,7 @@ export class ZonedTimeFormatter {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }

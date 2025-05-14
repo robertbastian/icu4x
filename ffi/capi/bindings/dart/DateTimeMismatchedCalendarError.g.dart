@@ -11,10 +11,8 @@ final class _DateTimeMismatchedCalendarErrorFfi extends ffi.Struct {
 
 /// See the [Rust documentation for `MismatchedCalendarError`](https://docs.rs/icu/latest/icu/datetime/struct.MismatchedCalendarError.html) for more information.
 final class DateTimeMismatchedCalendarError {
-  CalendarKind thisKind;
-  CalendarKind? dateKind;
-
-  DateTimeMismatchedCalendarError({required this.thisKind, this.dateKind});
+  final CalendarKind thisKind;
+  final CalendarKind? dateKind;
 
   // This struct contains borrowed fields, so this takes in a list of
   // "edges" corresponding to where each lifetime's data may have been borrowed from

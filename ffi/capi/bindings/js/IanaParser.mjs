@@ -6,6 +6,9 @@ import { TimeZoneIterator } from "./TimeZoneIterator.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
+const IanaParser_box_destroy_registry = new FinalizationRegistry((ptr) => {
+    wasm.icu4x_IanaParser_destroy_mv1(ptr);
+});
 
 /**
  * A mapper between IANA time zone identifiers and BCP-47 time zone identifiers.
@@ -15,10 +18,6 @@ import * as diplomatRuntime from "./diplomat-runtime.mjs";
  *
  * See the [Rust documentation for `IanaParser`](https://docs.rs/icu/latest/icu/time/zone/iana/struct.IanaParser.html) for more information.
  */
-const IanaParser_box_destroy_registry = new FinalizationRegistry((ptr) => {
-    wasm.icu4x_IanaParser_destroy_mv1(ptr);
-});
-
 export class IanaParser {
     // Internal ptr reference:
     #ptr = null;
@@ -42,6 +41,7 @@ export class IanaParser {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }
@@ -126,6 +126,11 @@ export class IanaParser {
         }
     }
 
+    /**
+     * Create a new [`IanaParser`] using compiled data
+     *
+     * See the [Rust documentation for `new`](https://docs.rs/icu/latest/icu/time/zone/iana/struct.IanaParser.html#method.new) for more information.
+     */
     constructor() {
         if (arguments[0] === diplomatRuntime.exposeConstructor) {
             return this.#internalConstructor(...Array.prototype.slice.call(arguments, 1));

@@ -13,14 +13,13 @@ import { YearStyle } from "./YearStyle.mjs"
 import wasm from "./diplomat-wasm.mjs";
 import * as diplomatRuntime from "./diplomat-runtime.mjs";
 
-
-/**
- * See the [Rust documentation for `DateTimeFormatter`](https://docs.rs/icu/latest/icu/datetime/struct.DateTimeFormatter.html) for more information.
- */
 const DateTimeFormatter_box_destroy_registry = new FinalizationRegistry((ptr) => {
     wasm.icu4x_DateTimeFormatter_destroy_mv1(ptr);
 });
 
+/**
+ * See the [Rust documentation for `DateTimeFormatter`](https://docs.rs/icu/latest/icu/datetime/struct.DateTimeFormatter.html) for more information.
+ */
 export class DateTimeFormatter {
     // Internal ptr reference:
     #ptr = null;
@@ -44,6 +43,7 @@ export class DateTimeFormatter {
 
         return this;
     }
+    /** @internal */
     get ffiValue() {
         return this.#ptr;
     }
