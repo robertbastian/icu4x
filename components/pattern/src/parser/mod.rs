@@ -39,8 +39,6 @@ macro_rules! handle_literal {
 }
 
 /// Options passed to the constructor of [`Parser`].
-///
-/// ✨ *Enabled with the `alloc` Cargo feature.*
 #[derive(Debug, Default)]
 #[non_exhaustive]
 pub struct ParserOptions {
@@ -82,8 +80,6 @@ impl From<QuoteMode> for ParserOptions {
 /// characters in the input pattern string.
 ///
 /// At the moment the parser is written as a custom fallible iterator.
-///
-/// ✨ *Enabled with the `alloc` Cargo feature.*
 ///
 /// # Examples
 ///
