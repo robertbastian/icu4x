@@ -765,56 +765,56 @@
     ],
     [
       [
-        145,
+        146,
         "Standard"
       ],
       "hora estándar de Turkmenistán"
     ],
     [
       [
-        147,
+        148,
         "Standard"
       ],
       "hora estándar de Uruguay"
     ],
     [
       [
-        148,
+        150,
         "Standard"
       ],
       "hora estándar de Uzbekistán"
     ],
     [
       [
-        149,
+        151,
         "Standard"
       ],
       "hora estándar de Vanuatu"
     ],
     [
       [
-        151,
+        153,
         "Standard"
       ],
       "hora estándar de Vladivostok"
     ],
     [
       [
-        152,
+        154,
         "Standard"
       ],
       "hora estándar de Volgogrado"
     ],
     [
       [
-        156,
+        158,
         "Standard"
       ],
       "hora estándar de Yakutsk"
     ],
     [
       [
-        157,
+        159,
         "Standard"
       ],
       "hora estándar de Ekaterimburgo"
@@ -905,11 +905,11 @@
     141,
     142,
     144,
-    146,
-    150,
-    153,
-    154,
+    147,
+    152,
     155,
-    158
+    156,
+    157,
+    160
   ]
 }

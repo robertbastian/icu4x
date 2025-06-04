@@ -25,7 +25,7 @@
     "122": "Phoenix Islands Time",
     "134": "Singapore Standard Time",
     "136": "South Georgia Time",
-    "158": "Yukon Time"
+    "160": "Yukon Time"
   },
   "overrides": {
     "utc": "Coordinated Universal Time"

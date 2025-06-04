@@ -415,21 +415,21 @@
     ],
     [
       [
-        148,
+        150,
         "Standard"
       ],
       "Özbekistan Standart Saati"
     ],
     [
       [
-        151,
+        153,
         "Standard"
       ],
       "Vladivostok Standart Saati"
     ],
     [
       [
-        156,
+        158,
         "Standard"
       ],
       "Yakutsk Standart Saati"
@@ -520,11 +520,11 @@
     141,
     142,
     144,
-    146,
-    150,
-    153,
-    154,
+    147,
+    152,
     155,
-    158
+    156,
+    157,
+    160
   ]
 }

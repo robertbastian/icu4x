@@ -71,14 +71,14 @@
     "132": "heure des Samoa",
     "140": "heure de Taipei",
     "143": "heure des Tonga",
-    "145": "heure du Turkménistan",
-    "147": "heure de l’Uruguay",
-    "148": "heure de l’Ouzbékistan",
-    "149": "heure du Vanuatu",
-    "151": "heure de Vladivostok",
-    "152": "heure de Volgograd",
-    "156": "heure de Iakoutsk",
-    "157": "heure d’Ekaterinbourg"
+    "146": "heure du Turkménistan",
+    "148": "heure de l’Uruguay",
+    "150": "heure de l’Ouzbékistan",
+    "151": "heure du Vanuatu",
+    "153": "heure de Vladivostok",
+    "154": "heure de Volgograd",
+    "158": "heure de Iakoutsk",
+    "159": "heure d’Ekaterinbourg"
   },
   "overrides": {}
 }

@@ -61,12 +61,12 @@
     "141": "heure du Tadjikistan",
     "142": "heure de Tokelau",
     "144": "heure de Chuuk",
-    "146": "heure des Tuvalu",
-    "150": "heure du Venezuela",
-    "153": "heure de Vostok",
-    "154": "heure de l’île Wake",
-    "155": "heure de Wallis-et-Futuna",
-    "158": "heure normale du Yukon"
+    "147": "heure des Tuvalu",
+    "152": "heure du Venezuela",
+    "155": "heure de Vostok",
+    "156": "heure de l’île Wake",
+    "157": "heure de Wallis-et-Futuna",
+    "160": "heure normale du Yukon"
   },
   "overrides": {
     "utc": "temps universel coordonné"

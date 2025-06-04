@@ -227,33 +227,56 @@ impl SourceDataProvider {
             .tz_caches
             .metazone_to_short
             .get_or_init(|| {
-                let meta_zone_ids_resource = &self
+                let meta_zones_resource = &self
                     .cldr()?
                     .core()
                     .read_and_parse::<cldr_serde::time_zones::meta_zones::Resource>(
                         "supplemental/metaZones.json",
                     )?
                     .supplemental
-                    .meta_zones
-                    .meta_zone_ids
-                    .0;
+                    .meta_zones;
+
+                let mut all_metazones = BTreeSet::new();
+
+                use crate::cldr_serde::time_zones::meta_zones::*;
+                for (_, p) in &meta_zones_resource.meta_zone_info.time_zone.0 {
+                    match p {
+                        ZonePeriod::LocationOrSubRegion(x) => {
+                            for (_, x) in x {
+                                match x {
+                                    MetaLocationOrSubRegion::Location(x) => {
+                                        for x in x {
+                                            all_metazones.insert(&x.uses_meta_zone.mzone);
+                                        }
+                                    }
+                                    MetaLocationOrSubRegion::SubRegion(x) => {
+                                        for (_, x) in x {
+                                            for x in x {
+                                                all_metazones.insert(&x.uses_meta_zone.mzone);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ZonePeriod::Region(x) => {
+                            for x in x {
+                                all_metazones.insert(&x.uses_meta_zone.mzone);
+                            }
+                        }
+                    }
+                }
 
                 let mut hash = XxHash64::with_seed(0);
-                meta_zone_ids_resource.len().hash(&mut hash);
+                all_metazones.len().hash(&mut hash);
 
                 Ok((
-                    meta_zone_ids_resource
-                        .values()
-                        .map(|a| &a.long_id)
-                        .collect::<BTreeSet<_>>()
-                        .into_iter()
+                    all_metazones
+                        .iter()
                         .enumerate()
-                        .map(|(idx, alias)| {
+                        .map(|(idx, &alias)| {
                             alias.hash(&mut hash);
-                            (
-                                alias.clone(),
-                                MetazoneId::new(idx as u8 + 1).unwrap(),
-                            )
+                            (alias.clone(), MetazoneId::new(idx as u8 + 1).unwrap())
                         })
                         .collect(),
                     hash.finish(),

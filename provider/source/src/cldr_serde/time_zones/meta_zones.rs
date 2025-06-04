@@ -19,7 +19,7 @@ pub(crate) struct MetazoneAliasData {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub(crate) struct MetazoneIds(pub(crate) BTreeMap<tinystr::TinyAsciiStr<4>, MetazoneAliasData>);
+pub(crate) struct MetazoneIds(#[allow(dead_code)] pub(crate) BTreeMap<tinystr::TinyAsciiStr<4>, MetazoneAliasData>);
 
 #[derive(PartialEq, Debug, Clone, Deserialize)]
 pub(crate) struct UsesMetazone {
@@ -86,7 +86,7 @@ pub(crate) struct Metazones {
     #[serde(rename = "metazones")]
     pub(crate) _meta_zones_territory: MetazonesTerritory,
     #[serde(rename = "metazoneIds")]
-    pub(crate) meta_zone_ids: MetazoneIds,
+    pub(crate) _meta_zone_ids: MetazoneIds,
 }
 
 #[derive(Debug, Clone, Deserialize)]

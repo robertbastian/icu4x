@@ -61,12 +61,12 @@
     "141": "Tadžikistan vreme",
     "142": "Tokelau vreme",
     "144": "Čuuk vreme",
-    "146": "Tuvalu vreme",
-    "150": "Venecuela vreme",
-    "153": "Vostok vreme",
-    "154": "Vejk ostrvo vreme",
-    "155": "Valis i Futuna Ostrva vreme",
-    "158": "Jukon"
+    "147": "Tuvalu vreme",
+    "152": "Venecuela vreme",
+    "155": "Vostok vreme",
+    "156": "Vejk ostrvo vreme",
+    "157": "Valis i Futuna Ostrva vreme",
+    "160": "Jukon"
   },
   "overrides": {
     "utc": "Koordinisano univerzalno vreme"

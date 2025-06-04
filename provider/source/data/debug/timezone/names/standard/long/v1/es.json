@@ -31,8 +31,8 @@
     "126": "hora de Pyongyang",
     "135": "hora de las Islas Salomón",
     "136": "hora de Georgia del Sur",
-    "154": "hora de la isla Wake",
-    "158": "hora de Yukón"
+    "156": "hora de la isla Wake",
+    "160": "hora de Yukón"
   },
   "overrides": {
     "utc": "tiempo universal coordinado"

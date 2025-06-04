@@ -471,21 +471,21 @@
     ],
     [
       [
-        148,
+        150,
         "Standard"
       ],
       "Uzbekistan Standard Time"
     ],
     [
       [
-        151,
+        153,
         "Standard"
       ],
       "Vladivostok Standard Time"
     ],
     [
       [
-        156,
+        158,
         "Standard"
       ],
       "Yakutsk Standard Time"
@@ -576,11 +576,11 @@
     141,
     142,
     144,
-    146,
-    150,
-    153,
-    154,
+    147,
+    152,
     155,
-    158
+    156,
+    157,
+    160
   ]
 }

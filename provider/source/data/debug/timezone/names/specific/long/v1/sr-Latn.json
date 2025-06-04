@@ -499,21 +499,21 @@
     ],
     [
       [
-        148,
+        150,
         "Standard"
       ],
       "Uzbekistan, standardno vreme"
     ],
     [
       [
-        151,
+        153,
         "Standard"
       ],
       "Vladivostok, standardno vreme"
     ],
     [
       [
-        156,
+        158,
         "Standard"
       ],
       "Jakutsk, standardno vreme"
@@ -603,11 +603,11 @@
     141,
     142,
     144,
-    146,
-    150,
-    153,
-    154,
+    147,
+    152,
     155,
-    158
+    156,
+    157,
+    160
   ]
 }

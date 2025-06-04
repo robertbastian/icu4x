@@ -35,9 +35,9 @@
     "109": "Newfoundland Time",
     "121": "Philippine Time",
     "132": "American Samoa Time",
-    "148": "Uzbekistan Time",
-    "151": "Vladivostok Time",
-    "156": "Yakutsk Time"
+    "150": "Uzbekistan Time",
+    "153": "Vladivostok Time",
+    "158": "Yakutsk Time"
   },
   "overrides": {}
 }
