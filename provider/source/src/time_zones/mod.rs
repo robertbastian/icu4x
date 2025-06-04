@@ -243,12 +243,15 @@ impl SourceDataProvider {
 
                 Ok((
                     meta_zone_ids_resource
-                        .iter()
+                        .values()
+                        .map(|a| &a.long_id)
+                        .collect::<BTreeSet<_>>()
+                        .into_iter()
                         .enumerate()
-                        .map(|(idx, (_short_id, alias))| {
-                            alias.long_id.hash(&mut hash);
+                        .map(|(idx, alias)| {
+                            alias.hash(&mut hash);
                             (
-                                alias.long_id.clone(),
+                                alias.clone(),
                                 MetazoneId::new(idx as u8 + 1).unwrap(),
                             )
                         })
