@@ -5,8 +5,7 @@
 .DEFAULT_GOAL := build
 FORCE:
 
-# TODO: Set this back to nightly once the -zwasm-c-abi mess is resolved
-PINNED_CI_NIGHTLY ?= "nightly-2025-02-17"
+PINNED_CI_NIGHTLY ?= "nightly"
 
 # 100 KiB, working around a bug in older rustc
 # https://github.com/unicode-org/icu4x/issues/2753
@@ -26,7 +25,7 @@ lib/index.mjs: FORCE
 		--release \
 		-p icu_capi \
 		--crate-type cdylib \
-		--features buffer_provider,icu_segmenter/lstm
+		--features buffer_provider,icu_segmenter/lstm,experimental
 
 icu_capi.wasm: ../../target/wasm32-unknown-unknown/release/icu_capi.wasm
 	cp ../../target/wasm32-unknown-unknown/release/icu_capi.wasm icu_capi.wasm
