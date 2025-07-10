@@ -2,26 +2,16 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
-// https://github.com/unicode-org/icu4x/blob/main/documents/process/boilerplate.md#library-annotations
 #![cfg_attr(not(any(test, feature = "std")), no_std)]
-#![cfg_attr(
-    not(test),
-    deny(
-        clippy::indexing_slicing,
-        clippy::unwrap_used,
-        clippy::expect_used,
-        clippy::panic,
-        // Enums should be non-exhaustive, as exhaustive enums don't exist in other languages anyway
-        clippy::exhaustive_enums,
-        // Structs should be exhaustive, as they are exhaustive in C/C++
-        // Debug is not required as there is no stable Rust API
-    )
-)]
-// Diplomat limitations
+
 #![allow(
+    // Diplomat limitations
     clippy::needless_lifetimes,
     clippy::result_unit_err,
-    clippy::should_implement_trait
+    clippy::should_implement_trait,
+    // Structs should be exhaustive, but enums shouldn't
+    clippy::exhaustive_structs,
+    missing_debug_implementations,
 )]
 
 //! This crate contains the `extern "C"` FFI for ICU4X, as well as the [Diplomat](https://github.com/rust-diplomat/diplomat)-generated

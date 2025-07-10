@@ -933,7 +933,7 @@ Miscellaneous types with public fields may or may not be exhaustive based on nee
 
 ## Panics :: required
 
-Crates should deny the `clippy::indexing_slicing, clippy::unwrap_used, clippy::expect_used, clippy::panic` lints at the top-level to greatly reduce the number of panicky call sites in our code.
+The `clippy::indexing_slicing, clippy::unwrap_used, clippy::expect_used, clippy::panic` lints are denied at the workspace level.
 
 In general, non-panicky APIs that return `Result`s or `Option`s should be preferred.
 

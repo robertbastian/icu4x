@@ -374,19 +374,6 @@
 //! [temporal-grammar]: https://tc39.es/proposal-temporal/#sec-temporal-iso8601grammar
 
 #![no_std]
-#![cfg_attr(
-    not(test),
-    deny(
-        clippy::indexing_slicing,
-        clippy::unwrap_used,
-        clippy::expect_used,
-        clippy::panic,
-        clippy::exhaustive_structs,
-        clippy::exhaustive_enums,
-        clippy::trivially_copy_pass_by_ref,
-        missing_debug_implementations,
-    )
-)]
 
 pub(crate) mod core;
 mod error;

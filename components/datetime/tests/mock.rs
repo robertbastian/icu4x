@@ -4,6 +4,8 @@
 
 //! Some useful parsing functions for tests.
 
+#![allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing, missing_docs)] // https://github.com/rust-lang/rust-clippy/issues/13981
+
 use icu_calendar::Gregorian;
 use icu_time::{
     zone::{models, IanaParser, TimeZoneVariant, VariantOffsetsCalculator},

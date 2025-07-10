@@ -10,9 +10,8 @@
 //! It will usually undergo a major SemVer bump for every ICU4X release. Components in this
 //! crate will eventually stabilize and move to their own top-level components.
 
-// https://github.com/unicode-org/icu4x/blob/main/documents/process/boilerplate.md#library-annotations
 #![cfg_attr(not(any(test, doc)), no_std)]
-// No boilerplate, each module has their own
+
 #![allow(clippy::module_inception)]
 
 extern crate alloc;

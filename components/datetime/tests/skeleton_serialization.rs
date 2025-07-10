@@ -3,6 +3,7 @@
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
 #![cfg(all(test, feature = "datagen"))]
+#![allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing, missing_docs)] // https://github.com/rust-lang/rust-clippy/issues/13981
 
 use icu_datetime::provider::skeleton::reference::Skeleton;
 use std::{fs::File, io::BufReader};
@@ -12,7 +13,7 @@ use std::{fs::File, io::BufReader};
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct SkeletonFixtures {
-    pub skeletons: Vec<String>,
+    skeletons: Vec<String>,
 }
 
 fn get_skeleton_fixtures() -> Vec<String> {

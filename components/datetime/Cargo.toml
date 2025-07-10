@@ -99,9 +99,6 @@ bench = false  # This option is required for Benchmark CI
 [package.metadata.cargo-all-features]
 skip_optional_dependencies = true
 
-[lints.rust]
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(icu4x_run_size_tests)'] }
-
 [[bench]]
 name = "datetime"
 harness = false
@@ -127,3 +124,6 @@ required-features = ["compiled_data"]
 [[test]]
 name = "skeleton_serialization"
 required-features = ["experimental"]
+
+[lints]
+workspace = true
