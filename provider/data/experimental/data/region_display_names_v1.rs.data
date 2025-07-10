@@ -5,7 +5,7 @@
 ///
 /// Using this implementation will embed the following data in the binary's data segment:
 /// * 1091B for the lookup data structure (217 data identifiers)
-/// * 1115290B[^1] for the actual data (202 unique structs)
+/// * 1117838B[^1] for the actual data (202 unique structs)
 ///
 /// [^1]: these numbers can be smaller in practice due to linker deduplication
 ///
@@ -42,7 +42,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x08\0H\xC9\x94nk\xC9\x94nMakaw") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x02\0\n\0\x0F\0*\0UKH\xC9\x94nk\xC9\x94nMakawPalestaen West Bank ne GazaAm\xC9\x9Brika") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -52,7 +52,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x06\0\x19\0\"\x004\0\xE1\x8B\xA9\xE1\x8A\xAC\xE1\x88\x86\xE1\x8A\x95\xE1\x8C\x8D \xE1\x8A\xAE\xE1\x8A\x95\xE1\x8C\x8D\xE1\x88\x9B\xE1\x8A\xAB\xE1\x8A\xA6\xE1\x8D\x8D\xE1\x88\x8D\xE1\x88\xB5\xE1\x8C\xA5\xE1\x8A\xA4\xE1\x88\x9D\xE1\x8B\xA8\xE1\x89\xB0\xE1\x88\x98") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x06\0\x19\0\"\x004\0=\0\xE1\x8B\xA9\xE1\x8A\xAC\xE1\x88\x86\xE1\x8A\x95\xE1\x8C\x8D \xE1\x8A\xAE\xE1\x8A\x95\xE1\x8C\x8D\xE1\x88\x9B\xE1\x8A\xAB\xE1\x8A\xA6\xE1\x8D\x8D\xE1\x88\x8D\xE1\x88\xB5\xE1\x8C\xA5\xE1\x8A\xA4\xE1\x88\x9D\xE1\x8B\xA8\xE1\x89\xB0\xE1\x88\x98\xE1\x8B\xA9\xE1\x8A\x93\xE1\x8B\xAD\xE1\x89\xB5\xE1\x8B\xB5 \xE1\x88\xB5\xE1\x89\xB4\xE1\x89\xB5\xE1\x88\xB5") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -62,7 +62,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x11\0\x19\0\xD9\x87\xD9\x88\xD9\x86\xD8\xBA \xD9\x83\xD9\x88\xD9\x86\xD8\xBA\xD9\x85\xD9\x83\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x1D\0.\x006\0B\0[\0\xD8\xA7\xD9\x84\xD9\x85\xD9\x85\xD9\x84\xD9\x83\xD8\xA9 \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9\xD9\x87\xD9\x88\xD9\x86\xD8\xBA \xD9\x83\xD9\x88\xD9\x86\xD8\xBA\xD9\x85\xD9\x83\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86\xD8\xA7\xD9\x84\xD8\xA3\xD9\x85\xD9\x85 \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9\xD8\xA7\xD9\x84\xD9\x88\xD9\x84\xD8\xA7\xD9\x8A\xD8\xA7\xD8\xAA \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -72,7 +72,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x11\0\x19\0\xD9\x87\xD9\x88\xD9\x86\xD8\xBA \xD9\x83\xD9\x88\xD9\x86\xD8\xBA\xD9\x85\xD9\x83\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x1D\0.\x006\0B\0[\0\xD8\xA7\xD9\x84\xD9\x85\xD9\x85\xD9\x84\xD9\x83\xD8\xA9 \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9\xD9\x87\xD9\x88\xD9\x86\xD8\xBA \xD9\x83\xD9\x88\xD9\x86\xD8\xBA\xD9\x85\xD9\x83\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86\xD8\xA7\xD9\x84\xD8\xA3\xD9\x85\xD9\x85 \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9\xD8\xA7\xD9\x84\xD9\x88\xD9\x84\xD8\xA7\xD9\x8A\xD8\xA7\xD8\xAA \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -82,7 +82,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x11\0\x1B\0\xD9\x87\xD9\x88\xD9\x86\xD8\xBA \xD9\x83\xD9\x88\xD9\x86\xD8\xBA\xD9\x85\xD8\xA7\xD9\x83\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x1D\0.\08\0D\0]\0\xD8\xA7\xD9\x84\xD9\x85\xD9\x85\xD9\x84\xD9\x83\xD8\xA9 \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9\xD9\x87\xD9\x88\xD9\x86\xD8\xBA \xD9\x83\xD9\x88\xD9\x86\xD8\xBA\xD9\x85\xD8\xA7\xD9\x83\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86\xD8\xA7\xD9\x84\xD8\xA3\xD9\x85\xD9\x85 \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9\xD8\xA7\xD9\x84\xD9\x88\xD9\x84\xD8\xA7\xD9\x8A\xD8\xA7\xD8\xAA \xD8\xA7\xD9\x84\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD8\xA9") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -122,7 +122,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x0B\0\x11\0H\xC3\xA1ng K\xC3\xA1ngMaka\xC3\xB3Palastin") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\n\0\x15\0\x1B\0#\0Bart\xC3\xA1ni\xC3\xA1H\xC3\xA1ng K\xC3\xA1ngMaka\xC3\xB3PalastinAmrik\xC3\xA1ay Tep\xC3\xA1k\xC3\xA9n Est\xC3\xA1n") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -132,7 +132,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x0E\0\x18\0*\0\xD0\x93\xD0\xB0\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xB0\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x86\xD1\x96\xD0\xBD\xD0\xB0\xD0\x97\xD0\xA8\xD0\x90") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x1C\0*\x004\0F\0\xD0\x92\xD1\x8F\xD0\xBB\xD1\x96\xD0\xBA\xD0\xB0\xD0\xB1\xD1\x80\xD1\x8B\xD1\x82\xD0\xB0\xD0\xBD\xD1\x96\xD1\x8F\xD0\x93\xD0\xB0\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xB0\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x86\xD1\x96\xD0\xBD\xD0\xB0\xD0\x97\xD0\xA8\xD0\x90") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -142,7 +142,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x0E\0\x18\0*\0\xD0\xA5\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\xB0\xD0\xA1\xD0\x90\xD0\xA9") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0'\x005\0?\0Q\0\xD0\x9E\xD0\xB1\xD0\xB5\xD0\xB4\xD0\xB8\xD0\xBD\xD0\xB5\xD0\xBD\xD0\xBE\xD1\x82\xD0\xBE \xD0\xBA\xD1\x80\xD0\xB0\xD0\xBB\xD1\x81\xD1\x82\xD0\xB2\xD0\xBE\xD0\xA5\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\xB0\xD0\xA1\xD0\x90\xD0\xA9") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -182,7 +182,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\r\0\x19\0.\0I\0\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x95\xE0\xA7\x87\xE0\xA6\xB9\xE0\xA6\x82\xE0\xA6\x95\xE0\xA6\x82\xE0\xA6\xAE\xE0\xA7\x8D\xE0\xA6\xAF\xE0\xA6\xBE\xE0\xA6\x95\xE0\xA6\xBE\xE0\xA6\x93\xE0\xA6\xAB\xE0\xA6\xBF\xE0\xA6\xB2\xE0\xA6\xBF\xE0\xA6\xB8\xE0\xA7\x8D\xE0\xA6\xA4\xE0\xA6\xBF\xE0\xA6\xA8\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x8F\xE0\xA6\xB8") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\r\0\x19\0.\0I\0^\0\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x95\xE0\xA7\x87\xE0\xA6\xB9\xE0\xA6\x82\xE0\xA6\x95\xE0\xA6\x82\xE0\xA6\xAE\xE0\xA7\x8D\xE0\xA6\xAF\xE0\xA6\xBE\xE0\xA6\x95\xE0\xA6\xBE\xE0\xA6\x93\xE0\xA6\xAB\xE0\xA6\xBF\xE0\xA6\xB2\xE0\xA6\xBF\xE0\xA6\xB8\xE0\xA7\x8D\xE0\xA6\xA4\xE0\xA6\xBF\xE0\xA6\xA8\xE0\xA6\x9C\xE0\xA6\xBE\xE0\xA6\xA4\xE0\xA6\xBF\xE0\xA6\xB8\xE0\xA6\x82\xE0\xA6\x98\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x8F\xE0\xA6\xB8") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -192,7 +192,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\r\0\x19\0.\0I\0\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x95\xE0\xA7\x87\xE0\xA6\xB9\xE0\xA6\x82\xE0\xA6\x95\xE0\xA6\x82\xE0\xA6\xAE\xE0\xA7\x8D\xE0\xA6\xAF\xE0\xA6\xBE\xE0\xA6\x95\xE0\xA6\xBE\xE0\xA6\x93\xE0\xA6\xAB\xE0\xA6\xBF\xE0\xA6\xB2\xE0\xA6\xBF\xE0\xA6\xB8\xE0\xA7\x8D\xE0\xA6\xA4\xE0\xA6\xBF\xE0\xA6\xA8\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x8F\xE0\xA6\xB8") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\r\0\x19\0.\0I\0^\0\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x95\xE0\xA7\x87\xE0\xA6\xB9\xE0\xA6\x82\xE0\xA6\x95\xE0\xA6\x82\xE0\xA6\xAE\xE0\xA7\x8D\xE0\xA6\xAF\xE0\xA6\xBE\xE0\xA6\x95\xE0\xA6\xBE\xE0\xA6\x93\xE0\xA6\xAB\xE0\xA6\xBF\xE0\xA6\xB2\xE0\xA6\xBF\xE0\xA6\xB8\xE0\xA7\x8D\xE0\xA6\xA4\xE0\xA6\xBF\xE0\xA6\xA8\xE0\xA6\x9C\xE0\xA6\xBE\xE0\xA6\xA4\xE0\xA6\xBF\xE0\xA6\xB8\xE0\xA6\x82\xE0\xA6\x98\xE0\xA6\x87\xE0\xA6\x89 \xE0\xA6\x8F\xE0\xA6\xB8") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -262,7 +262,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x13\0\x1C\0\xE1\x8E\xB0\xE1\x8F\x82\xE1\x8E\xA9 \xE1\x8E\xAA\xE1\x8F\x82\xE1\x8E\xA9\xE1\x8E\xB9\xE1\x8E\xA7\xE1\x8E\xA3\xE1\x8F\x86\xE1\x8E\xB4\xE1\x8F\x8D\xE1\x8F\x97\xE1\x8F\x82") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x0C\0\x1F\0(\0\xE1\x8E\xA9\xE1\x8E\xB5\xE1\x8F\x8F\xE1\x8F\xB2\xE1\x8E\xB0\xE1\x8F\x82\xE1\x8E\xA9 \xE1\x8E\xAA\xE1\x8F\x82\xE1\x8E\xA9\xE1\x8E\xB9\xE1\x8E\xA7\xE1\x8E\xA3\xE1\x8F\x86\xE1\x8E\xB4\xE1\x8F\x8D\xE1\x8F\x97\xE1\x8F\x82") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -282,7 +282,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(zerovec::ZeroVec::new(), zerovec::vecs::VarZeroVec16::new())
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0\xE1\x91\xAD\xE1\x90\xA6\xE1\x92\x8B \xE1\x92\xA8\xE1\x91\xAF\xE1\x92\xAB\xE1\x93\x82\xE1\x95\xBD") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -312,7 +312,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x08\0\r\0\x17\0HongkongMacaoPal\xC3\xA6stinaFN") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x0E\0\x16\0\x1B\0%\0'\0StorbritannienHongkongMacaoPal\xC3\xA6stinaFNUSA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -542,7 +542,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0SA\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0F\0\x1B\0'\x005\0\xD9\x87\xD9\x86\xDA\xAF\xE2\x80\x8C\xDA\xA9\xD9\x86\xDA\xAF\xD9\x85\xD8\xA7\xDA\xA9\xD8\xA7\xD8\xA6\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xB9\xD8\xB1\xD8\xA8\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD8\xB3\xD8\xA7\xD8\xB2\xD9\x85\xD8\xA7\xD9\x86 \xD9\x85\xD9\x84\xD9\x84") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0SA\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x07\0\x10\0\x1F\0+\x007\0E\0X\0\xD8\xA8\xD8\xB1\xDB\x8C\xD8\xAA\xD8\xA7\xD9\x86\xDB\x8C\xD8\xA7\xD9\x87\xD9\x86\xDA\xAF\xE2\x80\x8C\xDA\xA9\xD9\x86\xDA\xAF\xD9\x85\xD8\xA7\xDA\xA9\xD8\xA7\xD8\xA6\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xB9\xD8\xB1\xD8\xA8\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD8\xB3\xD8\xA7\xD8\xB2\xD9\x85\xD8\xA7\xD9\x86 \xD9\x85\xD9\x84\xD9\x84\xD8\xA7\xDB\x8C\xD8\xA7\xD9\x84\xD8\xA7\xD8\xAA \xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD9\x87") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -552,7 +552,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0SA\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x11\0\x1D\0)\x007\0\xD9\x87\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xD8\xA7\xDA\xA9\xD8\xA7\xD8\xA6\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xB9\xD8\xB1\xD8\xA8\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD8\xB3\xD8\xA7\xD8\xB2\xD9\x85\xD8\xA7\xD9\x86 \xD9\x85\xD9\x84\xD9\x84") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0SA\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x07\0\x10\0!\0-\09\0G\0Z\0\xD8\xA8\xD8\xB1\xDB\x8C\xD8\xAA\xD8\xA7\xD9\x86\xDB\x8C\xD8\xA7\xD9\x87\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xD8\xA7\xDA\xA9\xD8\xA7\xD8\xA6\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xB9\xD8\xB1\xD8\xA8\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD8\xB3\xD8\xA7\xD8\xB2\xD9\x85\xD8\xA7\xD9\x86 \xD9\x85\xD9\x84\xD9\x84\xD8\xA7\xDB\x8C\xD8\xA7\xD9\x84\xD8\xA7\xD8\xAA \xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD9\x87") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -562,7 +562,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x08\0)\0E\0\xF0\x9E\xA4\x91\xF0\x9E\xA4\x98\xF0\x9E\xA4\x96\xF0\x9E\xA4\xAE\xF0\x9E\xA4\xB2\xF0\x9E\xA4\xBA \xF0\x9E\xA4\x91\xF0\x9E\xA4\xAE\xF0\x9E\xA4\xB2\xF0\x9E\xA4\xBA\xF0\x9E\xA4\x83\xF0\x9E\xA4\xA2\xF0\x9E\xA4\xB3\xF0\x9E\xA4\xA2\xF0\x9E\xA4\xB1\xF0\x9E\xA4\xAE\xF0\x9E\xA5\x85\xF0\x9E\xA4\x81\xF0\x9E\xA4\x82\xF0\x9E\xA4\x80") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x08\0)\0E\0\x8A\0\xF0\x9E\xA4\x91\xF0\x9E\xA4\x98\xF0\x9E\xA4\x96\xF0\x9E\xA4\xAE\xF0\x9E\xA4\xB2\xF0\x9E\xA4\xBA \xF0\x9E\xA4\x91\xF0\x9E\xA4\xAE\xF0\x9E\xA4\xB2\xF0\x9E\xA4\xBA\xF0\x9E\xA4\x83\xF0\x9E\xA4\xA2\xF0\x9E\xA4\xB3\xF0\x9E\xA4\xA2\xF0\x9E\xA4\xB1\xF0\x9E\xA4\xAE\xF0\x9E\xA5\x85\xF0\x9E\xA4\x82\xF0\x9E\xA4\xAB\xF0\x9E\xA4\xA7\xF0\x9E\xA4\xA3\xF0\x9E\xA4\xAD\xF0\x9E\xA5\x85\xF0\x9E\xA4\xB6\xF0\x9E\xA4\xAD \xF0\x9E\xA4\x8A\xF0\x9E\xA4\xA2\xF0\x9E\xA4\xA4\xF0\x9E\xA4\xAB\xF0\x9E\xA4\xA7\xF0\x9E\xA4\xBC\xF0\x9E\xA4\xAD\xF0\x9E\xA5\x85\xF0\x9E\xA4\xB2\xF0\x9E\xA4\x81\xF0\x9E\xA4\x82\xF0\x9E\xA4\x80") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -642,7 +642,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x0E\0\x1C\0\x1E\0Hong CongMacaoan Phalaist\xC3\xADnNASAM") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x14\0\x1D\0\"\x000\x002\0an R\xC3\xADocht AontaitheHong CongMacaoan Phalaist\xC3\xADnNASAM") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -692,7 +692,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\t\0\x0E\0Hong KongMacaoPalas\xC9\x97inu") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\n\0\x13\0\x18\0\"\0BiritaniyaHong KongMacaoPalas\xC9\x97inuAmurka") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -702,7 +702,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x11\0\x19\0%\0\xD7\x94\xD7\x95\xD7\xA0\xD7\x92 \xD7\xA7\xD7\x95\xD7\xA0\xD7\x92\xD7\x9E\xD7\xA7\xD7\x90\xD7\x95\xD7\xA4\xD7\x9C\xD7\xA1\xD7\x98\xD7\x99\xD7\x9F\xD7\x90\xD7\xA8\xD7\x94\xD7\xB4\xD7\x91") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0E\0\x1F\0'\x003\0\xD7\x91\xD7\xA8\xD7\x99\xD7\x98\xD7\xA0\xD7\x99\xD7\x94\xD7\x94\xD7\x95\xD7\xA0\xD7\x92 \xD7\xA7\xD7\x95\xD7\xA0\xD7\x92\xD7\x9E\xD7\xA7\xD7\x90\xD7\x95\xD7\xA4\xD7\x9C\xD7\xA1\xD7\x98\xD7\x99\xD7\x9F\xD7\x90\xD7\xA8\xD7\x94\xD7\xB4\xD7\x91") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -712,7 +712,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x12\0+\x007\0U\0\xE0\xA4\xAF\xE0\xA5\x82\xE0\xA5\xB0\xE0\xA4\x95\xE0\xA5\x87\xE0\xA5\xB0\xE0\xA4\xB9\xE0\xA4\xBE\xE0\xA4\x81\xE0\xA4\x97 \xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x81\xE0\xA4\x97\xE0\xA4\xAE\xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x8A\xE0\xA4\xAB\xE0\xA4\xBC\xE0\xA4\xBF\xE0\xA4\xB2\xE0\xA4\xBF\xE0\xA4\xB8\xE0\xA5\x8D\xE0\xA4\xA4\xE0\xA5\x80\xE0\xA4\xA8\xE0\xA4\x85\xE0\xA4\xAE\xE0\xA5\x87\xE0\xA4\xB0\xE0\xA4\xBF\xE0\xA4\x95\xE0\xA4\xBE") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x12\0+\x007\0U\0\x80\0\xE0\xA4\xAF\xE0\xA5\x82\xE0\xA5\xB0\xE0\xA4\x95\xE0\xA5\x87\xE0\xA5\xB0\xE0\xA4\xB9\xE0\xA4\xBE\xE0\xA4\x81\xE0\xA4\x97 \xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x81\xE0\xA4\x97\xE0\xA4\xAE\xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x8A\xE0\xA4\xAB\xE0\xA4\xBC\xE0\xA4\xBF\xE0\xA4\xB2\xE0\xA4\xBF\xE0\xA4\xB8\xE0\xA5\x8D\xE0\xA4\xA4\xE0\xA5\x80\xE0\xA4\xA8\xE0\xA4\xB8\xE0\xA4\x82\xE0\xA4\xAF\xE0\xA5\x81\xE0\xA4\x95\xE0\xA5\x8D\xE0\xA4\xA4 \xE0\xA4\xB0\xE0\xA4\xBE\xE0\xA4\xB7\xE0\xA5\x8D\xE0\xA4\x9F\xE0\xA5\x8D\xE0\xA4\xB0\xE0\xA4\x85\xE0\xA4\xAE\xE0\xA5\x87\xE0\xA4\xB0\xE0\xA4\xBF\xE0\xA4\x95\xE0\xA4\xBE") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -802,7 +802,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x02\0\x0B\0\x10\0UKHong KongMacaoPalestine") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x02\0\x0B\0\x10\0\x19\0UKHong KongMacaoPalestineUnited States") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -822,7 +822,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x0F\0\x19\0\x1C\0Hong KongMaka\xC3\xB3Palest\xC3\xADnaS\xC3\x9EBNA") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x08\0\x11\0\x17\0!\0$\0BretlandHong KongMaka\xC3\xB3Palest\xC3\xADnaS\xC3\x9EBNA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -862,7 +862,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x1A\x002\0A\0\\\0\xE1\x83\x92\xE1\x83\x90\xE1\x83\x94\xE1\x83\xA0\xE1\x83\x97.\xE1\x83\xA1\xE1\x83\x90\xE1\x83\x9B.\xE1\x83\xB0\xE1\x83\x9D\xE1\x83\x9C\xE1\x83\x99\xE1\x83\x9D\xE1\x83\x9C\xE1\x83\x92\xE1\x83\x98\xE1\x83\x9B\xE1\x83\x90\xE1\x83\x99\xE1\x83\x90\xE1\x83\x9D\xE1\x83\x9E\xE1\x83\x90\xE1\x83\x9A\xE1\x83\x94\xE1\x83\xA1\xE1\x83\xA2\xE1\x83\x98\xE1\x83\x9C\xE1\x83\x90\xE1\x83\x90\xE1\x83\xA8\xE1\x83\xA8") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x1A\x002\0A\0\\\0k\0\xE1\x83\x92\xE1\x83\x90\xE1\x83\x94\xE1\x83\xA0\xE1\x83\x97.\xE1\x83\xA1\xE1\x83\x90\xE1\x83\x9B.\xE1\x83\xB0\xE1\x83\x9D\xE1\x83\x9C\xE1\x83\x99\xE1\x83\x9D\xE1\x83\x9C\xE1\x83\x92\xE1\x83\x98\xE1\x83\x9B\xE1\x83\x90\xE1\x83\x99\xE1\x83\x90\xE1\x83\x9D\xE1\x83\x9E\xE1\x83\x90\xE1\x83\x9A\xE1\x83\x94\xE1\x83\xA1\xE1\x83\xA2\xE1\x83\x98\xE1\x83\x9C\xE1\x83\x90\xE1\x83\x92\xE1\x83\x90\xE1\x83\x94\xE1\x83\xA0\xE1\x83\x9D\xE1\x83\x90\xE1\x83\xA8\xE1\x83\xA8") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -882,7 +882,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x10\0\x1C\0\x1F\0H\xC3\xA3g K\xC3\xA3gM\xE1\xBB\xB9kavParenhtin\xE1\xBB\xB9ONUEUA") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\r\0\x16\0\x1D\0)\0,\0Rejn\xC5\xA9 Un\xC4\xA9nuH\xC3\xA3g K\xC3\xA3gM\xE1\xBB\xB9kavParenhtin\xE1\xBB\xB9ONUEUA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -892,7 +892,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0C\0\x16\0(\0.\0\xD0\xA1\xD1\x8F\xD0\xBD\xD0\xB3\xD0\xB0\xD0\xBD\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\xB0\xD0\x91\xD2\xB0\xD2\xB0\xD0\x90\xD2\x9A\xD0\xA8") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x16\0\"\0,\0>\0D\0\xD2\xB0\xD0\xBB\xD1\x8B\xD0\xB1\xD1\x80\xD0\xB8\xD1\x82\xD0\xB0\xD0\xBD\xD0\xB8\xD1\x8F\xD0\xA1\xD1\x8F\xD0\xBD\xD0\xB3\xD0\xB0\xD0\xBD\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\xB0\xD0\x91\xD2\xB0\xD2\xB0\xD0\x90\xD2\x9A\xD0\xA8") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -922,7 +922,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x06\0\x0F\0\x1E\0\xED\x99\x8D\xEC\xBD\xA9\xEB\xA7\x88\xEC\xB9\xB4\xEC\x98\xA4\xED\x8C\x94\xEB\xA0\x88\xEC\x8A\xA4\xED\x83\x80\xEC\x9D\xB8\xEC\x9C\xA0\xEC\x97\x94") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0KR\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x07\0\x06\0\x0C\0\x12\0\x1B\0*\x000\0\xEC\x98\x81\xEA\xB5\xAD\xED\x99\x8D\xEC\xBD\xA9\xED\x95\x9C\xEA\xB5\xAD\xEB\xA7\x88\xEC\xB9\xB4\xEC\x98\xA4\xED\x8C\x94\xEB\xA0\x88\xEC\x8A\xA4\xED\x83\x80\xEC\x9D\xB8\xEC\x9C\xA0\xEC\x97\x94\xEB\xAF\xB8\xEA\xB5\xAD") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -932,7 +932,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x06\0\x0F\0\x1E\0\xED\x99\x8D\xEC\xBD\xA9\xEB\xA7\x88\xEC\xB9\xB4\xEC\x98\xA4\xED\x8C\x94\xEB\xA0\x88\xEC\x8A\xA4\xED\x83\x80\xEC\x9D\xB8\xEC\x9C\xA0\xEC\x97\x94") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0KR\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x07\0\x06\0\x0C\0\x12\0\x1B\0*\x000\0\xEC\x98\x81\xEA\xB5\xAD\xED\x99\x8D\xEC\xBD\xA9\xED\x95\x9C\xEA\xB5\xAD\xEB\xA7\x88\xEC\xB9\xB4\xEC\x98\xA4\xED\x8C\x94\xEB\xA0\x88\xEC\x8A\xA4\xED\x83\x80\xEC\x9D\xB8\xEC\x9C\xA0\xEC\x97\x94\xEB\xAF\xB8\xEA\xB5\xAD") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -962,7 +962,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x11\0\x1D\0\xDB\x81\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xD8\xA7\xDA\xA9\xD8\xA7\xD9\x88\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x17\0(\x004\0@\0\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xDB\x81 \xD9\x85\xD9\x85\xD9\x84\xD9\x90\xDA\xA9\xD8\xAA\xDB\x81\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xD8\xA7\xDA\xA9\xD8\xA7\xD9\x88\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xDB\x8C\xD9\x88\xD9\x97\xD9\x86\xD8\xA7\xDB\x8C\xD9\xB9\xD9\x90\xDA\x91 \xD8\xB3\xD9\x90\xD9\xB9\xDB\x8C\xD9\xB9\xD9\x90\xD8\xB3") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1072,7 +1072,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0-\0?\0N\0l\0\xE0\xBA\xAA\xE0\xBA\xB0\xE0\xBA\xAB\xE0\xBA\xB0\xE0\xBA\xA5\xE0\xBA\xB2\xE0\xBA\x8A\xE0\xBA\xB0\xE0\xBA\xAD\xE0\xBA\xB2\xE0\xBA\x99\xE0\xBA\xB2\xE0\xBA\x88\xE0\xBA\xB1\xE0\xBA\x81\xE0\xBA\xAE\xE0\xBA\xBB\xE0\xBA\x87\xE0\xBA\x81\xE0\xBA\xBB\xE0\xBA\x87\xE0\xBA\xA1\xE0\xBA\xB2\xE0\xBA\x81\xE0\xBA\xB2\xE0\xBA\xA7\xE0\xBA\x9B\xE0\xBA\xB2\xE0\xBB\x80\xE0\xBA\xA5\xE0\xBA\x94\xE0\xBA\xAA\xE0\xBA\xB0\xE0\xBA\x95\xE0\xBA\xB4\xE0\xBA\x99\xE0\xBA\xA2\xE0\xBA\xB9\xE0\xBB\x80\xE0\xBA\xAD\xE0\xBA\xB1\xE0\xBA\x99") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0-\0?\0N\0l\0~\0\xE0\xBA\xAA\xE0\xBA\xB0\xE0\xBA\xAB\xE0\xBA\xB0\xE0\xBA\xA5\xE0\xBA\xB2\xE0\xBA\x8A\xE0\xBA\xB0\xE0\xBA\xAD\xE0\xBA\xB2\xE0\xBA\x99\xE0\xBA\xB2\xE0\xBA\x88\xE0\xBA\xB1\xE0\xBA\x81\xE0\xBA\xAE\xE0\xBA\xBB\xE0\xBA\x87\xE0\xBA\x81\xE0\xBA\xBB\xE0\xBA\x87\xE0\xBA\xA1\xE0\xBA\xB2\xE0\xBA\x81\xE0\xBA\xB2\xE0\xBA\xA7\xE0\xBA\x9B\xE0\xBA\xB2\xE0\xBB\x80\xE0\xBA\xA5\xE0\xBA\x94\xE0\xBA\xAA\xE0\xBA\xB0\xE0\xBA\x95\xE0\xBA\xB4\xE0\xBA\x99\xE0\xBA\xA2\xE0\xBA\xB9\xE0\xBB\x80\xE0\xBA\xAD\xE0\xBA\xB1\xE0\xBA\x99\xE0\xBA\xAA\xE0\xBA\xB0\xE0\xBA\xAB\xE0\xBA\xB0\xE0\xBA\xA5\xE0\xBA\xB1\xE0\xBA\x94") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1092,7 +1092,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x08\0\r\0\x17\0\x1A\0HonkongaMakaoPalest\xC4\xABnaANOASV") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x14\0\x1C\0!\0+\0.\0Apvienot\xC4\x81 KaralisteHonkongaMakaoPalest\xC4\xABnaANOASV") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1102,7 +1102,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x12\0+\x007\0\xE0\xA4\xAF\xE0\xA5\x82\xE0\xA5\xB0\xE0\xA4\x95\xE0\xA5\x87\xE0\xA5\xB0\xE0\xA4\xB9\xE0\xA4\xBE\xE0\xA4\x82\xE0\xA4\x97 \xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x82\xE0\xA4\x97\xE0\xA4\xAE\xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x89\xE0\xA4\xAB\xE0\xA4\xBF\xE0\xA4\xB2\xE0\xA4\xBF\xE0\xA4\xB8\xE0\xA5\x8D\xE0\xA4\xA4\xE0\xA5\x80\xE0\xA4\xA8") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x12\0+\x007\0R\0\xE0\xA4\xAF\xE0\xA5\x82\xE0\xA5\xB0\xE0\xA4\x95\xE0\xA5\x87\xE0\xA5\xB0\xE0\xA4\xB9\xE0\xA4\xBE\xE0\xA4\x82\xE0\xA4\x97 \xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x82\xE0\xA4\x97\xE0\xA4\xAE\xE0\xA4\x95\xE0\xA4\xBE\xE0\xA4\x89\xE0\xA4\xAB\xE0\xA4\xBF\xE0\xA4\xB2\xE0\xA4\xBF\xE0\xA4\xB8\xE0\xA5\x8D\xE0\xA4\xA4\xE0\xA5\x80\xE0\xA4\xA8\xE0\xA4\xB8\xE0\xA4\x82\xE0\xA4\xAF\xE0\xA5\x81\xE0\xA4\x95\xE0\xA5\x8D\xE0\xA4\xA4 \xE0\xA4\xB0\xE0\xA4\xBE\xE0\xA4\x9C\xE0\xA5\x8D\xE0\xA4\xAF") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1112,7 +1112,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x08\0\r\0HongipuaMakauParihitini") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x15\0\x1D\0\"\0,\0Te Hononga o PiriteneHongipuaMakauParihitiniHononga o Amerika") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1192,7 +1192,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0C\0*\0<\0`\0\xE1\x80\x9A\xE1\x80\xB0\xE1\x80\x80\xE1\x80\xB1\xE1\x80\x9F\xE1\x80\xB1\xE1\x80\xAC\xE1\x80\x84\xE1\x80\xBA\xE1\x80\x80\xE1\x80\xB1\xE1\x80\xAC\xE1\x80\x84\xE1\x80\xBA\xE1\x80\x99\xE1\x80\x80\xE1\x80\xAC\xE1\x80\xA1\xE1\x80\xAD\xE1\x80\xAF\xE1\x80\x95\xE1\x80\xAB\xE1\x80\x9C\xE1\x80\x80\xE1\x80\xBA\xE1\x80\x85\xE1\x80\x90\xE1\x80\xAD\xE1\x80\xAF\xE1\x80\x84\xE1\x80\xBA\xE1\x80\xB8\xE1\x80\x9A\xE1\x80\xB0\xE1\x80\xA1\xE1\x80\x80\xE1\x80\xBA\xE1\x80\x85\xE1\x80\xBA") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x0C\0*\0<\0`\0x\0\xE1\x80\x9A\xE1\x80\xB0\xE1\x80\x80\xE1\x80\xB1\xE1\x80\x9F\xE1\x80\xB1\xE1\x80\xAC\xE1\x80\x84\xE1\x80\xBA\xE1\x80\x80\xE1\x80\xB1\xE1\x80\xAC\xE1\x80\x84\xE1\x80\xBA\xE1\x80\x99\xE1\x80\x80\xE1\x80\xAC\xE1\x80\xA1\xE1\x80\xAD\xE1\x80\xAF\xE1\x80\x95\xE1\x80\xAB\xE1\x80\x9C\xE1\x80\x80\xE1\x80\xBA\xE1\x80\x85\xE1\x80\x90\xE1\x80\xAD\xE1\x80\xAF\xE1\x80\x84\xE1\x80\xBA\xE1\x80\xB8\xE1\x80\x80\xE1\x80\xAF\xE1\x80\x9C\xE1\x80\x9E\xE1\x80\x99\xE1\x80\x82\xE1\x80\xB9\xE1\x80\x82\xE1\x80\x9A\xE1\x80\xB0\xE1\x80\xA1\xE1\x80\x80\xE1\x80\xBA\xE1\x80\x85\xE1\x80\xBA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1232,7 +1232,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x08\0\r\0\x16\0HongkongMacaoPalestinaSN") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\r\0\x15\0\x1A\0#\0%\0StorbritanniaHongkongMacaoPalestinaSNUSA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1242,7 +1242,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x08\0\r\0HongkongMacaoPalestina") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\r\0\x15\0\x1A\0#\0%\0StorbritanniaHongkongMacaoPalestinaFNUSA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1342,7 +1342,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x10\0!\0)\0\xD8\xA7\xD9\x86\xDA\xAB\xD9\x84\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD9\x87\xD8\xA7\xD9\x86\xDA\xAB \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAB\xD9\x85\xDA\xA9\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x10\0!\0)\x005\0\xD8\xA7\xD9\x86\xDA\xAB\xD9\x84\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD9\x87\xD8\xA7\xD9\x86\xDA\xAB \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAB\xD9\x85\xDA\xA9\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD9\x87 \xD8\xA2\xD9\x8A\xD8\xA7\xD9\x84\xD8\xA7\xD8\xAA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1352,7 +1352,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x10\0!\0)\0\xD8\xA7\xD9\x86\xDA\xAB\xD9\x84\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD9\x87\xD8\xA7\xD9\x86\xDA\xAB \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAB\xD9\x85\xDA\xA9\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x10\0!\0)\x005\0\xD8\xA7\xD9\x86\xDA\xAB\xD9\x84\xD8\xB3\xD8\xAA\xD8\xA7\xD9\x86\xD9\x87\xD8\xA7\xD9\x86\xDA\xAB \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAB\xD9\x85\xDA\xA9\xD8\xA7\xD9\x88\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xD9\x8A\xD9\x86\xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xD9\x87 \xD8\xA2\xD9\x8A\xD8\xA7\xD9\x84\xD8\xA7\xD8\xAA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1362,7 +1362,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x0E\0\x17\0\x1A\0Hong KongMacauPalestinaONUEUA") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x0B\0\x14\0\x19\0\"\0%\0Reino UnidoHong KongMacauPalestinaONUEUA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1382,7 +1382,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\t\0\x0E\0Hong KongMacaoPalestina") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0B\0\x14\0\x19\0\"\0Reino UnidoHong KongMacaoPalestinaEstados Unidos") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1412,7 +1412,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x0E\0\x17\0\x1A\0Hong KongMacaoPalestinaONUS.U.A.") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x0C\0\x15\0\x1A\0#\0&\0Regatul UnitHong KongMacaoPalestinaONUS.U.A.") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1422,7 +1422,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x0E\0\x17\0\x1A\0Hong KongMacaoPalestinaONUS.U.A.") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x0C\0\x15\0\x1A\0#\0&\0Regatul UnitHong KongMacaoPalestinaONUS.U.A.") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1522,7 +1522,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\n\0\x1C\0+\0C\0\xE0\xB6\x91.\xE0\xB6\xBB\xE0\xB7\x8F\xE0\xB7\x84\xE0\xB7\x9C\xE0\xB6\x82\xE0\xB6\x9A\xE0\xB7\x9C\xE0\xB6\x82\xE0\xB6\xB8\xE0\xB6\x9A\xE0\xB7\x8F\xE0\xB7\x80\xE0\xB7\x94\xE0\xB6\xB4\xE0\xB6\xBD\xE0\xB7\x83\xE0\xB7\x8A\xE0\xB6\xAD\xE0\xB7\x93\xE0\xB6\xB1\xE0\xB6\xBA\xE0\xB6\x91.\xE0\xB6\xA2") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\n\0\x1C\0+\0C\0h\0\xE0\xB6\x91.\xE0\xB6\xBB\xE0\xB7\x8F\xE0\xB7\x84\xE0\xB7\x9C\xE0\xB6\x82\xE0\xB6\x9A\xE0\xB7\x9C\xE0\xB6\x82\xE0\xB6\xB8\xE0\xB6\x9A\xE0\xB7\x8F\xE0\xB7\x80\xE0\xB7\x94\xE0\xB6\xB4\xE0\xB6\xBD\xE0\xB7\x83\xE0\xB7\x8A\xE0\xB6\xAD\xE0\xB7\x93\xE0\xB6\xB1\xE0\xB6\xBA\xE0\xB6\x91\xE0\xB6\x9A\xE0\xB7\x8A\xE0\xB7\x83\xE0\xB6\xAD\xE0\xB7\x8A \xE0\xB6\xA2\xE0\xB7\x8F\xE0\xB6\xAD\xE0\xB7\x93\xE0\xB6\xB1\xE0\xB7\x8A\xE0\xB6\x91.\xE0\xB6\xA2") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1552,7 +1552,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x02\0\x02\0UKFalastiin") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x02\0\x0B\0\x11\0\x1A\0UKHong KongMakaawFalastiinMaraykanka") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1562,7 +1562,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x02\0\x0B\0\x10\0\x1A\0MBHong-KongMakaoPalestin\xC3\xABOKB") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x02\0\x0B\0\x10\0\x1A\0\x1D\0MBHong-KongMakaoPalestin\xC3\xABOKBSHBA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1662,7 +1662,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x08\0\r\0\x16\0HongkongMacaoPalestinaFN") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x0E\0\x16\0\x1B\0$\0&\0StorbritannienHongkongMacaoPalestinaFNUSA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1672,7 +1672,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\t\0\x0E\0Hong KongMakauPalestina") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x12\0\x1B\0 \0)\0Ufalme wa MuunganoHong KongMakauPalestinaUmoja wa Mataifa") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1682,7 +1682,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\t\0\x0E\0Hong KongMakauPalestina") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x12\0\x1B\0 \0)\0Ufalme wa MuunganoHong KongMakauPalestinaUmoja wa Mataifa") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1692,7 +1692,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\t\0\x0E\0\x17\0Hong KongMakauPalestinaMarekani") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x12\0\x1B\0 \0)\09\0Ufalme wa MuunganoHong KongMakauPalestinaUmoja wa MataifaMarekani") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1702,7 +1702,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0\xDC\xA6\xDC\xA0\xDC\xA3\xDC\x9B\xDC\x9D\xDC\xA2") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x19\0*\x006\0\xDC\xA1\xDC\xA0\xDC\x9F\xDC\x98\xDC\xAC\xDC\x90 \xDC\xA1\xDC\x9A\xDC\x9D\xDC\x95\xDC\xAC\xDC\x90\xDC\x97\xDC\x98\xDC\xA2\xDC\x93 \xDC\x9F\xDC\x98\xDC\xA2\xDC\x93\xDC\xA6\xDC\xA0\xDC\xA3\xDC\x9B\xDC\x9D\xDC\xA2\xDC\x90\xDC\x98\xDC\x9A\xDC\x95\xCC\x88\xDC\xA2\xDC\x90 \xDC\xA1\xDC\x9A\xDC\x9D\xDC\x95\xCC\x88\xDC\x90") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1742,7 +1742,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x0E\0\x18\0(\0\xD2\xB2\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\xA4\xD0\xB0\xD0\xBB\xD0\xB0\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\x98\xD0\x9C") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0%\x003\0=\0M\0\xD0\xA8\xD0\xBE\xD2\xB3\xD0\xB8\xD0\xB3\xD0\xB0\xD1\x80\xD0\xB8\xD0\xB8 \xD0\x9C\xD1\x83\xD1\x82\xD1\x82\xD0\xB0\xD2\xB3\xD0\xB8\xD0\xB4\xD0\xB0\xD2\xB2\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\xA4\xD0\xB0\xD0\xBB\xD0\xB0\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\x98\xD0\x9C") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1752,7 +1752,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x12\0$\0?\0\xE0\xB8\xAE\xE0\xB9\x88\xE0\xB8\xAD\xE0\xB8\x87\xE0\xB8\x81\xE0\xB8\x87\xE0\xB8\xA1\xE0\xB8\xB2\xE0\xB9\x80\xE0\xB8\x81\xE0\xB9\x8A\xE0\xB8\xB2\xE0\xB8\x9B\xE0\xB8\xB2\xE0\xB9\x80\xE0\xB8\xA5\xE0\xB8\xAA\xE0\xB9\x84\xE0\xB8\x95\xE0\xB8\x99\xE0\xB9\x8C\xE0\xB8\xAA\xE0\xB8\xAB\xE0\xB8\xA3\xE0\xB8\xB1\xE0\xB8\x90\xE0\xB8\xAF") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0'\09\0K\0f\0\x87\0\xE0\xB8\xAA\xE0\xB8\xAB\xE0\xB8\xA3\xE0\xB8\xB2\xE0\xB8\x8A\xE0\xB8\xAD\xE0\xB8\xB2\xE0\xB8\x93\xE0\xB8\xB2\xE0\xB8\x88\xE0\xB8\xB1\xE0\xB8\x81\xE0\xB8\xA3\xE0\xB8\xAE\xE0\xB9\x88\xE0\xB8\xAD\xE0\xB8\x87\xE0\xB8\x81\xE0\xB8\x87\xE0\xB8\xA1\xE0\xB8\xB2\xE0\xB9\x80\xE0\xB8\x81\xE0\xB9\x8A\xE0\xB8\xB2\xE0\xB8\x9B\xE0\xB8\xB2\xE0\xB9\x80\xE0\xB8\xA5\xE0\xB8\xAA\xE0\xB9\x84\xE0\xB8\x95\xE0\xB8\x99\xE0\xB9\x8C\xE0\xB8\xAA\xE0\xB8\xAB\xE0\xB8\x9B\xE0\xB8\xA3\xE0\xB8\xB0\xE0\xB8\x8A\xE0\xB8\xB2\xE0\xB8\x8A\xE0\xB8\xB2\xE0\xB8\x95\xE0\xB8\xB4\xE0\xB8\xAA\xE0\xB8\xAB\xE0\xB8\xA3\xE0\xB8\xB1\xE0\xB8\x90\xE0\xB8\xAF") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1762,7 +1762,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x13\0\x1C\0+\0\xE1\x88\x86\xE1\x8A\x95\xE1\x8C\x8D \xE1\x8A\xAE\xE1\x8A\x95\xE1\x8C\x8D\xE1\x88\x9B\xE1\x8A\xAB\xE1\x8B\x8D\xE1\x8D\x8D\xE1\x88\x8D\xE1\x88\xB5\xE1\x8C\xA4\xE1\x88\x9D\xE1\x88\x95.\xE1\x88\x98.") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0F\0\"\0+\0:\0\xE1\x89\xA5\xE1\x88\xAA\xE1\x8C\xA3\xE1\x8A\x95\xE1\x8B\xAB\xE1\x88\x86\xE1\x8A\x95\xE1\x8C\x8D \xE1\x8A\xAE\xE1\x8A\x95\xE1\x8C\x8D\xE1\x88\x9B\xE1\x8A\xAB\xE1\x8B\x8D\xE1\x8D\x8D\xE1\x88\x8D\xE1\x88\xB5\xE1\x8C\xA4\xE1\x88\x9D\xE1\x88\x95.\xE1\x88\x98.") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1772,7 +1772,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x07\0\x0C\0\x15\0GonkongMakaoPalestinaAB\xC5\x9E") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x14\0\x1B\0 \0)\0Birle\xC5\x9Fen Paty\xC5\x9FalykGonkongMakaoPalestinaAB\xC5\x9E") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1792,7 +1792,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x0B\0\x10\0\x1B\0Hongi KongiMakauPalesitaine\xCA\xBBAmelika") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\n\0\x15\0\x1A\0%\0Pilit\xC4\x81niaHongi KongiMakauPalesitaine\xCA\xBBAmelika") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1812,7 +1812,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x0E\0\x18\0\xD0\x93\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\xA4\xD3\x99\xD0\xBB\xD3\x99\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0%\x003\0=\0M\0\xD0\x91\xD0\xB5\xD1\x80\xD0\xBB\xD3\x99\xD1\x88\xD0\xBA\xD3\x99\xD0\xBD \xD0\x9A\xD0\xBE\xD1\x80\xD0\xBE\xD0\xBB\xD1\x8C\xD0\xBB\xD0\xB5\xD0\xBA\xD0\x93\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\xA4\xD3\x99\xD0\xBB\xD3\x99\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\x90\xD0\x9A\xD0\xA8") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1832,7 +1832,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0E\0\x18\0*\x000\0\xD0\x93\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\xB0\xD0\x9E\xD0\x9E\xD0\x9D\xD0\xA1\xD0\xA8\xD0\x90") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x1D\0+\x005\0G\0M\0\xD0\x92\xD0\xB5\xD0\xBB\xD0\xB8\xD0\xBA\xD0\xB0 \xD0\x91\xD1\x80\xD0\xB8\xD1\x82\xD0\xB0\xD0\xBD\xD1\x96\xD1\x8F\xD0\x93\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\x9F\xD0\xB0\xD0\xBB\xD0\xB5\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\xB0\xD0\x9E\xD0\x9E\xD0\x9D\xD0\xA1\xD0\xA8\xD0\x90") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1842,7 +1842,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x1A\0\"\0.\0\xDB\x8C\xD9\x88 \xDA\xA9\xDB\x92\xDB\x81\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xDA\xA9\xD8\xA7\xD8\xA4\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xA7\xD9\x85\xD8\xB1\xDB\x8C\xDA\xA9\xD8\xA7") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\t\0\x1A\0\"\0.\0C\0\xDB\x8C\xD9\x88 \xDA\xA9\xDB\x92\xDB\x81\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xDA\xA9\xD8\xA7\xD8\xA4\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xA7\xD9\x82\xD9\x88\xD8\xA7\xD9\x85 \xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xDB\x81\xD8\xA7\xD9\x85\xD8\xB1\xDB\x8C\xDA\xA9\xD8\xA7") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1852,7 +1852,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\t\0\x1A\0\"\0.\0\xDB\x8C\xD9\x88 \xDA\xA9\xDB\x92\xDB\x81\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xDA\xA9\xD8\xA7\xD8\xA4\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xA7\xD9\x85\xD8\xB1\xDB\x8C\xDA\xA9\xD8\xA7") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\t\0\x1A\0\"\0.\0C\0\xDB\x8C\xD9\x88 \xDA\xA9\xDB\x92\xDB\x81\xD8\xA7\xD9\x86\xDA\xAF \xDA\xA9\xD8\xA7\xD9\x86\xDA\xAF\xD9\x85\xDA\xA9\xD8\xA7\xD8\xA4\xD9\x81\xD9\x84\xD8\xB3\xD8\xB7\xDB\x8C\xD9\x86\xD8\xA7\xD9\x82\xD9\x88\xD8\xA7\xD9\x85 \xD9\x85\xD8\xAA\xD8\xAD\xD8\xAF\xDB\x81\xD8\xA7\xD9\x85\xD8\xB1\xDB\x8C\xDA\xA9\xD8\xA7") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1872,7 +1872,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x04\0\x0E\0\x18\0(\0\xD0\x93\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\xA4\xD0\xB0\xD0\xBB\xD0\xB0\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\x90\xD2\x9A\xD0\xA8") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x19\0'\x001\0A\0\xD0\x91\xD1\x83\xD1\x8E\xD0\xBA \xD0\x91\xD1\x80\xD0\xB8\xD1\x82\xD0\xB0\xD0\xBD\xD0\xB8\xD1\x8F\xD0\x93\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xBE\xD0\xBD\xD0\xB3\xD0\x9C\xD0\xB0\xD0\xBA\xD0\xB0\xD0\xBE\xD0\xA4\xD0\xB0\xD0\xBB\xD0\xB0\xD1\x81\xD1\x82\xD0\xB8\xD0\xBD\xD0\x90\xD2\x9A\xD0\xA8") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1892,7 +1892,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0C\0\x11\0\x1A\0\x1D\0H\xE1\xBB\x93ng K\xC3\xB4ngMacaoPalestineLHQM\xE1\xBB\xB9") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x12\0\x1E\0#\0,\0/\0V\xC6\xB0\xC6\xA1ng qu\xE1\xBB\x91c AnhH\xE1\xBB\x93ng K\xC3\xB4ngMacaoPalestineLHQM\xE1\xBB\xB9") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1912,7 +1912,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x01\0Palestine") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0C\0\x15\0\x1C\0%\0Ruwaayom IniOo\xC5\x8B Ko\xC5\x8BMakaawoPalestineEtaa Sini") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1942,7 +1942,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\t\0\x11\0Hong KongM\xC3\xA0k\xC3\xA1\xC3\xB2Pal\xE1\xBA\xB9s\xC3\xADt\xC3\xADn\xC3\xAC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0E\0\x17\0\x1F\0.\0G\xE1\xBA\xB9\xCC\x80\xE1\xBA\xB9\xCC\x81s\xC3\xACHong KongM\xC3\xA0k\xC3\xA1\xC3\xB2Pal\xE1\xBA\xB9s\xC3\xADt\xC3\xADn\xC3\xACAm\xE1\xBA\xB9rik\xC3\xA0") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1952,7 +1952,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\t\0\x11\0Hong KongM\xC3\xA0k\xC3\xA1\xC3\xB2Pal\xC9\x9Bs\xC3\xADt\xC3\xADn\xC3\xAC") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0C\0\x15\0\x1D\0+\0G\xC9\x9B\xCC\x80\xC9\x9B\xCC\x81s\xC3\xACHong KongM\xC3\xA0k\xC3\xA1\xC3\xB2Pal\xC9\x9Bs\xC3\xADt\xC3\xADn\xC3\xACAm\xC9\x9Brik\xC3\xA0") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1962,7 +1962,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0B\0\x10\0\x18\0\x1B\0H\xC5\xA9gi K\xC5\xA9giMakauParetinaONUEUA") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x10\0\x1B\0 \0(\0+\0Reyinu Yepewas\xC3\xBAH\xC5\xA9gi K\xC5\xA9giMakauParetinaONUEUA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1972,7 +1972,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x0B\0\x10\0\x18\0\x1B\0H\xC5\xA9gi K\xC5\xA9giMakauParetinaONUEUA") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x10\0\x1B\0 \0(\0+\0Reyinu Yepewas\xC3\xBAH\xC5\xA9gi K\xC5\xA9giMakauParetinaONUEUA") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1982,7 +1982,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x06\0\x0C\0\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x96\x80\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x06\0\x0C\0\x12\0\x1E\0\xE8\x8B\xB1\xE5\x9C\x8B\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x96\x80\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6\xE7\xBE\x8E\xE5\x9C\x8B") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -1992,7 +1992,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x06\0\x0C\0\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x97\xA8\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x05\0\x06\0\x0C\0\x12\0\x1E\0\xE8\x8B\xB1\xE5\x9B\xBD\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x97\xA8\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6\xE7\xBE\x8E\xE5\x9B\xBD") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -2012,7 +2012,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x06\0\x0C\0\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x97\xA8\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x06\0\x0C\0\x12\0\x1E\0'\0\xE8\x8B\xB1\xE5\x9B\xBD\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x97\xA8\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6\xE8\x81\x94\xE5\x90\x88\xE5\x9B\xBD\xE7\xBE\x8E\xE5\x9B\xBD") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -2022,7 +2022,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x06\0\x0C\0\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x96\x80\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x06\0\x0C\0\x12\0\x1E\0'\0\xE8\x8B\xB1\xE5\x9C\x8B\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x96\x80\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6\xE8\x81\xAF\xE5\x90\x88\xE5\x9C\x8B\xE7\xBE\x8E\xE5\x9C\x8B") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {
@@ -2032,7 +2032,7 @@ macro_rules! __impl_region_display_names_v1 {
                         },
                         short_names: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"HK\0MO\0PS\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x06\0\x0C\0\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x96\x80\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"GB\0HK\0MO\0PS\0UN\0US\0") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x06\0\x06\0\x0C\0\x12\0\x1E\0'\0\xE8\x8B\xB1\xE5\x9C\x8B\xE9\xA6\x99\xE6\xB8\xAF\xE6\xBE\xB3\xE9\x96\x80\xE5\xB7\xB4\xE5\x8B\x92\xE6\x96\xAF\xE5\x9D\xA6\xE8\x81\xAF\xE5\x90\x88\xE5\x9C\x8B\xE7\xBE\x8E\xE5\x9C\x8B") })
                         },
                     },
                     icu::experimental::displaynames::provider::RegionDisplayNames {

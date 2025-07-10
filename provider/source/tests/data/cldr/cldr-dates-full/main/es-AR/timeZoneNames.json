@@ -10,6 +10,7 @@
           "hourFormat": "+HH:mm;-HH:mm",
           "gmtFormat": "GMT{0}",
           "gmtZeroFormat": "GMT",
+          "gmtUnknownFormat": "GMT+?",
           "regionFormat": "hora de {0}",
           "regionFormat-type-daylight": "hora de verano de {0}",
           "regionFormat-type-standard": "hora estándar de {0}",
@@ -42,7 +43,7 @@
               },
               "Enderbury": {
                 "_type": "zone",
-                "exemplarCity": "Enderbury"
+                "exemplarCity": "Canton"
               },
               "Saipan": {
                 "_type": "zone",
@@ -63,6 +64,10 @@
               "Wake": {
                 "_type": "zone",
                 "exemplarCity": "Isla Wake"
+              },
+              "Wallis": {
+                "_type": "zone",
+                "exemplarCity": "Wallis & Futuna"
               }
             },
             "Etc": {
@@ -180,6 +185,10 @@
               "Rangoon": {
                 "_type": "zone",
                 "exemplarCity": "Yangón (Rangún)"
+              },
+              "Hovd": {
+                "_type": "zone",
+                "exemplarCity": "Khovd"
               },
               "Ulaanbaatar": {
                 "_type": "zone",
@@ -713,6 +722,10 @@
               }
             },
             "Antarctica": {
+              "Syowa": {
+                "_type": "zone",
+                "exemplarCity": "Showa"
+              },
               "DumontDUrville": {
                 "_type": "zone",
                 "exemplarCity": "Dumont-d’Urville"
@@ -1745,6 +1758,13 @@
             "Truk": {
               "long": {
                 "standard": "hora de Chuuk"
+              }
+            },
+            "Turkey": {
+              "long": {
+                "generic": "Hora de Turquía",
+                "standard": "Hora estándar de Turquía",
+                "daylight": "Hora de verano de Turquía"
               }
             },
             "Turkmenistan": {

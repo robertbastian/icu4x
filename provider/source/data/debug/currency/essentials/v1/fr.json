@@ -942,7 +942,9 @@
       "short_placeholder_value": {
         "Index": 89
       },
-      "narrow_placeholder_value": null
+      "narrow_placeholder_value": {
+        "Index": 89
+      }
     },
     "XOF": {
       "short_pattern_selection": "StandardAlphaNextToNumber",

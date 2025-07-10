@@ -12,6 +12,6 @@
   "elements": [
     "EEEEที่ d MMMM GGG y",
     "E d MMM GGG y",
-    "E d MMM GGG yy"
+    "GGG yy-M-d, E"
   ]
 }

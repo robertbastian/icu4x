@@ -1500,7 +1500,7 @@
         {
           "mapZone": {
             "_other": "Magallanes Standard Time",
-            "_type": "America/Punta_Arenas",
+            "_type": "America/Punta_Arenas America/Coyhaique",
             "_territory": "CL"
           }
         },

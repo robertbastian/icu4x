@@ -820,7 +820,9 @@
       "short_placeholder_value": {
         "Index": 57
       },
-      "narrow_placeholder_value": null
+      "narrow_placeholder_value": {
+        "Index": 57
+      }
     },
     "XOF": {
       "short_pattern_selection": "StandardAlphaNextToNumber",

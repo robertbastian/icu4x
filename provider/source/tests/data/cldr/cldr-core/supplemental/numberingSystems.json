@@ -53,6 +53,10 @@
         "_digits": "꩐꩑꩒꩓꩔꩕꩖꩗꩘꩙",
         "_type": "numeric"
       },
+      "chis": {
+        "_digits": "𖶠𖶡𖶢𖶣𖶤𖶥𖶦𖶧𖶨𖶩",
+        "_type": "numeric"
+      },
       "cyrl": {
         "_rules": "cyrillic-lower",
         "_type": "algorithmic"
@@ -375,6 +379,10 @@
       },
       "tnsa": {
         "_digits": "𖫀𖫁𖫂𖫃𖫄𖫅𖫆𖫇𖫈𖫉",
+        "_type": "numeric"
+      },
+      "tols": {
+        "_digits": "𑷠𑷡𑷢𑷣𑷤𑷥𑷦𑷧𑷨𑷩",
         "_type": "numeric"
       },
       "vaii": {

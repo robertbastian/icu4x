@@ -595,7 +595,7 @@ macro_rules! __impl_locale_exemplar_characters_punctuation_v1 {
                     icu::locale::provider::ExemplarCharactersData(icu::collections::codepointinvliststringlist::CodePointInversionListAndStringList::from_parts_unchecked(
                         unsafe {
                             #[allow(unused_unsafe)]
-                            icu::collections::codepointinvlist::CodePointInversionList::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"!\0\0\"\0\0(\0\0*\0\0,\0\0/\0\0:\0\0<\0\0?\0\0@\0\0[\0\0^\0\0\x11 \0\x12 \0") }, 13u32)
+                            icu::collections::codepointinvlist::CodePointInversionList::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"!\0\0\"\0\0(\0\0*\0\0,\0\0/\0\0:\0\0<\0\0?\0\0@\0\0[\0\0^\0\0\x10 \0\x12 \0") }, 14u32)
                         },
                         zerovec::vecs::VarZeroVec16::new(),
                     )),

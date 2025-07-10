@@ -674,7 +674,9 @@
       "short_placeholder_value": {
         "Index": 11
       },
-      "narrow_placeholder_value": null
+      "narrow_placeholder_value": {
+        "Index": 11
+      }
     },
     "RWF": {
       "short_pattern_selection": "StandardAlphaNextToNumber",

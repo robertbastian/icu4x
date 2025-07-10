@@ -233,6 +233,13 @@
     ],
     [
       [
+        38,
+        "Daylight"
+      ],
+      "Şili Yaz Saati"
+    ],
+    [
+      [
         39,
         "Standard"
       ],
@@ -324,6 +331,20 @@
     ],
     [
       [
+        70,
+        "Standard"
+      ],
+      "Hovd Standart Saati"
+    ],
+    [
+      [
+        70,
+        "Daylight"
+      ],
+      "Hovd Yaz Saati"
+    ],
+    [
+      [
         78,
         "Standard"
       ],
@@ -349,6 +370,13 @@
         "Standard"
       ],
       "Krasnoyarsk Standart Saati"
+    ],
+    [
+      [
+        93,
+        "Standard"
+      ],
+      "Magadan Standart Saati"
     ],
     [
       [
@@ -398,6 +426,13 @@
         "Daylight"
       ],
       "Yeni Zelanda Yaz Saati"
+    ],
+    [
+      [
+        131,
+        "Standard"
+      ],
+      "Samara Standart Saati"
     ],
     [
       [

@@ -38,9 +38,27 @@
     ],
     [
       [
+        6,
+        {
+          "AlphaNextToNumber": "Other"
+        }
+      ],
+      "0 M¤"
+    ],
+    [
+      [
         7,
         {
           "Standard": "Other"
+        }
+      ],
+      "00 M¤"
+    ],
+    [
+      [
+        7,
+        {
+          "AlphaNextToNumber": "Other"
         }
       ],
       "00 M¤"
@@ -56,9 +74,27 @@
     ],
     [
       [
+        8,
+        {
+          "AlphaNextToNumber": "Other"
+        }
+      ],
+      "000 M¤"
+    ],
+    [
+      [
         9,
         {
           "Standard": "Other"
+        }
+      ],
+      "0000 M¤"
+    ],
+    [
+      [
+        9,
+        {
+          "AlphaNextToNumber": "Other"
         }
       ],
       "0000 M¤"
@@ -74,9 +110,27 @@
     ],
     [
       [
+        10,
+        {
+          "AlphaNextToNumber": "Other"
+        }
+      ],
+      "00 mil M¤"
+    ],
+    [
+      [
         11,
         {
           "Standard": "Other"
+        }
+      ],
+      "000 mil M¤"
+    ],
+    [
+      [
+        11,
+        {
+          "AlphaNextToNumber": "Other"
         }
       ],
       "000 mil M¤"
@@ -92,6 +146,15 @@
     ],
     [
       [
+        12,
+        {
+          "AlphaNextToNumber": "Other"
+        }
+      ],
+      "0 B¤"
+    ],
+    [
+      [
         13,
         {
           "Standard": "Other"
@@ -101,9 +164,27 @@
     ],
     [
       [
+        13,
+        {
+          "AlphaNextToNumber": "Other"
+        }
+      ],
+      "00 B¤"
+    ],
+    [
+      [
         14,
         {
           "Standard": "Other"
+        }
+      ],
+      "000 B¤"
+    ],
+    [
+      [
+        14,
+        {
+          "AlphaNextToNumber": "Other"
         }
       ],
       "000 B¤"

@@ -205,6 +205,20 @@
     ],
     [
       [
+        37,
+        "Standard"
+      ],
+      "Chatham Standard Time"
+    ],
+    [
+      [
+        37,
+        "Daylight"
+      ],
+      "Chatham Daylight Time"
+    ],
+    [
+      [
         38,
         "Standard"
       ],
@@ -341,7 +355,7 @@
         70,
         "Daylight"
       ],
-      "Hovd Summer Time"
+      "Khovd Summer Time"
     ],
     [
       [
@@ -349,6 +363,13 @@
         "Standard"
       ],
       "Irkutsk Standard Time"
+    ],
+    [
+      [
+        82,
+        "Standard"
+      ],
+      "Kamchatka Standard Time"
     ],
     [
       [
@@ -377,6 +398,13 @@
         "Daylight"
       ],
       "Lord Howe Daylight Time"
+    ],
+    [
+      [
+        93,
+        "Standard"
+      ],
+      "Magadan Standard Time"
     ],
     [
       [
@@ -447,6 +475,13 @@
         "Standard"
       ],
       "Philippine Standard Time"
+    ],
+    [
+      [
+        131,
+        "Standard"
+      ],
+      "Samara Standard Time"
     ],
     [
       [

@@ -291,13 +291,16 @@
             },
             "eras": {
               "eraNames": {
-                "0": "هـ"
+                "0": "هـ",
+                "1": "BH"
               },
               "eraAbbr": {
-                "0": "هـ"
+                "0": "هـ",
+                "1": "BH"
               },
               "eraNarrow": {
-                "0": "هـ"
+                "0": "هـ",
+                "1": "BH"
               }
             },
             "dateFormats": {
@@ -335,24 +338,31 @@
                 "Bhms": "h:mm:ss B",
                 "d": "d",
                 "E": "ccc",
+                "EBh": "E h B",
                 "EBhm": "E h:mm B",
                 "EBhms": "E h:mm:ss B",
                 "Ed": "E، d",
+                "Eh": "E h a",
+                "EH": "E HH'h'",
                 "Ehm": "E h:mm a",
                 "EHm": "E HH:mm",
                 "Ehms": "E h:mm:ss a",
                 "EHms": "E HH:mm:ss",
                 "Gy": "y G",
+                "GyM": "G y-MM",
                 "GyMd": "d‏/M‏/y G",
+                "GyMEd": "G y-MM-dd, E",
                 "GyMMM": "MMM y G",
                 "GyMMMd": "d MMM y G",
                 "GyMMMEd": "E، d MMM y G",
                 "h": "h a",
-                "H": "HH",
+                "H": "HH'h'",
                 "hm": "h:mm a",
                 "Hm": "HH:mm",
                 "hms": "h:mm:ss a",
                 "Hms": "HH:mm:ss",
+                "hv": "h a v",
+                "Hv": "HH'h' v",
                 "M": "L",
                 "Md": "d‏/M",
                 "MEd": "E، d‏/M",
@@ -443,7 +453,7 @@
                   "h": "h–h a"
                 },
                 "H": {
-                  "H": "HH–HH"
+                  "H": "HH–HH'h'"
                 },
                 "hm": {
                   "a": "h:mm a – h:mm a",
@@ -468,7 +478,7 @@
                   "h": "h–h a v"
                 },
                 "Hv": {
-                  "H": "HH–HH v"
+                  "H": "HH–HH'h' v"
                 },
                 "M": {
                   "M": "M–M"
@@ -536,6 +546,14 @@
               "standard": {
                 "full": "{1} في {0}",
                 "long": "{1} في {0}",
+                "medium": "{1}، {0}",
+                "short": "{1}, {0}"
+              }
+            },
+            "dateTimeFormats-relative": {
+              "standard": {
+                "full": "{1}، {0}",
+                "long": "{1}، {0}",
                 "medium": "{1}، {0}",
                 "short": "{1}, {0}"
               }

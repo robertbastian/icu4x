@@ -339,6 +339,10 @@
             "_reason": "deprecated",
             "_replacement": "njz"
           },
+          "dek": {
+            "_reason": "deprecated",
+            "_replacement": "sqm"
+          },
           "deu": {
             "_reason": "overlong",
             "_replacement": "de"
@@ -1055,10 +1059,6 @@
             "_reason": "overlong",
             "_replacement": "mt"
           },
-          "mnk": {
-            "_reason": "macrolanguage",
-            "_replacement": "man"
-          },
           "mnt": {
             "_reason": "deprecated",
             "_replacement": "wnn"
@@ -1214,6 +1214,10 @@
           "npi": {
             "_reason": "macrolanguage",
             "_replacement": "ne"
+          },
+          "nte": {
+            "_reason": "deprecated",
+            "_replacement": "eko"
           },
           "nts": {
             "_reason": "deprecated",

@@ -5,7 +5,7 @@
 ///
 /// Using this implementation will embed the following data in the binary's data segment:
 /// * 707B for the lookup data structure (140 data identifiers)
-/// * 29474B[^1] for the actual data (137 unique structs)
+/// * 29481B[^1] for the actual data (137 unique structs)
 ///
 /// [^1]: these numbers can be smaller in practice due to linker deduplication
 ///
@@ -349,7 +349,7 @@ macro_rules! __impl_short_quarter_relative_v1 {
                     icu::experimental::relativetime::provider::RelativeTimePatternData {
                         relatives: unsafe {
                             #[allow(unused_unsafe)]
-                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"\xFF\0\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\r\0\x15\0trim. dernierce trim.trim. prochain") })
+                            zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"\xFF\0\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\r\0\x1C\0trim. dernierce trimestre-citrim. prochain") })
                         },
                         past: icu::plurals::provider::PluralElementsPackedCow { elements: alloc::borrow::Cow::Borrowed(unsafe { icu::plurals::provider::PluralElementsPackedULE::from_bytes_unchecked(b"\0\x08il y a  trim.") }) },
                         future: icu::plurals::provider::PluralElementsPackedCow { elements: alloc::borrow::Cow::Borrowed(unsafe { icu::plurals::provider::PluralElementsPackedULE::from_bytes_unchecked(b"\0\x06dans  trim.") }) },

@@ -9,7 +9,6 @@ use core::cmp::Ordering;
 use core::hash::Hash;
 use core::hash::Hasher;
 use icu::datetime::provider::time_zones::*;
-use icu::locale::subtags::region;
 use icu::time::provider::*;
 use icu::time::zone::ZoneNameTimestamp;
 use icu::time::DateTime;
@@ -321,26 +320,15 @@ impl SourceDataProvider {
 
                 for (&bcp47_tzid, bcp47_tzid_data) in bcp47_tzids_resource {
                     regions_to_zones
-                        .entry(match bcp47_tzid.as_str() {
-                            // backfill since this data is not in 47 yet
-                            "ancur" => region!("CW"),
-                            "fimhq" => region!("AX"),
-                            "gpmsb" => region!("MF"),
-                            "gpsbh" => region!("BL"),
-                            "gazastrp" | "hebron" => region!("PS"),
-                            "jeruslm" => region!("IL"),
-                            _ => {
-                                if bcp47_tzid_data.deprecated == Some(true) {
-                                    continue;
-                                } else if let Some(region) = bcp47_tzid_data.region {
-                                    region
-                                } else if bcp47_tzid.0.len() != 5 {
-                                    // Length-5 ID without override, no region
-                                    continue;
-                                } else {
-                                    bcp47_tzid.as_str()[0..2].parse().unwrap()
-                                }
-                            }
+                        .entry(if bcp47_tzid_data.deprecated == Some(true) {
+                            continue;
+                        } else if let Some(region) = bcp47_tzid_data.region {
+                            region
+                        } else if bcp47_tzid.0.len() != 5 {
+                            // Length-5 ID without override, no region
+                            continue;
+                        } else {
+                            bcp47_tzid.as_str()[0..2].parse().unwrap()
                         })
                         .or_default()
                         .insert(bcp47_tzid);

@@ -9,6 +9,7 @@
           "hourFormat": "+HH:mm;-HH:mm",
           "gmtFormat": "GMT{0}",
           "gmtZeroFormat": "GMT",
+          "gmtUnknownFormat": "GMT+?",
           "regionFormat": "{0}",
           "regionFormat-type-daylight": "{0}, летње време",
           "regionFormat-type-standard": "{0}, стандардно време",
@@ -56,10 +57,6 @@
                 "exemplarCity": "Гуам"
               },
               "Enderbury": {
-                "_type": "zone",
-                "exemplarCity": "Ендербери"
-              },
-              "Kanton": {
                 "_type": "zone",
                 "exemplarCity": "Кантон"
               },
@@ -2617,6 +2614,13 @@
             "Truk": {
               "long": {
                 "standard": "Чуук време"
+              }
+            },
+            "Turkey": {
+              "long": {
+                "generic": "Турска време",
+                "standard": "Турска стандардно време",
+                "daylight": "Турска летње рачунање времена"
               }
             },
             "Turkmenistan": {

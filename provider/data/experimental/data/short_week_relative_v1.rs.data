@@ -5,7 +5,7 @@
 ///
 /// Using this implementation will embed the following data in the binary's data segment:
 /// * 776B for the lookup data structure (155 data identifiers)
-/// * 30878B[^1] for the actual data (153 unique structs)
+/// * 30901B[^1] for the actual data (153 unique structs)
 ///
 /// [^1]: these numbers can be smaller in practice due to linker deduplication
 ///
@@ -1120,7 +1120,7 @@ macro_rules! __impl_short_week_relative_v1 {
                             zerovec::ZeroMap::from_parts_unchecked(unsafe { zerovec::ZeroVec::from_bytes_unchecked(b"\xFF\0\x01") }, unsafe { zerovec::vecs::VarZeroVec16::from_bytes_unchecked(b"\x03\0\x13\0 \0\xD9\xBE\xDA\x86\xDA\xBE\xD9\x84\xDB\x92 \xDB\x81\xD9\x81\xD8\xAA\xDB\x81\xD8\xA7\xD8\xB3 \xDB\x81\xD9\x81\xD8\xAA\xDB\x81\xD8\xA7\xDA\xAF\xD9\x84\xDB\x92 \xDB\x81\xD9\x81\xD8\xAA\xDB\x81") })
                         },
                         past: icu::plurals::provider::PluralElementsPackedCow { elements: alloc::borrow::Cow::Borrowed(unsafe { icu::plurals::provider::PluralElementsPackedULE::from_bytes_unchecked(b"\0\x01 \xDB\x81\xD9\x81\xD8\xAA\xDB\x92 \xD9\x82\xD8\xA8\xD9\x84") }) },
-                        future: icu::plurals::provider::PluralElementsPackedCow { elements: alloc::borrow::Cow::Borrowed(unsafe { icu::plurals::provider::PluralElementsPackedULE::from_bytes_unchecked(b"\0\x01 \xDB\x81\xD9\x81\xD8\xAA\xDB\x92 \xD9\x85\xDB\x8C\xDA\xBA") }) },
+                        future: icu::plurals::provider::PluralElementsPackedCow { elements: alloc::borrow::Cow::Borrowed(unsafe { icu::plurals::provider::PluralElementsPackedULE::from_bytes_unchecked(b"\x80\x13\x01 \xDB\x81\xD9\x81\xD8\xAA\xD9\x88\xDA\xBA \xD9\x85\xDB\x8C\xDA\xBA\x01\0\x10\x01 \xDB\x81\xD9\x81\xD8\xAA\xDB\x92 \xD9\x85\xDB\x8C\xDA\xBA") }) },
                     },
                     icu::experimental::relativetime::provider::RelativeTimePatternData {
                         relatives: unsafe {

@@ -10,6 +10,7 @@
           "hourFormat": "+HH:mm;-HH:mm",
           "gmtFormat": "غرينتش{0}",
           "gmtZeroFormat": "غرينتش",
+          "gmtUnknownFormat": "GMT+?",
           "regionFormat": "توقيت {0}",
           "regionFormat-type-daylight": "توقيت {0} الصيفي",
           "regionFormat-type-standard": "توقيت {0} الرسمي",
@@ -57,10 +58,6 @@
                 "exemplarCity": "غوام"
               },
               "Enderbury": {
-                "_type": "zone",
-                "exemplarCity": "اندربيرج"
-              },
-              "Kanton": {
                 "_type": "zone",
                 "exemplarCity": "كانتون"
               },
@@ -2117,9 +2114,6 @@
             "Gulf": {
               "long": {
                 "standard": "توقيت الخليج"
-              },
-              "short": {
-                "standard": "GST"
               }
             },
             "Guyana": {

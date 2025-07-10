@@ -33,7 +33,7 @@ impl SourceDataProvider {
                     .cldr()?
                     .dates("japanese")
                     .read_and_parse::<cldr_serde::ca::Resource>(
-                        &locale!("en").into(),
+                        &locale!("und").into(),
                         "ca-japanese.json",
                     )?
                     .main

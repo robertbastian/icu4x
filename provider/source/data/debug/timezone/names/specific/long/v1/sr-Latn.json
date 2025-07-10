@@ -107,13 +107,6 @@
     ],
     [
       [
-        14,
-        "Standard"
-      ],
-      "Anadir standardno vreme"
-    ],
-    [
-      [
         15,
         "Standard"
       ],
@@ -216,6 +209,13 @@
         "Standard"
       ],
       "Čile, standardno vreme"
+    ],
+    [
+      [
+        38,
+        "Daylight"
+      ],
+      "Čile, letnje vreme"
     ],
     [
       [
@@ -405,6 +405,13 @@
         "Daylight"
       ],
       "Lord Hov, letnje vreme"
+    ],
+    [
+      [
+        93,
+        "Standard"
+      ],
+      "Magadan, standardno vreme"
     ],
     [
       [

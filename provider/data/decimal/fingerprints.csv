@@ -27,7 +27,7 @@ decimal/digits/v1, und/telu, 40B, 40B, 4084dfba70dc949
 decimal/digits/v1, und/thai, 40B, 40B, 470541c261160c5a
 decimal/digits/v1, und/tibt, 40B, 40B, a199e0054f3d55b9
 decimal/digits/v1, und/vaii, 40B, 40B, f3247f156118e197
-decimal/symbols/v1, <lookup>, 1352B, 262 identifiers
+decimal/symbols/v1, <lookup>, 1372B, 267 identifiers
 decimal/symbols/v1, <total>, 2363B, 991B, 49 unique payloads
 decimal/symbols/v1, af, 47B, 19B, 3e51d5d2bbc1f2d7
 decimal/symbols/v1, ar, 52B, 24B, c3d6103c042fed33
@@ -114,13 +114,17 @@ decimal/symbols/v1, en-CH, -> de-CH
 decimal/symbols/v1, en-CZ, -> af
 decimal/symbols/v1, en-DE, -> ast
 decimal/symbols/v1, en-DK, -> ast
+decimal/symbols/v1, en-EE, -> af
 decimal/symbols/v1, en-ES, -> ast
 decimal/symbols/v1, en-FI, -> af
 decimal/symbols/v1, en-FR, 48B, 20B, 1bf992c0a6d711d8
+decimal/symbols/v1, en-GE, -> en-FR
 decimal/symbols/v1, en-HU, -> af
 decimal/symbols/v1, en-ID, -> ast
 decimal/symbols/v1, en-IN, -> as/latn
 decimal/symbols/v1, en-IT, -> ast
+decimal/symbols/v1, en-LT, -> af
+decimal/symbols/v1, en-LV, -> af
 decimal/symbols/v1, en-NL, -> ast
 decimal/symbols/v1, en-NO, -> af
 decimal/symbols/v1, en-PL, -> ast
@@ -129,6 +133,7 @@ decimal/symbols/v1, en-RO, -> ast
 decimal/symbols/v1, en-SE, -> af
 decimal/symbols/v1, en-SI, -> ast
 decimal/symbols/v1, en-SK, -> af
+decimal/symbols/v1, en-UA, -> af
 decimal/symbols/v1, en-ZA, -> af
 decimal/symbols/v1, eo, -> af
 decimal/symbols/v1, es, 46B, 18B, 28dd4136886d5f01

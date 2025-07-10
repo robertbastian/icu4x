@@ -100,13 +100,6 @@
     ],
     [
       [
-        14,
-        "Standard"
-      ],
-      "Standard Time sa Anadyr"
-    ],
-    [
-      [
         15,
         "Standard"
       ],
@@ -360,6 +353,13 @@
     [
       [
         70,
+        "Standard"
+      ],
+      "Standard na Oras sa Hovd"
+    ],
+    [
+      [
+        70,
         "Daylight"
       ],
       "Oras sa Tag-init ng Hovd"
@@ -412,6 +412,13 @@
         "Daylight"
       ],
       "Daylight Time sa Lorde Howe"
+    ],
+    [
+      [
+        93,
+        "Standard"
+      ],
+      "Standard na Oras sa Magadan"
     ],
     [
       [
