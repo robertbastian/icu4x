@@ -36,27 +36,15 @@
 #![warn(missing_docs)]
 
 mod astronomy;
-/// Chinese-like lunar calendars (Chinese, Dangi)
 pub mod chinese_based;
-/// The Coptic calendar
 pub mod coptic;
-/// Error handling
 mod error;
-/// The ethiopian calendar
 pub mod ethiopian;
-/// The Hebrew calendar
+pub mod gregorian;
 pub mod hebrew;
 pub mod hebrew_keviyah;
-/// Additional math helpers
 pub mod helpers;
-/// Various islamic lunar calendars
 pub mod islamic;
-/// The ISO calendar (also usable as Gregorian)
-pub mod iso;
-/// The Julian calendar
 pub mod julian;
-/// The persian calendar
 pub mod persian;
-/// Representation of Rata Die (R.D.) dates, which are
-/// represented as the number of days since ISO date 0001-01-01.
 pub mod rata_die;

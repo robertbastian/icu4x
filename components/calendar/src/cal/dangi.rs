@@ -245,7 +245,7 @@ impl Calendar for Dangi {
     }
 
     fn extended_year(&self, date: &Self::DateInner) -> i32 {
-        chinese_based::extended_from_iso::<chinese_based::Dangi>(date.0.year.related_iso)
+        chinese_based::extended_from_gregorian::<chinese_based::Dangi>(date.0.year.related_iso)
     }
 
     fn is_in_leap_year(&self, date: &Self::DateInner) -> bool {
