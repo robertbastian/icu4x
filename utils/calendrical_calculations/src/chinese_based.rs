@@ -51,6 +51,11 @@ pub fn gregorian_from_extended<C: ChineseBased>(extended_year: i32) -> i32 {
     extended_year + const { crate::gregorian::gregorian_year_from_fixed(C::EPOCH) as i32 - 1 }
 }
 
+#[deprecated(since = "0.2.1", note = "use `extended_from_gregorian`")]
+pub use extended_from_gregorian as extended_from_iso;
+#[deprecated(since = "0.2.1", note = "use `gregorian_from_extended`")]
+pub use gregorian_from_extended as iso_from_extended;
+
 /// A type implementing [`ChineseBased`] for the Chinese calendar
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
 #[allow(clippy::exhaustive_structs)] // newtype

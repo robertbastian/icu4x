@@ -48,3 +48,12 @@ pub mod islamic;
 pub mod julian;
 pub mod persian;
 pub mod rata_die;
+
+#[deprecated(since = "0.2.1", note = "use `gregorian`")]
+pub mod iso {
+    //! The ISO calendar (i.e. Gregorian)
+    pub use crate::gregorian::const_fixed_from_gregorian as const_fixed_from_iso;
+    pub use crate::gregorian::fixed_from_gregorian as fixed_from_iso;
+    pub use crate::gregorian::gregorian_from_fixed as iso_from_fixed;
+    pub use crate::gregorian::is_leap_year;
+}
