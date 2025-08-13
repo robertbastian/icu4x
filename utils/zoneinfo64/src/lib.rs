@@ -431,14 +431,40 @@ pub struct Zone<'a> {
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Offset {
-    pub since: i64,
+    /// The offset from UTC of this time zone
     pub offset: UtcOffset,
+    /// Whether or not the Rule (i.e. "non standard" time) applies
     pub rule_applies: bool,
 }
 
+/// The offset for a transition
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct TransitionOffset {
+    /// When the transition starts
+    pub since: i64,
+    /// The offset from UTC after this transition
+    pub offset: UtcOffset,
+    /// Whether or not the Rule (i.e. "non standard" time) applies
+    pub rule_applies: bool,
+}
+
+impl From<TransitionOffset> for Offset {
+    fn from(other: TransitionOffset) -> Self {
+        Self {
+            offset: other.offset,
+            rule_applies: other.rule_applies,
+        }
+    }
+}
+
 pub enum PossibleOffset {
+    /// There is a single possible offset
     Single(Offset),
+    /// There are multiple possible offsets (sorted in ascending order)
+    // The ascending order constraint is useful in Temporal
+    // <https://tc39.es/proposal-temporal/#sec-getnamedtimezoneepochnanoseconds>
     Ambiguous(Offset, Offset),
+    /// There is no possible offset, this is a gap transition
     None,
 }
 
@@ -480,12 +506,12 @@ impl Zone<'_> {
         }
     }
 
-    fn offset_at(&self, idx: isize, seconds_since_epoch: i64) -> Offset {
+    fn offset_at(&self, idx: isize, seconds_since_epoch: i64) -> TransitionOffset {
         // before first transition don't use `type_map`, just the first entry in `type_offsets`
         if idx < 0 || self.simple.type_map.is_empty() {
             #[expect(clippy::unwrap_used)] // type_offsets non-empty by invariant
             let &(standard, rule_additional) = self.simple.type_offsets.first().unwrap();
-            return Offset {
+            return TransitionOffset {
                 since: i64::MIN,
                 offset: UtcOffset::from_seconds_unchecked(standard + rule_additional),
                 rule_applies: rule_additional > 0,
@@ -494,20 +520,14 @@ impl Zone<'_> {
 
         let idx = idx as usize;
 
-        // after the last transition, respect the rule
         if idx >= self.simple.type_map.len() - 1 {
-            if let Some(rule) = self.final_rule.as_ref() {
-                let (additional_offset_seconds, transition) = rule
-                    .inner
-                    .additional_offset_since(seconds_since_epoch, rule.start_year);
-                return Offset {
-                    since: transition,
-                    rule_applies: additional_offset_seconds != 0,
-                    offset: UtcOffset::from_seconds_unchecked(
-                        rule.standard_offset_seconds + additional_offset_seconds,
-                    ),
-                };
-            }
+            debug_assert!(false, "Called offset_at with out-of-range index (got {idx}, but only have {} transitions)", self.simple.type_map.len());
+            // GIGO behavior
+            return TransitionOffset {
+                since: i64::MIN,
+                rule_applies: false,
+                offset: Default::default(),
+            };
         }
 
         let idx = core::cmp::min(idx, self.simple.type_map.len() - 1);
@@ -529,7 +549,7 @@ impl Zone<'_> {
             ((hi as u32 as u64) << 32 | (lo as u32 as u64)) as i64
         };
 
-        Offset {
+        TransitionOffset {
             since,
             offset: UtcOffset::from_seconds_unchecked(standard + rule_additional),
             rule_applies: rule_additional > 0,
@@ -579,31 +599,36 @@ impl Zone<'_> {
             && seconds_since_local_epoch >= candidate_local_since
             && before_candidate != candidate
         {
-            return PossibleOffset::Ambiguous(before_candidate, candidate);
+            return PossibleOffset::Ambiguous(before_candidate.into(), candidate.into());
         }
 
         if seconds_since_local_epoch < candidate_local_until
             && seconds_since_local_epoch >= after_candidate_local_since
             && candidate != after_candidate
         {
-            return PossibleOffset::Ambiguous(candidate, after_candidate);
+            return PossibleOffset::Ambiguous(candidate.into(), after_candidate.into());
         }
 
         if seconds_since_local_epoch < before_candidate_local_until {
-            return PossibleOffset::Single(before_candidate);
+            return PossibleOffset::Single(before_candidate.into());
         }
         if seconds_since_local_epoch < candidate_local_until {
-            return PossibleOffset::Single(candidate);
+            return PossibleOffset::Single(candidate.into());
         }
         if seconds_since_local_epoch >= after_candidate_local_since {
-            return PossibleOffset::Single(after_candidate);
+            return PossibleOffset::Single(after_candidate.into());
         }
 
         PossibleOffset::None
     }
 
     pub fn for_timestamp(&self, seconds_since_epoch: i64) -> Offset {
-        self.offset_at(self.offset_idx(seconds_since_epoch), seconds_since_epoch)
+        let mut idx = self.offset_idx(seconds_since_epoch);
+        if idx >= self.simple.type_map.len() as isize {
+            if let Some(rule) = self.final_rule {}
+            idx = (self.simple.type_map.len() - 1) as isize;
+        }
+        self.offset_at(idx, seconds_since_epoch).into()
     }
 }
 
