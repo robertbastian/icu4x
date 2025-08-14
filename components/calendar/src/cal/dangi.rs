@@ -27,7 +27,6 @@ use crate::provider::chinese_based::CalendarDangiV1;
 use crate::types::CyclicYear;
 use crate::AsCalendar;
 use crate::{types, Calendar, Date};
-use calendrical_calculations::chinese_based;
 use calendrical_calculations::rata_die::RataDie;
 use core::cmp::Ordering;
 use icu_provider::prelude::*;
@@ -244,10 +243,6 @@ impl Calendar for Dangi {
         }
     }
 
-    fn extended_year(&self, date: &Self::DateInner) -> i32 {
-        chinese_based::extended_from_gregorian::<chinese_based::Dangi>(date.0.year.related_iso)
-    }
-
     fn is_in_leap_year(&self, date: &Self::DateInner) -> bool {
         Self::provided_year_is_leap(date.0.year)
     }
@@ -312,7 +307,7 @@ impl<A: AsCalendar<Calendar = Dangi>> Date<A> {
 
 impl ChineseBasedWithDataLoading for Dangi {
     type CB = calendrical_calculations::chinese_based::Dangi;
-    fn get_precomputed_data(&self) -> ChineseBasedPrecomputedData<Self::CB> {
+    fn get_precomputed_data(&self) -> ChineseBasedPrecomputedData<'_, Self::CB> {
         ChineseBasedPrecomputedData::new(self.data.as_ref().map(|d| d.get()))
     }
 }
