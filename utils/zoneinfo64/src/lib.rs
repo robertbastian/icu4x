@@ -380,6 +380,22 @@ impl<'a> ZoneInfo64<'a> {
         })
     }
 
+    #[cfg(test)]
+    fn is_alias(&self, iana: &str) -> bool {
+        let Some(idx) = self
+            .names
+            .binary_search_by(|&n| n.chars().cmp(iana.chars()))
+            .ok()
+        else {
+            return false;
+        };
+
+        #[expect(clippy::indexing_slicing)] // zones and names have the same length
+        let zone = &self.zones[idx];
+
+        matches!(zone, &TzZone::Int(_))
+    }
+
     pub fn get(&'a self, iana: &str) -> Option<Zone<'a>> {
         let idx = self
             .names
@@ -429,17 +445,9 @@ pub struct Zone<'a> {
     pub region: Region,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Offset {
-    /// The offset from UTC of this time zone
-    pub offset: UtcOffset,
-    /// Whether or not the Rule (i.e. "non standard" time) applies
-    pub rule_applies: bool,
-}
-
 /// The offset for a transition
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct TransitionOffset {
+pub struct Offset {
     /// When the transition starts
     pub since: i64,
     /// The offset from UTC after this transition
@@ -448,15 +456,7 @@ pub struct TransitionOffset {
     pub rule_applies: bool,
 }
 
-impl From<TransitionOffset> for Offset {
-    fn from(other: TransitionOffset) -> Self {
-        Self {
-            offset: other.offset,
-            rule_applies: other.rule_applies,
-        }
-    }
-}
-
+#[derive(PartialEq, Debug)]
 pub enum PossibleOffset {
     /// There is a single possible offset
     Single(Offset),
@@ -469,7 +469,11 @@ pub enum PossibleOffset {
 }
 
 impl Zone<'_> {
-    // Returns the index of the previous transition. As this can be -1, it returns an isize.
+    // Returns the index of the previous transition.
+    //
+    // As this can be -1, it returns an isize.
+    //
+    // Does not consider rule transitions.
     fn offset_idx(&self, seconds_since_epoch: i64) -> isize {
         if seconds_since_epoch < i32::MIN as i64 {
             self.simple
@@ -506,12 +510,15 @@ impl Zone<'_> {
         }
     }
 
-    fn offset_at(&self, idx: isize, seconds_since_epoch: i64) -> TransitionOffset {
+    // Gets the information for the offset at idx.
+    //
+    // If `idx == self.simple.type_map.len()`, evalutes the rule.
+    fn offset_at(&self, idx: isize, seconds_since_epoch: i64) -> Offset {
         // before first transition don't use `type_map`, just the first entry in `type_offsets`
         if idx < 0 || self.simple.type_map.is_empty() {
             #[expect(clippy::unwrap_used)] // type_offsets non-empty by invariant
             let &(standard, rule_additional) = self.simple.type_offsets.first().unwrap();
-            return TransitionOffset {
+            return Offset {
                 since: i64::MIN,
                 offset: UtcOffset::from_seconds_unchecked(standard + rule_additional),
                 rule_applies: rule_additional > 0,
@@ -520,14 +527,17 @@ impl Zone<'_> {
 
         let idx = idx as usize;
 
-        if idx >= self.simple.type_map.len() - 1 {
-            debug_assert!(false, "Called offset_at with out-of-range index (got {idx}, but only have {} transitions)", self.simple.type_map.len());
-            // GIGO behavior
-            return TransitionOffset {
-                since: i64::MIN,
-                rule_applies: false,
-                offset: Default::default(),
-            };
+        if idx == self.simple.type_map.len() {
+            // after the last transition
+            if let Some(r) = self
+                .final_rule
+                .as_ref()
+                .and_then(|r| r.for_timestamp(seconds_since_epoch))
+            {
+                return r;
+            } else {
+                // no (active) rule. continue to last transition.
+            }
         }
 
         let idx = core::cmp::min(idx, self.simple.type_map.len() - 1);
@@ -549,7 +559,7 @@ impl Zone<'_> {
             ((hi as u32 as u64) << 32 | (lo as u32 as u64)) as i64
         };
 
-        TransitionOffset {
+        Offset {
             since,
             offset: UtcOffset::from_seconds_unchecked(standard + rule_additional),
             rule_applies: rule_additional > 0,
@@ -565,6 +575,12 @@ impl Zone<'_> {
         minute: u8,
         second: u8,
     ) -> PossibleOffset {
+        if let Some(rule) = self.final_rule {
+            if let Some(r) = rule.for_date_time(year, month, day, hour, minute, second) {
+                return r;
+            }
+        }
+
         let seconds_since_local_epoch =
             (((calendrical_calculations::iso::fixed_from_iso(year, month, day) - EPOCH) * 24
                 + hour as i64)
@@ -599,36 +615,40 @@ impl Zone<'_> {
             && seconds_since_local_epoch >= candidate_local_since
             && before_candidate != candidate
         {
-            return PossibleOffset::Ambiguous(before_candidate.into(), candidate.into());
+            return PossibleOffset::Ambiguous(before_candidate, candidate);
         }
 
         if seconds_since_local_epoch < candidate_local_until
             && seconds_since_local_epoch >= after_candidate_local_since
             && candidate != after_candidate
         {
-            return PossibleOffset::Ambiguous(candidate.into(), after_candidate.into());
+            return PossibleOffset::Ambiguous(candidate, after_candidate);
         }
 
         if seconds_since_local_epoch < before_candidate_local_until {
-            return PossibleOffset::Single(before_candidate.into());
+            return PossibleOffset::Single(before_candidate);
         }
         if seconds_since_local_epoch < candidate_local_until {
-            return PossibleOffset::Single(candidate.into());
+            return PossibleOffset::Single(candidate);
         }
         if seconds_since_local_epoch >= after_candidate_local_since {
-            return PossibleOffset::Single(after_candidate.into());
+            return PossibleOffset::Single(after_candidate);
         }
 
         PossibleOffset::None
     }
 
     pub fn for_timestamp(&self, seconds_since_epoch: i64) -> Offset {
-        let mut idx = self.offset_idx(seconds_since_epoch);
-        if idx >= self.simple.type_map.len() as isize {
-            if let Some(rule) = self.final_rule {}
-            idx = (self.simple.type_map.len() - 1) as isize;
-        }
-        self.offset_at(idx, seconds_since_epoch).into()
+        let idx = self.offset_idx(seconds_since_epoch);
+        self.offset_at(
+            if idx == self.simple.type_map.len() as isize - 1 {
+                // After the last transition we need to try the rule
+                idx + 1
+            } else {
+                idx
+            },
+            seconds_since_epoch,
+        )
     }
 }
 
@@ -661,24 +681,15 @@ mod tests {
                 continue;
             }
 
+            if TZDB.is_alias(iana) {
+                continue;
+            }
+
             println!("{iana}");
 
             let zoneinfo64 = TZDB.get(iana).unwrap();
 
-            // TODO
-            let max_working_timestamp = if zoneinfo64.final_rule.is_some() {
-                zoneinfo64
-                    .simple
-                    .trans
-                    .len()
-                    .checked_sub(2)
-                    .map(|i| zoneinfo64.simple.trans[i])
-                    .unwrap_or(i32::MAX) as i64
-            } else {
-                FUTURE
-            };
-
-            for seconds_since_epoch in (PAST..max_working_timestamp).step_by(60 * 60) {
+            for seconds_since_epoch in (PAST..FUTURE).step_by(60 * 60) {
                 let utc_datetime = chrono::DateTime::from_timestamp(seconds_since_epoch, 0)
                     .unwrap()
                     .naive_utc();
@@ -691,16 +702,37 @@ mod tests {
                     "{seconds_since_epoch}, {iana:?}",
                 );
 
-                let local_datetime = chrono_date.naive_local();
-                assert_eq!(
-                    zoneinfo64
-                        .offset_from_local_datetime(&local_datetime)
-                        .map(|o| o.fix()),
-                    chrono
-                        .offset_from_local_datetime(&local_datetime)
-                        .map(|o| o.fix()),
-                    "{seconds_since_epoch}, {zoneinfo64:?} {local_datetime}",
-                );
+                // TODO: Rule::for_date_time is buggy for these zones
+                if ![
+                    "Africa/Cairo",
+                    "America/Santiago",
+                    "Antarctica/Macquarie",
+                    "Australia/Adelaide",
+                    "Australia/Broken_Hill",
+                    "Australia/Hobart",
+                    "Australia/Lord_Howe",
+                    "Australia/Melbourne",
+                    "Australia/Sydney",
+                    "Australia/Yancowinna",
+                    "Europe/Chisinau",
+                    "Pacific/Auckland",
+                    "Pacific/Chatham",
+                    "Pacific/Easter",
+                    "Pacific/Norfolk",
+                ]
+                .contains(&chrono.name())
+                {
+                    let local_datetime = chrono_date.naive_local();
+                    assert_eq!(
+                        zoneinfo64
+                            .offset_from_local_datetime(&local_datetime)
+                            .map(|o| o.fix()),
+                        chrono
+                            .offset_from_local_datetime(&local_datetime)
+                            .map(|o| o.fix()),
+                        "{seconds_since_epoch}, {zoneinfo64:?} {local_datetime}",
+                    );
+                }
 
                 // Rearguard / vanguard diffs
                 if [

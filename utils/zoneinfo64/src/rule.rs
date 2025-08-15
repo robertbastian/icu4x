@@ -7,7 +7,6 @@ use calendrical_calculations::iso;
 use calendrical_calculations::rata_die::RataDie;
 use icu_time::zone::UtcOffset;
 use iso::is_leap_year;
-use std::ops::Range;
 
 const SECONDS_IN_UTC_DAY: i64 = 86400;
 
@@ -196,6 +195,38 @@ impl TzRuleDate {
         // Subtract one so we get a 0-indexed value (Jan 1 = day 0)
         days_before_month + u16::from(day_of_month) - 1
     }
+
+    /// Converts the {transition_time} into a time in the UTC day, in seconds
+    /// for either the start or end trnasition
+    fn transition_time_to_utc(
+        &self,
+        standard_offset_seconds: i32,
+        additional_offset_seconds: i32,
+    ) -> i32 {
+        let seconds_of_day = self.transition_time as i32;
+        match self.time_mode {
+            TimeMode::Utc => seconds_of_day,
+            TimeMode::Standard => seconds_of_day - standard_offset_seconds,
+            TimeMode::Wall => {
+                seconds_of_day - (standard_offset_seconds + additional_offset_seconds)
+            }
+        }
+    }
+
+    /// Converts the {transition_time} into a time in the UTC day, in seconds
+    /// for either the start or end trnasition
+    fn transition_time_to_wall(
+        &self,
+        standard_offset_seconds: i32,
+        additional_offset_seconds: i32,
+    ) -> i32 {
+        let seconds_of_day = self.transition_time as i32;
+        match self.time_mode {
+            TimeMode::Utc => seconds_of_day + standard_offset_seconds + additional_offset_seconds,
+            TimeMode::Standard => seconds_of_day + additional_offset_seconds,
+            TimeMode::Wall => seconds_of_day,
+        }
+    }
 }
 
 impl TzRule {
@@ -220,188 +251,186 @@ impl TzRule {
             .unwrap(),
         }
     }
-}
 
-/// A reference point for a transition start time
-#[derive(Copy, Clone, Debug)]
-enum WallReference {
-    /// The time is in wall time pre-transition (note that this time may not occur!)
-    Prev,
-    /// The time is in wall time post-transition
-    Next,
-}
-
-#[derive(Copy, Clone, Debug)]
-struct TransitionsForYear {
-    /// The transition start time as a number of seconds since the epoch
-    start_epoch_seconds: i64,
-    /// The transition end time as a number of seconds since the epoch
-    end_epoch_seconds: i64,
-}
-
-impl TransitionsForYear {
-    /// For a UTC TransitionsForYear, convert it to the given WallReference mode
-    fn to_wall(self, rule: &Rule, mode_to: WallReference) -> Self {
-        let standard = i64::from(rule.standard_offset_seconds);
-        let rule = standard + i64::from(rule.inner.additional_offset_secs);
-
-        match mode_to {
-            WallReference::Prev => TransitionsForYear {
-                start_epoch_seconds: self.start_epoch_seconds + standard,
-                end_epoch_seconds: self.end_epoch_seconds + rule,
-            },
-            WallReference::Next => TransitionsForYear {
-                start_epoch_seconds: self.start_epoch_seconds + rule,
-                end_epoch_seconds: self.end_epoch_seconds + standard,
-            },
-        }
-    }
-
-    /// Returns the range between offsets in this year
-    /// This may cover DST or standard time, whichever starts first
-    pub(crate) fn range(&self) -> Range<i64> {
-        if self.range_is_standard() {
-            self.end_epoch_seconds..self.start_epoch_seconds
-        } else {
-            self.start_epoch_seconds..self.end_epoch_seconds
-        }
-    }
-
-    /// Whether range() contains standard time
-    pub(crate) fn range_is_standard(&self) -> bool {
-        self.start_epoch_seconds > self.end_epoch_seconds
+    pub(crate) fn is_inverted(&self) -> bool {
+        (self.start.month, self.start.day) > (self.end.month, self.end.day)
     }
 }
 
 impl Rule<'_> {
-    /// Get the transitions for a year, either as Utc or Wall
-    fn transitions_for_year(&self, year: i32) -> TransitionsForYear {
+    fn first_for_year(&self, year: i32) -> Offset {
+        if self.inner.is_inverted() {
+            self.end_for_year(year)
+        } else {
+            self.start_for_year(year)
+        }
+    }
+
+    fn second_for_year(&self, year: i32) -> Offset {
+        if self.inner.is_inverted() {
+            self.start_for_year(year)
+        } else {
+            self.end_for_year(year)
+        }
+    }
+
+    fn start_for_year(&self, year: i32) -> Offset {
         let days_since_epoch = days_since_epoch(year);
 
         let start = &self.inner.start;
         let start_day_in_year = start.day_in_year(year);
-        let start_seconds = self.transition_time_to_utc(start, true);
+        let start_seconds = start.transition_time_to_utc(self.standard_offset_seconds, 0);
         let start_epoch_seconds = (days_since_epoch + i64::from(start_day_in_year))
             * SECONDS_IN_UTC_DAY
             + i64::from(start_seconds);
 
+        Offset {
+            since: start_epoch_seconds,
+            offset: UtcOffset::from_seconds_unchecked(
+                self.standard_offset_seconds + self.inner.additional_offset_secs,
+            ),
+            rule_applies: true,
+        }
+    }
+
+    fn end_for_year(&self, year: i32) -> Offset {
+        let days_since_epoch = days_since_epoch(year);
+
         let end = &self.inner.end;
         let end_day_in_year = end.day_in_year(year);
-        let end_seconds = self.transition_time_to_utc(end, false);
+        let end_seconds = end.transition_time_to_utc(
+            self.standard_offset_seconds,
+            self.inner.additional_offset_secs,
+        );
         let end_epoch_seconds = (days_since_epoch + i64::from(end_day_in_year))
             * SECONDS_IN_UTC_DAY
             + i64::from(end_seconds);
 
-        TransitionsForYear {
-            start_epoch_seconds,
-            end_epoch_seconds,
-        }
-    }
-
-    /// Converts the {transition_time} into a time in the UTC day, in seconds
-    /// for either the start or end trnasition
-    fn transition_time_to_utc(&self, date: &TzRuleDate, is_start: bool) -> i32 {
-        let seconds_of_day = date.transition_time as i32;
-        let standard = self.standard_offset_seconds;
-        let rule = standard + self.inner.additional_offset_secs;
-        match date.time_mode {
-            TimeMode::Utc => seconds_of_day,
-            TimeMode::Standard => seconds_of_day - standard,
-            // Tz before this transition was standard
-            TimeMode::Wall if is_start => seconds_of_day - standard,
-            // Tz before this transition was rule
-            TimeMode::Wall => seconds_of_day - rule,
-        }
-    }
-
-    #[allow(unused)]
-    pub(crate) fn resolve_utc(&self, local_year: i32, seconds_since_utc_epoch: i64) -> UtcOffset {
-        let transitions = self.transitions_for_year(local_year);
-
-        let range_is_standard = transitions.range_is_standard();
-        let range = transitions.range();
-
-        let standard = self.standard_offset_seconds;
-
-        if range.contains(&seconds_since_utc_epoch) ^ range_is_standard {
-            UtcOffset::from_seconds_unchecked(standard + self.inner.additional_offset_secs)
-        } else {
-            UtcOffset::from_seconds_unchecked(standard)
-        }
-    }
-
-    #[allow(unused)]
-    pub(crate) fn resolve_local(
-        &self,
-        local_year: i32,
-        seconds_since_local_epoch: i64,
-    ) -> PossibleOffset {
-        let transitions = self.transitions_for_year(local_year);
-        let transitions_prev = transitions.to_wall(self, WallReference::Prev);
-        let transitions_next = transitions.to_wall(self, WallReference::Next);
-        let range_is_standard = transitions.range_is_standard();
-        let range_prev = transitions_prev.range();
-        let range_next = transitions_next.range();
-        let range_prev_contains = range_prev.contains(&seconds_since_local_epoch);
-        let range_next_contains = range_next.contains(&seconds_since_local_epoch);
-
-        let standard = self.standard_offset_seconds;
-        let standard_offset = Offset {
-            offset: UtcOffset::from_seconds_unchecked(standard),
+        Offset {
+            since: end_epoch_seconds,
+            offset: UtcOffset::from_seconds_unchecked(self.standard_offset_seconds),
             rule_applies: false,
-        };
-        let additional = standard + self.inner.additional_offset_secs;
-        let additional_offset = Offset {
-            offset: UtcOffset::from_seconds_unchecked(additional),
-            rule_applies: true,
-        };
-        let (in_range_offset, out_of_range_offset) = if range_is_standard {
-            (standard_offset, additional_offset)
-        } else {
-            (additional_offset, standard_offset)
-        };
+        }
+    }
 
-        // Prev is in the time zone *before* the transition, Next is in the time zone of and after the transition
-        // This means that when something is >= prev but < next there is no match, but if something is
-        // >= next and < prev there is an ambiguous match
+    pub fn for_date_time(
+        &self,
+        year: i32,
+        month: u8,
+        day: u8,
+        hour: u8,
+        minute: u8,
+        second: u8,
+    ) -> Option<PossibleOffset> {
+        if year < self.start_year as i32 {
+            return None;
+        }
+        let day_in_year =
+            (iso::fixed_from_iso(year, month, day) - iso::fixed_from_iso(year, 1, 1)) as i64;
+        let local_second_in_day = ((hour as i64 * 60) + minute as i64) * 60 + second as i64;
 
-        if seconds_since_local_epoch < range_prev.start
-            && seconds_since_local_epoch < range_next.start
-        {
-            // We're before any of the transitions
-            PossibleOffset::Single(out_of_range_offset)
-        } else if seconds_since_local_epoch >= range_prev.start
-            && seconds_since_local_epoch < range_next.start
-        {
-            // We're in the gap of the first transition
-            PossibleOffset::None
-        } else if seconds_since_local_epoch < range_prev.start
-            && seconds_since_local_epoch >= range_next.start
-        {
-            // We're in the ambiguous part of the first transition
-            // This happens when prev.start > next.start, which happens if the new (in range) offset is smaller
-            debug_assert!(in_range_offset.offset <= out_of_range_offset.offset);
-            PossibleOffset::Ambiguous(in_range_offset, out_of_range_offset)
-        } else if seconds_since_local_epoch < range_prev.end
-            && seconds_since_local_epoch < range_next.end
-        {
-            // We're between the two transitions
-            PossibleOffset::Single(in_range_offset)
-        } else if seconds_since_local_epoch >= range_prev.end
-            && seconds_since_local_epoch < range_next.end
-        {
-            // We're in the gap of the second transition
-            PossibleOffset::None
-        } else if seconds_since_local_epoch < range_prev.end
-            && seconds_since_local_epoch >= range_next.end
-        {
-            // We're in the ambiguous part of the second transition
-            // This happens when prev.end > next.end, which happens if the new (out of range) offset is smaller
-            debug_assert!(out_of_range_offset.offset <= in_range_offset.offset);
-            PossibleOffset::Ambiguous(out_of_range_offset, in_range_offset)
+        #[allow(clippy::collapsible_else_if)] // symmetry
+        if !self.inner.is_inverted() {
+            if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + self
+                        .inner
+                        .start
+                        .transition_time_to_wall(self.standard_offset_seconds, 0)
+                        as i64
+            {
+                // before spring-forward
+                if year == self.start_year as i32 {
+                    return None;
+                }
+                Some(PossibleOffset::Single(self.end_for_year(year - 1)))
+            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + (self
+                        .inner
+                        .start
+                        .transition_time_to_wall(self.standard_offset_seconds, 0)
+                        + self.inner.additional_offset_secs) as i64
+            {
+                // in spring-forward gap
+                Some(PossibleOffset::None)
+            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + (self.inner.start.transition_time_to_wall(
+                        self.standard_offset_seconds,
+                        self.inner.additional_offset_secs,
+                    ) - self.inner.additional_offset_secs) as i64
+            {
+                // before duplicated fall-back hour
+                Some(PossibleOffset::Single(self.start_for_year(year)))
+            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + self.inner.start.transition_time_to_wall(
+                        self.standard_offset_seconds,
+                        self.inner.additional_offset_secs,
+                    ) as i64
+            {
+                // in duplicated fall-back hour
+                Some(PossibleOffset::Ambiguous(
+                    self.start_for_year(year),
+                    self.end_for_year(year),
+                ))
+            } else {
+                // after fall-back
+                Some(PossibleOffset::Single(self.end_for_year(year)))
+            }
         } else {
-            // We're out of range
-            PossibleOffset::Single(out_of_range_offset)
+            if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + (self.inner.end.transition_time_to_wall(
+                        self.standard_offset_seconds,
+                        self.inner.additional_offset_secs,
+                    ) - self.inner.additional_offset_secs) as i64
+            {
+                // before duplicated fall-back hour
+                if year == self.start_year as i32 {
+                    return None;
+                }
+                Some(PossibleOffset::Single(self.start_for_year(year - 1)))
+            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + self.inner.end.transition_time_to_wall(
+                        self.standard_offset_seconds,
+                        self.inner.additional_offset_secs,
+                    ) as i64
+            {
+                // in duplicated fall-back hour
+                if year == self.start_year as i32 {
+                    return None;
+                }
+                Some(PossibleOffset::Ambiguous(
+                    self.start_for_year(year - 1),
+                    self.end_for_year(year),
+                ))
+            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + self
+                        .inner
+                        .start
+                        .transition_time_to_wall(self.standard_offset_seconds, 0)
+                        as i64
+            {
+                // before spring-forward
+                Some(PossibleOffset::Single(self.start_for_year(year)))
+            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
+                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
+                    + (self
+                        .inner
+                        .start
+                        .transition_time_to_wall(self.standard_offset_seconds, 0)
+                        + self.inner.additional_offset_secs) as i64
+            {
+                // in spring-forward gap
+                Some(PossibleOffset::None)
+            } else {
+                // after fall-back
+                Some(PossibleOffset::Single(self.start_for_year(year)))
+            }
         }
     }
 }
@@ -476,27 +505,33 @@ impl TzRuleDate {
     }
 }
 
-impl TzRule {
-    pub(crate) fn additional_offset_since(
-        &self,
-        seconds_since_epoch: i64,
-        _start_year: u32,
-    ) -> (i32, i64) {
-        let _ = self.start.month;
-        let _ = self.start.day;
-        let _ = self.start.day_of_week;
-        let _ = self.start.transition_time;
-        let _ = self.start.time_mode;
-        let _ = self.start.mode;
+impl Rule<'_> {
+    // Returns the [`TransitionOffset`] for the given `seconds_since_epoch`, unless the rule has not been activated, i.e.
+    // the year is `self.start_year` and the start date has not been reached.
+    pub(crate) fn for_timestamp(&self, seconds_since_epoch: i64) -> Option<Offset> {
+        let (year, _, _) =
+            iso::iso_from_fixed(super::EPOCH + (seconds_since_epoch / SECONDS_IN_UTC_DAY)).unwrap();
 
-        let _ = self.end.month;
-        let _ = self.end.day;
-        let _ = self.end.day_of_week;
-        let _ = self.end.transition_time;
-        let _ = self.end.time_mode;
-        let _ = self.end.mode;
+        // TODO
+        let local_year = year;
 
-        (self.additional_offset_secs, seconds_since_epoch)
+        if local_year < self.start_year as i32 {
+            return None;
+        }
+
+        let first = self.first_for_year(local_year);
+        let second = self.second_for_year(local_year);
+
+        if seconds_since_epoch < first.since {
+            if local_year == self.start_year as i32 {
+                return None;
+            }
+            Some(self.second_for_year(local_year - 1))
+        } else if seconds_since_epoch < second.since {
+            Some(first)
+        } else {
+            Some(second)
+        }
     }
 }
 
@@ -513,62 +548,76 @@ mod tests {
         assert_eq!(weekday_before_year(2025), 2);
         // Dec 31 1969 was a Wednesday
         assert_eq!(weekday_before_year(1970), 3);
-        // Dec 32 3029 will be a Thursday
+        // Dec 31 3029 will be a Thursday
         assert_eq!(weekday_before_year(3030), 4);
-        // Dec 32 0999 (proleptic) was a Tuesday
+        // Dec 31 0999 (proleptic) was a Tuesday
         assert_eq!(weekday_before_year(1000), 2);
     }
 
+    #[track_caller]
     fn test_single_year(
         tz: &str,
         year: i32,
-        (start_month, start_day, (start_hours_prev, start_hours_next)): (u8, u8, (i8, i8)),
-        (end_month, end_day, (end_hours_prev, end_hours_next)): (u8, u8, (i8, i8)),
+        (start_month, start_day, (start_before, start_after)): (u8, u8, (i8, i8)),
+        (end_month, end_day, (end_before, end_after)): (u8, u8, (i8, i8)),
     ) {
         let rule = TZDB.get(tz).unwrap().final_rule.unwrap();
-        let epoch_start = iso::fixed_from_iso(year, start_month, start_day) - crate::EPOCH;
-        let epoch_end = iso::fixed_from_iso(year, end_month, end_day) - crate::EPOCH;
 
-        let seconds_start_prev =
-            epoch_start * SECONDS_IN_UTC_DAY + i64::from(start_hours_prev) * 3600;
-        let seconds_start_next =
-            epoch_start * SECONDS_IN_UTC_DAY + i64::from(start_hours_next) * 3600;
-        let seconds_end_prev = epoch_end * SECONDS_IN_UTC_DAY + i64::from(end_hours_prev) * 3600;
-        let seconds_end_next = epoch_end * SECONDS_IN_UTC_DAY + i64::from(end_hours_next) * 3600;
-        let transitions = rule.transitions_for_year(year);
-
-        let transitions_prev = transitions.to_wall(&rule, WallReference::Prev);
-        let transitions_next = transitions.to_wall(&rule, WallReference::Next);
-
+        // start_before doesn't actually happen
         assert_eq!(
-            seconds_start_prev,
-            transitions_prev.start_epoch_seconds,
-            "{tz}: {year}-{start_month}-{start_day} at {start_hours_prev} (before transition). Delta: {}h",
-            (seconds_start_prev - transitions_prev.start_epoch_seconds) as f64 / 3600.
-        );
-        assert_eq!(
-            seconds_start_next,
-            transitions_next.start_epoch_seconds,
-            "{tz}: {year}-{start_month}-{start_day} at {start_hours_next} (after transition). Delta: {}h",
-            (seconds_start_next - transitions_next.start_epoch_seconds) as f64 / 3600.
+            rule.for_date_time(
+                year,
+                start_month,
+                start_day - start_before.div_euclid(24).unsigned_abs(),
+                start_before.rem_euclid(24).unsigned_abs(),
+                0,
+                0
+            ),
+            Some(PossibleOffset::None),
         );
 
-        assert_eq!(
-            seconds_end_prev,
-            transitions_prev.end_epoch_seconds,
-            "{tz}: {year}-{end_month}-{end_day} at {end_hours_prev} (before transition). Delta: {}h",
-            (seconds_end_prev - transitions_prev.end_epoch_seconds) as f64 / 3600.
-        );
-        assert_eq!(
-            seconds_end_next,
-            transitions_next.end_epoch_seconds,
-            "{tz}: {year}-{end_month}-{end_day} at {end_hours_next} (after transition). Delta: {}h",
-            (seconds_end_next - transitions_next.end_epoch_seconds) as f64 / 3600.
-        );
+        // start_after happens exactly once
+        assert!(matches!(
+            rule.for_date_time(
+                year,
+                start_month,
+                start_day - start_after.div_euclid(24).unsigned_abs(),
+                start_after.rem_euclid(24).unsigned_abs(),
+                0,
+                0
+            ),
+            Some(PossibleOffset::Single(_))
+        ));
+
+        // end_before happens exactly once
+        assert!(matches!(
+            rule.for_date_time(
+                year,
+                end_month,
+                end_day - end_before.div_euclid(24).unsigned_abs(),
+                end_before.rem_euclid(24).unsigned_abs(),
+                0,
+                0
+            ),
+            Some(PossibleOffset::Single(_))
+        ));
+
+        // end_after happens again after falling back
+        assert!(matches!(
+            rule.for_date_time(
+                year,
+                end_month,
+                end_day - end_after.div_euclid(24).unsigned_abs(),
+                end_after.rem_euclid(24).unsigned_abs(),
+                0,
+                0
+            ),
+            Some(PossibleOffset::Ambiguous(_, _)),
+        ));
     }
 
     #[test]
-    fn test_transitions_for_year() {
+    fn test_los_angeles() {
         // This is a Wall rule
         // so the transition happens at the same time in the
         // previous timezone
@@ -580,11 +629,17 @@ mod tests {
             (3, 9, (2, 3)),
             (11, 2, (2, 1)),
         );
+    }
 
+    #[test]
+    fn test_london() {
         // This is a Standard rule, so the transition happens
         // at the same time in the standard timezone
         test_single_year("Europe/London", 2017, (3, 26, (1, 2)), (10, 29, (2, 1)));
+    }
 
+    #[test]
+    fn test_santiago() {
         // This is a Utc rule, so the transition happens
         // at the same time in UTC
         test_single_year(
