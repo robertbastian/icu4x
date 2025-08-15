@@ -329,106 +329,86 @@ impl Rule<'_> {
             (iso::fixed_from_iso(year, month, day) - iso::fixed_from_iso(year, 1, 1)) as i64;
         let local_second_in_day = ((hour as i64 * 60) + minute as i64) * 60 + second as i64;
 
+        let mut before_start_day = self.inner.start.day_in_year(year) as i64;
+        let mut before_start_seconds =
+            self.inner
+                .start
+                .transition_time_to_wall(self.standard_offset_seconds, 0) as i64;
+        if before_start_seconds < 0 {
+            before_start_seconds += SECONDS_IN_UTC_DAY;
+            before_start_day -= 1;
+        }
+
+        let mut after_start_day = self.inner.start.day_in_year(year) as i64;
+        let mut after_start_seconds = (self
+            .inner
+            .start
+            .transition_time_to_wall(self.standard_offset_seconds, 0)
+            + self.inner.additional_offset_secs) as i64;
+        if after_start_seconds < 0 {
+            after_start_seconds += SECONDS_IN_UTC_DAY;
+            after_start_day -= 1;
+        }
+
+        let mut before_end_day = self.inner.end.day_in_year(year) as i64;
+        let mut before_end_seconds = (self.inner.end.transition_time_to_wall(
+            self.standard_offset_seconds,
+            self.inner.additional_offset_secs,
+        ) - self.inner.additional_offset_secs) as i64;
+        if before_end_seconds < 0 {
+            before_end_seconds += SECONDS_IN_UTC_DAY;
+            before_end_day -= 1;
+        }
+
+        let mut after_end_day = self.inner.end.day_in_year(year) as i64;
+        let mut after_end_seconds = self.inner.end.transition_time_to_wall(
+            self.standard_offset_seconds,
+            self.inner.additional_offset_secs,
+        ) as i64;
+        if after_end_seconds < 0 {
+            after_end_seconds += SECONDS_IN_UTC_DAY;
+            after_end_day -= 1;
+        }
+
         #[allow(clippy::collapsible_else_if)] // symmetry
         if !self.inner.is_inverted() {
-            if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + self
-                        .inner
-                        .start
-                        .transition_time_to_wall(self.standard_offset_seconds, 0)
-                        as i64
-            {
-                // before spring-forward
+            if (day_in_year, local_second_in_day) < (before_start_day, before_start_seconds) {
                 if year == self.start_year as i32 {
                     return None;
                 }
                 Some(PossibleOffset::Single(self.end_for_year(year - 1)))
-            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + (self
-                        .inner
-                        .start
-                        .transition_time_to_wall(self.standard_offset_seconds, 0)
-                        + self.inner.additional_offset_secs) as i64
-            {
-                // in spring-forward gap
+            } else if (day_in_year, local_second_in_day) < (after_start_day, after_start_seconds) {
                 Some(PossibleOffset::None)
-            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + (self.inner.start.transition_time_to_wall(
-                        self.standard_offset_seconds,
-                        self.inner.additional_offset_secs,
-                    ) - self.inner.additional_offset_secs) as i64
-            {
-                // before duplicated fall-back hour
+            } else if (day_in_year, local_second_in_day) < (before_end_day, before_end_seconds) {
                 Some(PossibleOffset::Single(self.start_for_year(year)))
-            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + self.inner.start.transition_time_to_wall(
-                        self.standard_offset_seconds,
-                        self.inner.additional_offset_secs,
-                    ) as i64
-            {
-                // in duplicated fall-back hour
+            } else if (day_in_year, local_second_in_day) < (after_end_day, after_end_seconds) {
                 Some(PossibleOffset::Ambiguous(
                     self.start_for_year(year),
                     self.end_for_year(year),
                 ))
             } else {
-                // after fall-back
                 Some(PossibleOffset::Single(self.end_for_year(year)))
             }
         } else {
-            if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + (self.inner.end.transition_time_to_wall(
-                        self.standard_offset_seconds,
-                        self.inner.additional_offset_secs,
-                    ) - self.inner.additional_offset_secs) as i64
-            {
-                // before duplicated fall-back hour
+            if (day_in_year, local_second_in_day) < (before_end_day, before_end_seconds) {
                 if year == self.start_year as i32 {
                     return None;
                 }
                 Some(PossibleOffset::Single(self.start_for_year(year - 1)))
-            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.end.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + self.inner.end.transition_time_to_wall(
-                        self.standard_offset_seconds,
-                        self.inner.additional_offset_secs,
-                    ) as i64
-            {
-                // in duplicated fall-back hour
-                if year == self.start_year as i32 {
-                    return None;
-                }
+            } else if (day_in_year, local_second_in_day) < (after_end_day, after_end_seconds) {
+                // if year == self.start_year as i32 {
+                //     return None;
+                // }
                 Some(PossibleOffset::Ambiguous(
                     self.start_for_year(year - 1),
                     self.end_for_year(year),
                 ))
-            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + self
-                        .inner
-                        .start
-                        .transition_time_to_wall(self.standard_offset_seconds, 0)
-                        as i64
+            } else if (day_in_year, local_second_in_day) < (before_start_day, before_start_seconds)
             {
-                // before spring-forward
-                Some(PossibleOffset::Single(self.start_for_year(year)))
-            } else if day_in_year * SECONDS_IN_UTC_DAY + local_second_in_day
-                < self.inner.start.day_in_year(year) as i64 * SECONDS_IN_UTC_DAY
-                    + (self
-                        .inner
-                        .start
-                        .transition_time_to_wall(self.standard_offset_seconds, 0)
-                        + self.inner.additional_offset_secs) as i64
-            {
-                // in spring-forward gap
+                Some(PossibleOffset::Single(self.end_for_year(year)))
+            } else if (day_in_year, local_second_in_day) < (after_start_day, after_start_seconds) {
                 Some(PossibleOffset::None)
             } else {
-                // after fall-back
                 Some(PossibleOffset::Single(self.start_for_year(year)))
             }
         }

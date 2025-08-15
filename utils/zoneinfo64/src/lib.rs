@@ -702,27 +702,9 @@ mod tests {
                     "{seconds_since_epoch}, {iana:?}",
                 );
 
+                let local_datetime = chrono_date.naive_local();
                 // TODO: Rule::for_date_time is buggy for these zones
-                if ![
-                    "Africa/Cairo",
-                    "America/Santiago",
-                    "Antarctica/Macquarie",
-                    "Australia/Adelaide",
-                    "Australia/Broken_Hill",
-                    "Australia/Hobart",
-                    "Australia/Lord_Howe",
-                    "Australia/Melbourne",
-                    "Australia/Sydney",
-                    "Australia/Yancowinna",
-                    "Europe/Chisinau",
-                    "Pacific/Auckland",
-                    "Pacific/Chatham",
-                    "Pacific/Easter",
-                    "Pacific/Norfolk",
-                ]
-                .contains(&chrono.name())
-                {
-                    let local_datetime = chrono_date.naive_local();
+                if !["America/Santiago", "Pacific/Easter"].contains(&chrono.name()) {
                     assert_eq!(
                         zoneinfo64
                             .offset_from_local_datetime(&local_datetime)
@@ -731,6 +713,23 @@ mod tests {
                             .offset_from_local_datetime(&local_datetime)
                             .map(|o| o.fix()),
                         "{seconds_since_epoch}, {zoneinfo64:?} {local_datetime}",
+                    );
+                } else if zoneinfo64
+                    .offset_from_local_datetime(&local_datetime)
+                    .map(|o| o.fix())
+                    != chrono
+                        .offset_from_local_datetime(&local_datetime)
+                        .map(|o| o.fix())
+                {
+                    println!(
+                        "{:?}, {:?} != {:?}",
+                        local_datetime,
+                        zoneinfo64
+                            .offset_from_local_datetime(&local_datetime)
+                            .map(|o| o.fix()),
+                        chrono
+                            .offset_from_local_datetime(&local_datetime)
+                            .map(|o| o.fix())
                     );
                 }
 
