@@ -235,7 +235,7 @@ mod tests {
         let epoch = ISLAMIC_EPOCH_FRIDAY.to_i64_date();
         // Gregorian year of Islamic Epoch
         let epoch_year_from_fixed =
-            crate::gregorian::gregorian_year_from_fixed(RataDie::new(epoch));
+            crate::gregorian::gregorian_year_from_fixed(RataDie::new(epoch)).unwrap();
         // 622 is the correct Gregorian year for the Islamic Epoch
         assert_eq!(epoch_year_from_fixed, 622);
     }
@@ -245,7 +245,7 @@ mod tests {
         let epoch = ISLAMIC_EPOCH_THURSDAY.to_i64_date();
         // Gregorian year of Islamic Epoch
         let epoch_year_from_fixed =
-            crate::gregorian::gregorian_year_from_fixed(RataDie::new(epoch));
+            crate::gregorian::gregorian_year_from_fixed(RataDie::new(epoch)).unwrap();
         // 622 is the correct Gregorian year for the Islamic Epoch
         assert_eq!(epoch_year_from_fixed, 622);
     }

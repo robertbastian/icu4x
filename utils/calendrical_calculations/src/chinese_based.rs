@@ -44,11 +44,23 @@ pub trait ChineseBased {
 
 /// Given a Gregorian year, return the extended year
 pub fn extended_from_gregorian<C: ChineseBased>(gregorian_year: i32) -> i32 {
-    gregorian_year - const { crate::gregorian::gregorian_year_from_fixed(C::EPOCH) as i32 - 1 }
+    gregorian_year
+        - const {
+            let Ok(y) = crate::gregorian::gregorian_year_from_fixed(C::EPOCH) else {
+                panic!()
+            };
+            y - 1
+        }
 }
 /// Given an extended year, return the Gregorian year
 pub fn gregorian_from_extended<C: ChineseBased>(extended_year: i32) -> i32 {
-    extended_year + const { crate::gregorian::gregorian_year_from_fixed(C::EPOCH) as i32 - 1 }
+    extended_year
+        + const {
+            let Ok(y) = crate::gregorian::gregorian_year_from_fixed(C::EPOCH) else {
+                panic!()
+            };
+            y - 1
+        }
 }
 
 #[deprecated(since = "0.2.1", note = "use `extended_from_gregorian`")]

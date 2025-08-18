@@ -181,7 +181,7 @@ mod tests {
         let epoch = FIXED_PERSIAN_EPOCH.to_i64_date();
         // Gregorian year of Persian Epoch
         let epoch_year_from_fixed =
-            crate::gregorian::gregorian_year_from_fixed(RataDie::new(epoch));
+            crate::gregorian::gregorian_year_from_fixed(RataDie::new(epoch)).unwrap();
         // 622 is the correct Gregorian year for the Persian Epoch
         assert_eq!(epoch_year_from_fixed, 622);
     }
