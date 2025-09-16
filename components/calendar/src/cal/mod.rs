@@ -33,7 +33,7 @@ pub use hijri_internal::Hijri;
 /// Customizations for the [`Hijri`] calendar.
 pub mod hijri {
     pub use super::hijri_internal::{
-        AstronomicalSimulation, HijriSighting, HijriYearData, TabularAlgorithm,
+        AstronomicalSimulation, Rules, HijriYearData, TabularAlgorithm,
         TabularAlgorithmEpoch, TabularAlgorithmLeapYears, UmmAlQura,
     };
 }
