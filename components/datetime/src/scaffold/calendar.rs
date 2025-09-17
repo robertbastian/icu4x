@@ -358,7 +358,7 @@ impl FormattableAnyCalendar {
         let any_calendar = match kind {
             Buddhist => AnyCalendar::Buddhist(cal::Buddhist),
             Chinese => AnyCalendar::Chinese(cal::LunarChinese::new_china()),
-            Coptic => AnyCalendar::Coptic(cal::Coptic),
+            Coptic => AnyCalendar::Coptic(cal::Coptic::new()),
             Dangi => AnyCalendar::Dangi(cal::LunarChinese::new_dangi()),
             Ethiopian => AnyCalendar::Ethiopian(cal::Ethiopian::new()),
             EthiopianAmeteAlem => AnyCalendar::Ethiopian(cal::Ethiopian::new_with_era_style(
@@ -395,7 +395,7 @@ impl FormattableAnyCalendar {
         let any_calendar = match kind {
             Buddhist => AnyCalendar::Buddhist(cal::Buddhist),
             Chinese => AnyCalendar::Chinese(cal::LunarChinese::new_china()),
-            Coptic => AnyCalendar::Coptic(cal::Coptic),
+            Coptic => AnyCalendar::Coptic(cal::Coptic::new()),
             Dangi => AnyCalendar::Dangi(cal::LunarChinese::new_dangi()),
             Ethiopian => AnyCalendar::Ethiopian(cal::Ethiopian::new()),
             EthiopianAmeteAlem => AnyCalendar::Ethiopian(cal::Ethiopian::new_with_era_style(
@@ -433,7 +433,7 @@ impl FormattableAnyCalendar {
         let any_calendar = match kind {
             Buddhist => AnyCalendar::Buddhist(cal::Buddhist),
             Chinese => AnyCalendar::Chinese(cal::LunarChinese::new_china()),
-            Coptic => AnyCalendar::Coptic(cal::Coptic),
+            Coptic => AnyCalendar::Coptic(cal::Coptic::new()),
             Dangi => AnyCalendar::Dangi(cal::LunarChinese::new_dangi()),
             Ethiopian => AnyCalendar::Ethiopian(cal::Ethiopian::new()),
             EthiopianAmeteAlem => AnyCalendar::Ethiopian(cal::Ethiopian::new_with_era_style(

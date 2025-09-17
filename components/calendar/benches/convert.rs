@@ -37,7 +37,7 @@ fn convert_benches(c: &mut Criterion) {
         icu::calendar::cal::Buddhist,
     );
 
-    bench_calendar(&mut group, "calendar/coptic", icu::calendar::cal::Coptic);
+    bench_calendar(&mut group, "calendar/coptic", icu::calendar::cal::Coptic::new());
 
     bench_calendar(
         &mut group,

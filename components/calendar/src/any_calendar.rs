@@ -537,7 +537,7 @@ impl AnyCalendar {
         match kind {
             AnyCalendarKind::Buddhist => AnyCalendar::Buddhist(Buddhist),
             AnyCalendarKind::Chinese => AnyCalendar::Chinese(LunarChinese::new_china()),
-            AnyCalendarKind::Coptic => AnyCalendar::Coptic(Coptic),
+            AnyCalendarKind::Coptic => AnyCalendar::Coptic(Coptic::new()),
             AnyCalendarKind::Dangi => AnyCalendar::Dangi(LunarChinese::new_dangi()),
             AnyCalendarKind::Ethiopian => AnyCalendar::Ethiopian(Ethiopian::new_with_era_style(
                 EthiopianEraStyle::AmeteMihret,
@@ -588,7 +588,7 @@ impl AnyCalendar {
         Ok(match kind {
             AnyCalendarKind::Buddhist => AnyCalendar::Buddhist(Buddhist),
             AnyCalendarKind::Chinese => AnyCalendar::Chinese(LunarChinese::new_china()),
-            AnyCalendarKind::Coptic => AnyCalendar::Coptic(Coptic),
+            AnyCalendarKind::Coptic => AnyCalendar::Coptic(Coptic::new()),
             AnyCalendarKind::Dangi => AnyCalendar::Dangi(LunarChinese::new_dangi()),
             AnyCalendarKind::Ethiopian => AnyCalendar::Ethiopian(Ethiopian::new_with_era_style(
                 EthiopianEraStyle::AmeteMihret,
@@ -639,7 +639,7 @@ impl AnyCalendar {
         Ok(match kind {
             AnyCalendarKind::Buddhist => AnyCalendar::Buddhist(Buddhist),
             AnyCalendarKind::Chinese => AnyCalendar::Chinese(LunarChinese::new_china()),
-            AnyCalendarKind::Coptic => AnyCalendar::Coptic(Coptic),
+            AnyCalendarKind::Coptic => AnyCalendar::Coptic(Coptic::new()),
             AnyCalendarKind::Dangi => AnyCalendar::Dangi(LunarChinese::new_dangi()),
             AnyCalendarKind::Ethiopian => AnyCalendar::Ethiopian(Ethiopian::new_with_era_style(
                 EthiopianEraStyle::AmeteMihret,
@@ -818,7 +818,7 @@ impl AnyCalendarKind {
         match self {
             AnyCalendarKind::Buddhist => Buddhist.debug_name(),
             AnyCalendarKind::Chinese => LunarChinese::new_china().debug_name(),
-            AnyCalendarKind::Coptic => Coptic.debug_name(),
+            AnyCalendarKind::Coptic => Coptic::new().debug_name(),
             AnyCalendarKind::Dangi => LunarChinese::new_dangi().debug_name(),
             AnyCalendarKind::Ethiopian => Ethiopian(false).debug_name(),
             AnyCalendarKind::EthiopianAmeteAlem => Ethiopian(true).debug_name(),
@@ -1014,7 +1014,7 @@ impl From<LunarChinese<chinese::China>> for AnyCalendar {
 impl IntoAnyCalendar for Coptic {
     #[inline]
     fn to_any(self) -> AnyCalendar {
-        AnyCalendar::Coptic(Coptic)
+        AnyCalendar::Coptic(Coptic::new())
     }
     #[inline]
     fn kind(&self) -> AnyCalendarKind {

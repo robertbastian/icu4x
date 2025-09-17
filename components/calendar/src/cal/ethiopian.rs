@@ -10,9 +10,6 @@ use calendrical_calculations::helpers::I32CastError;
 use calendrical_calculations::rata_die::RataDie;
 use tinystr::tinystr;
 
-/// The number of years the Amete Alem epoch precedes the Amete Mihret epoch
-const INCARNATION_OFFSET: i32 = 5500;
-
 /// Which era style the ethiopian calendar uses
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 #[non_exhaustive]
@@ -109,19 +106,7 @@ impl Calendar for Ethiopian {
         month_code: types::MonthCode,
         day: u8,
     ) -> Result<Self::DateInner, DateError> {
-        let year = match (self.era_style(), era) {
-            (EthiopianEraStyle::AmeteMihret, Some("am")) => {
-                range_check(year, "year", 1..)? + INCARNATION_OFFSET
-            }
-            (EthiopianEraStyle::AmeteMihret, None) => year + INCARNATION_OFFSET,
-            (EthiopianEraStyle::AmeteMihret, Some("aa")) => {
-                range_check(year, "year", ..=INCARNATION_OFFSET)?
-            }
-            (EthiopianEraStyle::AmeteAlem, Some("aa") | None) => year,
-            (_, Some(_)) => {
-                return Err(DateError::UnknownEra);
-            }
-        };
+        let year = year;
         ArithmeticDate::new_from_codes(self, year, month_code, day).map(EthiopianDateInner)
     }
 
@@ -185,30 +170,7 @@ impl Calendar for Ethiopian {
     }
 
     fn year_info(&self, date: &Self::DateInner) -> Self::Year {
-        let year = date.0.extended_year();
-        let extended_year = if self.0 {
-            year
-        } else {
-            year - INCARNATION_OFFSET
-        };
-
-        if self.0 || extended_year <= 0 {
-            types::EraYear {
-                era: tinystr!(16, "aa"),
-                era_index: Some(0),
-                year,
-                extended_year,
-                ambiguity: types::YearAmbiguity::CenturyRequired,
-            }
-        } else {
-            types::EraYear {
-                era: tinystr!(16, "am"),
-                era_index: Some(1),
-                year: year - INCARNATION_OFFSET,
-                extended_year,
-                ambiguity: types::YearAmbiguity::CenturyRequired,
-            }
-        }
+        
     }
 
     fn is_in_leap_year(&self, date: &Self::DateInner) -> bool {
@@ -241,6 +203,7 @@ impl Ethiopian {
     pub const fn new() -> Self {
         Self(false)
     }
+
     /// Construct a new Ethiopian Calendar with a value specifying whether or not it is Amete Alem
     pub const fn new_with_era_style(era_style: EthiopianEraStyle) -> Self {
         Self(matches!(era_style, EthiopianEraStyle::AmeteAlem))

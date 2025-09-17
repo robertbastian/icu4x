@@ -78,7 +78,7 @@ fn date_benches(c: &mut Criterion) {
         &mut group,
         "calendar/coptic",
         &fxs,
-        icu::calendar::cal::Coptic,
+        icu::calendar::cal::Coptic::new(),
         |y, m, d, _| Date::try_new_coptic(y, m, d).unwrap(),
     );
 

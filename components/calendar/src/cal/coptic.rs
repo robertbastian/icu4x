@@ -3,12 +3,117 @@
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
 use crate::cal::iso::{Iso, IsoDateInner};
+use crate::cal::EthiopianEraStyle;
 use crate::calendar_arithmetic::{ArithmeticDate, CalendarArithmetic};
-use crate::error::DateError;
+use crate::error::{range_check, DateError};
+use crate::types::EraYear;
 use crate::{types, Calendar, Date, DateDuration, DateDurationUnit, RangeError};
 use calendrical_calculations::helpers::I32CastError;
 use calendrical_calculations::rata_die::RataDie;
 use tinystr::tinystr;
+
+/// TODO
+pub type Coptic = CopticBased<CopticEra>;
+
+pub trait CopticEras: core::fmt::Debug + Clone {
+    const EXTENDED_YEAR_OFFSET: i32;
+
+    fn get(&self, extended_year: i32) -> EraYear;
+    fn resolve(&self, era: Option<&str>, year: i32) -> Result<i32, DateError>;
+
+    fn debug_name(&self) -> &'static str;
+    fn calendar_algorithm(&self) -> Option<crate::preferences::CalendarAlgorithm>;
+}
+
+#[derive(Debug, Clone)]
+pub struct CopticEra;
+
+impl CopticEras for CopticEra {
+    const EXTENDED_YEAR_OFFSET: i32 = 0;
+
+    fn get(&self, extended_year: i32) -> EraYear {
+        types::EraYear {
+            era: tinystr!(16, "am"),
+            era_index: Some(0),
+            year: extended_year,
+            extended_year,
+            ambiguity: types::YearAmbiguity::CenturyRequired,
+        }
+    }
+
+    fn resolve(&self, era: Option<&str>, year: i32) -> Result<i32, DateError> {
+        match era {
+            Some("am") | None => Ok(year),
+            Some(_) => Err(DateError::UnknownEra),
+        }
+    }
+
+    fn debug_name(&self) -> &'static str {
+        "Coptic"
+    }
+
+    fn calendar_algorithm(&self) -> Option<crate::preferences::CalendarAlgorithm> {
+        Some(crate::preferences::CalendarAlgorithm::Coptic)
+    }
+}
+
+
+/// The number of years the Amete Alem epoch precedes the Amete Mihret epoch
+const INCARNATION_OFFSET: i32 = 5500;
+
+impl CopticEras for EthiopianEraStyle {
+    const EXTENDED_YEAR_OFFSET: i32 = 275;
+
+    fn get(&self, year: i32) -> EraYear {
+        let extended_year = if *self == Self::AmeteAlem {
+            year
+        } else {
+            year - INCARNATION_OFFSET
+        };
+
+        if self.0 || extended_year <= 0 {
+            types::EraYear {
+                era: tinystr!(16, "aa"),
+                era_index: Some(0),
+                year,
+                extended_year,
+                ambiguity: types::YearAmbiguity::CenturyRequired,
+            }
+        } else {
+            types::EraYear {
+                era: tinystr!(16, "am"),
+                era_index: Some(1),
+                year: year - INCARNATION_OFFSET,
+                extended_year,
+                ambiguity: types::YearAmbiguity::CenturyRequired,
+            }
+        }
+    }
+
+    fn resolve(&self, era: Option<&str>, year: i32) -> Result<i32, DateError> {
+        Ok(match (self, era) {
+            (EthiopianEraStyle::AmeteMihret, Some("am")) => {
+                range_check(year, "year", 1..)? + INCARNATION_OFFSET
+            }
+            (EthiopianEraStyle::AmeteMihret, None) => year + INCARNATION_OFFSET,
+            (EthiopianEraStyle::AmeteMihret, Some("aa")) => {
+                range_check(year, "year", ..=INCARNATION_OFFSET)?
+            }
+            (EthiopianEraStyle::AmeteAlem, Some("aa") | None) => year,
+            (_, Some(_)) => {
+                return Err(DateError::UnknownEra);
+            }
+        })
+    }
+
+    fn debug_name(&self) -> &'static str {
+        "Ethiopian"
+    }
+
+    fn calendar_algorithm(&self) -> Option<crate::preferences::CalendarAlgorithm> {
+        Some(crate::preferences::CalendarAlgorithm::Ethiopic)
+    }
+}
 
 /// The [Coptic Calendar]
 ///
@@ -29,14 +134,28 @@ use tinystr::tinystr;
 /// This calendar supports 13 solar month codes (`"M01" - "M13"`), with `"M13"` being used for the short epagomenal month
 /// at the end of the year.
 #[derive(Copy, Clone, Debug, Hash, Default, Eq, PartialEq, PartialOrd, Ord)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
-pub struct Coptic;
+pub struct CopticBased<E: CopticEras>(E);
+
+impl CopticBased<CopticEra> {
+    /// TODO
+    pub const fn new() -> Self {
+        Self(CopticEra)
+    }
+}
 
 /// The inner date type used for representing [`Date`]s of [`Coptic`]. See [`Date`] and [`Coptic`] for more details.
-#[derive(Copy, Clone, Debug, Hash, Eq, PartialEq, PartialOrd, Ord)]
-pub struct CopticDateInner(pub(crate) ArithmeticDate<Coptic>);
+#[derive(Clone, Debug)]
+pub struct CopticDateInner<E: CopticEras>(pub(crate) ArithmeticDate<CopticBased<E>>);
 
-impl CalendarArithmetic for Coptic {
+impl<E: CopticEras> Copy for CopticDateInner<E> {}
+impl<E: CopticEras> PartialEq for CopticDateInner<E> {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}
+impl<E: CopticEras> Eq for CopticDateInner<E> {}
+
+impl<E: CopticEras> CalendarArithmetic for CopticBased<E> {
     type YearInfo = i32;
 
     fn days_in_provided_month(year: i32, month: u8) -> u8 {
@@ -78,9 +197,9 @@ impl CalendarArithmetic for Coptic {
     }
 }
 
-impl crate::cal::scaffold::UnstableSealed for Coptic {}
-impl Calendar for Coptic {
-    type DateInner = CopticDateInner;
+impl<E: CopticEras> crate::cal::scaffold::UnstableSealed for CopticBased<E> {}
+impl<E: CopticEras> Calendar for CopticBased<E> {
+    type DateInner = CopticDateInner<E>;
     type Year = types::EraYear;
     fn from_codes(
         &self,
@@ -89,12 +208,7 @@ impl Calendar for Coptic {
         month_code: types::MonthCode,
         day: u8,
     ) -> Result<Self::DateInner, DateError> {
-        let year = match era {
-            Some("am") | None => year,
-            Some(_) => return Err(DateError::UnknownEra),
-        };
-
-        ArithmeticDate::new_from_codes(self, year, month_code, day).map(CopticDateInner)
+        ArithmeticDate::new_from_codes(self, self.0.resolve(era, year)? + E::EXTENDED_YEAR_OFFSET, month_code, day).map(CopticDateInner)
     }
 
     fn from_rata_die(&self, rd: RataDie) -> Self::DateInner {
@@ -111,7 +225,7 @@ impl Calendar for Coptic {
         calendrical_calculations::coptic::fixed_from_coptic(date.0.year, date.0.month, date.0.day)
     }
 
-    fn from_iso(&self, iso: IsoDateInner) -> CopticDateInner {
+    fn from_iso(&self, iso: IsoDateInner) -> CopticDateInner<E> {
         self.from_rata_die(Iso.to_rata_die(&iso))
     }
 
@@ -147,14 +261,7 @@ impl Calendar for Coptic {
     }
 
     fn year_info(&self, date: &Self::DateInner) -> Self::Year {
-        let year = date.0.extended_year();
-        types::EraYear {
-            era: tinystr!(16, "am"),
-            era_index: Some(0),
-            year,
-            extended_year: year,
-            ambiguity: types::YearAmbiguity::CenturyRequired,
-        }
+        self.0.get(date.0.extended_year() - E::EXTENDED_YEAR_OFFSET)
     }
 
     fn is_in_leap_year(&self, date: &Self::DateInner) -> bool {
@@ -174,15 +281,15 @@ impl Calendar for Coptic {
     }
 
     fn debug_name(&self) -> &'static str {
-        "Coptic"
+        self.0.debug_name()
     }
 
     fn calendar_algorithm(&self) -> Option<crate::preferences::CalendarAlgorithm> {
-        Some(crate::preferences::CalendarAlgorithm::Coptic)
+        self.0.calendar_algorithm()
     }
 }
 
-impl Date<Coptic> {
+impl Date<CopticBased<CopticEra>> {
     /// Construct new Coptic Date.
     ///
     /// ```rust
@@ -195,10 +302,10 @@ impl Date<Coptic> {
     /// assert_eq!(date_coptic.month().ordinal, 5);
     /// assert_eq!(date_coptic.day_of_month().0, 6);
     /// ```
-    pub fn try_new_coptic(year: i32, month: u8, day: u8) -> Result<Date<Coptic>, RangeError> {
+    pub fn try_new_coptic(year: i32, month: u8, day: u8) -> Result<Self, RangeError> {
         ArithmeticDate::new_from_ordinals(year, month, day)
             .map(CopticDateInner)
-            .map(|inner| Date::from_raw(inner, Coptic))
+            .map(|inner| Date::from_raw(inner, CopticBased(CopticEra)))
     }
 }
 
@@ -209,7 +316,7 @@ mod tests {
     fn test_coptic_regression() {
         // https://github.com/unicode-org/icu4x/issues/2254
         let iso_date = Date::try_new_iso(-100, 3, 3).unwrap();
-        let coptic = iso_date.to_calendar(Coptic);
+        let coptic = iso_date.to_calendar(Coptic::new());
         let recovered_iso = coptic.to_iso();
         assert_eq!(iso_date, recovered_iso);
     }

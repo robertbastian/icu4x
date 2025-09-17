@@ -75,7 +75,7 @@ fn test_fixture(fixture_name: &str, file: &str) {
                     &description,
                 ),
                 CalendarAlgorithm::Coptic => {
-                    assert_fixture_element(prefs, Coptic, input, &expected, field_set, &description)
+                    assert_fixture_element(prefs, Coptic::new(), input, &expected, field_set, &description)
                 }
                 CalendarAlgorithm::Dangi => assert_fixture_element(
                     prefs,
