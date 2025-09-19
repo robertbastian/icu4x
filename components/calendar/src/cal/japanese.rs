@@ -769,6 +769,8 @@ impl Japanese {
 
 #[cfg(test)]
 mod tests {
+    use core::num::NonZero;
+
     use super::*;
     use crate::Ref;
 
@@ -849,8 +851,25 @@ mod tests {
         assert_eq!(
             date,
             Err(error),
-            "Construction with {era:?}, {year}, {month}, {day} did not return {error:?}"
-        )
+            "Constructor construction with {era:?}, {year}, {month}, {day} did not return {error:?}"
+        );
+        let date = Date::try_from_fields(
+            DateFields {
+                era: Some(era),
+                era_year: Some(year),
+                extended_year: None,
+                month_code: None,
+                ordinal_month: NonZero::new(month),
+                day: NonZero::new(day),
+            },
+            Default::default(),
+            calendar,
+        );
+        assert_eq!(
+            date,
+            Err(error),
+            "Fields construction with {era:?}, {year}, {month}, {day} did not return {error:?}"
+        );
     }
 
     fn single_test_error_ext(
