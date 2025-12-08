@@ -253,136 +253,244 @@ impl Date<Persian> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    #[derive(Debug)]
-    struct DateCase {
-        year: i32,
-        month: u8,
-        day: u8,
-    }
+    use crate::{
+        tests::TestCase,
+        types::{Month, MonthInfo},
+    };
 
-    static TEST_RD: [i64; 21] = [
-        656786, 664224, 671401, 694799, 702806, 704424, 708842, 709409, 709580, 727274, 728714,
-        739330, 739331, 744313, 763436, 763437, 764652, 775123, 775488, 775489, 1317874,
-    ];
+    use super::*;
+
+    const fn month_info(ordinal: u8) -> MonthInfo {
+        MonthInfo::from_parts(Month::new(ordinal), ordinal)
+    }
 
     // Test data are provided for the range 1178-3000 AP, for which
     // we know the 33-year rule, with the override table, matches the
     // astronomical calculations based on the 52.5 degrees east meridian.
-    static CASES: [DateCase; 21] = [
+    const CASES: &[TestCase] = &[
         // First year for which 33-year rule matches the astronomical calculation
-        DateCase {
+        TestCase {
+            rd: RataDie::new(656786),
+            era: Some("ap"),
+            extended_year: 1178,
             year: 1178,
-            month: 1,
+            month: month_info(1),
             day: 1,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(664224),
+            era: Some("ap"),
+            extended_year: 1198,
             year: 1198,
-            month: 5,
+            month: month_info(5),
             day: 10,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(671401),
+            era: Some("ap"),
+            extended_year: 1218,
             year: 1218,
-            month: 1,
+            month: month_info(1),
             day: 7,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(694799),
+            era: Some("ap"),
+            extended_year: 1282,
             year: 1282,
-            month: 1,
+            month: month_info(1),
             day: 29,
         },
         // The beginning of the year the calendar was adopted
-        DateCase {
+        TestCase {
+            rd: RataDie::new(702806),
+            era: Some("ap"),
+            extended_year: 1304,
             year: 1304,
-            month: 1,
+            month: month_info(1),
             day: 1,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(704424),
+            era: Some("ap"),
+            extended_year: 1308,
             year: 1308,
-            month: 6,
+            month: month_info(6),
             day: 3,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(708842),
+            era: Some("ap"),
+            extended_year: 1320,
             year: 1320,
-            month: 7,
+            month: month_info(7),
             day: 7,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(709409),
+            era: Some("ap"),
+            extended_year: 1322,
             year: 1322,
-            month: 1,
+            month: month_info(1),
             day: 29,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(709580),
+            era: Some("ap"),
+            extended_year: 1322,
             year: 1322,
-            month: 7,
+            month: month_info(7),
             day: 14,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(727274),
+            era: Some("ap"),
+            extended_year: 1370,
             year: 1370,
-            month: 12,
+            month: month_info(12),
             day: 27,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(728714),
+            era: Some("ap"),
+            extended_year: 1374,
             year: 1374,
-            month: 12,
+            month: month_info(12),
             day: 6,
         },
         // First day that the 2820-year rule fails
-        DateCase {
+        TestCase {
+            rd: RataDie::new(739330),
+            era: Some("ap"),
+            extended_year: 1403,
             year: 1403,
-            month: 12,
+            month: month_info(12),
             day: 30,
         },
         // First Nowruz that the 2820-year rule fails
-        DateCase {
+        TestCase {
+            rd: RataDie::new(739331),
+            era: Some("ap"),
+            extended_year: 1404,
             year: 1404,
-            month: 1,
+            month: month_info(1),
             day: 1,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(744313),
+            era: Some("ap"),
+            extended_year: 1417,
             year: 1417,
-            month: 8,
+            month: month_info(8),
             day: 19,
         },
         // First day the unmodified astronomical algorithm fails
-        DateCase {
+        TestCase {
+            rd: RataDie::new(763436),
+            era: Some("ap"),
+            extended_year: 1469,
             year: 1469,
-            month: 12,
+            month: month_info(12),
             day: 30,
         },
         // First Nowruz the unmodified astronomical algorithm fails
-        DateCase {
+        TestCase {
+            rd: RataDie::new(763437),
+            era: Some("ap"),
+            extended_year: 1470,
             year: 1470,
-            month: 1,
+            month: month_info(1),
             day: 1,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(764652),
+            era: Some("ap"),
+            extended_year: 1473,
             year: 1473,
-            month: 4,
+            month: month_info(4),
             day: 28,
         },
         // Last year the 33-year rule matches the modified astronomical calculation
-        DateCase {
+        TestCase {
+            rd: RataDie::new(775123),
+            era: Some("ap"),
+            extended_year: 1501,
             year: 1501,
-            month: 12,
+            month: month_info(12),
             day: 29,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(775488),
+            era: Some("ap"),
+            extended_year: 1502,
             year: 1502,
-            month: 12,
+            month: month_info(12),
             day: 29,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(775489),
+            era: Some("ap"),
+            extended_year: 1503,
             year: 1503,
-            month: 1,
+            month: month_info(1),
             day: 1,
         },
-        DateCase {
+        TestCase {
+            rd: RataDie::new(1317874),
+            era: Some("ap"),
+            extended_year: 2988,
             year: 2988,
-            month: 1,
+            month: month_info(1),
             day: 1,
+        },
+        TestCase {
+            rd: RataDie::new(400813), // unverified
+            era: Some("ap"),
+            extended_year: 477,
+            year: 477,
+            month: month_info(3),
+            day: 1,
+        },
+        TestCase {
+            rd: RataDie::new(987536), // unverified
+            era: Some("ap"),
+            extended_year: 2083,
+            year: 2083,
+            month: month_info(7),
+            day: 21,
+        },
+        TestCase {
+            rd: RataDie::new(190212), // unverified
+            era: Some("ap"),
+            extended_year: -100,
+            year: -100,
+            month: month_info(7),
+            day: 21,
+        },
+        TestCase {
+            rd: RataDie::new(811273), // unverified
+            era: Some("ap"),
+            extended_year: 1600,
+            year: 1600,
+            month: month_info(12),
+            day: 20,
         },
     ];
+
+    #[test]
+    fn test_cases() {
+        for case in CASES {
+            case.check(&Persian);
+            case.check_any(Persian);
+            case.check_constructor(&Persian, |date| {
+                Date::try_new_persian(
+                    date.extended_year(),
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                )
+            });
+        }
+    }
 
     #[test]
     fn test_persian_leap_year() {
@@ -414,26 +522,6 @@ mod tests {
                 (calendrical_calculations::persian::fixed_from_fast_persian(case.year + 1, 1, 1)
                     - calendrical_calculations::persian::fixed_from_fast_persian(case.year, 1, 1))
                     as u16
-            );
-        }
-    }
-
-    #[test]
-    fn test_rd_from_persian() {
-        for (case, f_date) in CASES.iter().zip(TEST_RD.iter()) {
-            let date = Date::try_new_persian(case.year, case.month, case.day).unwrap();
-
-            assert_eq!(date.to_rata_die().to_i64_date(), *f_date, "{case:?}");
-        }
-    }
-    #[test]
-    fn test_persian_from_rd() {
-        for (case, f_date) in CASES.iter().zip(TEST_RD.iter()) {
-            let date = Date::try_new_persian(case.year, case.month, case.day).unwrap();
-            assert_eq!(
-                Date::from_rata_die(RataDie::new(*f_date), Persian),
-                date,
-                "{case:?}"
             );
         }
     }
@@ -739,10 +827,18 @@ mod tests {
     #[test]
     fn test_calendar_ut_ac_ir_data() {
         for &(p_year, leap, iso_year, iso_month, iso_day) in CALENDAR_UT_AC_IR_TEST_DATA.iter() {
-            let iso_date = Date::try_new_iso(iso_year, iso_month, iso_day).unwrap();
-            let persian_date = Date::try_new_persian(p_year, 1, 1).unwrap();
-            assert_eq!(persian_date.is_in_leap_year(), leap);
-            assert_eq!(iso_date.to_calendar(Persian), persian_date);
+            let case = TestCase {
+                rd: Date::try_new_iso(iso_year, iso_month, iso_day)
+                    .unwrap()
+                    .to_rata_die(),
+                era: Some("ap"),
+                extended_year: p_year,
+                year: p_year,
+                month: month_info(1),
+                day: 1,
+            };
+            assert_eq!(case.check(&Persian).is_in_leap_year(), leap);
+            case.check_any(Persian);
         }
     }
 }

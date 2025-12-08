@@ -618,7 +618,7 @@ mod tests {
     use super::*;
     use crate::{
         cal::{Buddhist, Hebrew},
-        types::Weekday,
+        types::{Weekday, Month},
         Gregorian,
     };
 
@@ -667,6 +667,20 @@ mod tests {
         assert_eq!(
             Date::try_new_iso(2020, 1, 21).unwrap().weekday(),
             Weekday::Tuesday,
+        );
+        // Should be Saturday per:
+        // https://www.hebcal.com/converter?hd=1&hm=Tishrei&hy=3760&h2g=1
+        assert_eq!(
+            crate::Date::try_new_from_codes(
+                None,
+                3760,
+                Month::new(1).code(),
+                1,
+                crate::cal::Hebrew::new(),
+            )
+            .unwrap()
+            .weekday(),
+            Weekday::Saturday
         );
     }
 

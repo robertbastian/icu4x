@@ -307,80 +307,185 @@ impl Date<Ethiopian> {
 
 #[cfg(test)]
 mod test {
+    use crate::{
+        tests::TestCase,
+        types::{Month, MonthInfo},
+    };
+
     use super::*;
 
-    #[test]
-    fn test_leap_year() {
-        // 2023-09-11 ISO is 2025-13-06 Ethiopian
-        let rd = Date::try_new_iso(2023, 9, 11).unwrap().to_rata_die();
-        let date_ethiopian = Date::from_rata_die(rd, Ethiopian::new());
-        assert_eq!(date_ethiopian.extended_year(), 2015);
-        assert_eq!(date_ethiopian.month().ordinal, 13);
-        assert_eq!(date_ethiopian.day_of_month().0, 6);
+    fn month_info(ordinal: u8) -> MonthInfo {
+        MonthInfo::from_parts(Month::new(ordinal), ordinal)
     }
 
     #[test]
-    fn test_ethiopian_conversion_and_back() {
-        let rd = Date::try_new_iso(1970, 1, 2).unwrap().to_rata_die();
-        let date_ethiopian = Date::from_rata_die(rd, Ethiopian::new());
+    fn test_am_cases() {
+        let cases = [
+            TestCase {
+                rd: RataDie::new(39016),
+                era: Some("am"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(732991),
+                era: Some("am"),
+                extended_year: 2000,
+                year: 2000,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-2042909),
+                era: Some("aa"),
+                extended_year: -5600,
+                year: -100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(733291),
+                era: Some("am"),
+                extended_year: 2000,
+                year: 2000,
+                month: month_info(13),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-34034),
+                era: Some("aa"),
+                extended_year: -100,
+                year: 5400,
+                month: month_info(3),
+                day: 1,
+            },
+            // 2023-09-11 ISO is 2025-13-06 Ethiopian
+            TestCase {
+                rd: Date::try_new_iso(2023, 9, 11).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 2015,
+                year: 2015,
+                month: month_info(13),
+                day: 6,
+            },
+            TestCase {
+                rd: Date::try_new_iso(1970, 1, 2).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 1962,
+                year: 1962,
+                month: month_info(4),
+                day: 24,
+            },
+            // https://github.com/unicode-org/icu4x/issues/2254
+            TestCase {
+                rd: Date::try_new_iso(-1000, 3, 3).unwrap().to_rata_die(),
+                era: Some("aa"),
+                extended_year: -1008,
+                year: 4492,
+                month: month_info(7),
+                day: 16,
+            },
+            TestCase {
+                rd: Date::try_new_iso(-5500 + 9, 1, 1).unwrap().to_rata_die(),
+                era: Some("aa"),
+                extended_year: -5499,
+                year: 1,
+                month: month_info(6),
+                day: 19,
+            },
+            TestCase {
+                rd: Date::try_new_iso(9, 1, 1).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 1,
+                year: 1,
+                month: month_info(5),
+                day: 8,
+            },
+        ];
 
-        assert_eq!(date_ethiopian.extended_year(), 1962);
-        assert_eq!(date_ethiopian.month().ordinal, 4);
-        assert_eq!(date_ethiopian.day_of_month().0, 24);
-
-        assert_eq!(date_ethiopian.to_rata_die(), rd);
+        for case in cases {
+            case.check(&Ethiopian::new());
+            case.check_any(Ethiopian::new());
+            case.check_constructor(&Ethiopian::new(), |date| {
+                Date::try_new_ethiopian(
+                    EthiopianEraStyle::AmeteMihret,
+                    date.extended_year(),
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                )
+            });
+        }
     }
 
     #[test]
-    fn test_ethiopian_aa_conversion_and_back() {
-        let rd = Date::try_new_iso(1970, 1, 2).unwrap().to_rata_die();
-        let date_ethiopian = Date::from_rata_die(rd, Ethiopian(EthiopianEraStyle::AmeteAlem));
+    fn test_aa_cases() {
+        let cases = [
+            TestCase {
+                rd: RataDie::new(550666),
+                era: Some("aa"),
+                extended_year: 7000,
+                year: 7000,
+                month: month_info(13),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-2042609),
+                era: Some("aa"),
+                extended_year: -100,
+                year: -100,
+                month: month_info(13),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-1969859),
+                era: Some("aa"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(1970, 1, 2).unwrap().to_rata_die(),
+                era: Some("aa"),
+                extended_year: 7462,
+                year: 7462,
+                month: month_info(4),
+                day: 24,
+            },
+            TestCase {
+                rd: Date::try_new_iso(-5500 + 9, 1, 1).unwrap().to_rata_die(),
+                era: Some("aa"),
+                extended_year: 1,
+                year: 1,
+                month: month_info(6),
+                day: 19,
+            },
+            TestCase {
+                rd: Date::try_new_iso(9, 1, 1).unwrap().to_rata_die(),
+                era: Some("aa"),
+                extended_year: 5501,
+                year: 5501,
+                month: month_info(5),
+                day: 8,
+            },
+        ];
 
-        assert_eq!(date_ethiopian.extended_year(), 7462);
-        assert_eq!(date_ethiopian.month().ordinal, 4);
-        assert_eq!(date_ethiopian.day_of_month().0, 24);
-
-        assert_eq!(date_ethiopian.to_rata_die(), rd);
-    }
-
-    #[test]
-    fn test_roundtrip_negative() {
-        // https://github.com/unicode-org/icu4x/issues/2254
-        let rd = Date::try_new_iso(-1000, 3, 3).unwrap().to_rata_die();
-        let date_ethiopian = Date::from_rata_die(rd, Ethiopian::new());
-        assert_eq!(date_ethiopian.to_rata_die(), rd);
-    }
-
-    #[test]
-    fn extended_year() {
-        assert_eq!(
-            Date::try_new_iso(-5500 + 9, 1, 1)
-                .unwrap()
-                .to_calendar(Ethiopian(EthiopianEraStyle::AmeteAlem))
-                .extended_year(),
-            1
-        );
-        assert_eq!(
-            Date::try_new_iso(9, 1, 1)
-                .unwrap()
-                .to_calendar(Ethiopian(EthiopianEraStyle::AmeteAlem))
-                .extended_year(),
-            5501
-        );
-
-        assert_eq!(
-            Date::try_new_iso(-5500 + 9, 1, 1)
-                .unwrap()
-                .to_calendar(Ethiopian(EthiopianEraStyle::AmeteMihret))
-                .extended_year(),
-            -5499
-        );
-        assert_eq!(
-            Date::try_new_iso(9, 1, 1)
-                .unwrap()
-                .to_calendar(Ethiopian(EthiopianEraStyle::AmeteMihret))
-                .extended_year(),
-            1
-        );
+        for case in cases {
+            case.check(&Ethiopian::new_with_era_style(EthiopianEraStyle::AmeteAlem));
+            case.check_any(Ethiopian::new_with_era_style(EthiopianEraStyle::AmeteAlem));
+            case.check_constructor(
+                &Ethiopian::new_with_era_style(EthiopianEraStyle::AmeteAlem),
+                |date| {
+                    Date::try_new_ethiopian(
+                        EthiopianEraStyle::AmeteAlem,
+                        date.extended_year(),
+                        date.month().ordinal,
+                        date.day_of_month().0,
+                    )
+                },
+            );
+        }
     }
 }

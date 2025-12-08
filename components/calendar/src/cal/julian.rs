@@ -295,170 +295,156 @@ impl Date<Julian> {
 
 #[cfg(test)]
 mod test {
+    use crate::{
+        tests::TestCase,
+        types::{Month, MonthInfo},
+    };
+
     use super::*;
 
     #[test]
     fn test_julian() {
+        fn month_info(ordinal: u8) -> MonthInfo {
+            MonthInfo::from_parts(Month::new(ordinal), ordinal)
+        }
         let cases = [
             // March 1st 200 is same on both calendars
             TestCase {
                 rd: Date::try_new_iso(200, 3, 1).unwrap().to_rata_die(),
-                era: "ce",
+                era: Some("ce"),
+                extended_year: 200,
                 year: 200,
-                month: 3,
+                month: month_info(3),
                 day: 1,
             },
             // Feb 28th, 200 (iso) = Feb 29th, 200 (julian)
             TestCase {
                 rd: Date::try_new_iso(200, 2, 28).unwrap().to_rata_die(),
-                era: "ce",
+                era: Some("ce"),
+                extended_year: 200,
                 year: 200,
-                month: 2,
+                month: month_info(2),
                 day: 29,
             },
             // March 1st 400 (iso) = Feb 29th, 400 (julian)
             TestCase {
                 rd: Date::try_new_iso(400, 3, 1).unwrap().to_rata_die(),
-                era: "ce",
+                era: Some("ce"),
+                extended_year: 400,
                 year: 400,
-                month: 2,
+                month: month_info(2),
                 day: 29,
             },
             // Jan 1st, 2022 (iso) = Dec 19, 2021 (julian)
             TestCase {
                 rd: Date::try_new_iso(2022, 1, 1).unwrap().to_rata_die(),
-                era: "ce",
+                era: Some("ce"),
+                extended_year: 2021,
                 year: 2021,
-                month: 12,
+                month: month_info(12),
                 day: 19,
             },
             // March 1st, 2022 (iso) = Feb 16, 2022 (julian)
             TestCase {
-                era: "ce",
-                year: 2022,
-                month: 2,
-                day: 16,
                 rd: Date::try_new_iso(2022, 3, 1).unwrap().to_rata_die(),
+                era: Some("ce"),
+                extended_year: 2022,
+                year: 2022,
+                month: month_info(2),
+                day: 16,
             },
-        ];
-
-        for case in cases {
-            check_case(case)
-        }
-    }
-
-    #[test]
-    fn test_roundtrip_negative() {
-        // https://github.com/unicode-org/icu4x/issues/2254
-        let rd = Date::try_new_iso(-1000, 3, 3).unwrap().to_rata_die();
-        let julian = Date::from_rata_die(rd, Julian::new());
-        let recovered_rd = julian.to_rata_die();
-        assert_eq!(rd, recovered_rd);
-    }
-
-    #[derive(Debug)]
-    struct TestCase {
-        rd: RataDie,
-        year: i32,
-        era: &'static str,
-        month: u8,
-        day: u8,
-    }
-
-    fn check_case(case: TestCase) {
-        let date = Date::from_rata_die(case.rd, Julian);
-
-        assert_eq!(date.to_rata_die(), case.rd, "{case:?}");
-
-        assert_eq!(date.era_year().year, case.year, "{case:?}");
-        assert_eq!(date.era_year().era, case.era, "{case:?}");
-        assert_eq!(date.month().ordinal, case.month, "{case:?}");
-        assert_eq!(date.day_of_month().0, case.day, "{case:?}");
-
-        assert_eq!(
-            Date::try_new_julian(
-                date.era_year().extended_year,
-                date.month().ordinal,
-                date.day_of_month().0
-            ),
-            Ok(date),
-            "{case:?}"
-        );
-    }
-
-    #[test]
-    fn test_julian_near_era_change() {
-        // Tests that the Julian calendar gives the correct expected
-        // day, month, and year for positive years (CE)
-
-        let cases = [
             TestCase {
                 rd: RataDie::new(1),
+                era: Some("ce"),
+                extended_year: 1,
                 year: 1,
-                era: "ce",
-                month: 1,
+                month: month_info(1),
                 day: 3,
             },
             TestCase {
                 rd: RataDie::new(0),
+                era: Some("ce"),
+                extended_year: 1,
                 year: 1,
-                era: "ce",
-                month: 1,
+                month: month_info(1),
                 day: 2,
             },
             TestCase {
                 rd: RataDie::new(-1),
+                era: Some("ce"),
+                extended_year: 1,
                 year: 1,
-                era: "ce",
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: RataDie::new(-2),
+                era: Some("bce"),
+                extended_year: 1 - 1,
                 year: 1,
-                era: "bce",
-                month: 12,
+                month: month_info(12),
                 day: 31,
             },
             TestCase {
                 rd: RataDie::new(-3),
+                era: Some("bce"),
+                extended_year: 1 - 1,
                 year: 1,
-                era: "bce",
-                month: 12,
+                month: month_info(12),
                 day: 30,
             },
             TestCase {
                 rd: RataDie::new(-367),
+                era: Some("bce"),
+                extended_year: 1 - 1,
                 year: 1,
-                era: "bce",
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: RataDie::new(-368),
+                era: Some("bce"),
+                extended_year: 1 - 2,
                 year: 2,
-                era: "bce",
-                month: 12,
+                month: month_info(12),
                 day: 31,
             },
             TestCase {
                 rd: RataDie::new(-1462),
+                era: Some("bce"),
+                extended_year: 1 - 4,
                 year: 4,
-                era: "bce",
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: RataDie::new(-1463),
+                era: Some("bce"),
+                extended_year: 1 - 5,
                 year: 5,
-                era: "bce",
-                month: 12,
+                month: month_info(12),
                 day: 31,
             },
+            // https://github.com/unicode-org/icu4x/issues/2254
+            TestCase {
+                rd: Date::try_new_iso(-1000, 3, 3).unwrap().to_rata_die(),
+                era: Some("bce"),
+                extended_year: -1000,
+                year: 1001,
+                month: month_info(3),
+                day: 12,
+            }
         ];
 
         for case in cases {
-            check_case(case)
+            case.check(&Julian);
+            case.check_constructor(&Julian, |date| {
+                Date::try_new_julian(
+                    date.era_year().extended_year,
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                )
+            });
         }
     }
 

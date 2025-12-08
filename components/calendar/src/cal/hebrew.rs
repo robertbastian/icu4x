@@ -366,7 +366,7 @@ impl Date<Hebrew> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::Weekday;
+    use crate::tests::TestCase;
 
     pub const TISHREI: Month = Month::new(1);
     pub const ḤESHVAN: Month = Month::new(2);
@@ -382,144 +382,468 @@ mod tests {
     pub const AV: Month = Month::new(11);
     pub const ELUL: Month = Month::new(12);
 
-    /// The leap years used in the tests below
-    const LEAP_YEARS_IN_TESTS: [i32; 1] = [5782];
-    /// (iso, hebrew) pairs of testcases. If any of the years here
-    /// are leap years please add them to LEAP_YEARS_IN_TESTS (we have this manually
-    /// so we don't end up exercising potentially buggy codepaths to test this)
-    #[expect(clippy::type_complexity)]
-    const ISO_HEBREW_DATE_PAIRS: [((i32, u8, u8), (i32, Month, u8)); 48] = [
-        ((2021, 1, 10), (5781, TEVET, 26)),
-        ((2021, 1, 25), (5781, SHEVAT, 12)),
-        ((2021, 2, 10), (5781, SHEVAT, 28)),
-        ((2021, 2, 25), (5781, ADAR, 13)),
-        ((2021, 3, 10), (5781, ADAR, 26)),
-        ((2021, 3, 25), (5781, NISAN, 12)),
-        ((2021, 4, 10), (5781, NISAN, 28)),
-        ((2021, 4, 25), (5781, IYYAR, 13)),
-        ((2021, 5, 10), (5781, IYYAR, 28)),
-        ((2021, 5, 25), (5781, SIVAN, 14)),
-        ((2021, 6, 10), (5781, SIVAN, 30)),
-        ((2021, 6, 25), (5781, TAMMUZ, 15)),
-        ((2021, 7, 10), (5781, AV, 1)),
-        ((2021, 7, 25), (5781, AV, 16)),
-        ((2021, 8, 10), (5781, ELUL, 2)),
-        ((2021, 8, 25), (5781, ELUL, 17)),
-        ((2021, 9, 10), (5782, TISHREI, 4)),
-        ((2021, 9, 25), (5782, TISHREI, 19)),
-        ((2021, 10, 10), (5782, ḤESHVAN, 4)),
-        ((2021, 10, 25), (5782, ḤESHVAN, 19)),
-        ((2021, 11, 10), (5782, KISLEV, 6)),
-        ((2021, 11, 25), (5782, KISLEV, 21)),
-        ((2021, 12, 10), (5782, TEVET, 6)),
-        ((2021, 12, 25), (5782, TEVET, 21)),
-        ((2022, 1, 10), (5782, SHEVAT, 8)),
-        ((2022, 1, 25), (5782, SHEVAT, 23)),
-        ((2022, 2, 10), (5782, ADARI, 9)),
-        ((2022, 2, 25), (5782, ADARI, 24)),
-        ((2022, 3, 10), (5782, ADAR, 7)),
-        ((2022, 3, 25), (5782, ADAR, 22)),
-        ((2022, 4, 10), (5782, NISAN, 9)),
-        ((2022, 4, 25), (5782, NISAN, 24)),
-        ((2022, 5, 10), (5782, IYYAR, 9)),
-        ((2022, 5, 25), (5782, IYYAR, 24)),
-        ((2022, 6, 10), (5782, SIVAN, 11)),
-        ((2022, 6, 25), (5782, SIVAN, 26)),
-        ((2022, 7, 10), (5782, TAMMUZ, 11)),
-        ((2022, 7, 25), (5782, TAMMUZ, 26)),
-        ((2022, 8, 10), (5782, AV, 13)),
-        ((2022, 8, 25), (5782, AV, 28)),
-        ((2022, 9, 10), (5782, ELUL, 14)),
-        ((2022, 9, 25), (5782, ELUL, 29)),
-        ((2022, 10, 10), (5783, TISHREI, 15)),
-        ((2022, 10, 25), (5783, TISHREI, 30)),
-        ((2022, 11, 10), (5783, ḤESHVAN, 16)),
-        ((2022, 11, 25), (5783, KISLEV, 1)),
-        ((2022, 12, 10), (5783, KISLEV, 16)),
-        ((2022, 12, 25), (5783, TEVET, 1)),
-    ];
+    fn month_info(month: Month, leap: bool) -> MonthInfo {
+        MonthInfo::from_parts(
+            month,
+            if (month == ADARI || month.number() >= ADAR.number()) && leap {
+                month.number() + 1
+            } else {
+                assert!(month != ADARI);
+                month.number()
+            },
+        )
+    }
 
     #[test]
-    fn test_conversions() {
-        for ((iso_y, iso_m, iso_d), (y, m, d)) in ISO_HEBREW_DATE_PAIRS.into_iter() {
-            let rd = Date::try_new_iso(iso_y, iso_m, iso_d)
-                .unwrap()
-                .to_rata_die();
+    fn test_cases() {
+        let cases = [
+            TestCase {
+                rd: Date::try_new_iso(2021, 1, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(TEVET, false),
+                day: 26,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 1, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(SHEVAT, false),
+                day: 12,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 2, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(SHEVAT, false),
+                day: 28,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 2, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(ADAR, false),
+                day: 13,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 3, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(ADAR, false),
+                day: 26,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 3, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(NISAN, false),
+                day: 12,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 4, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(NISAN, false),
+                day: 28,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 4, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(IYYAR, false),
+                day: 13,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 5, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(IYYAR, false),
+                day: 28,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 5, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(SIVAN, false),
+                day: 14,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 6, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(SIVAN, false),
+                day: 30,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 6, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(TAMMUZ, false),
+                day: 15,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 7, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(AV, false),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 7, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(AV, false),
+                day: 16,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 8, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(ELUL, false),
+                day: 2,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 8, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5781,
+                year: 5781,
+                month: month_info(ELUL, false),
+                day: 17,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 9, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(TISHREI, true),
+                day: 4,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 9, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(TISHREI, true),
+                day: 19,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 10, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ḤESHVAN, true),
+                day: 4,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 10, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ḤESHVAN, true),
+                day: 19,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 11, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(KISLEV, true),
+                day: 6,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 11, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(KISLEV, true),
+                day: 21,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 12, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(TEVET, true),
+                day: 6,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2021, 12, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(TEVET, true),
+                day: 21,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 1, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(SHEVAT, true),
+                day: 8,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 1, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(SHEVAT, true),
+                day: 23,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 2, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ADARI, true),
+                day: 9,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 2, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ADARI, true),
+                day: 24,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 3, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ADAR, true),
+                day: 7,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 3, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ADAR, true),
+                day: 22,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 4, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(NISAN, true),
+                day: 9,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 4, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(NISAN, true),
+                day: 24,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 5, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(IYYAR, true),
+                day: 9,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 5, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(IYYAR, true),
+                day: 24,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 6, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(SIVAN, true),
+                day: 11,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 6, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(SIVAN, true),
+                day: 26,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 7, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(TAMMUZ, true),
+                day: 11,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 7, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(TAMMUZ, true),
+                day: 26,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 8, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(AV, true),
+                day: 13,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 8, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(AV, true),
+                day: 28,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 9, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ELUL, true),
+                day: 14,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 9, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5782,
+                year: 5782,
+                month: month_info(ELUL, true),
+                day: 29,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 10, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5783,
+                year: 5783,
+                month: month_info(TISHREI, false),
+                day: 15,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 10, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5783,
+                year: 5783,
+                month: month_info(TISHREI, false),
+                day: 30,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 11, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5783,
+                year: 5783,
+                month: month_info(ḤESHVAN, false),
+                day: 16,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 11, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5783,
+                year: 5783,
+                month: month_info(KISLEV, false),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 12, 10).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5783,
+                year: 5783,
+                month: month_info(KISLEV, false),
+                day: 16,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2022, 12, 25).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 5783,
+                year: 5783,
+                month: month_info(TEVET, false),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(734822), // unverified
+                era: Some("am"),
+                extended_year: 5773,
+                year: 5773,
+                month: month_info(KISLEV, false),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(450078), // unverified
+                era: Some("am"),
+                extended_year: 4993,
+                year: 4993,
+                month: month_info(NISAN, false),
+                day: 21,
+            },
+            TestCase {
+                rd: RataDie::new(-1410112), // unverified
+                era: Some("am"),
+                extended_year: -100,
+                year: -100,
+                month: month_info(NISAN, true),
+                day: 21,
+            },
+            TestCase {
+                rd: RataDie::new(457164), // unverified
+                era: Some("am"),
+                extended_year: 5012,
+                year: 5012,
+                month: month_info(ELUL, false),
+                day: 20,
+            },
+            // In Hebrew, there is no inverse era, so negative extended years are negative era years
+            TestCase {
+                rd: Date::try_new_gregorian(-5000, 1, 1).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: -1240,
+                year: -1240,
+                month: month_info(SHEVAT, false), // unverified
+                day: 28,                          // unverified
+            },
+            // https://github.com/unicode-org/icu4x/issues/4893
+            TestCase {
+                rd: Date::try_new_iso(-1, 8, 28).unwrap().to_rata_die(),
+                era: Some("am"),
+                extended_year: 3760,
+                year: 3760,
+                month: month_info(TISHREI, false),
+                day: 1,
+            },
+        ];
 
-            let date = Date::from_rata_die(rd, Hebrew);
-
-            assert_eq!(date.to_rata_die(), rd, "{date:?}");
-
-            assert_eq!(date.era_year().year, y, "{date:?}");
-            assert_eq!(
-                date.month().ordinal,
-                if (m == ADARI || m.number() >= ADAR.number()) && LEAP_YEARS_IN_TESTS.contains(&y) {
-                    m.number() + 1
-                } else {
-                    assert!(m != ADARI);
-                    m.number()
-                },
-                "{date:?}"
-            );
-            assert_eq!(date.day_of_month().0, d, "{date:?}");
-
-            assert_eq!(
-                Date::try_new_from_codes(
-                    Some(&date.era_year().era),
-                    date.era_year().year,
-                    date.month().value.code(),
+        for case in cases {
+            case.check(&Hebrew);
+            case.check_any(Hebrew);
+            #[allow(deprecated)]
+            case.check_constructor(&Hebrew, |date| {
+                Date::try_new_hebrew(
+                    date.era_year().extended_year,
+                    date.month().ordinal,
                     date.day_of_month().0,
-                    Hebrew
-                ),
-                Ok(date)
-            );
-
-            #[allow(deprecated)] // should still test
-            {
-                assert_eq!(
-                    Date::try_new_hebrew(
-                        date.era_year().extended_year,
-                        date.month().ordinal,
-                        date.day_of_month().0
-                    ),
-                    Ok(date)
-                );
-            }
+                )
+            });
         }
-    }
-
-    #[test]
-    fn test_icu_bug_22441() {
-        let yi = HebrewYear::compute(88369);
-        assert_eq!(yi.keviyah.year_length(), 383);
-    }
-
-    #[test]
-    fn test_negative_era_years() {
-        let greg_date = Date::try_new_gregorian(-5000, 1, 1).unwrap();
-        let greg_year = greg_date.era_year();
-        assert_eq!(greg_date.inner.0.year(), -5000);
-        assert_eq!(greg_year.era, "bce");
-        // In Gregorian, era year is 1 - extended year
-        assert_eq!(greg_year.year, 5001);
-        let hebr_date = greg_date.to_calendar(Hebrew);
-        let hebr_year = hebr_date.era_year();
-        assert_eq!(hebr_date.inner.0.year().value, -1240);
-        assert_eq!(hebr_year.era, "am");
-        // In Hebrew, there is no inverse era, so negative extended years are negative era years
-        assert_eq!(hebr_year.year, -1240);
-    }
-
-    #[test]
-    fn test_weekdays() {
-        // https://github.com/unicode-org/icu4x/issues/4893
-        let cal = Hebrew::new();
-        let era = "am";
-        let month = Month::new(1);
-        let dt = Date::try_new_from_codes(Some(era), 3760, month.code(), 1, cal).unwrap();
-
-        // Should be Saturday per:
-        // https://www.hebcal.com/converter?hd=1&hm=Tishrei&hy=3760&h2g=1
-        assert_eq!(dt.weekday(), Weekday::Saturday);
     }
 }

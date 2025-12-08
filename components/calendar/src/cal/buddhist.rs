@@ -102,6 +102,10 @@ impl Date<Buddhist> {
 mod test {
     use calendrical_calculations::rata_die::RataDie;
 
+    use crate::{
+        error::DateFromFieldsError, tests::{ErrorTestCase, TestCase}, types::{Month, MonthInfo}
+    };
+
     use super::*;
 
     #[test]
@@ -158,124 +162,152 @@ mod test {
         }
     }
 
-    #[derive(Debug)]
-    struct TestCase {
-        rd: RataDie,
-        year: i32,
-        month: u8,
-        day: u8,
-    }
-
-    fn check_test_case(case: TestCase) {
-        let date = Date::from_rata_die(case.rd, Buddhist);
-
-        assert_eq!(date.to_rata_die(), case.rd, "{case:?}");
-
-        assert_eq!(date.era_year().year, case.year, "{case:?}");
-        assert_eq!(date.month().ordinal, case.month, "{case:?}");
-        assert_eq!(date.day_of_month().0, case.day, "{case:?}");
-
-        assert_eq!(
-            Date::try_new_buddhist(
-                date.era_year().extended_year,
-                date.month().ordinal,
-                date.day_of_month().0
-            ),
-            Ok(date),
-            "{case:?}"
-        );
-    }
-
     #[test]
-    fn test_buddhist_cases_near_rd_zero() {
+    fn test_cases() {
+        fn month_info(ordinal: u8) -> MonthInfo {
+            MonthInfo::from_parts(Month::new(ordinal), ordinal)
+        }
         let cases = [
             TestCase {
                 rd: Date::try_new_iso(-100, 2, 15).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 443,
                 year: 443,
-                month: 2,
+                month: month_info(2),
                 day: 15,
             },
             TestCase {
                 rd: Date::try_new_iso(-3, 10, 29).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 540,
                 year: 540,
-                month: 10,
+                month: month_info(10),
                 day: 29,
             },
             TestCase {
                 rd: Date::try_new_iso(0, 12, 31).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 543,
                 year: 543,
-                month: 12,
+                month: month_info(12),
                 day: 31,
             },
             TestCase {
                 rd: Date::try_new_iso(1, 1, 1).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 544,
                 year: 544,
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: Date::try_new_iso(4, 2, 29).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 547,
                 year: 547,
-                month: 2,
+                month: month_info(2),
                 day: 29,
             },
-        ];
-
-        for case in cases {
-            check_test_case(case);
-        }
-    }
-
-    #[test]
-    fn test_buddhist_cases_near_epoch() {
-        // 1 BE = 543 BCE = -542 ISO
-        let cases = [
             TestCase {
                 rd: Date::try_new_iso(-554, 12, 31).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: -11,
                 year: -11,
-                month: 12,
+                month: month_info(12),
                 day: 31,
             },
             TestCase {
                 rd: Date::try_new_iso(-553, 1, 1).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: -10,
                 year: -10,
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: Date::try_new_iso(-544, 8, 31).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: -1,
                 year: -1,
-                month: 8,
+                month: month_info(8),
                 day: 31,
             },
             TestCase {
                 rd: Date::try_new_iso(-543, 5, 12).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 0,
                 year: 0,
-                month: 5,
+                month: month_info(5),
                 day: 12,
             },
             TestCase {
                 rd: Date::try_new_iso(-543, 12, 31).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 0,
                 year: 0,
-                month: 12,
+                month: month_info(12),
                 day: 31,
             },
             TestCase {
                 rd: Date::try_new_iso(-542, 1, 1).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 1,
                 year: 1,
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: Date::try_new_iso(-541, 7, 9).unwrap().to_rata_die(),
+                era: Some("be"),
+                extended_year: 2,
                 year: 2,
-                month: 7,
+                month: month_info(7),
                 day: 9,
+            },
+            TestCase {
+                rd: RataDie::new(-162108), // unverified
+                era: Some("be"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-235156), // unverified
+                era: Some("be"),
+                extended_year: -100,
+                year: -100,
+                month: month_info(3),
+                day: 1,
             },
         ];
 
         for case in cases {
-            check_test_case(case);
+            case.check(&Buddhist);
+            case.check_any(Buddhist);
+            case.check_constructor(&Buddhist, |d| {
+                Date::try_new_buddhist(
+                    d.era_year().extended_year,
+                    d.month().ordinal,
+                    d.day_of_month().0,
+                )
+            });
+        }
+    }
+
+    #[test]
+    fn test_errors() {
+        let cases = [ErrorTestCase {
+            era: Some("be"),
+            year: 100,
+            month: Month::new(13),
+            day: 1,
+            error: DateFromFieldsError::MonthCodeNotInCalendar,
+        }];
+
+        for case in cases {
+            case.check(&Buddhist);
+            case.check_any(Buddhist)
         }
     }
 }

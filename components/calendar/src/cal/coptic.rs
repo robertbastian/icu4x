@@ -261,13 +261,91 @@ impl Date<Coptic> {
 mod tests {
     use super::*;
     use crate::options::{DateFromFieldsOptions, MissingFieldsStrategy, Overflow};
-    use crate::types::{DateFields, Month};
+    use crate::tests::{ErrorTestCase, TestCase};
+    use crate::types::{DateFields, Month, MonthInfo};
 
     #[test]
     fn test_coptic_regression() {
         // https://github.com/unicode-org/icu4x/issues/2254
         let rd = Date::try_new_iso(-100, 3, 3).unwrap().to_rata_die();
         assert_eq!(Date::from_rata_die(rd, Coptic).to_rata_die(), rd);
+    }
+
+    #[test]
+    fn test_cases() {
+        fn month_info(ordinal: u8) -> MonthInfo {
+            MonthInfo::from_parts(Month::new(ordinal), ordinal)
+        }
+
+        let cases = [
+            TestCase {
+                rd: RataDie::new(139825), // unverified
+                era: Some("am"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(833800), // unverified
+                era: Some("am"),
+                extended_year: 2000,
+                year: 2000,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(66775), // unverified
+                era: Some("am"),
+                extended_year: -100,
+                year: -100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(67140), // unverified
+                era: Some("am"),
+                extended_year: -99,
+                year: -99,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(140125), // unverified
+                era: Some("am"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(13),
+                day: 1,
+            },
+        ];
+
+        for case in cases {
+            case.check(&Coptic);
+            case.check_any(Coptic);
+            case.check_constructor(&Coptic, |date| {
+                Date::try_new_coptic(
+                    date.extended_year(),
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                )
+            })
+        }
+    }
+
+    #[test]
+    fn test_error_cases() {
+        let cases = [ErrorTestCase {
+            era: Some("am"),
+            year: 100,
+            month: Month::new(14),
+            day: 1,
+            error: DateFromFieldsError::MonthCodeNotInCalendar,
+        }];
+
+        for case in cases {
+            case.check(&Coptic);
+        }
     }
 
     #[test]

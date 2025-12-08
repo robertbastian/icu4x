@@ -155,147 +155,171 @@ impl Gregorian {
 mod test {
     use calendrical_calculations::rata_die::RataDie;
 
+    use crate::{
+        tests::TestCase,
+        types::{Month, MonthInfo},
+    };
+
     use super::*;
 
-    #[derive(Debug)]
-    struct TestCase {
-        rd: RataDie,
-        extended_year: i32,
-        month: u8,
-        day: u8,
-        era_year: i32,
-        era: &'static str,
-    }
-
-    fn check_test_case(case: TestCase) {
-        let date = Date::from_rata_die(case.rd, Gregorian);
-
-        assert_eq!(date.to_rata_die(), case.rd, "{case:?}");
-
-        assert_eq!(date.era_year().year, case.era_year, "{case:?}");
-        assert_eq!(
-            date.era_year().extended_year,
-            case.extended_year,
-            "{case:?}"
-        );
-        assert_eq!(date.era_year().era, case.era, "{case:?}");
-        assert_eq!(date.month().ordinal, case.month, "{case:?}");
-        assert_eq!(date.day_of_month().0, case.day, "{case:?}");
-
-        assert_eq!(
-            Date::try_new_gregorian(
-                date.era_year().extended_year,
-                date.month().ordinal,
-                date.day_of_month().0
-            ),
-            Ok(date),
-            "{case:?}"
-        );
-    }
-
     #[test]
-    fn test_gregorian_ce() {
-        // Tests that the Gregorian calendar gives the correct expected
-        // day, month, and year for positive years (AD/CE/gregory era)
+    fn test_cases() {
+        fn month_info(ordinal: u8) -> MonthInfo {
+            MonthInfo::from_parts(Month::new(ordinal), ordinal)
+        }
 
         let cases = [
             TestCase {
                 rd: RataDie::new(1),
                 extended_year: 1,
-                month: 1,
+                month: month_info(1),
                 day: 1,
-                era_year: 1,
-                era: "ce",
+                year: 1,
+                era: Some("ce"),
             },
             TestCase {
                 rd: RataDie::new(181),
                 extended_year: 1,
-                month: 6,
+                month: month_info(6),
                 day: 30,
-                era_year: 1,
-                era: "ce",
+                year: 1,
+                era: Some("ce"),
             },
             TestCase {
                 rd: RataDie::new(1155),
                 extended_year: 4,
-                month: 2,
+                month: month_info(2),
                 day: 29,
-                era_year: 4,
-                era: "ce",
+                year: 4,
+                era: Some("ce"),
             },
             TestCase {
                 rd: RataDie::new(1344),
                 extended_year: 4,
-                month: 9,
+                month: month_info(9),
                 day: 5,
-                era_year: 4,
-                era: "ce",
+                year: 4,
+                era: Some("ce"),
             },
             TestCase {
                 rd: RataDie::new(36219),
                 extended_year: 100,
-                month: 3,
+                month: month_info(3),
                 day: 1,
-                era_year: 100,
-                era: "ce",
+                year: 100,
+                era: Some("ce"),
             },
-        ];
-
-        for case in cases {
-            check_test_case(case);
-        }
-    }
-
-    #[test]
-    fn test_gregorian_bce() {
-        // Tests that the Gregorian calendar gives the correct expected
-        // day, month, and year for negative years (BC/BCE era)
-
-        let cases = [
             TestCase {
                 rd: RataDie::new(0),
                 extended_year: 0,
-                month: 12,
+                month: month_info(12),
                 day: 31,
-                era_year: 1,
-                era: "bce",
+                year: 1,
+                era: Some("bce"),
             },
             TestCase {
                 rd: RataDie::new(-365), // This is a leap year
                 extended_year: 0,
-                month: 1,
+                month: month_info(1),
                 day: 1,
-                era_year: 1,
-                era: "bce",
+                year: 1,
+                era: Some("bce"),
             },
             TestCase {
                 rd: RataDie::new(-366),
                 extended_year: -1,
-                month: 12,
+                month: month_info(12),
                 day: 31,
-                era_year: 2,
-                era: "bce",
+                year: 2,
+                era: Some("bce"),
             },
             TestCase {
                 rd: RataDie::new(-1461),
                 extended_year: -4,
-                month: 12,
+                month: month_info(12),
                 day: 31,
-                era_year: 5,
-                era: "bce",
+                year: 5,
+                era: Some("bce"),
             },
             TestCase {
                 rd: RataDie::new(-1826),
                 extended_year: -4,
-                month: 1,
+                month: month_info(1),
                 day: 1,
-                era_year: 5,
-                era: "bce",
+                year: 5,
+                era: Some("bce"),
             },
+            TestCase {
+                rd: RataDie::new(36219), // unverified
+                era: Some("ce"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(730180), // unverified
+                era: Some("ce"),
+                extended_year: 2000,
+                year: 2000,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-36830), // unverified
+                era: Some("bce"),
+                extended_year: -100,
+                year: 101,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-36465), // unverified
+                era: Some("bce"),
+                extended_year: -99,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            // // Since #6910, the era range is not enforced in try_from_codes
+            // single_test_error(
+            //     gregorian,
+            //     Some(("ce", Some(1))),
+            //     0,
+            //     Month::new(3),
+            //     1,
+            //     DateError::Range {
+            //         field: "year",
+            //         value: 0,
+            //         min: 1,
+            //         max: i32::MAX,
+            //     },
+            // );
+            // single_test_error(
+            //     gregorian,
+            //     Some(("bce", Some(0))),
+            //     0,
+            //     Month::new(3),
+            //     1,
+            //     DateError::Range {
+            //         field: "year",
+            //         value: 0,
+            //         min: 1,
+            //         max: i32::MAX,
+            //     },
+            // );
         ];
 
         for case in cases {
-            check_test_case(case);
+            case.check(&Gregorian);
+            case.check_any(Gregorian);
+            case.check_constructor(&Gregorian, |date| {
+                Date::try_new_gregorian(
+                    date.era_year().extended_year,
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                )
+            });
         }
     }
 

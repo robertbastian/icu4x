@@ -1075,320 +1075,464 @@ mod test {
     use super::*;
     use crate::cal::Iso;
     use crate::options::{DateFromFieldsOptions, Overflow};
-    use crate::types::DateFields;
+    use crate::tests::{ErrorTestCase, TestCase};
+    use crate::types::{DateFields, MonthInfo};
     use calendrical_calculations::{gregorian::fixed_from_gregorian, rata_die::RataDie};
     use std::collections::BTreeMap;
 
     #[test]
-    fn test_chinese_from_rd() {
-        #[derive(Debug)]
-        struct TestCase {
-            rd: i64,
-            expected_year: i32,
-            expected_month: u8,
-            expected_day: u8,
-        }
-
+    fn test_chinese_cases() {
         let cases = [
             TestCase {
-                rd: -964192,
-                expected_year: -2639,
-                expected_month: 1,
-                expected_day: 1,
+                rd: RataDie::new(145808),
+                era: None,
+                extended_year: 400,
+                year: 37,
+                month: MonthInfo::from_parts(Month::new(2), 2),
+                day: 5,
             },
             TestCase {
-                rd: -963838,
-                expected_year: -2638,
-                expected_month: 1,
-                expected_day: 1,
+                rd: RataDie::new(1701917),
+                era: None,
+                extended_year: 4660,
+                year: 37,
+                month: MonthInfo::from_parts(Month::new(7), 7),
+                day: 29,
             },
             TestCase {
-                rd: -963129,
-                expected_year: -2637,
-                expected_month: 13,
-                expected_day: 1,
+                rd: RataDie::new(-36537),
+                era: None,
+                extended_year: -100,
+                year: 17,
+                month: MonthInfo::from_parts(Month::new(11), 11),
+                day: 12,
             },
             TestCase {
-                rd: -963100,
-                expected_year: -2637,
-                expected_month: 13,
-                expected_day: 30,
+                rd: RataDie::new(-964192),
+                era: None,
+                extended_year: -2639,
+                year: 58,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
             },
             TestCase {
-                rd: -963099,
-                expected_year: -2636,
-                expected_month: 1,
-                expected_day: 1,
+                rd: RataDie::new(-963838),
+                era: None,
+                extended_year: -2638,
+                year: 59,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
             },
             TestCase {
-                rd: 738700,
-                expected_year: 2023,
-                expected_month: 6,
-                expected_day: 12,
+                rd: RataDie::new(-963129),
+                era: None,
+                extended_year: -2637,
+                year: 60,
+                month: MonthInfo::from_parts(Month::new(12), 13),
+                day: 1,
             },
             TestCase {
-                rd: fixed_from_gregorian(2319, 2, 20).to_i64_date(),
-                expected_year: 2318,
-                expected_month: 13,
-                expected_day: 30,
+                rd: RataDie::new(-963100),
+                era: None,
+                extended_year: -2637,
+                year: 60,
+                month: MonthInfo::from_parts(Month::new(12), 13),
+                day: 30,
             },
             TestCase {
-                rd: fixed_from_gregorian(2319, 2, 21).to_i64_date(),
-                expected_year: 2319,
-                expected_month: 1,
-                expected_day: 1,
+                rd: RataDie::new(-963099),
+                era: None,
+                extended_year: -2636,
+                year: 1,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
             },
             TestCase {
-                rd: 738718,
-                expected_year: 2023,
-                expected_month: 6,
-                expected_day: 30,
+                rd: RataDie::new(738700),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(5), 6),
+                day: 12,
             },
             TestCase {
-                rd: 738747,
-                expected_year: 2023,
-                expected_month: 7,
-                expected_day: 29,
+                rd: RataDie::new(fixed_from_gregorian(2319, 2, 20).to_i64_date()),
+                era: None,
+                extended_year: 2318,
+                year: 35,
+                month: MonthInfo::from_parts(Month::new(12), 13),
+                day: 30,
             },
             TestCase {
-                rd: 738748,
-                expected_year: 2023,
-                expected_month: 8,
-                expected_day: 1,
+                rd: RataDie::new(fixed_from_gregorian(2319, 2, 21).to_i64_date()),
+                era: None,
+                extended_year: 2319,
+                year: 36,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
             },
             TestCase {
-                rd: 738865,
-                expected_year: 2023,
-                expected_month: 11,
-                expected_day: 29,
+                rd: RataDie::new(738718),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(5), 6),
+                day: 30,
             },
             TestCase {
-                rd: 738895,
-                expected_year: 2023,
-                expected_month: 12,
-                expected_day: 29,
+                rd: RataDie::new(738747),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(6), 7),
+                day: 29,
             },
             TestCase {
-                rd: 738925,
-                expected_year: 2023,
-                expected_month: 13,
-                expected_day: 30,
+                rd: RataDie::new(738748),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(7), 8),
+                day: 1,
             },
             TestCase {
-                rd: 0,
-                expected_year: 0,
-                expected_month: 11,
-                expected_day: 19,
+                rd: RataDie::new(738865),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(10), 11),
+                day: 29,
             },
             TestCase {
-                rd: -1,
-                expected_year: 0,
-                expected_month: 11,
-                expected_day: 18,
+                rd: RataDie::new(738895),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(11), 12),
+                day: 29,
             },
             TestCase {
-                rd: -365,
-                expected_year: -1,
-                expected_month: 12,
-                expected_day: 9,
+                rd: RataDie::new(738925),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(12), 13),
+                day: 30,
             },
             TestCase {
-                rd: 100,
-                expected_year: 1,
-                expected_month: 3,
-                expected_day: 1,
+                rd: RataDie::new(0),
+                era: None,
+                extended_year: 0,
+                year: 57,
+                month: MonthInfo::from_parts(Month::new(11), 11),
+                day: 19,
+            },
+            TestCase {
+                rd: RataDie::new(-1),
+                era: None,
+                extended_year: 0,
+                year: 57,
+                month: MonthInfo::from_parts(Month::new(11), 11),
+                day: 18,
+            },
+            TestCase {
+                rd: RataDie::new(-365),
+                era: None,
+                extended_year: -1,
+                year: 56,
+                month: MonthInfo::from_parts(Month::new(12), 12),
+                day: 9,
+            },
+            TestCase {
+                rd: RataDie::new(100),
+                era: None,
+                extended_year: 1,
+                year: 58,
+                month: MonthInfo::from_parts(Month::new(3), 3),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 6, 23).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(5), 6),
+                day: 6,
+            },
+            TestCase {
+                rd: RataDie::new(-963099),
+                era: None,
+                extended_year: -2636,
+                year: 1,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(-2636, 2, 15).unwrap().to_rata_die(),
+                era: None,
+                extended_year: -2636,
+                year: 1,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(-2636, 2, 14).unwrap().to_rata_die(),
+                era: None,
+                extended_year: -2637,
+                year: 60,
+                month: MonthInfo::from_parts(Month::new(12), 13),
+                day: 30,
+            },
+            TestCase {
+                rd: Date::try_new_iso(-2636, 1, 15).unwrap().to_rata_die(),
+                era: None,
+                extended_year: -2637,
+                year: 60,
+                month: MonthInfo::from_parts(Month::new(11), 12),
+                day: 29,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 1, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2022,
+                year: 39,
+                month: MonthInfo::from_parts(Month::new(12), 12),
+                day: 18,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 2, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 19,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 3, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(2), 2),
+                day: 18,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 4, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::leap(2), 3),
+                day: 19,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 5, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(3), 4),
+                day: 20,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 6, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(4), 5),
+                day: 22,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 7, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(5), 6),
+                day: 22,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 8, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(6), 7),
+                day: 23,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 9, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(7), 8),
+                day: 25,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 10, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(8), 9),
+                day: 25,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 11, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(9), 10),
+                day: 26,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2023, 12, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(10), 11),
+                day: 27,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2024, 1, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(11), 12),
+                day: 28,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2024, 2, 9).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2023,
+                year: 40,
+                month: MonthInfo::from_parts(Month::new(12), 13),
+                day: 30,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2024, 2, 10).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2024,
+                year: 41,
+                month: MonthInfo::from_parts(Month::new(1), 1),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(1933, 6, 23).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 1933,
+                year: 10,
+                month: MonthInfo::from_parts(Month::leap(5), 6),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(1938, 8, 25).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 1938,
+                year: 15,
+                month: MonthInfo::from_parts(Month::leap(7), 8),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(1984, 11, 23).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 1984,
+                year: 1,
+                month: MonthInfo::from_parts(Month::leap(10), 11),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2009, 6, 23).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2009,
+                year: 26,
+                month: MonthInfo::from_parts(Month::leap(5), 6),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2017, 7, 23).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2017,
+                year: 34,
+                month: MonthInfo::from_parts(Month::leap(6), 7),
+                day: 1,
+            },
+            TestCase {
+                rd: Date::try_new_iso(2028, 6, 23).unwrap().to_rata_die(),
+                era: None,
+                extended_year: 2028,
+                year: 45,
+                month: MonthInfo::from_parts(Month::leap(5), 6),
+                day: 1,
             },
         ];
 
         for case in cases {
-            let rata_die = RataDie::new(case.rd);
+            let cal = ChineseTraditional::new();
+            let date = case.check(&cal);
+            case.check_any(ChineseTraditional::new());
+            #[allow(deprecated)]
+            case.check_constructor(&ChineseTraditional::new(), |date| {
+                Date::try_new_chinese_with_calendar(
+                    date.extended_year(),
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                    ChineseTraditional::new(),
+                )
+            });
 
-            let chinese = Date::from_rata_die(rata_die, ChineseTraditional::new());
-            assert_eq!(
-                case.expected_year,
-                chinese.extended_year(),
-                "Chinese from RD failed, case: {case:?}"
-            );
-            assert_eq!(
-                case.expected_month,
-                chinese.month().ordinal,
-                "Chinese from RD failed, case: {case:?}"
-            );
-            assert_eq!(
-                case.expected_day,
-                chinese.day_of_month().0,
-                "Chinese from RD failed, case: {case:?}"
-            );
+            if matches!(case.extended_year, 1933 | 1938 | 1984 | 2009 | 2017 | 2028) {
+                assert!(date.is_in_leap_year());
+            }
         }
     }
 
     #[test]
-    fn test_rd_from_chinese() {
-        #[derive(Debug)]
-        struct TestCase {
-            year: i32,
-            ordinal_month: u8,
-            month: Month,
-            day: u8,
-            expected: i64,
-        }
-
+    fn test_korean_cases() {
         let cases = [
             TestCase {
-                year: 2023,
-                ordinal_month: 6,
-                month: Month::new(5),
-                day: 6,
-                // June 23 2023
-                expected: 738694,
+                rd: RataDie::new(145808),
+                era: None,
+                extended_year: 400,
+                year: 37,
+                month: MonthInfo::from_parts(Month::new(2), 2),
+                day: 5,
             },
             TestCase {
-                year: -2636,
-                ordinal_month: 1,
-                month: Month::new(1),
-                day: 1,
-                expected: -963099,
+                rd: RataDie::new(1701946),
+                era: None,
+                extended_year: 4660,
+                year: 37,
+                month: MonthInfo::from_parts(Month::new(8), 8),
+                day: 29,
+            },
+            TestCase {
+                rd: RataDie::new(-474830),
+                era: None,
+                extended_year: -1300,
+                year: 17,
+                month: MonthInfo::from_parts(Month::new(11), 11),
+                day: 12,
             },
         ];
 
         for case in cases {
-            let date = Date::try_new_from_codes(
-                None,
-                case.year,
-                case.month.code(),
-                case.day,
-                ChineseTraditional::new(),
-            )
-            .unwrap();
-            #[allow(deprecated)] // should still test
-            {
-                assert_eq!(
-                    Date::try_new_chinese_with_calendar(
-                        case.year,
-                        case.ordinal_month,
-                        case.day,
-                        ChineseTraditional::new()
-                    ),
-                    Ok(date)
-                );
-            }
-            let rd = date.to_rata_die().to_i64_date();
-            let expected = case.expected;
-            assert_eq!(rd, expected, "RD from Chinese failed, with expected: {expected} and calculated: {rd}, for test case: {case:?}");
+            case.check(&KoreanTraditional::new());
+            case.check_any(KoreanTraditional::new());
+            #[allow(deprecated)]
+            case.check_constructor(&KoreanTraditional::new(), |date| {
+                Date::try_new_dangi_with_calendar(
+                    date.extended_year(),
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                    KoreanTraditional::new(),
+                )
+            });
         }
     }
 
     #[test]
     fn test_rd_chinese_roundtrip() {
-        let mut rd = -1963020;
-        let max_rd = 1963020;
-        let mut iters = 0;
-        let max_iters = 560;
-        while rd < max_rd && iters < max_iters {
+        for rd in (-1963020..=1963020).step_by(7043).take(560) {
             let rata_die = RataDie::new(rd);
 
-            let chinese = Date::from_rata_die(rata_die, ChineseTraditional::new());
-            let result = chinese.to_rata_die();
-            assert_eq!(result, rata_die, "Failed roundtrip RD -> Chinese -> RD for RD: {rata_die:?}, with calculated: {result:?} from Chinese date:\n{chinese:?}");
-
-            rd += 7043;
-            iters += 1;
-        }
-    }
-
-    #[test]
-    fn test_chinese_epoch() {
-        let iso = Date::try_new_iso(-2636, 2, 15).unwrap();
-
-        let chinese = iso.to_calendar(ChineseTraditional::new());
-
-        assert_eq!(chinese.cyclic_year().related_iso, -2636);
-        assert_eq!(chinese.month().ordinal, 1);
-        assert_eq!(chinese.month().value, Month::new(1));
-        assert_eq!(chinese.day_of_month().0, 1);
-        assert_eq!(chinese.cyclic_year().year, 1);
-        assert_eq!(chinese.cyclic_year().related_iso, -2636);
-    }
-
-    #[test]
-    fn test_iso_to_chinese_negative_years() {
-        #[derive(Debug)]
-        struct TestCase {
-            iso_year: i32,
-            iso_month: u8,
-            iso_day: u8,
-            expected_year: i32,
-            expected_month: u8,
-            expected_day: u8,
-        }
-
-        let cases = [
-            TestCase {
-                iso_year: -2636,
-                iso_month: 2,
-                iso_day: 14,
-                expected_year: -2637,
-                expected_month: 13,
-                expected_day: 30,
-            },
-            TestCase {
-                iso_year: -2636,
-                iso_month: 1,
-                iso_day: 15,
-                expected_year: -2637,
-                expected_month: 12,
-                expected_day: 29,
-            },
-        ];
-
-        for case in cases {
-            let iso = Date::try_new_iso(case.iso_year, case.iso_month, case.iso_day).unwrap();
-
-            let chinese = iso.to_calendar(ChineseTraditional::new());
             assert_eq!(
-                case.expected_year,
-                chinese.cyclic_year().related_iso,
-                "ISO to Chinese failed for case: {case:?}"
-            );
-            assert_eq!(
-                case.expected_month,
-                chinese.month().ordinal,
-                "ISO to Chinese failed for case: {case:?}"
-            );
-            assert_eq!(
-                case.expected_day,
-                chinese.day_of_month().0,
-                "ISO to Chinese failed for case: {case:?}"
-            );
-        }
-    }
-
-    #[test]
-    fn test_chinese_leap_months() {
-        let expected = [
-            (1933, 6),
-            (1938, 8),
-            (1984, 11),
-            (2009, 6),
-            (2017, 7),
-            (2028, 6),
-        ];
-
-        for case in expected {
-            let year = case.0;
-            let expected_month = case.1;
-            let iso = Date::try_new_iso(year, 6, 1).unwrap();
-
-            let chinese_date = iso.to_calendar(ChineseTraditional::new());
-            assert!(
-                chinese_date.is_in_leap_year(),
-                "{year} should be a leap year"
-            );
-            let new_year = chinese_date.inner.0.year().new_year();
-            assert_eq!(
-                expected_month,
-                chinese_based::get_leap_month_from_new_year::<chinese_based::Chinese>(new_year),
-                "{year} have leap month {expected_month}"
+                Date::from_rata_die(rata_die, ChineseTraditional::new()).to_rata_die(),
+                rata_die
             );
         }
     }
@@ -1421,175 +1565,41 @@ mod test {
     }
 
     #[test]
-    fn test_ordinal_to_month() {
-        #[derive(Debug)]
-        struct TestCase {
-            iso_year: i32,
-            iso_month: u8,
-            iso_day: u8,
-            month: Month,
-        }
-
+    fn test_chinese_errors() {
         let cases = [
-            TestCase {
-                iso_year: 2023,
-                iso_month: 1,
-                iso_day: 9,
-                month: Month::new(12),
+            ErrorTestCase {
+                era: None,
+                year: 4659,
+                month: Month::leap(4),
+                day: 1,
+                error: DateFromFieldsError::MonthCodeNotInYear,
             },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 2,
-                iso_day: 9,
-                month: Month::new(1),
+            ErrorTestCase {
+                era: None,
+                year: 4659,
+                month: Month::leap(4),
+                day: 1,
+                error: DateFromFieldsError::MonthCodeNotInYear,
             },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 3,
-                iso_day: 9,
-                month: Month::new(2),
+            ErrorTestCase {
+                era: None,
+                year: 4660,
+                month: Month::new(13),
+                day: 1,
+                error: DateFromFieldsError::MonthCodeNotInCalendar,
             },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 4,
-                iso_day: 9,
-                month: Month::leap(2),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 5,
-                iso_day: 9,
-                month: Month::new(3),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 6,
-                iso_day: 9,
-                month: Month::new(4),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 7,
-                iso_day: 9,
-                month: Month::new(5),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 8,
-                iso_day: 9,
-                month: Month::new(6),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 9,
-                iso_day: 9,
-                month: Month::new(7),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 10,
-                iso_day: 9,
-                month: Month::new(8),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 11,
-                iso_day: 9,
-                month: Month::new(9),
-            },
-            TestCase {
-                iso_year: 2023,
-                iso_month: 12,
-                iso_day: 9,
-                month: Month::new(10),
-            },
-            TestCase {
-                iso_year: 2024,
-                iso_month: 1,
-                iso_day: 9,
-                month: Month::new(11),
-            },
-            TestCase {
-                iso_year: 2024,
-                iso_month: 2,
-                iso_day: 9,
-                month: Month::new(12),
-            },
-            TestCase {
-                iso_year: 2024,
-                iso_month: 2,
-                iso_day: 10,
-                month: Month::new(1),
+            ErrorTestCase {
+                era: None,
+                year: 4660,
+                month: Month::new(13),
+                day: 1,
+                error: DateFromFieldsError::MonthCodeNotInCalendar,
             },
         ];
 
         for case in cases {
-            let iso = Date::try_new_iso(case.iso_year, case.iso_month, case.iso_day).unwrap();
-            let chinese = iso.to_calendar(ChineseTraditional::new());
-            assert_eq!(
-                chinese.month().value,
-                case.month,
-                "Month codes did not match for test case: {case:?}"
-            );
-        }
-    }
-
-    #[test]
-    fn test_month_to_ordinal() {
-        let cal = ChineseTraditional::new();
-        let reject = DateFromFieldsOptions {
-            overflow: Some(Overflow::Reject),
-            ..Default::default()
-        };
-        let year = cal.year_info_from_extended(2023);
-        for (ordinal, month) in [
-            Month::new(1),
-            Month::new(2),
-            Month::leap(2),
-            Month::new(3),
-            Month::new(4),
-            Month::new(5),
-            Month::new(6),
-            Month::new(7),
-            Month::new(8),
-            Month::new(9),
-            Month::new(10),
-            Month::new(11),
-            Month::new(12),
-        ]
-        .into_iter()
-        .enumerate()
-        {
-            let ordinal = ordinal as u8 + 1;
-            assert_eq!(
-                cal.ordinal_from_month(year, month, reject),
-                Ok(ordinal),
-                "Code to ordinal failed for year: {}, code: {ordinal}",
-                year.related_iso
-            );
-        }
-    }
-
-    #[test]
-    fn check_invalid_month_to_ordinal() {
-        let cal = ChineseTraditional::new();
-        let reject = DateFromFieldsOptions {
-            overflow: Some(Overflow::Reject),
-            ..Default::default()
-        };
-        for year in [4659, 4660] {
-            let year = cal.year_info_from_extended(year);
-            for (month, error) in [
-                (Month::leap(4), MonthCodeError::NotInYear),
-                (Month::new(13), MonthCodeError::NotInCalendar),
-            ] {
-                assert_eq!(
-                    cal.ordinal_from_month(year, month, reject),
-                    Err(error),
-                    "Invalid month code failed for year: {}, code: {month:?}",
-                    year.related_iso,
-                );
-            }
+            case.check(&ChineseTraditional::new());
+            case.check_any(ChineseTraditional::new());
         }
     }
 
@@ -1641,22 +1651,12 @@ mod test {
 
     #[test]
     fn test_iso_to_korean_roundtrip() {
-        let mut rd = -1963020;
-        let max_rd = 1963020;
-        let mut iters = 0;
-        let max_iters = 560;
-        while rd < max_rd && iters < max_iters {
+        for rd in (-1963020..=1963020).step_by(7043).take(560) {
             let rata_die = RataDie::new(rd);
-            let iso = Date::from_rata_die(rata_die, Iso);
-            let korean = iso.to_calendar(KoreanTraditional::new());
-            let result = korean.to_calendar(Iso);
             assert_eq!(
-                iso, result,
-                "Failed roundtrip ISO -> Korean -> ISO for RD: {rd}"
+                Date::from_rata_die(rata_die, KoreanTraditional::new()).to_rata_die(),
+                rata_die,
             );
-
-            rd += 7043;
-            iters += 1;
         }
     }
 

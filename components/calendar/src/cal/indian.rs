@@ -309,180 +309,215 @@ impl Date<Indian> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::RataDie;
+    use crate::{
+        tests::TestCase,
+        types::{Month, MonthInfo, RataDie},
+    };
 
     #[test]
-    fn roundtrip_indian() {
-        // Ultimately the day of the year will always be identical regardless of it
-        // being a leap year or not
+    fn test_cases() {
+        fn month_info(ordinal: u8) -> MonthInfo {
+            MonthInfo::from_parts(Month::new(ordinal), ordinal)
+        }
         // Test dates that occur after and before Chaitra 1 (March 22/21), in all years of
         // a four-year leap cycle, to ensure that all code paths are tested
         let cases = [
             TestCase {
                 rd: Date::try_new_iso(2022, 8, 29).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1944,
                 year: 1944,
-                month: 6,
+                month: month_info(6),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2021, 8, 29).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1943,
                 year: 1943,
-                month: 6,
+                month: month_info(6),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2020, 8, 29).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1942,
                 year: 1942,
-                month: 6,
+                month: month_info(6),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2019, 8, 29).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1941,
                 year: 1941,
-                month: 6,
+                month: month_info(6),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2023, 1, 27).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1944,
                 year: 1944,
-                month: 11,
+                month: month_info(11),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2022, 1, 27).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1943,
                 year: 1943,
-                month: 11,
+                month: month_info(11),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2021, 1, 27).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1942,
                 year: 1942,
-                month: 11,
+                month: month_info(11),
                 day: 7,
             },
             TestCase {
                 rd: Date::try_new_iso(2020, 1, 27).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1941,
                 year: 1941,
-                month: 11,
+                month: month_info(11),
                 day: 7,
             },
-        ];
-
-        for case in cases {
-            check_case(case);
-        }
-    }
-
-    #[derive(Debug)]
-    struct TestCase {
-        rd: RataDie,
-        year: i32,
-        month: u8,
-        day: u8,
-    }
-
-    fn check_case(case: TestCase) {
-        let date = Date::from_rata_die(case.rd, Indian);
-
-        assert_eq!(date.to_rata_die(), case.rd, "{case:?}");
-
-        assert_eq!(date.era_year().year, case.year, "{case:?}");
-        assert_eq!(date.month().ordinal, case.month, "{case:?}");
-        assert_eq!(date.day_of_month().0, case.day, "{case:?}");
-
-        assert_eq!(
-            Date::try_new_indian(
-                date.era_year().extended_year,
-                date.month().ordinal,
-                date.day_of_month().0
-            ),
-            Ok(date)
-        );
-    }
-
-    #[test]
-    fn test_cases_near_epoch_start() {
-        let cases = [
             TestCase {
                 rd: Date::try_new_iso(79, 3, 23).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1,
                 year: 1,
-                month: 1,
+                month: month_info(1),
                 day: 2,
             },
             TestCase {
                 rd: Date::try_new_iso(79, 3, 22).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 1,
                 year: 1,
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: Date::try_new_iso(79, 3, 21).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 0,
                 year: 0,
-                month: 12,
+                month: month_info(12),
                 day: 30,
             },
             TestCase {
                 rd: Date::try_new_iso(79, 3, 20).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: 0,
                 year: 0,
-                month: 12,
+                month: month_info(12),
                 day: 29,
             },
             TestCase {
                 rd: Date::try_new_iso(78, 3, 21).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -1,
                 year: -1,
-                month: 12,
+                month: month_info(12),
                 day: 30,
             },
-        ];
-
-        for case in cases {
-            check_case(case);
-        }
-    }
-
-    #[test]
-    fn test_cases_near_rd_zero() {
-        let cases = [
             TestCase {
                 rd: Date::try_new_iso(1, 3, 22).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -77,
                 year: -77,
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: Date::try_new_iso(1, 3, 21).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -78,
                 year: -78,
-                month: 12,
+                month: month_info(12),
                 day: 30,
             },
             TestCase {
                 rd: Date::try_new_iso(1, 1, 1).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -78,
                 year: -78,
-                month: 10,
+                month: month_info(10),
                 day: 11,
             },
             TestCase {
                 rd: Date::try_new_iso(0, 3, 21).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -78,
                 year: -78,
-                month: 1,
+                month: month_info(1),
                 day: 1,
             },
             TestCase {
                 rd: Date::try_new_iso(0, 1, 1).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -79,
                 year: -79,
-                month: 10,
+                month: month_info(10),
                 day: 11,
             },
             TestCase {
                 rd: Date::try_new_iso(-1, 3, 21).unwrap().to_rata_die(),
+                era: Some("shaka"),
+                extended_year: -80,
                 year: -80,
-                month: 12,
+                month: month_info(12),
                 day: 30,
+            },
+            TestCase {
+                rd: RataDie::new(64790), // unverified
+                era: Some("shaka"),
+                extended_year: 100,
+                year: 100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(759025), // unverified
+                era: Some("shaka"),
+                extended_year: 2000,
+                year: 2000,
+                month: month_info(12),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(-8259), // unverified
+                era: Some("shaka"),
+                extended_year: -100,
+                year: -100,
+                month: month_info(3),
+                day: 1,
+            },
+            TestCase {
+                rd: RataDie::new(28266), // unverified
+                era: Some("shaka"),
+                extended_year: 0,
+                year: 0,
+                month: month_info(3),
+                day: 1,
             },
         ];
 
         for case in cases {
-            check_case(case);
+            case.check(&Indian);
+            case.check_any(Indian);
+            case.check_constructor(&Indian, |date| {
+                Date::try_new_indian(
+                    date.era_year().extended_year,
+                    date.month().ordinal,
+                    date.day_of_month().0,
+                )
+            });
         }
     }
 

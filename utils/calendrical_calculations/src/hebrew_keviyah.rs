@@ -908,4 +908,9 @@ mod test {
             assert_eq!(ḥalakim, ḥal!(7 - 18 - 0));
         }
     }
+
+    #[test]
+    fn test_icu_bug_22441() {
+        assert_eq!(YearInfo::compute_for(88369).keviyah.year_length(), 383);
+    }
 }

@@ -550,46 +550,49 @@ impl Month {
     ///
     /// [`Hebrew`]: crate::cal::Hebrew
     /// [`EastAsianTraditional`]: crate::cal::east_asian_traditional::EastAsianTraditional
-    pub fn is_leap(self) -> bool {
-        self.leap_status == LeapStatus::Leap
+    pub const fn is_leap(self) -> bool {
+        matches!(self.leap_status, LeapStatus::Leap)
     }
 
     /// Returns whether the [`Month`] is a formatting-leap month
     ///
     /// This is true for months that format differently during leap years, even if they are not
     /// considered leap months.
-    pub fn is_formatting_leap(self) -> bool {
-        self.leap_status == LeapStatus::Leap || self.leap_status == LeapStatus::FormattingLeap
+    pub const fn is_formatting_leap(self) -> bool {
+        matches!(
+            self.leap_status,
+            LeapStatus::Leap | LeapStatus::FormattingLeap
+        )
     }
 
     /// Returns the [`MonthCode`] for this month.
-    pub fn code(self) -> MonthCode {
+    pub const fn code(self) -> MonthCode {
         #[allow(clippy::unwrap_used)] // by construction
-        MonthCode(
-            TinyAsciiStr::try_from_raw([
-                b'M',
-                b'0' + self.number / 10,
-                b'0' + self.number % 10,
-                if self.is_leap() { b'L' } else { 0 },
-            ])
-            .unwrap(),
-        )
+        let Ok(r) = TinyAsciiStr::try_from_raw([
+            b'M',
+            b'0' + self.number / 10,
+            b'0' + self.number % 10,
+            if self.is_leap() { b'L' } else { 0 },
+        ]) else {
+            unreachable!()
+        };
+        MonthCode(r)
     }
 
     /// Returns the formatting [`MonthCode`] for this month.
     ///
     /// See [`Self::is_formatting_leap`].
-    pub fn formatting_code(self) -> MonthCode {
+    pub const fn formatting_code(self) -> MonthCode {
         #[allow(clippy::unwrap_used)] // by construction
-        MonthCode(
-            TinyAsciiStr::try_from_raw([
-                b'M',
-                b'0' + self.number / 10,
-                b'0' + self.number % 10,
-                if self.is_formatting_leap() { b'L' } else { 0 },
-            ])
-            .unwrap(),
-        )
+        let Ok(r) = TinyAsciiStr::try_from_raw([
+            b'M',
+            b'0' + self.number / 10,
+            b'0' + self.number % 10,
+            if self.is_formatting_leap() { b'L' } else { 0 },
+        ]) else {
+            unreachable!()
+        };
+        MonthCode(r)
     }
 }
 
@@ -625,21 +628,23 @@ pub struct MonthInfo {
 }
 
 impl MonthInfo {
+    pub(crate) const fn from_parts(value: Month, ordinal: u8) -> Self {
+        #[allow(deprecated)] // field-level allows don't work at 1.83 MSRV
+        Self {
+            ordinal,
+            value,
+            standard_code: value.code(),
+            formatting_code: value.formatting_code(),
+        }
+    }
+
     pub(crate) fn new<C: crate::calendar_arithmetic::DateFieldsResolver>(
         c: &C,
         date: ArithmeticDate<C>,
     ) -> Self {
         let ordinal = date.month();
         let value = c.month_from_ordinal(date.year(), ordinal);
-        #[allow(deprecated)] // field-level allows don't work at 1.83 MSRV
-        Self {
-            ordinal,
-            value,
-            #[allow(deprecated)]
-            standard_code: value.code(),
-            #[allow(deprecated)]
-            formatting_code: value.code(),
-        }
+        Self::from_parts(value, ordinal)
     }
 
     /// Returns the month number of the [`Month`].
