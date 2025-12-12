@@ -14,7 +14,10 @@ use icu_provider::prelude::*;
 
 use core::fmt;
 
-macro_rules! make_any_calendar {
+#[cfg_attr(feature = "unstable", macro_export)]
+#[doc(hidden)]
+/// Creates an enum calendar with the given variants.
+macro_rules! __make_any_calendar {
     (
         $(#[$any_calendar_meta:meta])*
         $any_calendar_ident:ident,
@@ -275,7 +278,7 @@ macro_rules! make_any_calendar {
                 }
             }
 
-            fn calendar_algorithm(&self) -> Option<CalendarAlgorithm> {
+            fn calendar_algorithm(&self) -> Option<$crate::preferences::CalendarAlgorithm> {
                 match self {
                     $(
                         Self::$variant(c) => c.calendar_algorithm(),
@@ -338,8 +341,11 @@ macro_rules! make_any_calendar_impls {
         }
     };
 }
+#[cfg(feature = "unstable")]
+#[doc(inline)]
+pub use __make_any_calendar as make_any_calendar;
 
-make_any_calendar!(
+__make_any_calendar!(
     /// This is a calendar that encompasses a selection of calendars from this crate.
     ///
     /// This allows for the construction of [`Date`] objects that have their calendar known at runtime.

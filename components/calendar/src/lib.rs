@@ -126,6 +126,9 @@ pub use error::{DateError, RangeError};
 #[cfg(feature = "ixdtf")]
 pub use ixdtf::ParseError;
 
+#[cfg(feature = "unstable")]
+pub use any_calendar::make_any_calendar;
+
 // Reexports
 #[doc(no_inline)]
 pub use cal::{AnyCalendar, AnyCalendarKind, Gregorian, Iso};

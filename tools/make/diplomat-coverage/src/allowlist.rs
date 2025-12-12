@@ -470,6 +470,7 @@ lazy_static::lazy_static! {
         "icu_provider_adapters::fork::MultiForkByMarkerProvider",
 
         // macros
+        "icu::calendar::make_any_calendar",
         "icu::locale::langid",
         "icu::locale::locale",
         "icu::locale::extensions::other::subtag",

@@ -12,7 +12,7 @@ pub mod ffi {
     use diplomat_runtime::DiplomatOption;
     use icu_calendar::Iso;
 
-    use crate::unstable::calendar::ffi::Calendar;
+    use crate::unstable::calendar::{ffi::Calendar, CalendarInner, CalendarInnerDateInner};
     use crate::unstable::errors::ffi::{
         CalendarDateAddError, CalendarDateFromFieldsError, CalendarMismatchedCalendarError,
         DateDurationParseError,
@@ -154,7 +154,10 @@ pub mod ffi {
         #[diplomat::rust_link(icu::calendar::Date::to_any, FnInStruct)]
         #[diplomat::attr(demo_gen, disable)] // covered by Date
         pub fn to_any(&self) -> Box<Date> {
-            Box::new(Date(self.0.to_any()))
+            Box::new(Date(icu_calendar::Date::from_raw(
+                CalendarInnerDateInner::Iso(*self.0.inner()),
+                CalendarInner::Iso(*self.0.calendar()),
+            )))
         }
 
         /// Returns this date's Rata Die
@@ -322,7 +325,7 @@ pub mod ffi {
     #[diplomat::transparent_convert]
     /// An ICU4X Date object capable of containing a date for any calendar.
     #[diplomat::rust_link(icu::calendar::Date, Struct)]
-    pub struct Date(pub icu_calendar::Date<icu_calendar::AnyCalendar>);
+    pub struct Date(pub icu_calendar::Date<CalendarInner>);
 
     impl Date {
         /// Creates a new [`Date`] representing the ISO date
