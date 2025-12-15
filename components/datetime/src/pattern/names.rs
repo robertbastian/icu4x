@@ -5,7 +5,7 @@
 use super::{
     DateTimePattern, DateTimePatternFormatter, GetNameForCyclicYearError, GetNameForDayPeriodError,
     GetNameForEraError, GetNameForMonthError, GetNameForWeekdayError, MonthPlaceholderValue,
-    PatternLoadError, UnsupportedCalendarError,
+    PatternLoadError,
 };
 use crate::error::ErrorField;
 use crate::fieldsets::enums::{CompositeDateTimeFieldSet, CompositeFieldSet};
@@ -21,7 +21,6 @@ use crate::{scaffold::*, DateTimeFormatter, DateTimeFormatterLoadError};
 use core::fmt;
 use core::marker::PhantomData;
 use icu_calendar::types::{EraYear, LeapStatus, MonthInfo};
-use icu_calendar::AnyCalendar;
 use icu_decimal::options::DecimalFormatterOptions;
 use icu_decimal::options::GroupingStrategy;
 use icu_decimal::provider::{DecimalDigitsV1, DecimalSymbolsV1};
@@ -1079,14 +1078,12 @@ impl<FSet: DateTimeNamesMarker> DateTimeNames<FSet> {
     /// with the specified calendar.
     pub fn try_new_with_calendar_without_number_formatting(
         prefs: DateTimeFormatterPreferences,
-        calendar: AnyCalendar,
-    ) -> Result<Self, UnsupportedCalendarError> {
-        let calendar = FormattableAnyCalendar::try_from_any_calendar(calendar)
-            .map_err(|c| UnsupportedCalendarError { kind: c.kind() })?;
-        Ok(Self {
+        calendar: FormattableAnyCalendar,
+    ) -> Self {
+        Self {
             inner: FixedCalendarDateTimeNames::new_without_number_formatting(prefs),
             calendar,
-        })
+        }
     }
 
     /// Creates an instance with the names and calendar loaded in a [`DateTimeFormatter`].

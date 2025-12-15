@@ -418,9 +418,37 @@ impl From<icu_datetime::pattern::PatternLoadError> for ffi::DateTimeFormatterLoa
 #[cfg(feature = "datetime")]
 impl From<icu_datetime::MismatchedCalendarError> for ffi::DateTimeMismatchedCalendarError {
     fn from(value: icu_datetime::MismatchedCalendarError) -> Self {
+        use crate::unstable::calendar::ffi::CalendarKind;
+        use icu_calendar::preferences::{CalendarAlgorithm, HijriCalendarAlgorithm};
+        fn convert(value: CalendarAlgorithm) -> CalendarKind {
+            match value {
+                CalendarAlgorithm::Buddhist => CalendarKind::Buddhist,
+                CalendarAlgorithm::Chinese => CalendarKind::Chinese,
+                CalendarAlgorithm::Coptic => CalendarKind::Coptic,
+                CalendarAlgorithm::Dangi => CalendarKind::Dangi,
+                CalendarAlgorithm::Ethiopic => CalendarKind::Ethiopian,
+                CalendarAlgorithm::Ethioaa => CalendarKind::EthiopianAmeteAlem,
+                CalendarAlgorithm::Gregory => CalendarKind::Gregorian,
+                CalendarAlgorithm::Hebrew => CalendarKind::Hebrew,
+                CalendarAlgorithm::Hijri(Some(HijriCalendarAlgorithm::Tbla)) => {
+                    CalendarKind::HijriTabularTypeIIThursday
+                }
+                CalendarAlgorithm::Hijri(Some(HijriCalendarAlgorithm::Umalqura)) => {
+                    CalendarKind::HijriUmmAlQura
+                }
+                CalendarAlgorithm::Hijri(_) => CalendarKind::HijriTabularTypeIIFriday,
+                CalendarAlgorithm::Indian => CalendarKind::Indian,
+                CalendarAlgorithm::Iso8601 => CalendarKind::Iso,
+                CalendarAlgorithm::Japanese => CalendarKind::Japanese,
+                CalendarAlgorithm::Persian => CalendarKind::Persian,
+                CalendarAlgorithm::Roc => CalendarKind::Roc,
+                _ => CalendarKind::Gregorian,
+            }
+        }
+
         Self {
-            this_kind: value.this_kind.into(),
-            date_kind: value.date_kind.map(Into::into).into(),
+            this_kind: convert(value.this_algorithm),
+            date_kind: value.date_algorithm.map(convert).into(),
         }
     }
 }

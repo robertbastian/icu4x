@@ -18,8 +18,8 @@ pub mod ffi {
     use crate::unstable::provider::ffi::DataProvider;
 
     /// The various calendar types currently supported by [`Calendar`]
-    #[diplomat::enum_convert(icu_calendar::AnyCalendarKind, needs_wildcard)]
-    #[diplomat::rust_link(icu::calendar::AnyCalendarKind, Enum)]
+    #[diplomat::rust_link(icu::calendar::preferences::CalendarAlgorithm, Enum)]
+    #[diplomat::rust_link(icu::calendar::AnyCalendarKind, Enum, hidden)]
     #[non_exhaustive]
     pub enum CalendarKind {
         /// The kind of an Iso calendar

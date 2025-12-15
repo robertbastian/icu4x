@@ -2,10 +2,12 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
-use crate::scaffold::{ConvertCalendar, GetField, InFixedCalendar, UnstableSealed};
+use crate::scaffold::{
+    ConvertCalendar, FormattableAnyCalendar, GetField, InFixedCalendar, UnstableSealed,
+};
 use chrono::{Datelike, Offset};
 use icu_calendar::types::{DayOfMonth, DayOfYear, MonthInfo, RataDie, Weekday, YearInfo};
-use icu_calendar::{AnyCalendar, Date, Gregorian};
+use icu_calendar::{Date, Gregorian};
 use icu_time::zone::models::AtTime;
 use icu_time::zone::{UtcOffset, ZoneNameTimestamp};
 use icu_time::{DateTime, Hour, Minute, Nanosecond, Second, Time, ZonedDateTime};
@@ -282,7 +284,7 @@ impl<Tz: chrono::TimeZone> GetField<ZoneNameTimestamp> for chrono::DateTime<Tz> 
 impl ConvertCalendar for chrono::NaiveTime {
     type Converted<'a> = Self;
     #[inline]
-    fn to_calendar<'a>(&self, _: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, _: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         *self
     }
 }
@@ -290,7 +292,7 @@ impl ConvertCalendar for chrono::NaiveTime {
 impl ConvertCalendar for chrono::NaiveDate {
     type Converted<'a> = <Date<Gregorian> as ConvertCalendar>::Converted<'a>;
 
-    fn to_calendar<'a>(&self, calendar: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, calendar: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         ConvertCalendar::to_calendar(&Date::from(*self), calendar)
     }
 }
@@ -298,7 +300,7 @@ impl ConvertCalendar for chrono::NaiveDate {
 impl ConvertCalendar for chrono::NaiveDateTime {
     type Converted<'a> = <DateTime<Gregorian> as ConvertCalendar>::Converted<'a>;
 
-    fn to_calendar<'a>(&self, calendar: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, calendar: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         ConvertCalendar::to_calendar(&DateTime::from(*self), calendar)
     }
 }
@@ -306,7 +308,7 @@ impl ConvertCalendar for chrono::NaiveDateTime {
 impl ConvertCalendar for chrono::Weekday {
     type Converted<'a> = Self;
     #[inline]
-    fn to_calendar<'a>(&self, _: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, _: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         *self
     }
 }
@@ -318,7 +320,7 @@ where
     type Converted<'a> =
         <ZonedDateTime<Gregorian, TimeZoneInfo<AtTime>> as ConvertCalendar>::Converted<'a>;
 
-    fn to_calendar<'a>(&self, calendar: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, calendar: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         ConvertCalendar::to_calendar(&ZonedDateTime::from(self), calendar)
     }
 }
@@ -326,7 +328,7 @@ where
 impl ConvertCalendar for chrono::FixedOffset {
     type Converted<'a> = Self;
     #[inline]
-    fn to_calendar<'a>(&self, _: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, _: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         *self
     }
 }

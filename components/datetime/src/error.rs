@@ -4,7 +4,7 @@
 
 use crate::pattern::PatternLoadError;
 use displaydoc::Display;
-use icu_calendar::AnyCalendarKind;
+use icu_calendar::preferences::CalendarAlgorithm;
 use icu_provider::DataError;
 
 /// An error from constructing a formatter.
@@ -34,14 +34,16 @@ pub struct ErrorField(pub(crate) crate::provider::fields::Field);
 
 /// An error from mixing calendar types in a formatter.
 #[derive(Display, Debug, Copy, Clone, PartialEq)]
-#[displaydoc("DateTimeFormatter for {this_kind} calendar was given a {date_kind:?} calendar")]
+#[displaydoc(
+    "DateTimeFormatter for {this_algorithm:?} calendar was given a {date_algorithm:?} calendar"
+)]
 #[non_exhaustive]
 pub struct MismatchedCalendarError {
-    /// The calendar kind of the target object (formatter).
-    pub this_kind: AnyCalendarKind,
-    /// The calendar kind of the input object (date being formatted).
+    /// The calendar algorithm of the target object (formatter).
+    pub this_algorithm: CalendarAlgorithm,
+    /// The calendar algorithm of the input object (date being formatted).
     /// Can be `None` if the input calendar was not specified.
-    pub date_kind: Option<AnyCalendarKind>,
+    pub date_algorithm: Option<CalendarAlgorithm>,
 }
 
 impl core::error::Error for MismatchedCalendarError {}

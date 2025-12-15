@@ -22,7 +22,7 @@ use crate::size_test_macro::size_test;
 use crate::MismatchedCalendarError;
 use core::fmt;
 use core::marker::PhantomData;
-use icu_calendar::{preferences::CalendarPreferences, AnyCalendar, IntoAnyCalendar};
+use icu_calendar::{preferences::CalendarPreferences, Calendar};
 use icu_decimal::DecimalFormatterPreferences;
 use icu_locale_core::preferences::{define_preferences, prefs_convert};
 use icu_provider::prelude::*;
@@ -670,7 +670,7 @@ where
     where
         I: ?Sized + InSameCalendar + AllInputMarkers<FSet>,
     {
-        datetime.check_any_calendar_kind(self.calendar.any_calendar().kind())?;
+        datetime.check_calendar(&self.calendar)?;
         let datetime = DateTimeInputUnchecked::extract_from_neo_input::<FSet::D, FSet::T, FSet::Z, I>(
             datetime,
         );
@@ -729,7 +729,7 @@ where
         I: ?Sized + ConvertCalendar,
         I::Converted<'a>: Sized + AllInputMarkers<FSet>,
     {
-        let datetime = datetime.to_calendar(self.calendar.any_calendar());
+        let datetime = datetime.to_calendar(&self.calendar);
         let datetime = DateTimeInputUnchecked::extract_from_neo_input::<
             FSet::D,
             FSet::T,
@@ -776,12 +776,12 @@ impl<C: CldrCalendar, FSet: DateTimeMarkers> FixedCalendarDateTimeFormatter<C, F
     /// ```
     pub fn into_formatter(self, calendar: C) -> DateTimeFormatter<FSet>
     where
-        C: IntoFormattableAnyCalendar,
+        C: Into<FormattableAnyCalendar>,
     {
         DateTimeFormatter {
             selection: self.selection,
             names: self.names,
-            calendar: FormattableAnyCalendar::from_calendar(calendar),
+            calendar: calendar.into(),
         }
     }
 
@@ -935,12 +935,13 @@ impl<FSet: DateTimeMarkers> DateTimeFormatter<FSet> {
         self,
     ) -> Result<FixedCalendarDateTimeFormatter<C, FSet>, MismatchedCalendarError>
     where
-        C: CldrCalendar + IntoAnyCalendar,
+        C: CldrCalendar
+            + for<'a> TryFrom<&'a FormattableAnyCalendar, Error = &'a FormattableAnyCalendar>,
     {
-        if let Err(cal) = C::from_any(self.calendar.take_any_calendar()) {
+        if let Err(cal) = C::try_from(&self.calendar) {
             return Err(MismatchedCalendarError {
-                this_kind: cal.kind(),
-                date_kind: None,
+                this_algorithm: cal.calendar_algorithm(),
+                date_algorithm: None,
             });
         }
         Ok(FixedCalendarDateTimeFormatter {
@@ -1006,7 +1007,7 @@ impl<FSet: DateTimeMarkers> DateTimeFormatter<FSet> {
     /// # Examples
     ///
     /// ```
-    /// use icu::calendar::AnyCalendarKind;
+    /// use icu::calendar::{Calendar, preferences::CalendarAlgorithm};
     /// use icu::datetime::fieldsets::YMD;
     /// use icu::datetime::input::Date;
     /// use icu::datetime::DateTimeFormatter;
@@ -1022,10 +1023,10 @@ impl<FSet: DateTimeMarkers> DateTimeFormatter<FSet> {
     ///     "16 ธันวาคม 2567"
     /// );
     ///
-    /// assert_eq!(formatter.calendar().kind(), AnyCalendarKind::Buddhist);
+    /// assert_eq!(formatter.calendar().calendar_algorithm(), Some(CalendarAlgorithm::Buddhist));
     /// ```
-    pub fn calendar(&self) -> icu_calendar::Ref<'_, AnyCalendar> {
-        icu_calendar::Ref(self.calendar.any_calendar())
+    pub fn calendar(&self) -> icu_calendar::Ref<'_, impl Calendar> {
+        icu_calendar::Ref(&self.calendar)
     }
 
     /// Gets a [`FieldSetBuilder`] corresponding to the fields and options configured in this

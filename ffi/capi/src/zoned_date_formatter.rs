@@ -622,7 +622,7 @@ pub mod ffi {
             let date_borrowed = date.0.as_borrowed();
             // Check that the date's calendar matches the formatter's calendar
             use icu_datetime::scaffold::InSameCalendar;
-            date_borrowed.check_any_calendar_kind(self.0.calendar().kind()).map_err(crate::unstable::errors::ffi::DateTimeMismatchedCalendarError::from)?;
+            date_borrowed.check_calendar(self.0.calendar()).map_err(crate::unstable::errors::ffi::DateTimeMismatchedCalendarError::from)?;
             let mut input = icu_datetime::unchecked::DateTimeInputUnchecked::default();
             input.set_date_fields_unchecked(date_borrowed); // calendar check on previous lines
             input.set_time_zone_info_at_time_fields(zone.as_rust_at_time(Some(date.0.clone()), None));

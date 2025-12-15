@@ -2,9 +2,11 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
-use crate::scaffold::{ConvertCalendar, GetField, InFixedCalendar, UnstableSealed};
+use crate::scaffold::{
+    ConvertCalendar, FormattableAnyCalendar, GetField, InFixedCalendar, UnstableSealed,
+};
 use icu_calendar::types::{DayOfMonth, DayOfYear, MonthInfo, RataDie, Weekday, YearInfo};
-use icu_calendar::{AnyCalendar, Date, Gregorian};
+use icu_calendar::{Date, Gregorian};
 #[cfg(feature = "compiled_data")]
 use icu_time::zone::models::AtTime;
 use icu_time::zone::{UtcOffset, ZoneNameTimestamp};
@@ -281,7 +283,7 @@ impl GetField<ZoneNameTimestamp> for jiff::Zoned {
 impl ConvertCalendar for jiff::civil::Time {
     type Converted<'a> = Self;
     #[inline]
-    fn to_calendar<'a>(&self, _: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, _: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         *self
     }
 }
@@ -289,7 +291,7 @@ impl ConvertCalendar for jiff::civil::Time {
 impl ConvertCalendar for jiff::civil::Date {
     type Converted<'a> = <Date<Gregorian> as ConvertCalendar>::Converted<'a>;
 
-    fn to_calendar<'a>(&self, calendar: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, calendar: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         ConvertCalendar::to_calendar(&Date::from(*self), calendar)
     }
 }
@@ -297,7 +299,7 @@ impl ConvertCalendar for jiff::civil::Date {
 impl ConvertCalendar for jiff::civil::DateTime {
     type Converted<'a> = <DateTime<Gregorian> as ConvertCalendar>::Converted<'a>;
 
-    fn to_calendar<'a>(&self, calendar: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, calendar: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         ConvertCalendar::to_calendar(&DateTime::from(*self), calendar)
     }
 }
@@ -305,7 +307,7 @@ impl ConvertCalendar for jiff::civil::DateTime {
 impl ConvertCalendar for jiff::civil::Weekday {
     type Converted<'a> = Self;
     #[inline]
-    fn to_calendar<'a>(&self, _: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, _: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         *self
     }
 }
@@ -315,7 +317,7 @@ impl ConvertCalendar for jiff::Zoned {
     type Converted<'a> =
         <ZonedDateTime<Gregorian, TimeZoneInfo<AtTime>> as ConvertCalendar>::Converted<'a>;
 
-    fn to_calendar<'a>(&self, calendar: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, calendar: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         ConvertCalendar::to_calendar(&ZonedDateTime::from(self), calendar)
     }
 }
@@ -323,7 +325,7 @@ impl ConvertCalendar for jiff::Zoned {
 impl ConvertCalendar for jiff::tz::Offset {
     type Converted<'a> = Self;
     #[inline]
-    fn to_calendar<'a>(&self, _: &'a AnyCalendar) -> Self::Converted<'a> {
+    fn to_calendar<'a>(&self, _: &'a FormattableAnyCalendar) -> Self::Converted<'a> {
         *self
     }
 }

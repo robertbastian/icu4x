@@ -23,7 +23,7 @@ all-features = true
 [dependencies]
 displaydoc = { workspace = true }
 fixed_decimal = { workspace = true }
-icu_calendar = { workspace = true }
+icu_calendar = { workspace = true, features = ["unstable"] }
 icu_decimal = { workspace = true }
 icu_locale_core = { workspace = true }
 icu_pattern = { workspace = true, features = ["zerovec", "alloc"] }
