@@ -206,14 +206,14 @@ pub struct VariantOffsetsCalculatorBorrowed<'a> {
 }
 
 #[cfg(feature = "compiled_data")]
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl Default for VariantOffsetsCalculatorBorrowed<'static> {
     fn default() -> Self {
         VariantOffsetsCalculator::new()
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl VariantOffsetsCalculator {
     /// Constructs a `VariantOffsetsCalculator` using compiled data.
     ///
@@ -283,7 +283,7 @@ impl VariantOffsetsCalculator {
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl VariantOffsetsCalculatorBorrowed<'static> {
     /// Constructs a `VariantOffsetsCalculatorBorrowed` using compiled data.
     ///
@@ -315,7 +315,7 @@ impl VariantOffsetsCalculatorBorrowed<'static> {
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl VariantOffsetsCalculatorBorrowed<'_> {
     /// Calculate zone offsets from timezone and local datetime.
     ///
@@ -391,7 +391,7 @@ impl VariantOffsetsCalculatorBorrowed<'_> {
 pub use crate::provider::VariantOffsets;
 
 #[test]
-#[allow(deprecated)]
+#[expect(deprecated)]
 pub fn test_legacy_offsets_data() {
     use crate::ZonedDateTime;
     use icu_locale_core::subtags::subtag;

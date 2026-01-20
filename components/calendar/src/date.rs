@@ -65,7 +65,7 @@ impl<C: AsCalendar> AsCalendar for Arc<C> {
 /// `AsCalendar` for `C: Calendar`.
 ///
 /// Use `Date<Ref<'a, C>>` where you would use `Date<&'a C>`
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[derive(PartialEq, Eq, Debug)]
 pub struct Ref<'a, C>(pub &'a C);
 

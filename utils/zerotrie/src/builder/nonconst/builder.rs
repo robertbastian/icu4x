@@ -134,7 +134,7 @@ impl<S: TrieBuilderStore> ZeroTrieBuilder<S> {
         items: &[(&ByteStr, usize)],
         options: ZeroTrieBuilderOptions,
     ) -> Result<Self, ZeroTrieBuildError> {
-        #[allow(clippy::indexing_slicing)] // a debug assertion only
+        #[expect(clippy::indexing_slicing, reason = "debug_assert! already panicky")]
         for ab in items.windows(2) {
             debug_assert!(cmp_keys_values(
                 options,
@@ -302,7 +302,7 @@ impl<S: TrieBuilderStore> ZeroTrieBuilder<S> {
                 for c in original_keys.as_const_slice().as_slice() {
                     if c.is_ascii_alphabetic() {
                         let i = (c.to_ascii_lowercase() - b'a') as usize;
-                        #[allow(clippy::indexing_slicing)] // 26 letters
+                        #[expect(clippy::indexing_slicing, reason = "26 letters")]
                         if seen_ascii_alpha[i] {
                             return Err(ZeroTrieBuildError::MixedCase);
                         } else {

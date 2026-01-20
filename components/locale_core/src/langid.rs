@@ -524,7 +524,13 @@ impl FromStr for LanguageIdentifier {
     }
 }
 
-impl_writeable_for_each_subtag_str_no_test!(LanguageIdentifier, selff, selff.script.is_none() && selff.region.is_none() && selff.variants.is_empty() => Some(selff.language.as_str()));
+impl_writeable_for_each_subtag_str_no_test!(
+    LanguageIdentifier,
+    selff,
+    if selff.script.is_none() && selff.region.is_none() && selff.variants.is_empty() {
+        return Some(selff.language.as_str());
+    }
+);
 
 #[test]
 fn test_writeable() {

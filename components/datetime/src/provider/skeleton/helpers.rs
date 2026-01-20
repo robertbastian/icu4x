@@ -236,7 +236,10 @@ pub fn create_best_pattern_for_fields<'data>(
             BestSkeleton::NoMatch => (None, true, SkeletonQuality(REQUESTED_SYMBOL_MISSING)),
         };
     let time_pattern: Option<runtime::Pattern<'data>> = time_patterns.map(|pattern| {
-        #[allow(clippy::unwrap_used)] // only date patterns can contain plural variants
+        #[expect(
+            clippy::unwrap_used,
+            reason = "only date patterns can contain plural variants"
+        )]
         let mut pattern = pattern.try_into_other().unwrap();
         naively_apply_hour_cycle(&mut pattern, components.hour_cycle);
         naively_apply_time_zone_name(&mut pattern, components.time_zone_name);
@@ -566,9 +569,9 @@ pub fn get_best_available_format_pattern<'data>(
     }
 
     // Modify the resulting pattern to have fields of the same length.
-    #[allow(clippy::panic)] // guards against running this branch in non-datagen mode.
     if prefer_matched_pattern {
         #[cfg(not(feature = "datagen"))]
+        #[expect(clippy::panic)] // guards against running this branch in non-datagen mode.
         panic!("This code branch should only be run when transforming provider code.");
     } else {
         closest_format_pattern.for_each_mut(|pattern| {

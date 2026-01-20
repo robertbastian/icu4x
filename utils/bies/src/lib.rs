@@ -86,11 +86,11 @@ pub struct BiesVector<F: fmt::Debug> {
 
 // TODO: Consider parameterizing the f32 to a trait
 #[derive(Clone, Debug, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct BiesMatrix(pub Vec<BiesVector<f32>>);
 
 #[derive(Clone, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct BiesString<'a>(&'a Breakpoints);
 
 #[derive(Clone, Copy, Debug, PartialEq, EnumIter)]

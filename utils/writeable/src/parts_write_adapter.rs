@@ -6,7 +6,7 @@ use crate::*;
 
 /// A wrapper around a type implementing [`fmt::Write`] that implements [`PartsWrite`].
 #[derive(Debug)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct CoreWriteAsPartsWrite<W: fmt::Write + ?Sized>(pub W);
 
 impl<W: fmt::Write + ?Sized> fmt::Write for CoreWriteAsPartsWrite<W> {

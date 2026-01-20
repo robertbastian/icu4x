@@ -61,7 +61,7 @@ fn convert_benches(c: &mut Criterion) {
 
     bench_calendar(&mut group, "calendar/hebrew", icu::calendar::cal::Hebrew);
 
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     bench_calendar(
         &mut group,
         "calendar/islamic/observational",

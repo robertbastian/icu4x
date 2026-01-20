@@ -636,8 +636,7 @@ where
             // Initialize with a placeholder starter in case
             // the real stream starts with a non-starter.
             pending: Some(CharacterAndTrieValue::new('\u{FFFF}', 0)),
-            #[allow(clippy::useless_conversion, clippy::expect_used)] // Expectation always succeeds when untyped tries are in use
-            trie: <&Trie>::try_from(&decompositions.trie).expect("Unexpected trie type in data"),
+            trie: &decompositions.trie,
             scalars16: &tables.scalars16,
             scalars24: &tables.scalars24,
             supplementary_scalars16: if let Some(supplementary) = supplementary_tables {

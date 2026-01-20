@@ -38,7 +38,7 @@ pub use hebrew::Hebrew;
 pub use hijri_internal::Hijri;
 /// Customizations for the [`Hijri`] calendar.
 pub mod hijri {
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     pub use super::hijri_internal::{
         AstronomicalSimulation, TabularAlgorithm, TabularAlgorithmEpoch, TabularAlgorithmLeapYears,
         UmmAlQura,
@@ -73,7 +73,7 @@ pub use hijri::{
 };
 /// Deprecated
 #[deprecated]
-#[allow(deprecated)]
+#[expect(deprecated)]
 pub type HijriSimulated = Hijri<hijri::AstronomicalSimulation>;
 /// Deprecated
 #[deprecated]

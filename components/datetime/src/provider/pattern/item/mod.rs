@@ -19,7 +19,6 @@ pub use generic::GenericPatternItem;
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_datetime::provider::pattern::item))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-#[allow(clippy::exhaustive_enums)] // this type is stable
 pub enum PatternItem {
     /// A field, like "abbreviated months". Mostly follows UTS 35.
     Field(Field),

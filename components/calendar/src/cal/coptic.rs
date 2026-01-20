@@ -43,7 +43,7 @@ use tinystr::tinystr;
 /// The Coptic calendar has the same year lengths and leap year rules as the Julian calendar,
 /// so it experiences the same drift of 1 day in ~128 years with respect to the seasons.
 #[derive(Copy, Clone, Debug, Hash, Default, Eq, PartialEq, PartialOrd, Ord)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Coptic;
 
 /// The inner date type used for representing [`Date`]s of [`Coptic`]. See [`Date`] and [`Coptic`] for more details.

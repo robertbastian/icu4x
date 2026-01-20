@@ -49,7 +49,7 @@ pub mod ffi {
         #[diplomat::rust_link(icu::time::ZonedDateTime::try_full_from_str, FnInStruct)]
         #[diplomat::rust_link(icu::time::ZonedDateTime::try_full_from_utf8, FnInStruct, hidden)]
         #[diplomat::attr(all(supports = named_constructors, supports = fallible_constructors), named_constructor = "full_from_string")]
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         pub fn full_from_string(
             v: &DiplomatStr,
             iana_parser: &IanaParser,
@@ -120,7 +120,7 @@ pub mod ffi {
         #[diplomat::rust_link(icu::time::ZonedDateTime::try_full_from_str, FnInStruct)]
         #[diplomat::rust_link(icu::time::ZonedDateTime::try_from_utf8, FnInStruct, hidden)]
         #[diplomat::attr(all(supports = named_constructors, supports = fallible_constructors), named_constructor = "full_from_string")]
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         pub fn full_from_string(
             v: &DiplomatStr,
             calendar: &Calendar,

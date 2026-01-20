@@ -29,7 +29,7 @@ use yoke::Yokeable;
 ///         .expect("marker matches");
 /// assert_writeable_eq!(formatter.format(), "custom hello world");
 /// ```
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct FixedProvider<M: DataMarker> {
     data: DataPayload<M>,
 }

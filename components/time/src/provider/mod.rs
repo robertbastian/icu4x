@@ -452,14 +452,12 @@ impl serde::Serialize for TimezonePeriods<'_> {
                         &[ZoneNameTimestamp::far_in_past()]
                             .into_iter()
                             .chain(value.variable.iter().map(|(t, _, _)| t.0))
-                            .map(|t| {
+                            .filter_map(|t| {
                                 use icu_locale_core::subtags::Subtag;
 
-                                #[allow(clippy::unwrap_used)] // JSON debug format
-                                let (os, mz_info) = self
-                                    .get(TimeZone(Subtag::try_from_str(&tz).unwrap()), t)
-                                    .unwrap();
-                                (
+                                let (os, mz_info) =
+                                    self.get(TimeZone(Subtag::try_from_str(&tz).ok()?), t)?;
+                                Some((
                                     t,
                                     (
                                         os,
@@ -480,7 +478,7 @@ impl serde::Serialize for TimezonePeriods<'_> {
                                             )
                                         }),
                                     ),
-                                )
+                                ))
                             })
                             .collect::<alloc::collections::BTreeMap<_, _>>(),
                     )?;

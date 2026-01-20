@@ -152,7 +152,7 @@ mod check_convenience_constructors {
         Date::try_new_buddhist(*VALID_YEAR_RANGE.end() + 1, 1, 1).unwrap_err();
     }
     #[test]
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     fn chinese_traditional() {
         let c = ChineseTraditional::new();
         Date::try_new_chinese_with_calendar(*VALID_YEAR_RANGE.start() - 1, 1, 1, Ref(&c))
@@ -166,7 +166,7 @@ mod check_convenience_constructors {
         Date::try_new_coptic(*VALID_YEAR_RANGE.end() + 1, 1, 1).unwrap_err();
     }
     #[test]
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     fn korean_traditional() {
         let c = KoreanTraditional::new();
         Date::try_new_dangi_with_calendar(*VALID_YEAR_RANGE.start() - 1, 1, 1, Ref(&c))
@@ -213,7 +213,7 @@ mod check_convenience_constructors {
         Date::try_new_gregorian(*VALID_YEAR_RANGE.end() + 1, 1, 1).unwrap_err();
     }
     #[test]
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     fn hebrew() {
         Date::try_new_hebrew(*VALID_YEAR_RANGE.start() - 1, 1, 1).unwrap_err();
         Date::try_new_hebrew(*VALID_YEAR_RANGE.end() + 1, 1, 1).unwrap_err();

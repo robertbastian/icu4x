@@ -172,7 +172,7 @@ impl TryFrom<MonthNamesInner> for MonthNamesCheckedInvariants {
 
 impl MonthNamesCheckedInvariants {
     pub fn get_first_month_name(&self) -> &str {
-        #[allow(clippy::indexing_slicing)] // validated invariant
+        #[expect(clippy::indexing_slicing, reason = "validated invariant")]
         &self.month_names[0]
     }
     pub fn get_month_name_at_index(&self, idx: usize) -> Option<&str> {

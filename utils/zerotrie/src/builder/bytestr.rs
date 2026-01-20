@@ -73,23 +73,23 @@ impl ByteStr {
     }
 
     /// Returns the byte at the given index, panicking if out of bounds.
-    #[allow(clippy::indexing_slicing)] // "panic" is in method name
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     pub(crate) const fn byte_at_or_panic(&self, index: usize) -> u8 {
         self.0[index]
     }
 
     /// Const function to evaluate `self < other`.
-    #[allow(clippy::indexing_slicing)] // in-range loop conditions
-    pub(crate) const fn is_less_then(&self, other: &Self) -> bool {
-        let mut i = 0;
-        while i < self.len() && i < other.len() {
-            if self.0[i] < other.0[i] {
+    pub(crate) const fn is_less_than(&self, other: &Self) -> bool {
+        let mut ss = &self.0;
+        let mut oo = &other.0;
+        while let (Some((&s, sn)), Some((&o, on))) = (ss.split_first(), oo.split_first()) {
+            if s < o {
                 return true;
             }
-            if self.0[i] > other.0[i] {
+            if s > o {
                 return false;
             }
-            i += 1;
+            (ss, oo) = (sn, on);
         }
         self.len() < other.len()
     }
@@ -99,15 +99,20 @@ impl ByteStr {
     /// # Panics
     ///
     /// Panics if `prefix_len` is longer than either this string or the other string
-    #[allow(clippy::indexing_slicing)] // in-range loop conditions
     pub(crate) const fn prefix_eq(&self, other: &ByteStr, prefix_len: usize) -> bool {
         assert!(prefix_len <= self.len());
         assert!(prefix_len <= other.len());
+        let mut ss = &self.0;
+        let mut oo = &other.0;
         let mut i = 0;
-        while i < prefix_len {
-            if self.0[i] != other.0[i] {
+        while let (Some((&s, sn)), Some((&o, on))) = (ss.split_first(), oo.split_first()) {
+            if i == prefix_len {
+                break;
+            }
+            if s != o {
                 return false;
             }
+            (ss, oo) = (sn, on);
             i += 1;
         }
         true

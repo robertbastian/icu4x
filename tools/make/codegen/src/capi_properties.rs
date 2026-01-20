@@ -117,7 +117,6 @@ pub fn main() {
             name: "Script".into(),
             is_open: true,
             int_type: "u16",
-            #[allow(deprecated)]
             variants: variants(Script::ALL_VALUES)
                 .into_iter()
                 .chain([("Chisoi".into(), 254)])

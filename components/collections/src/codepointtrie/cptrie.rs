@@ -43,7 +43,7 @@ use zerovec::ZeroVec;
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 #[cfg_attr(feature = "databake", derive(databake::Bake))]
 #[cfg_attr(feature = "databake", databake(path = icu_collections::codepointtrie))]
-#[allow(clippy::exhaustive_enums)] // based on a stable serialized form
+#[expect(clippy::exhaustive_enums, reason = "based on a stable serialized form")]
 pub enum TrieType {
     /// Represents the "fast" type code point tries for the
     /// [`TrieType`] trait. The "fast max" limit is set to `0xffff`.
@@ -174,7 +174,10 @@ pub struct CodePointTrie<'trie, T: TrieValue> {
 #[cfg_attr(feature = "databake", derive(databake::Bake))]
 #[cfg_attr(feature = "databake", databake(path = icu_collections::codepointtrie))]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Yokeable, ZeroFrom)]
-#[allow(clippy::exhaustive_structs)] // based on a stable serialized form
+#[expect(
+    clippy::exhaustive_structs,
+    reason = "based on a stable serialized form"
+)]
 pub struct CodePointTrieHeader {
     /// The code point of the start of the last range of the trie. A
     /// range is defined as a partition of the code point space such that the
@@ -1386,7 +1389,10 @@ where
 /// The start and end of the interval is represented as a
 /// `RangeInclusive<u32>`, and the value is represented as `T`.
 #[derive(PartialEq, Eq, Debug, Clone)]
-#[allow(clippy::exhaustive_structs)] // based on a stable serialized form
+#[expect(
+    clippy::exhaustive_structs,
+    reason = "based on a stable serialized form"
+)]
 pub struct CodePointMapRange<T> {
     /// Range of code points from start to end (inclusive).
     pub range: RangeInclusive<u32>,

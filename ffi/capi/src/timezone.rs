@@ -71,12 +71,11 @@ pub mod ffi {
         Daylight,
     }
 
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     impl TimeZoneVariant {
         #[diplomat::rust_link(icu::time::zone::TimeZoneVariant::from_rearguard_isdst, FnInEnum)]
         #[diplomat::rust_link(icu::time::TimeZoneInfo::with_variant, FnInStruct)]
         #[deprecated(note = "type not needed anymore")]
-        #[allow(deprecated)] // remove in 3.0
         pub fn from_rearguard_isdst(isdst: bool) -> Self {
             icu_time::zone::TimeZoneVariant::from_rearguard_isdst(isdst).into()
         }
@@ -107,7 +106,7 @@ pub mod ffi {
         ///
         /// `variant` is ignored.
         #[diplomat::attr(auto, constructor)]
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         #[diplomat::attr(kotlin, disable)] // option support (https://github.com/rust-diplomat/diplomat/issues/989)
         #[diplomat::attr(dart, disable)]
         pub fn from_parts(
@@ -223,7 +222,7 @@ pub mod ffi {
         #[diplomat::rust_link(icu::time::TimeZoneInfo::with_variant, FnInStruct)]
         #[deprecated(note = "returns unmodified copy")]
         #[diplomat::attr(dart, disable)]
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         pub fn with_variant(&self, _time_variant: TimeZoneVariant) -> Box<Self> {
             Box::new(*self)
         }
@@ -238,7 +237,7 @@ pub mod ffi {
         #[diplomat::attr(dart, disable)]
         #[diplomat::rust_link(icu::time::TimeZoneInfo::infer_variant, FnInStruct)]
         #[diplomat::rust_link(icu::time::zone::TimeZoneVariant, Enum, compact)]
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         pub fn infer_variant(
             &mut self,
             _offset_calculator: &crate::unstable::variant_offset::ffi::VariantOffsetsCalculator,
@@ -250,7 +249,7 @@ pub mod ffi {
         #[diplomat::attr(demo_gen, disable)] // this just returns a constructor argument
         #[deprecated(note = "always returns null")]
         #[diplomat::attr(dart, disable)]
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         pub fn variant(&self) -> Option<TimeZoneVariant> {
             None
         }
@@ -287,7 +286,7 @@ impl From<icu_time::TimeZoneInfo<icu_time::zone::models::AtTime>> for TimeZoneIn
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl From<icu_time::TimeZoneInfo<icu_time::zone::models::Full>> for TimeZoneInfo {
     fn from(other: icu_time::TimeZoneInfo<icu_time::zone::models::Full>) -> Self {
         Self {

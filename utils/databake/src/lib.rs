@@ -109,7 +109,7 @@ impl CrateEnv {
     /// Adds a crate to this collection. This can be called concurrently
     /// and without `mut`.
     pub fn insert(&self, krate: &'static str) {
-        #[allow(clippy::expect_used)] // poison
+        #[expect(clippy::expect_used, reason = "poison")]
         self.0.lock().expect("poison").insert(krate);
     }
 }
@@ -119,7 +119,7 @@ impl IntoIterator for CrateEnv {
     type IntoIter = <HashSet<&'static str> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        #[allow(clippy::expect_used)] // poison
+        #[expect(clippy::expect_used, reason = "poison")]
         self.0.into_inner().expect("poison").into_iter()
     }
 }

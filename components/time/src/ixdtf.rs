@@ -314,7 +314,6 @@ impl<'a> Intermediate<'a> {
         Ok(zone.at_date_time_iso(DateTime { date, time }))
     }
 
-    #[allow(deprecated)]
     fn all(
         self,
         iana_parser: IanaParserBorrowed<'_>,
@@ -334,7 +333,7 @@ impl<'a> Intermediate<'a> {
             .at_date_time_iso(DateTime { date, time }))
     }
 
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     fn full(
         self,
         iana_parser: IanaParserBorrowed<'_>,
@@ -612,7 +611,7 @@ impl<A: AsCalendar> ZonedDateTime<A, TimeZoneInfo<models::AtTime>> {
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl<A: AsCalendar> ZonedDateTime<A, TimeZoneInfo<models::Full>> {
     /// Create a [`ZonedDateTime`] in any calendar from an RFC 9557 string.
     #[deprecated(since = "2.1.0", note = "use `try_strict_from_str`")]

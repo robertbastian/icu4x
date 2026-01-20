@@ -498,7 +498,7 @@ pub(crate) fn step_parameterized<T: ZeroTrieWithOptions + ?Sized>(
             } else {
                 get_branch(trie, i, x, w)
             };
-            #[allow(clippy::indexing_slicing)] // i is from a binary search
+            #[expect(clippy::indexing_slicing, reason = "binary search")]
             Some(search[i])
         }
         Err(_) => {
@@ -593,7 +593,7 @@ pub(crate) fn probe_parameterized<T: ZeroTrieWithOptions + ?Sized>(
         get_branch(trie, index, x, w)
     };
     Some(AsciiProbeResult {
-        #[allow(clippy::indexing_slicing)] // index < x, the length of search
+        #[expect(clippy::indexing_slicing, reason = "index < x, the length of search")]
         byte: search[index],
         total_siblings,
     })

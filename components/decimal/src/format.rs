@@ -122,7 +122,6 @@ impl<T: Writeable> FormattedSign<'_, T> {
     /// Under the hood, this uses an efficient [`Writeable`] implementation.
     /// However, in order to avoid allocating a string, it is more efficient
     /// to use [`Writeable`] directly.
-    #[allow(clippy::inherent_to_string_shadow_display)]
     pub fn to_string(&self) -> String {
         Writeable::write_to_string(self).into_owned()
     }

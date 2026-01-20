@@ -343,7 +343,7 @@ pub struct CyclicYear {
 
 /// String representation of a [`Month`]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[allow(clippy::exhaustive_structs)] // this is a newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_calendar::types))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
@@ -390,7 +390,7 @@ impl MonthCode {
 
 #[test]
 fn test_get_normal_month_code_if_leap() {
-    #![allow(deprecated)]
+    #![expect(deprecated)]
     assert_eq!(
         MonthCode::new_leap(1).unwrap().get_normal_if_leap(),
         MonthCode::new_normal(1)
@@ -572,7 +572,7 @@ impl Month {
 
     /// Returns the [`MonthCode`] for this month.
     pub fn code(self) -> MonthCode {
-        #[allow(clippy::unwrap_used)] // by construction
+        #[expect(clippy::unwrap_used, reason = "by construction")]
         MonthCode(
             TinyAsciiStr::try_from_raw([
                 b'M',
@@ -588,7 +588,7 @@ impl Month {
     ///
     /// See [`Self::is_formatting_leap`].
     pub fn formatting_code(self) -> MonthCode {
-        #[allow(clippy::unwrap_used)] // by construction
+        #[expect(clippy::unwrap_used, reason = "by construction")]
         MonthCode(
             TinyAsciiStr::try_from_raw([
                 b'M',
@@ -639,13 +639,12 @@ impl MonthInfo {
     ) -> Self {
         let ordinal = date.month();
         let value = c.month_from_ordinal(date.year(), ordinal);
-        #[allow(deprecated)] // field-level allows don't work at 1.83 MSRV
         Self {
             ordinal,
             value,
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             standard_code: value.code(),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             formatting_code: value.code(),
         }
     }
@@ -703,17 +702,17 @@ impl MonthInfo {
 
 /// The current day of the year, 1-based.
 #[derive(Copy, Clone, Debug, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // this is a newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct DayOfYear(pub u16);
 
 /// A 1-based day number in a month.
-#[allow(clippy::exhaustive_structs)] // this is a newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct DayOfMonth(pub u8);
 
 /// A week number in a year
 #[derive(Clone, Copy, Debug, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // this is a newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct IsoWeekOfYear {
     /// The 1-based ISO week number
     pub week_number: u8,
@@ -723,7 +722,7 @@ pub struct IsoWeekOfYear {
 
 /// A day of week in month. 1-based.
 #[derive(Clone, Copy, Debug, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // this is a newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct DayOfWeekInMonth(pub u8);
 
 impl From<DayOfMonth> for DayOfWeekInMonth {
@@ -757,7 +756,7 @@ fn test_day_of_week_in_month() {
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_calendar::types))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-#[allow(clippy::exhaustive_enums)] // This is stable
+#[expect(clippy::exhaustive_enums, reason = "stable")]
 pub enum Weekday {
     Monday = 1,
     Tuesday,

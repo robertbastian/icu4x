@@ -135,7 +135,17 @@ impl fmt::Debug for DataLocale {
     }
 }
 
-impl_writeable_for_each_subtag_str_no_test!(DataLocale, selff, selff.script.is_none() && selff.region.is_none() && selff.variant.is_none() && selff.subdivision.is_none() => Some(selff.language.as_str()));
+impl_writeable_for_each_subtag_str_no_test!(
+    DataLocale,
+    selff,
+    if selff.script.is_none()
+        && selff.region.is_none()
+        && selff.variant.is_none()
+        && selff.subdivision.is_none()
+    {
+        return Some(selff.language.as_str());
+    }
+);
 
 impl From<LanguageIdentifier> for DataLocale {
     fn from(langid: LanguageIdentifier) -> Self {

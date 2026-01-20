@@ -13,7 +13,7 @@ use core::num::{NonZeroI8, NonZeroU8};
 /// A u8 array of little-endian data with infallible conversions to and from &[u8].
 #[repr(transparent)]
 #[derive(Debug, PartialEq, Eq, Clone, Copy, PartialOrd, Ord, Hash)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct RawBytesULE<const N: usize>(pub [u8; N]);
 
 impl<const N: usize> RawBytesULE<N> {
@@ -132,7 +132,7 @@ macro_rules! impl_const_constructors {
             pub const fn try_from_bytes(bytes: &[u8]) -> Result<&Self, UleError> {
                 let len = bytes.len();
                 const STRIDE: usize = size_of::<$base>();
-                #[allow(clippy::modulo_one)]
+                #[allow(clippy::modulo_one, reason = "not actually happening")]
                 if (if STRIDE <= 1 { len } else { len % STRIDE }) == 0 {
                     Ok(unsafe { Self::from_bytes_unchecked(bytes) })
                 } else {

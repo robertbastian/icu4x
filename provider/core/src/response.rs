@@ -1010,7 +1010,7 @@ where
 }
 
 /// A response object containing an object as payload and metadata about it.
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct DataResponse<M>
 where
     M: DynamicDataMarker,

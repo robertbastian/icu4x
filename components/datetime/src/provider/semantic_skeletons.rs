@@ -131,7 +131,6 @@ pub mod marker_attrs {
     ///
     /// [`pattern`]: crate::pattern
     #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-    #[allow(clippy::exhaustive_enums)] // documented as unstable
     pub enum Length {
         Abbr,
         Narrow,
@@ -170,7 +169,6 @@ pub mod marker_attrs {
     ///
     /// [`fields`]: crate::provider::fields
     #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-    #[allow(clippy::exhaustive_enums)] // documented as unstable
     pub enum Context {
         Format,
         Standalone,
@@ -186,7 +184,6 @@ pub mod marker_attrs {
     ///
     /// [`fields`]: crate::provider::fields
     #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-    #[allow(clippy::exhaustive_enums)] // documented as unstable
     pub enum GlueType {
         DateTime,
         DateZone,

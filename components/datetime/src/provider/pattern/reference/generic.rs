@@ -16,7 +16,7 @@ use core::str::FromStr;
 /// to be stable, their Rust representation might not be. Use with caution.
 /// </div>
 #[derive(Debug)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct GenericPattern {
     pub(crate) items: Vec<GenericPatternItem>,
 }

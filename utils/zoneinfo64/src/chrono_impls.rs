@@ -27,7 +27,7 @@ impl ChronoOffset<'_> {
 
 impl<'a> chrono::Offset for ChronoOffset<'a> {
     fn fix(&self) -> FixedOffset {
-        #[allow(clippy::unwrap_used)] // in range for chrono
+        #[expect(clippy::unwrap_used, reason = "clamped to chrono range")]
         FixedOffset::east_opt(self.0.offset.0.clamp(-86_399, 86_399)).unwrap()
     }
 }

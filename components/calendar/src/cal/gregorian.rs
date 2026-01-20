@@ -116,7 +116,7 @@ impl GregorianYears for CeBce {
 /// [`Buddhist`](super::Buddhist) calendar, the [`Japanese`](super::Japanese) calendar, and the
 /// Chinese Republican Calendar ([`Roc`](super::Roc)).
 #[derive(Copy, Clone, Debug, Default)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Gregorian;
 
 impl Date<Gregorian> {

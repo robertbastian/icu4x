@@ -47,7 +47,7 @@ use quote::quote;
 /// ```
 #[derive(Default, Debug)]
 #[repr(transparent)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct AsStaticStr<T>(pub T)
 where
     T: AsRef<str>;
@@ -160,7 +160,7 @@ pub type StringAsStaticStr = AsStaticStr<String>;
 /// ```
 #[derive(Default, Debug)]
 #[repr(transparent)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct IteratorAsRefSlice<B, T>(pub B, pub PhantomData<T>)
 where
     for<'a> &'a B: IntoIterator<Item = &'a T>,

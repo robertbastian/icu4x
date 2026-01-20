@@ -188,7 +188,10 @@ impl<P: PatternBackend> CompactPatterns<'static, P> {
             deduplicated_patterns.push((log10_type, map.map(|p| (metadata, p))))
         }
 
-        #[allow(clippy::unwrap_used)] // keyed by u8, so it cannot exceed usize/2
+        #[expect(
+            clippy::unwrap_used,
+            reason = "keyed by u8, so it cannot exceed usize/2"
+        )]
         Ok(Self(
             VarZeroVecOwned::try_from_elements(
                 &deduplicated_patterns

@@ -45,7 +45,7 @@ impl<'a, T> ConstSlice<'a, T> {
 
     /// Gets the element at `index`, panicking if not present.
     pub const fn get_or_panic(&self, index: usize) -> &T {
-        #[allow(clippy::indexing_slicing)] // documented
+        #[expect(clippy::indexing_slicing, reason = "documented")]
         &self.full_slice[index + self.start]
     }
 
@@ -88,7 +88,10 @@ impl<'a, T> ConstSlice<'a, T> {
 
     /// Non-const function that returns this [`ConstSlice`] as a regular slice.
     #[cfg(any(test, feature = "alloc"))]
-    #[allow(clippy::indexing_slicing)] // indices in range by struct invariant
+    #[expect(
+        clippy::indexing_slicing,
+        reason = "indices in range by struct invariant"
+    )]
     pub fn as_slice(&self) -> &'a [T] {
         &self.full_slice[self.start..self.limit]
     }
@@ -180,7 +183,7 @@ impl<const N: usize, T: Copy> ConstArrayBuilder<N, T> {
     }
 
     /// Prepends an element to the front of the builder, panicking if there is no room.
-    #[allow(clippy::indexing_slicing)] // documented
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     pub const fn const_push_front_or_panic(&mut self, value: T) {
         if self.start == 0 {
             panic!("Buffer too small");
@@ -190,7 +193,7 @@ impl<const N: usize, T: Copy> ConstArrayBuilder<N, T> {
     }
 
     /// Prepends multiple elements to the front of the builder, panicking if there is no room.
-    #[allow(clippy::indexing_slicing)] // documented
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     pub const fn const_extend_front_or_panic(&mut self, other: ConstSlice<T>) {
         if self.start < other.len() {
             panic!("Buffer too small");
@@ -206,7 +209,7 @@ impl<const N: usize, T: Copy> ConstArrayBuilder<N, T> {
 
 impl<const N: usize> ConstArrayBuilder<N, u8> {
     /// Specialized function that performs `self[index] |= bits`
-    #[allow(clippy::indexing_slicing)] // documented
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     pub(crate) const fn const_bitor_assign_or_panic(&mut self, index: usize, bits: u8) {
         self.full_array[self.start + index] |= bits;
     }
@@ -269,7 +272,7 @@ impl<const K: usize> ConstLengthsStack<K> {
     }
 
     /// Adds a [`BranchMeta`] to the stack, panicking if there is no room.
-    #[allow(clippy::indexing_slicing)] // documented
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     pub const fn push_or_panic(&mut self, meta: BranchMeta) {
         if self.idx >= K {
             panic!(concat!(
@@ -292,7 +295,7 @@ impl<const K: usize> ConstLengthsStack<K> {
     }
 
     /// Returns a copy of the [`BranchMeta`] at the specified index.
-    #[allow(clippy::indexing_slicing)] // documented
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     const fn get_or_panic(&self, index: usize) -> BranchMeta {
         if self.idx <= index {
             panic!("AsciiTrie Builder: Attempted to get too deep in a stack");
@@ -304,7 +307,7 @@ impl<const K: usize> ConstLengthsStack<K> {
     }
 
     /// Removes many [`BranchMeta`]s from the stack, returning them in a [`ConstArrayBuilder`].
-    #[allow(clippy::indexing_slicing)] // documented
+    #[expect(clippy::indexing_slicing, reason = "documented")]
     pub const fn pop_many_or_panic(&mut self, len: usize) -> ConstArrayBuilder<256, BranchMeta> {
         debug_assert!(len <= 256);
         let mut result = ConstArrayBuilder::new_empty([BranchMeta::default(); 256], 256);

@@ -43,7 +43,7 @@ use tinystr::tinystr;
 /// The Indian calendar has the same year lengths and leap year rules as the Gregorian calendar,
 /// so it experiences the same drift of 1 day in ~7700 years with respect to the seasons.
 #[derive(Copy, Clone, Debug, Hash, Default, Eq, PartialEq, PartialOrd, Ord)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Indian;
 
 /// The inner date type used for representing [`Date`]s of [`Indian`]. See [`Date`] and [`Indian`] for more details.

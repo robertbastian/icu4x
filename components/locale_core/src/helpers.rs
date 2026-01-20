@@ -335,7 +335,7 @@ macro_rules! impl_tinystr_subtag {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! impl_writeable_for_each_subtag_str_no_test {
-    ($type:tt $(, $self:ident, $borrow_cond:expr => $borrow:expr)?) => {
+    ($type:tt $(, $self:ident, $maybe_borrow:stmt)?) => {
         impl writeable::Writeable for $type {
             fn write_to<W: core::fmt::Write + ?Sized>(&self, sink: &mut W) -> core::fmt::Result {
                 let mut initial = true;
@@ -369,11 +369,8 @@ macro_rules! impl_writeable_for_each_subtag_str_no_test {
             $(
                 fn writeable_borrow(&self) -> Option<&str> {
                     let $self = self;
-                    if $borrow_cond {
-                        $borrow
-                    } else {
-                        None
-                    }
+                    $maybe_borrow
+                    None
                 }
             )?
         }
@@ -384,7 +381,13 @@ macro_rules! impl_writeable_for_each_subtag_str_no_test {
 
 macro_rules! impl_writeable_for_subtag_list {
     ($type:tt, $sample1:literal, $sample2:literal) => {
-        impl_writeable_for_each_subtag_str_no_test!($type, selff, selff.0.len() == 1 => #[allow(clippy::unwrap_used)] { Some(selff.0.get(0).unwrap().as_str()) } );
+        impl_writeable_for_each_subtag_str_no_test!(
+            $type,
+            selff,
+            if let Some(s) = selff.0.single() {
+                return Some(s.as_str());
+            }
+        );
 
         #[test]
         fn test_writeable() {

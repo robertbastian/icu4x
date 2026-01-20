@@ -23,7 +23,6 @@ use icu_provider::prelude::*;
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_datetime::provider::pattern))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-#[allow(clippy::exhaustive_enums)] // this type is stable
 pub enum CoarseHourCycle {
     /// Can either be [`fields::Hour::H11`] or [`fields::Hour::H12`]
     H11H12,
@@ -109,13 +108,14 @@ impl CoarseHourCycle {
             // requested fields.
             true,
         ) {
+            #[expect(
+                clippy::unwrap_used,
+                reason = "only week-of patterns have plural variants"
+            )]
             skeleton::BestSkeleton::AllFieldsMatch(patterns, _)
-            | skeleton::BestSkeleton::MissingOrExtraFields(patterns, _) => {
-                Some(reference::Pattern::from(
-                    #[allow(clippy::unwrap_used)] // only week-of patterns have plural variants
-                    &patterns.try_into_other().unwrap(),
-                ))
-            }
+            | skeleton::BestSkeleton::MissingOrExtraFields(patterns, _) => Some(
+                reference::Pattern::from(&patterns.try_into_other().unwrap()),
+            ),
             skeleton::BestSkeleton::NoMatch => None,
         }
     }

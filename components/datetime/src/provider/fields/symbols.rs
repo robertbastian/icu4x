@@ -42,7 +42,6 @@ impl core::error::Error for SymbolError {}
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_datetime::fields))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-#[allow(clippy::exhaustive_enums)] // part of data struct
 pub enum FieldSymbol {
     /// Era name.
     Era,
@@ -252,7 +251,6 @@ unsafe impl ULE for FieldSymbolULE {
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy)]
-#[allow(clippy::exhaustive_enums)] // used in data struct
 #[cfg(feature = "datagen")]
 pub(crate) enum TextOrNumeric {
     Text,
@@ -410,7 +408,6 @@ macro_rules! field_type {
             #[zerovec::make_ule($ule_name)]
             #[zerovec::derive(Debug)]
         )?
-        #[allow(clippy::exhaustive_enums)] // used in data struct
         $(#[$enum_attr])*
         pub enum $i {
             $(
@@ -890,7 +887,6 @@ impl LengthType for TimeZone {
 #[repr(u8)]
 #[zerovec::make_ule(DecimalSecondULE)]
 #[zerovec::derive(Debug)]
-#[allow(clippy::exhaustive_enums)] // used in data struct
 pub enum DecimalSecond {
     /// A second with 1 fractional digit: "1.0"
     Subsecond1 = 1,

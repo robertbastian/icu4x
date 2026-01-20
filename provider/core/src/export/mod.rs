@@ -57,7 +57,7 @@ pub trait DataExporter: Sync {
 }
 
 #[derive(Debug, Default)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 /// Contains information about a successful export.
 pub struct ExporterCloseMetadata(pub Option<Box<dyn core::any::Any>>);
 

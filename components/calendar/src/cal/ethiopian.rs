@@ -76,7 +76,7 @@ impl Default for Ethiopian {
     }
 }
 
-#[allow(missing_docs)] // not actually public
+#[expect(missing_docs)] // not actually public
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq, PartialOrd, Ord)]
 pub struct EthiopianDateInner(CopticDateInner);
 

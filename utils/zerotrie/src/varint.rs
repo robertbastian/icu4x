@@ -126,7 +126,10 @@ const MAX_VARINT: usize = usize::MAX;
 const MAX_VARINT_LENGTH: usize = 1 + usize::BITS as usize / 7;
 
 /// Returns a new [`ConstArrayBuilder`] containing a varint with 2 bits of metadata.
-#[allow(clippy::indexing_slicing)] // Okay so long as MAX_VARINT_LENGTH is correct
+#[expect(
+    clippy::indexing_slicing,
+    reason = "Okay so long as MAX_VARINT_LENGTH is correct"
+)]
 pub(crate) const fn write_varint_meta2(value: usize) -> ConstArrayBuilder<MAX_VARINT_LENGTH, u8> {
     let mut result = [0; MAX_VARINT_LENGTH];
     let mut i = MAX_VARINT_LENGTH - 1;
@@ -155,7 +158,10 @@ pub(crate) const fn write_varint_meta2(value: usize) -> ConstArrayBuilder<MAX_VA
 }
 
 /// Returns a new [`ConstArrayBuilder`] containing a varint with 3 bits of metadata.
-#[allow(clippy::indexing_slicing)] // Okay so long as MAX_VARINT_LENGTH is correct
+#[expect(
+    clippy::indexing_slicing,
+    reason = "Okay so long as MAX_VARINT_LENGTH is correct"
+)]
 pub(crate) const fn write_varint_meta3(value: usize) -> ConstArrayBuilder<MAX_VARINT_LENGTH, u8> {
     let mut result = [0; MAX_VARINT_LENGTH];
     let mut i = MAX_VARINT_LENGTH - 1;

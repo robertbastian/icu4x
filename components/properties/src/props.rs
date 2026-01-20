@@ -156,7 +156,7 @@ macro_rules! make_enumerated_property {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct BidiClass(pub(crate) u8);
 
@@ -255,7 +255,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct NumericType(pub(crate) u8);
 
@@ -496,7 +496,7 @@ make_enumerated_property! {
 ///
 /// See `UCharCategory` and `U_GET_GC_MASK` in ICU4C.
 #[derive(Copy, Clone, PartialEq, Debug, Eq)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct GeneralCategoryGroup(pub(crate) u32);
 
@@ -804,7 +804,7 @@ impl From<GeneralCategoryGroup> for u32 {
 /// [`ScriptWithExtensionsBorrowed::has_script`]: crate::script::ScriptWithExtensionsBorrowed::has_script
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct Script(pub(crate) u16);
 
@@ -1065,7 +1065,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct HangulSyllableType(pub(crate) u8);
 
@@ -1131,7 +1131,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct EastAsianWidth(pub(crate) u8);
 
@@ -1195,7 +1195,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct LineBreak(pub(crate) u8);
 
@@ -1305,7 +1305,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 #[repr(transparent)]
 pub struct GraphemeClusterBreak(pub(crate) u8);
 
@@ -1384,7 +1384,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct WordBreak(pub(crate) u8);
 
@@ -1468,7 +1468,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct SentenceBreak(pub(crate) u8);
 
@@ -1547,7 +1547,7 @@ make_enumerated_property! {
 // without coordination.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct CanonicalCombiningClass(pub(crate) u8);
 
@@ -1667,7 +1667,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct IndicConjunctBreak(pub(crate) u8);
 
@@ -1724,7 +1724,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct IndicSyllabicCategory(pub(crate) u8);
 
@@ -1813,7 +1813,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct JoiningGroup(pub(crate) u8);
 
@@ -1973,7 +1973,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct JoiningType(pub(crate) u8);
 
@@ -2041,7 +2041,7 @@ make_enumerated_property! {
 /// ```
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[repr(transparent)]
 pub struct VerticalOrientation(pub(crate) u8);
 

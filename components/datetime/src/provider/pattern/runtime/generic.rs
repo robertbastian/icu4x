@@ -24,7 +24,7 @@ use zerovec::ZeroVec;
 /// to be stable, their Rust representation might not be. Use with caution.
 /// </div>
 #[derive(Debug, PartialEq, Eq, Clone, yoke::Yokeable, zerofrom::ZeroFrom)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 #[cfg_attr(feature = "datagen", derive(databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_datetime::provider::pattern::runtime))]
 pub struct GenericPattern<'data> {

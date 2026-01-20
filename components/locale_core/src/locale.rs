@@ -503,7 +503,13 @@ impl core::fmt::Debug for Locale {
     }
 }
 
-impl_writeable_for_each_subtag_str_no_test!(Locale, selff, selff.extensions.is_empty() => selff.id.writeable_borrow());
+impl_writeable_for_each_subtag_str_no_test!(
+    Locale,
+    selff,
+    if selff.extensions.is_empty() {
+        return selff.id.writeable_borrow();
+    }
+);
 
 #[test]
 fn test_writeable() {

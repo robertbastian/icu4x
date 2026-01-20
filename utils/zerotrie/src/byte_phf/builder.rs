@@ -16,8 +16,8 @@ const MAX_L2_SEARCH_MISSES: usize = 24;
 /// Directly compute the perfect hash function.
 ///
 /// Returns `(p, [q_0, q_1, ..., q_(N-1)])`, or an error if the PHF could not be computed.
-#[allow(unused_labels)] // for readability
-#[allow(clippy::indexing_slicing)] // carefully reviewed to not panic
+#[expect(unused_labels, reason = "readability")]
+#[expect(clippy::indexing_slicing, reason = "carefully reviewed")]
 pub fn find(bytes: &[u8]) -> Result<(u8, Vec<u8>), ZeroTrieBuildError> {
     let n_usize = bytes.len();
 
@@ -122,7 +122,7 @@ impl PerfectByteHashMap<Vec<u8>> {
     /// Computes a new [`PerfectByteHashMap`].
     ///
     /// (this is a doc-hidden API)
-    #[allow(clippy::indexing_slicing)] // carefully reviewed to not panic
+    #[expect(clippy::indexing_slicing)] // carefully reviewed to not panic
     pub fn try_new(keys: &[u8]) -> Result<Self, ZeroTrieBuildError> {
         let n_usize = keys.len();
         let n = n_usize as u8;

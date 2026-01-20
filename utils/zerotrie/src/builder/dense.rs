@@ -29,7 +29,10 @@ pub(crate) struct DenseSparse2dAsciiWithFixedDelimiterBuilder<'a> {
 
 impl<'a> DenseSparse2dAsciiWithFixedDelimiterBuilder<'a> {
     /// Helper function: finds best row offset when value range too large for dense matrix
-    #[allow(clippy::indexing_slicing)] // bot < top and top < sorted_vals.len()
+    #[expect(
+        clippy::indexing_slicing,
+        reason = "bot < top and top < sorted_vals.len()"
+    )]
     fn find_window(values: &BTreeMap<&'a str, usize>) -> usize {
         let mut sorted_vals: Vec<usize> = values.values().cloned().collect();
         let row_width = usize::from(DenseType::MAX);

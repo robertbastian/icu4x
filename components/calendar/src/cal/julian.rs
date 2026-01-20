@@ -70,7 +70,7 @@ use tinystr::tinystr;
 /// for a while after adoption, so the first year where the months align with this proleptic
 /// implementation is probably 4 CE.
 #[derive(Copy, Clone, Debug, Hash, Default, Eq, PartialEq, PartialOrd, Ord)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Julian;
 
 /// The inner date type used for representing [`Date`]s of [`Julian`]. See [`Date`] and [`Julian`] for more details.

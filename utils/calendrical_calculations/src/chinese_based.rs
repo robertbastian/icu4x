@@ -77,12 +77,12 @@ pub fn iso_from_extended<C: ChineseBased>(extended_year: i32) -> i32 {
 
 /// A type implementing [`ChineseBased`] for the Chinese calendar
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct Chinese;
 
 /// A type implementing [`ChineseBased`] for the Dangi (Korean) calendar
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct Dangi;
 
 impl ChineseBased for Chinese {

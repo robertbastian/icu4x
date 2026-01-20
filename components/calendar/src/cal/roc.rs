@@ -30,7 +30,7 @@ use tinystr::tinystr;
 /// This calendar uses two era codes: `roc`, corresponding to years in the 民國 era (CE year 1912 and
 /// after), and `broc`, corresponding to years before the 民國 era (CE year 1911 and before).
 #[derive(Copy, Clone, Debug, Default)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Roc;
 
 impl_with_abstract_gregorian!(Roc, RocDateInner, RocEra, _x, RocEra);

@@ -27,7 +27,7 @@ use tinystr::tinystr;
 /// # Era codes
 ///
 /// This calendar uses a single era code `be`, with 1 Buddhist Era being 543 BCE. Dates before this era use negative years.
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Buddhist;
 
 impl_with_abstract_gregorian!(Buddhist, BuddhistDateInner, BuddhistEra, _x, BuddhistEra);

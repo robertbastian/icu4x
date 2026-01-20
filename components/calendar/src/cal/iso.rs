@@ -21,7 +21,7 @@ use tinystr::tinystr;
 ///
 /// This calendar uses a single era: `default`
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Iso;
 
 impl_with_abstract_gregorian!(Iso, IsoDateInner, IsoEra, _x, IsoEra);

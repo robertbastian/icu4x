@@ -798,7 +798,7 @@ impl CollatorBorrowed<'static> {
                             .as_ule_slice();
                     if C.len() == MaxVariable::Currency as usize + 16 {
                         let i = MaxVariable::Currency as usize;
-                        #[allow(clippy::indexing_slicing)] // protected, const
+                        #[expect(clippy::indexing_slicing, reason = "const")]
                         &[
                             C[i],
                             C[i + 1],

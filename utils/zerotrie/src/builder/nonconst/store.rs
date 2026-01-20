@@ -77,7 +77,7 @@ impl TrieBuilderStore for VecDeque<u8> {
     }
     /// # Panics
     /// Panics if the specified ranges are invalid.
-    #[allow(clippy::panic)] // documented
+    #[expect(clippy::panic, reason = "documented")]
     fn atbs_swap_ranges(&mut self, mut start: usize, mut mid: usize, mut limit: usize) {
         if start > mid || mid > limit {
             panic!("Invalid args to atbs_swap_ranges(): start > mid || mid > limit");
@@ -146,7 +146,7 @@ impl NonConstLengthsStack {
 
     /// Returns a copy of the [`BranchMeta`] on the top of the stack, panicking if
     /// the stack is empty.
-    #[allow(clippy::unwrap_used)] // "panic" is in the method name
+    #[expect(clippy::unwrap_used, reason = "documented")]
     pub fn peek_or_panic(&self) -> BranchMeta {
         *self.data.last().unwrap()
     }

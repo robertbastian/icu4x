@@ -124,7 +124,7 @@ dt_unit!(
 ///
 /// This type supports the range [00:00:00.000000000, 23:59:60.999999999].
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct Time {
     /// Hour
     pub hour: Hour,
@@ -199,7 +199,7 @@ impl Time {
 /// equally), it does not implement [`PartialOrd`]/[`Ord`], arithmetic, and it is possible to
 /// create [`DateTime`]s that do not exist for a particular timezone.
 #[derive(Debug)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct DateTime<A: AsCalendar> {
     /// The date
     pub date: Date<A>,
@@ -256,7 +256,7 @@ impl<A: AsCalendar> Copy for DateTime<A> where Date<A>: Copy {}
 ///       identity is part of the type, and there are no local time discontinuities.
 ///       Therefore it actually identifies an absolute time and implements [`PartialOrd`].
 #[derive(Debug)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub struct ZonedDateTime<A: AsCalendar, Z> {
     /// The date, local to the time zone
     pub date: Date<A>,

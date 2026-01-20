@@ -9,14 +9,14 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 #[serde(transparent)]
 // Cows fail to borrow in some situations (array, option), but structs of Cows don't.
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[derive(Debug)]
 pub struct CowWrap<'data>(#[serde(borrow)] pub Cow<'data, str>);
 
 #[derive(Deserialize)]
 #[serde(transparent)]
 // Cows fail to borrow in some situations (array, option), but structs of Cows don't.
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 #[derive(Debug)]
 pub struct CowBytesWrap<'data>(#[serde(borrow)] pub Cow<'data, [u8]>);
 

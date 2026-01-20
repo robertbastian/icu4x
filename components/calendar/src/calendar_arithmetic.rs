@@ -580,7 +580,7 @@ impl<C: DateFieldsResolver> ArithmeticDate<C> {
         //   1. If _sign_ × (_m1_ - _calDate2_.[[Month]]) > 0, return *true*.
         // 1. Else if _d1_ ≠ _calDate2_.[[Day]], then
         //   1. If _sign_ × (_d1_ - _calDate2_.[[Day]]) > 0, return *true*.
-        #[allow(clippy::collapsible_if)] // to align with the spec
+        #[expect(clippy::collapsible_if, reason = "align with spec")]
         if y1 != other.year() {
             if sign
                 * (i64::from(y1.to_extended_year()) - i64::from(other.year().to_extended_year()))

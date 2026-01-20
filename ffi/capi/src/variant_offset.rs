@@ -21,7 +21,7 @@ pub mod ffi {
     #[diplomat::opaque]
     #[deprecated(note = "this API is a bad approximation of a time zone database")]
     #[diplomat::attr(dart, disable)]
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     pub struct VariantOffsetsCalculator(pub icu_time::zone::VariantOffsetsCalculator);
 
     #[diplomat::opaque]
@@ -117,7 +117,7 @@ pub mod ffi {
         }
     }
 
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     impl VariantOffsetsCalculator {
         /// Construct a new [`VariantOffsetsCalculator`] instance using compiled data.
         #[diplomat::rust_link(icu::time::zone::VariantOffsetsCalculator::new, FnInStruct)]
@@ -151,7 +151,7 @@ pub mod ffi {
             icu::time::zone::VariantOffsetsCalculatorBorrowed::compute_offsets_from_time_zone_and_name_timestamp,
             FnInStruct
         )]
-        #[allow(deprecated)] // clean up in 3.0
+        #[expect(deprecated)] // clean up in 3.0
         pub fn compute_offsets_from_time_zone_and_date_time(
             &self,
             time_zone: &TimeZone,

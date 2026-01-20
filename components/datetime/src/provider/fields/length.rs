@@ -29,7 +29,6 @@ impl core::error::Error for LengthError {}
 #[cfg_attr(feature = "datagen", derive(serde::Serialize, databake::Bake))]
 #[cfg_attr(feature = "datagen", databake(path = icu_datetime::fields))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
-#[allow(clippy::exhaustive_enums)] // part of data struct
 pub enum FieldLength {
     /// Numeric: minimum digits
     ///

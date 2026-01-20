@@ -420,7 +420,10 @@ mod tests {
     use super::*;
 
     #[test]
-    #[allow(clippy::field_reassign_with_default)] // want out-of-crate code style
+    #[expect(
+        clippy::field_reassign_with_default,
+        reason = "want out-of-crate code style"
+    )]
     fn test_missing_fields_strategy() {
         // The sets of fields that identify a year, according to the table in the docs
         let valid_year_field_sets = [

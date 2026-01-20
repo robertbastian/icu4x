@@ -30,7 +30,7 @@ use std::io;
 /// .unwrap();
 /// # std::fs::remove_dir_all(&demo_path).expect("Cleaning up test directory");
 /// ```
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 #[derive(Debug, Default)]
 pub struct Serializer;
 

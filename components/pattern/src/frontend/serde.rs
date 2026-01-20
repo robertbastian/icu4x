@@ -41,7 +41,7 @@ type HumanReadablePattern<'a, B> =
     Vec<PatternItemCow<'a, <B as PatternBackend>::PlaceholderKeyCow<'a>>>;
 
 #[derive(Debug, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct PatternString<B: PatternBackend>(pub Box<Pattern<B>>);
 
 impl<B: PatternBackend> Clone for PatternString<B>

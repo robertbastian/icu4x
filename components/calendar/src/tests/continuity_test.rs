@@ -158,7 +158,7 @@ fn test_hijri_civil_continuity() {
 }
 
 #[test]
-#[allow(deprecated)]
+#[expect(deprecated)]
 fn test_hijri_simulated_mecca_continuity() {
     #[cfg(feature = "logging")]
     let _ = simple_logger::SimpleLogger::new().env().init();

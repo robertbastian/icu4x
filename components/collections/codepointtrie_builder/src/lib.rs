@@ -114,7 +114,7 @@ pub enum CodePointTrieBuilderData<'a, T> {
 /// Settings for building a [`CodePointTrie`].
 ///
 /// [`CodePointTrie`]: icu_collections::codepointtrie::CodePointTrie
-#[allow(clippy::exhaustive_structs)]
+#[expect(clippy::exhaustive_structs, reason = "builder type")]
 #[derive(Debug)]
 pub struct CodePointTrieBuilder<'a, T> {
     /// The data to be encoded.

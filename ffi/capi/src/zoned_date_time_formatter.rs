@@ -593,7 +593,7 @@ pub mod ffi {
                 input.set_time_zone_name_timestamp(zone_name_timestamp);
             }
             else {
-                #[allow(deprecated)] // clean up in 3.0
+                #[expect(deprecated)]
                 input.set_time_zone_name_timestamp(zone.id.with_offset(zone.offset).with_zone_name_timestamp(
                     icu_time::zone::ZoneNameTimestamp::from_date_time_iso(icu_time::DateTime {
                         date: iso_date.0,
@@ -1158,7 +1158,7 @@ pub mod ffi {
                 input.set_time_zone_name_timestamp(zone_name_timestamp);
             }
             else {
-                #[allow(deprecated)] // clean up in 3.0
+                #[expect(deprecated)]
                 input.set_time_zone_name_timestamp(zone.id.with_offset(zone.offset).with_zone_name_timestamp(
                     icu_time::zone::ZoneNameTimestamp::from_date_time_iso(icu_time::DateTime {
                         date: iso_date.0,

@@ -136,7 +136,7 @@ impl Debug for TzZoneData<'_> {
 
         fn dbg_timestamp(f: &mut core::fmt::Formatter<'_>, t: i64) -> core::fmt::Result {
             #[cfg(feature = "chrono")]
-            #[allow(clippy::unwrap_used)] // in range for chrono
+            #[expect(clippy::unwrap_used, reason = "valid nanoseconds")]
             let t = chrono::DateTime::from_timestamp(t, 0).unwrap();
             write!(f, "{t:?}, ")
         }

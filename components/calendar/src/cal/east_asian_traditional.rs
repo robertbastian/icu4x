@@ -73,7 +73,7 @@ mod simple;
 /// As leap months are determined with respect to the solar year, this calendar stays anchored
 /// to the seasons.
 #[derive(Clone, Debug, Default, Copy, PartialEq, Eq, PartialOrd, Ord)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct EastAsianTraditional<R>(pub R);
 
 /// The rules for the [`EastAsianTraditional`] calendar.
@@ -864,8 +864,8 @@ impl EastAsianTraditionalYear {
         let mut month_lengths = [false; 13];
 
         let mut i = 0;
-        #[allow(clippy::indexing_slicing)]
-        while i < 12 + leap_month.is_some() as usize {
+        #[expect(clippy::indexing_slicing, reason = "const")]
+        while i < month_lengths.len() - leap_month.is_none() as usize {
             match month_starts[i + 1].to_i64_date() - month_starts[i].to_i64_date() {
                 29 => month_lengths[i] = false,
                 30 => month_lengths[i] = true,
@@ -1023,7 +1023,7 @@ impl PackedEastAsianTraditionalYearData {
 
         let mut month = 0;
         while month < month_lengths.len() {
-            #[allow(clippy::indexing_slicing)] // const iteration
+            #[expect(clippy::indexing_slicing, reason = "const")]
             if month_lengths[month] {
                 all |= 1 << month as u32;
             }
@@ -1286,7 +1286,7 @@ mod test {
                 ChineseTraditional::new(),
             )
             .unwrap();
-            #[allow(deprecated)] // should still test
+            #[expect(deprecated)]
             {
                 assert_eq!(
                     Date::try_new_chinese_with_calendar(

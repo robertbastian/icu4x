@@ -475,7 +475,7 @@ mod tests {
                 Ok(date)
             );
 
-            #[allow(deprecated)] // should still test
+            #[expect(deprecated)]
             {
                 assert_eq!(
                     Date::try_new_hebrew(

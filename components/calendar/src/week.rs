@@ -239,7 +239,7 @@ impl UnitInfo {
 
 /// The year or month that a calendar assigns a week to relative to the year/month that it is in.
 #[derive(Debug, PartialEq)]
-#[allow(clippy::exhaustive_enums)] // this type is stable
+#[expect(clippy::exhaustive_enums, reason = "stable")]
 pub(crate) enum RelativeUnit {
     /// A week that is assigned to previous year/month. e.g. 2021-01-01 is week 54 of 2020 per the ISO calendar.
     Previous,
@@ -251,7 +251,7 @@ pub(crate) enum RelativeUnit {
 
 /// The week number assigned to a given week according to a calendar.
 #[derive(Debug, PartialEq)]
-#[allow(clippy::exhaustive_structs)] // this type is stable
+#[expect(clippy::exhaustive_structs, reason = "stable")]
 pub(crate) struct WeekOf {
     /// Week of month/year. 1 based.
     pub week: u8,

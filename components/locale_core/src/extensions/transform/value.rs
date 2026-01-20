@@ -130,7 +130,13 @@ impl FromStr for Value {
     }
 }
 
-impl_writeable_for_each_subtag_str_no_test!(Value, selff, selff.0.is_empty() => Some("true"));
+impl_writeable_for_each_subtag_str_no_test!(
+    Value,
+    selff,
+    if selff.0.is_empty() {
+        return Some("true");
+    }
+);
 
 #[test]
 fn test_writeable() {

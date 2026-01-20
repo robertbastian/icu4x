@@ -115,7 +115,7 @@ pub mod adapters {
     /// A lossy wrapper for a [`TryWriteable`] that implements [`Writeable`]
     /// and ignores any errors.
     #[derive(Debug)]
-    #[allow(clippy::exhaustive_structs)] // newtype
+    #[expect(clippy::exhaustive_structs, reason = "newtype")]
     pub struct LossyWrap<T>(pub T);
 
     impl<T: TryWriteable> Writeable for LossyWrap<T> {

@@ -56,9 +56,9 @@ mod zone_name_timestamp;
 pub use offset::InvalidOffsetError;
 pub use offset::UtcOffset;
 pub use offset::VariantOffsets;
-#[allow(deprecated)]
+#[expect(deprecated)]
 pub use offset::VariantOffsetsCalculator;
-#[allow(deprecated)]
+#[expect(deprecated)]
 pub use offset::VariantOffsetsCalculatorBorrowed;
 
 #[doc(no_inline)]
@@ -128,9 +128,9 @@ pub mod models {
     )]
     pub struct Full;
 
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     impl private::Sealed for Full {}
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     impl TimeZoneModel for Full {
         type TimeZoneVariant = TimeZoneVariant;
         type ZoneNameTimestamp = ZoneNameTimestamp;
@@ -302,7 +302,7 @@ impl TimeZone {
     pub const fn with_offset(self, mut offset: Option<UtcOffset>) -> TimeZoneInfo<models::Base> {
         let mut id = self;
 
-        #[allow(clippy::identity_op, clippy::neg_multiply)]
+        #[expect(clippy::identity_op, clippy::neg_multiply, reason = "consistency")]
         let correct_offset = match self.0.as_str().as_bytes() {
             b"utc" | b"gmt" => Some(UtcOffset::zero()),
             b"utce01" => Some(UtcOffset::from_seconds_unchecked(1 * 60 * 60)),
@@ -432,7 +432,7 @@ impl TimeZoneInfo<models::AtTime> {
         since = "2.1.0",
         note = "creating a `TimeZoneInfo<Full>` is not required for formatting anymore"
     )]
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     pub const fn with_variant(self, variant: TimeZoneVariant) -> TimeZoneInfo<models::Full> {
         TimeZoneInfo {
             offset: self.offset,
@@ -498,7 +498,7 @@ impl TimeZoneInfo<models::AtTime> {
         since = "2.1.0",
         note = "creating a `TimeZoneInfo<Full>` is not required for formatting anymore"
     )]
-    #[allow(deprecated)]
+    #[expect(deprecated)]
     pub fn infer_variant(
         self,
         calculator: VariantOffsetsCalculatorBorrowed,

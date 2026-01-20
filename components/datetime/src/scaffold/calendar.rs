@@ -149,9 +149,9 @@ impl FormattableHijriRules for cal::hijri::UmmAlQura {
     type SkeletaV1 = DatetimePatternsDateHijriV1;
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl UnstableSealed for cal::hijri::AstronomicalSimulation {}
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl FormattableHijriRules for cal::hijri::AstronomicalSimulation {
     type YearNamesV1 = DatetimeNamesYearHijriV1;
     type MonthNamesV1 = DatetimeNamesMonthHijriV1;
@@ -239,14 +239,14 @@ where
 
 /// Implementation of [`CalMarkers`] that includes data for all calendars.
 #[derive(Debug)]
-#[allow(clippy::exhaustive_enums)] // empty enum
+#[expect(clippy::exhaustive_enums, reason = "uninhabited by design")]
 pub enum FullDataCalMarkers {}
 
 impl UnstableSealed for FullDataCalMarkers {}
 
 /// Implementation of [`CalMarkers`] that includes data for no calendars.
 #[derive(Debug)]
-#[allow(clippy::exhaustive_enums)] // empty enum
+#[expect(clippy::exhaustive_enums, reason = "uninhabited by design")]
 pub enum NoDataCalMarkers {}
 
 impl UnstableSealed for NoDataCalMarkers {}
@@ -284,7 +284,7 @@ impl IntoFormattableAnyCalendar for cal::Gregorian {}
 impl IntoFormattableAnyCalendar for cal::Hebrew {}
 impl IntoFormattableAnyCalendar for cal::Indian {}
 impl IntoFormattableAnyCalendar for cal::Hijri<cal::hijri::TabularAlgorithm> {}
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl IntoFormattableAnyCalendar for cal::Hijri<cal::hijri::AstronomicalSimulation> {}
 impl IntoFormattableAnyCalendar for cal::Hijri<cal::hijri::UmmAlQura> {}
 // _NOT_ Hijri<S>
@@ -331,7 +331,7 @@ impl FormattableAnyCalendarKind {
             HijriTabularTypeIIThursday => Self::HijriTabularTypeIIThursday,
             HijriUmmAlQura => Self::HijriUmmAlQura,
             Iso => return None,
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             Japanese | JapaneseExtended => Self::Japanese,
             Persian => Self::Persian,
             Roc => Self::Roc,

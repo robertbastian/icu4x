@@ -57,7 +57,7 @@ macro_rules! make_any_calendar {
                         ($variant(c1), $variant(c2)) => AnyCalendarable::identity(c1) == AnyCalendarable::identity(c2),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         ($deprecated_variant(c1), $deprecated_variant(c2)) => AnyCalendarable::identity(c1) == AnyCalendarable::identity(c2),
                     )*
                     _ => false,
@@ -116,7 +116,7 @@ macro_rules! make_any_calendar {
                         &Self::$variant(ref c) => $any_date_ident::$variant(c.from_codes(era, year, month_code, day)?, AnyCalendarable::identity(c)),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         &Self::$deprecated_variant(ref c) => $any_date_ident::$deprecated_variant(c.from_codes(era, year, month_code, day)?, AnyCalendarable::identity(c)),
                     )*
                 })
@@ -133,7 +133,7 @@ macro_rules! make_any_calendar {
                         &Self::$variant(ref c) => $any_date_ident::$variant(c.from_fields(fields, options)?, AnyCalendarable::identity(c)),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         &Self::$deprecated_variant(ref c) => $any_date_ident::$deprecated_variant(c.from_fields(fields, options)?, AnyCalendarable::identity(c)),
                     )*
                 })
@@ -145,7 +145,7 @@ macro_rules! make_any_calendar {
                         Self::$variant(ref c) => c.has_cheap_iso_conversion(),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         Self::$deprecated_variant(ref c) => c.has_cheap_iso_conversion(),
                     )*
                 }
@@ -157,7 +157,7 @@ macro_rules! make_any_calendar {
                         &Self::$variant(ref c) => $any_date_ident::$variant(c.from_iso(iso), AnyCalendarable::identity(c)),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         &Self::$deprecated_variant(ref c) => $any_date_ident::$deprecated_variant(c.from_iso(iso), AnyCalendarable::identity(c)),
                     )*
                 }
@@ -169,7 +169,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.to_iso(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.to_iso(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -183,7 +183,7 @@ macro_rules! make_any_calendar {
                         &Self::$variant(ref c) => $any_date_ident::$variant(c.from_rata_die(rd), AnyCalendarable::identity(c)),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         &Self::$deprecated_variant(ref c) => $any_date_ident::$deprecated_variant(c.from_rata_die(rd), AnyCalendarable::identity(c)),
                     )*
                 }
@@ -195,7 +195,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.to_rata_die(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.to_rata_die(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -209,7 +209,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.months_in_year(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.months_in_year(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -223,7 +223,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.days_in_year(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.days_in_year(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -237,7 +237,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.days_in_month(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.days_in_month(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -251,7 +251,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.year_info(&d).into(),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.year_info(&d).into(),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -266,7 +266,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.is_in_leap_year(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.is_in_leap_year(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -281,7 +281,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.month(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.month(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -296,7 +296,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.day_of_month(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.day_of_month(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -311,7 +311,7 @@ macro_rules! make_any_calendar {
                         (&Self::$variant(ref c), &$any_date_ident::$variant(d, q)) if AnyCalendarable::identity(c) == q => c.day_of_year(&d),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), &$any_date_ident::$deprecated_variant(d, q)) if AnyCalendarable::identity(c) == q => c.day_of_year(&d),
                     )*
                     // This is only reached from misuse of from_raw, a semi-internal api
@@ -334,7 +334,7 @@ macro_rules! make_any_calendar {
                         },
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (&Self::$deprecated_variant(ref c), $any_date_ident::$deprecated_variant(ref mut d, q)) if AnyCalendarable::identity(c) == *q => {
                             *d = c.add(d, duration, options)?;
                         },
@@ -359,7 +359,7 @@ macro_rules! make_any_calendar {
                         }
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         (Self::$deprecated_variant(ref c1), $any_date_ident::$deprecated_variant(d1, q1), $any_date_ident::$deprecated_variant(d2, q2)) if AnyCalendarable::identity(c1) == *q1 && q1 == q2 => {
                             c1.until(d1, d2, options)
                         }
@@ -377,7 +377,7 @@ macro_rules! make_any_calendar {
                         &Self::$variant(_) => concat!(stringify!($any_calendar_ident), " (", stringify!($variant), ")"),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         &Self::$deprecated_variant(_) => concat!(stringify!($any_calendar_ident), " (", stringify!($deprecated_variant), ")"),
                     )*
                 }
@@ -389,7 +389,7 @@ macro_rules! make_any_calendar {
                         Self::$variant(ref c) => c.calendar_algorithm(),
                     )+
                     $(
-                        #[allow(deprecated)]
+                        #[expect(deprecated)]
                         Self::$deprecated_variant(ref c) => c.calendar_algorithm(),
                     )*
                 }
@@ -562,7 +562,7 @@ impl AnyCalendar {
             }
             AnyCalendarKind::Gregorian => AnyCalendar::Gregorian(Gregorian),
             AnyCalendarKind::Hebrew => AnyCalendar::Hebrew(Hebrew),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::HijriSimulatedMecca => {
                 AnyCalendar::HijriSimulated(Hijri::new_simulated_mecca())
             }
@@ -583,7 +583,7 @@ impl AnyCalendar {
             }
             AnyCalendarKind::Indian => AnyCalendar::Indian(Indian),
             AnyCalendarKind::Iso => AnyCalendar::Iso(Iso),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::Japanese | AnyCalendarKind::JapaneseExtended => {
                 AnyCalendar::Japanese(Japanese::new())
             }
@@ -614,7 +614,7 @@ impl AnyCalendar {
             }
             AnyCalendarKind::Gregorian => AnyCalendar::Gregorian(Gregorian),
             AnyCalendarKind::Hebrew => AnyCalendar::Hebrew(Hebrew),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::HijriSimulatedMecca => {
                 AnyCalendar::HijriSimulated(Hijri::new_simulated_mecca())
             }
@@ -635,7 +635,7 @@ impl AnyCalendar {
             }
             AnyCalendarKind::Indian => AnyCalendar::Indian(Indian),
             AnyCalendarKind::Iso => AnyCalendar::Iso(Iso),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::Japanese | AnyCalendarKind::JapaneseExtended => {
                 AnyCalendar::Japanese(Japanese::try_new_with_buffer_provider(provider)?)
             }
@@ -668,7 +668,7 @@ impl AnyCalendar {
                     hijri::TabularAlgorithmEpoch::Friday,
                 ))
             }
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::HijriSimulatedMecca => {
                 AnyCalendar::HijriSimulated(Hijri::new_simulated_mecca())
             }
@@ -683,7 +683,7 @@ impl AnyCalendar {
             }
             AnyCalendarKind::Indian => AnyCalendar::Indian(Indian),
             AnyCalendarKind::Iso => AnyCalendar::Iso(Iso),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::Japanese | AnyCalendarKind::JapaneseExtended => {
                 AnyCalendar::Japanese(Japanese::try_new_unstable(provider)?)
             }
@@ -715,7 +715,7 @@ impl AnyCalendar {
                     hijri::TabularAlgorithmEpoch::Friday,
                 ))
             }
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::HijriSimulatedMecca => {
                 AnyCalendar::HijriSimulated(Hijri::new_simulated_mecca())
             }
@@ -730,7 +730,7 @@ impl AnyCalendar {
             }
             AnyCalendarKind::Indian => AnyCalendar::Indian(Indian),
             AnyCalendarKind::Iso => AnyCalendar::Iso(Iso),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             AnyCalendarKind::Japanese | AnyCalendarKind::JapaneseExtended => {
                 AnyCalendar::Japanese(Japanese::default())
             }
@@ -749,13 +749,13 @@ impl AnyCalendar {
             Self::Ethiopian(ref c) => IntoAnyCalendar::kind(c),
             Self::Gregorian(ref c) => IntoAnyCalendar::kind(c),
             Self::Hebrew(ref c) => IntoAnyCalendar::kind(c),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             Self::HijriSimulated(ref c) => IntoAnyCalendar::kind(c),
             Self::HijriTabular(ref c) => IntoAnyCalendar::kind(c),
             Self::HijriUmmAlQura(ref c) => IntoAnyCalendar::kind(c),
             Self::Indian(ref c) => IntoAnyCalendar::kind(c),
             Self::Iso(ref c) => IntoAnyCalendar::kind(c),
-            #[allow(deprecated)]
+            #[expect(deprecated)]
             Self::Japanese(ref c) | Self::JapaneseExtended(ref c) => IntoAnyCalendar::kind(c),
             Self::Persian(ref c) => IntoAnyCalendar::kind(c),
             Self::Roc(ref c) => IntoAnyCalendar::kind(c),
@@ -944,7 +944,7 @@ impl AnyCalendarable for Hebrew {
 
     fn identity(&self) -> Self::Identity {}
 }
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl AnyCalendarable for Hijri<hijri::AstronomicalSimulation> {
     type Identity = hijri::AstronomicalSimulation;
 
@@ -1260,7 +1260,7 @@ impl IntoAnyCalendar for Hijri<hijri::TabularAlgorithm> {
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl IntoAnyCalendar for Hijri<hijri::AstronomicalSimulation> {
     #[inline]
     fn to_any(self) -> AnyCalendar {

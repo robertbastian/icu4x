@@ -346,9 +346,9 @@ impl DataExporter for StatisticsExporter {
 
         // We're using SipHash, which is deprecated, but we want a stable hasher
         // (we're fine with it not being cryptographically secure since we're just using it to track diffs)
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         use std::hash::{Hasher, SipHasher};
-        #[allow(deprecated)]
+        #[expect(deprecated)]
         let mut hasher = SipHasher::new();
         let postcard_size = payload.hash_and_postcard_size(&mut hasher);
         let hash = hasher.finish();

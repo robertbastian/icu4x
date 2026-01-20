@@ -78,7 +78,7 @@ mod ummalqura_data;
 /// As a lunar calendar, this calendar does not intend to follow the solar year, and drifts more
 /// than 10 days per year with respect to the seasons.
 #[derive(Clone, Debug, Default, Copy)]
-#[allow(clippy::exhaustive_structs)] // newtype
+#[expect(clippy::exhaustive_structs, reason = "newtype")]
 pub struct Hijri<S>(pub S);
 
 /// Defines a variant of the [`Hijri`] calendar.
@@ -166,9 +166,9 @@ pub trait Rules: Clone + Debug + crate::cal::scaffold::UnstableSealed {
 #[deprecated(since = "2.2.0", note = "use `UmmAlQura`")]
 pub struct AstronomicalSimulation;
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl crate::cal::scaffold::UnstableSealed for AstronomicalSimulation {}
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl Rules for AstronomicalSimulation {
     fn debug_name(&self) -> &'static str {
         "Hijri (simulated, Mecca)"
@@ -367,7 +367,7 @@ impl Rules for TabularAlgorithm {
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl Hijri<AstronomicalSimulation> {
     /// Use [`Self::new_simulated_mecca`].
     #[cfg(feature = "compiled_data")]
@@ -495,8 +495,8 @@ impl HijriYear {
         let mut month_lengths = [false; 12];
 
         let mut i = 0;
-        #[allow(clippy::indexing_slicing)]
-        while i < 12 {
+        #[expect(clippy::indexing_slicing, reason = "const")]
+        while i < month_lengths.len() {
             match month_starts[i + 1].to_i64_date() - month_starts[i].to_i64_date() {
                 29 => month_lengths[i] = false,
                 30 => month_lengths[i] = true,
@@ -703,7 +703,7 @@ impl PackWithMD for HijriYear {
     }
 }
 
-#[allow(deprecated)]
+#[expect(deprecated)]
 impl<A: AsCalendar<Calendar = Hijri<AstronomicalSimulation>>> Date<A> {
     /// Deprecated
     #[deprecated(since = "2.1.0", note = "use `Date::try_new_hijri_with_calendar`")]
@@ -780,7 +780,7 @@ fn computer_reference_years() {
     }
 }
 
-#[allow(clippy::derived_hash_with_manual_eq)] // bounds
+#[expect(clippy::derived_hash_with_manual_eq, reason = "bounds")]
 #[derive(Clone, Debug, Hash)]
 /// The inner date type used for representing [`Date`]s of [`Hijri`]. See [`Date`] and [`Hijri`] for more details.
 pub struct HijriDateInner<R: Rules>(ArithmeticDate<Hijri<R>>);
