@@ -335,11 +335,11 @@ pub mod ffi {
             iso_month: u8,
             iso_day: u8,
             calendar: &Calendar,
-        ) -> Result<Box<Date>, CalendarError> {
+        ) -> Result<Date, CalendarError> {
             let cal = calendar.0.clone();
-            Ok(Box::new(Date(
+            Ok(Date(
                 icu_calendar::Date::try_new_iso(iso_year, iso_month, iso_day)?.to_calendar(cal),
-            )))
+            ))
         }
 
         /// Creates a new [`Date`] from the given fields, which are interpreted in the given calendar system.
@@ -682,6 +682,56 @@ impl<'a> From<ffi::DateFields<'a>> for icu_calendar::types::DateFields<'a> {
 
         fields
     }
+}
+
+// A struct that has the same size, align, and padding as `ffi::Date`. 
+#[repr(C)]
+pub struct AbiDate([u8; 16]);
+const _: () = assert!(size_of::<ffi::Date>() == size_of::<AbiDate>());
+const _: () = assert!(align_of::<ffi::Date>() == align_of::<AbiDate>());
+impl From<ffi::Date> for AbiDate {
+    fn from(value: ffi::Date) -> Self {
+        unsafe { core::mem::transmute::<ffi::Date, AbiDate>(value) }
+    }
+}
+impl From<AbiDate> for ffi::Date {
+    fn from(value: AbiDate) -> Self {
+        unsafe { core::mem::transmute::<AbiDate, ffi::Date>(value) }
+    }
+}
+impl core::ops::Deref for AbiDate {
+    type Target = ffi::Date;
+
+    fn deref(&self) -> &Self::Target {
+        unsafe { &*(self as *const Self as *const ffi::Date) }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn icu4x_Date_from_iso_in_calendar_mv2(
+    year: i32,
+    month: u8,
+    day: u8,
+    calendar: &super::calendar::ffi::Calendar,
+) -> diplomat_runtime::DiplomatResult<AbiDate, super::errors::ffi::CalendarError> {
+    ffi::Date::from_iso_in_calendar(year, month, day, calendar)
+        .map(Into::into)
+        .into()
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn icu4x_Date_era_year_or_related_iso_mv2(date: AbiDate) -> i32 {
+    date.era_year_or_related_iso()
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn icu4x_Date_month_number_mv2(date: AbiDate) -> u8 {
+    date.month_number()
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn icu4x_Date_day_of_month_mv2(date: AbiDate) -> u8 {
+    date.day_of_month()
 }
 
 impl From<icu_calendar::types::DateDuration> for ffi::DateDuration {

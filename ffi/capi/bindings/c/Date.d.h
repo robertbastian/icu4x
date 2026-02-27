@@ -11,7 +11,7 @@
 
 
 
-typedef struct Date Date;
+typedef struct Date { uint8_t bytes[16]; } Date;
 
 
 
