@@ -39,24 +39,30 @@ macro_rules! make_any_calendar {
 
         $(#[$any_date_meta])*
         #[doc = concat!("The inner date type for [`", stringify!($any_calendar_ident), "`]")]
-        #[derive(Clone, PartialEq, Eq, Debug, Copy)]
-        #[allow(deprecated)]
-        pub enum $any_date_ident {
+        #[derive(Clone, Copy, Eq)]
+        #[allow(deprecated, non_snake_case)]
+        pub union $any_date_ident {
             $(
                 #[doc = concat!("A date for a [`", stringify!($variant), "`] calendar")]
-                $variant(<$ty as $crate::Calendar>::DateInner),
+                $variant: <$ty as $crate::Calendar>::DateInner,
             )+
         }
 
         impl PartialOrd for $any_date_ident {
-            fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
-                use $any_date_ident::*;
-                match (self, other) {
-                    $(
-                        ($variant(d1), $variant(d2)) => d1.partial_cmp(d2),
-                    )+
-                    _ => None,
-                }
+            fn partial_cmp(&self, _: &Self) -> Option<core::cmp::Ordering> {
+                None
+            }
+        }
+
+        impl PartialEq for $any_date_ident {
+            fn eq(&self, _: &Self) -> bool {
+                false
+            }
+        }
+
+        impl core::fmt::Debug for $any_date_ident {
+            fn fmt(&self, _f: &mut core::fmt::Formatter) -> core::fmt::Result {
+                Ok(())
             }
         }
 
@@ -75,7 +81,7 @@ macro_rules! make_any_calendar {
             ) -> Result<Self::DateInner, $crate::error::DateNewError> {
                 Ok(match self {
                     $(
-                        &Self::$variant(c) => $any_date_ident::$variant(c.new_date(year, month, day)?),
+                        &Self::$variant(c) => $any_date_ident { $variant: c.new_date(year, month, day)? },
                     )+
                 })
             }
@@ -87,7 +93,7 @@ macro_rules! make_any_calendar {
             ) -> Result<Self::DateInner, $crate::error::DateFromFieldsError> {
                 Ok(match self {
                     $(
-                        &Self::$variant(c) => $any_date_ident::$variant(c.from_fields(fields, options)?),
+                        &Self::$variant(c) => $any_date_ident { $variant: c.from_fields(fields, options)? },
                     )+
                 })
             }
@@ -103,120 +109,100 @@ macro_rules! make_any_calendar {
             fn from_iso(&self, iso: <$crate::Iso as $crate::Calendar>::DateInner) -> Self::DateInner {
                 match self {
                     $(
-                        &Self::$variant(c) => $any_date_ident::$variant(c.from_iso(iso)),
+                        &Self::$variant(c) => $any_date_ident { $variant: c.from_iso(iso) } ,
                     )+
                 }
             }
 
             fn to_iso(&self, date: &Self::DateInner) -> <$crate::Iso as $crate::Calendar>::DateInner {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.to_iso(&d),
+                        &Self::$variant(c) => c.to_iso(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             fn from_rata_die(&self, rd: $crate::types::RataDie) -> Self::DateInner {
                 match self {
                     $(
-                        &Self::$variant(c) => $any_date_ident::$variant(c.from_rata_die(rd)),
+                        &Self::$variant(c) => $any_date_ident { $variant: c.from_rata_die(rd) },
                     )+
                 }
             }
 
             fn to_rata_die(&self, date: &Self::DateInner) -> $crate::types::RataDie {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.to_rata_die(&d),
+                        &Self::$variant(c) => c.to_rata_die(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             fn months_in_year(&self, date: &Self::DateInner) -> u8 {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.months_in_year(&d),
+                        &Self::$variant(c) => c.months_in_year(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             fn days_in_year(&self, date: &Self::DateInner) -> u16 {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.days_in_year(&d),
+                        &Self::$variant(c) => c.days_in_year(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             fn days_in_month(&self, date: &Self::DateInner) -> u8 {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.days_in_month(&d),
+                        &Self::$variant(c) => c.days_in_month(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             fn year_info(&self, date: &Self::DateInner) -> $crate::types::YearInfo {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.year_info(&d).into(),
+                        &Self::$variant(c) => c.year_info(&unsafe { date.$variant }).into(),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             /// The calendar-specific check if `date` is in a leap year
             fn is_in_leap_year(&self, date: &Self::DateInner) -> bool {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.is_in_leap_year(&d),
+                        &Self::$variant(c) => c.is_in_leap_year(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             /// The calendar-specific month represented by `date`
             fn month(&self, date: &Self::DateInner) -> $crate::types::MonthInfo {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.month(&d),
+                        &Self::$variant(c) => c.month(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             /// The calendar-specific day-of-month represented by `date`
             fn day_of_month(&self, date: &Self::DateInner) -> $crate::types::DayOfMonth {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.day_of_month(&d),
+                        &Self::$variant(c) => c.day_of_month(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
             /// Information of the day of the year
             fn day_of_year(&self, date: &Self::DateInner) -> $crate::types::DayOfYear {
-                match (self, date) {
+                match self {
                     $(
-                        (&Self::$variant(c), &$any_date_ident::$variant(d)) => c.day_of_year(&d),
+                        &Self::$variant(c) => c.day_of_year(&unsafe { date.$variant }),
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
@@ -227,14 +213,12 @@ macro_rules! make_any_calendar {
                 options: $crate::options::DateAddOptions,
             ) -> Result<Self::DateInner, $crate::error::DateAddError> {
                 let mut date = *date;
-                match (self, &mut date) {
+                match self {
                     $(
-                        (&Self::$variant(c), $any_date_ident::$variant(d)) => {
-                            *d = c.add(d, duration, options)?;
+                        &Self::$variant(ref c) => {
+                            date.$variant = c.add(&unsafe { date.$variant }, duration, options)?;
                         },
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
                 Ok(date)
             }
@@ -245,14 +229,12 @@ macro_rules! make_any_calendar {
                 date2: &Self::DateInner,
                 options: $crate::options::DateDifferenceOptions,
             ) -> $crate::types::DateDuration {
-                match (self, date1, date2) {
+                match self {
                     $(
-                        (Self::$variant(c), $any_date_ident::$variant(d1), $any_date_ident::$variant(d2)) => {
-                            c.until(d1, d2, options)
+                        Self::$variant(c) => {
+                            c.until(&unsafe { date1.$variant }, &unsafe { date2.$variant }, options)
                         }
                     )+
-                    // This is only reached from misuse of from_raw, a semi-internal api
-                    _ => panic!(concat!(stringify!($any_calendar_ident), " with mismatched date type")),
                 }
             }
 
@@ -318,7 +300,7 @@ macro_rules! make_any_calendar_impls {
                 }
                 #[inline]
                 fn date_to_any(&self, d: &Self::DateInner) -> AnyDateInner {
-                    AnyDateInner::$variant(*d)
+                    AnyDateInner { $variant: *d }
                 }
             }
         )+
@@ -384,7 +366,6 @@ make_any_calendar!(
     #[non_exhaustive]
     AnyCalendar,
 
-    #[non_exhaustive]
     AnyDateInner,
 
     Buddhist(Buddhist),
