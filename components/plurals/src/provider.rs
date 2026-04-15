@@ -25,14 +25,14 @@ use core::marker::PhantomData;
 use icu_provider::prelude::*;
 use yoke::Yokeable;
 use zerofrom::ZeroFrom;
-use zerovec::ule::vartuple::VarTuple;
-use zerovec::ule::vartuple::VarTupleULE;
+use zerovec::VarZeroSlice;
 use zerovec::ule::AsULE;
 use zerovec::ule::EncodeAsVarULE;
+use zerovec::ule::ULE;
 use zerovec::ule::UleError;
 use zerovec::ule::VarULE;
-use zerovec::ule::ULE;
-use zerovec::VarZeroSlice;
+use zerovec::ule::vartuple::VarTuple;
+use zerovec::ule::vartuple::VarTupleULE;
 
 pub mod rules;
 
@@ -464,9 +464,7 @@ where
 
     unsafe fn from_bytes_unchecked(bytes: &[u8]) -> &Self {
         // Safety: the bytes are valid by trait invariant, and we are transparent over bytes
-        unsafe {
-            &*(bytes as *const [u8] as *const Self)
-        }
+        unsafe { &*(bytes as *const [u8] as *const Self) }
     }
 }
 
@@ -481,9 +479,7 @@ where
     /// The bytes must be valid according to [`PluralElementsPackedULE::validate_bytes`].
     pub const unsafe fn from_bytes_unchecked(bytes: &[u8]) -> &Self {
         // Safety: the bytes are valid by trait invariant, and we are transparent over bytes
-        unsafe {
-            &*(bytes as *const [u8] as *const Self)
-        }
+        unsafe { &*(bytes as *const [u8] as *const Self) }
     }
 
     /// Returns a tuple with:
@@ -641,11 +637,7 @@ pub struct FourBitMetadata(u8);
 impl FourBitMetadata {
     /// Creates a [`FourBitMetadata`] if the given value fits in 4 bits.
     pub fn try_from_byte(byte: u8) -> Option<Self> {
-        if byte <= 0x0F {
-            Some(Self(byte))
-        } else {
-            None
-        }
+        if byte <= 0x0F { Some(Self(byte)) } else { None }
     }
 
     /// Creates a [`FourBitMetadata`] with a zero value.
