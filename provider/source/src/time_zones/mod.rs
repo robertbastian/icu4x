@@ -16,6 +16,7 @@ use icu::time::zone::UtcOffset;
 use icu::time::zone::VariantOffsets;
 use icu_locale_core::subtags::Region;
 use icu_provider::prelude::*;
+use icu_time::ZonedDateTime;
 use itertools::Itertools;
 use litemap::LiteMap;
 use std::collections::BTreeMap;
@@ -24,7 +25,7 @@ use std::collections::HashSet;
 use std::sync::OnceLock;
 use twox_hash::XxHash64;
 
-pub(crate) type Timestamp = icu::time::ZonedDateTime<icu::calendar::Iso, UtcOffset>;
+pub(crate) type Timestamp = ZonedDateTime<icu::calendar::Iso, UtcOffset>;
 
 mod convert;
 mod names;
@@ -40,7 +41,7 @@ pub(crate) struct Caches {
     metazones: Cache<MetazoneData>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct MetazoneData {
     periods: BTreeMap<TimeZone, Vec<(Timestamp, VariantOffsets, Option<MetazoneInfo>)>>,
     reverse: BTreeMap<(MetazoneId, MzMembership), Vec<TimeZone>>,
@@ -145,13 +146,7 @@ impl SourceDataProvider {
                             if i + 1 < periods.len() && periods[i].0 == periods[i + 1].0 {
                                 // The next period starts at the same time
                                 periods.remove(i);
-                            } else if i + 1 < periods.len() && periods[i + 1].0 <= self.timezone_horizon {
-                                // The next period still starts before the horizon.
-                                // Keep the period, but don't add the metazone to allMetazones, so that
-                                // it's only included if it's also used after the horizon.
-                                i += 1;
                             } else {
-                                all_metazones.extend(periods[i].1.and_then(|m| m.mzone.as_ref()));
                                 i += 1;
                             }
                         }
@@ -257,79 +252,122 @@ impl SourceDataProvider {
                     }
                 }
 
-                let collapsed_offsets_and_metazones = offsets_and_metazones.iter().map(|(&tz, ps)| {
-                    let mut ps = ps.clone();
-                    ps.dedup_by(|(_, oa, mza), (_, ob, mzb)| {
-                        if oa.standard != ob.standard {
-                            return false;
+                let annotated_offsets_and_metazones = offsets_and_metazones.iter().map(|(&tz, ps)| {
+                    let mut out = vec![];
+
+                    for i in 0..ps.len() {
+                        let (t, os, mz) = ps[i]; 
+
+                        let Some(mz) = mz else {
+                            out.push((t, os, None));
+                            continue;
+                        };
+
+                        let goldens = &offsets_and_metazones[&goldens[mz]];
+
+                        let mut mz_status = MetazoneMembershipKind::BehavesLikeGolden;
+
+                        let golden_i = goldens
+                            .iter()
+                            // Give some leeway if the transition happens within 12 hours of the golden transition
+                            .position(|&(ts, ..)| (ts - t).abs() < 12 * 60 * 60)
+                            .unwrap_or_else(|| {
+                                mz_status = MetazoneMembershipKind::CustomTransitions;
+                                goldens.iter().rposition(|&(ts, ..)| ts < t).unwrap()
+                            });
+
+                        let golden_os = goldens[golden_i].1;
+
+                        if golden_os != os {
+                            mz_status = MetazoneMembershipKind::CustomVariants
+                        };
+
+                        let max = ZonedDateTime::from_epoch_milliseconds_and_utc_offset(i64::MAX - 50 * 60 * 60 * 1000, Default::default());
+                        let next_golden_transition = goldens
+                            .get(golden_i+1)
+                            .map(|&(t, ..)| t)
+                            .unwrap_or(max);
+                        let next_transition = ps
+                            .get(i+1)
+                            .map(|&(t, ..)| t)
+                            .unwrap_or(max);
+
+                        if (next_golden_transition - next_transition).abs() < 12 * 60 * 60 * 1000 {
+                            out.push((t, os, Some((mz, mz_status))));
+                        } else if next_golden_transition < next_transition {
+                            // the next golden transition is (significantly) before our next transition
+                            // behaves like golden until the next golden transition
+                            out.push((next_golden_transition, os, Some((mz, mz_status))));
+                            // then has a custom transition
+                            out.push((t, os, Some((mz, MetazoneMembershipKind::CustomTransitions))));
+                        } else if next_golden_transition > next_transition {
+                            out.push((t, os, Some((mz, MetazoneMembershipKind::BehavesLikeGolden))));
+                            out.push((next_golden_transition, os, Some((mz, MetazoneMembershipKind::BehavesLikeGolden))));
+                        } else {
+                            out.push((t, os, Some((mz, MetazoneMembershipKind::BehavesLikeGolden))));
                         }
-                        if mza != mzb {
-                            return false;
-                        }
-                        match (oa.daylight, ob.daylight) {
-                            (None, None) => true,
-                            (Some(a), Some(b)) => a == b,
-                            // It's fine if one period doesn't use DST,
-                            (Some(a), None) => {
-                                ob.daylight = Some(a);
-                                true
-                            }
-                            (None, Some(b)) => {
-                                oa.daylight = Some(b);
-                                true
-                            }
-                        }
-                    });
-
-                    (tz, ps)
-                })
-                .collect::<BTreeMap<_, _>>();
 
 
-                let collapsed_and_annotated_offsets_and_metazones = collapsed_offsets_and_metazones.iter().map(|(&tz, ps)| {
-                    (
-                        tz,
-                        ps.iter().map(|&(t, os, mz)| {
-                            let mz = if let Some(mz) = mz {
-                                let golden = goldens[mz];
-                                let golden_os = collapsed_offsets_and_metazones[&golden]
-                                    .iter()
-                                    .rev()
-                                    .find(|&&(ts, _, _)| ts <= t)
-                                    .unwrap()
-                                    .1;
+                        // i += 1;
+                        
+                        // // while the zone is in the metazone
+                        // while ps.get(i).is_some_and(|(_, _, m)| m == Some(mz)) {
+                        //     let golden_i = goldens
+                        //     .iter()
+                        //     // Give some leeway if the transition happens within 12 hours of the golden transition
+                        //     .position(|&&(ts, ..)| (ts - t).abs() < 12 * 60 * 60 * 1000)
+                        //     .unwrap_or_else(|| {
+                        //         mz_status = MetazoneMembershipKind::CustomTransitions;
+                        //         goldens.iter().rposition(|&(ts, ..)| ts < t).unwrap()
+                        //     });
+                        // }
 
-                                if (Some(os.standard) != os.daylight && golden_os.standard != os.standard)
-                                    || (Some(os.standard) == os.daylight && golden_os.daylight != os.daylight)
-                                {
-                                    log::warn!("Offsets don't agree with metazone golden: {tz:?} - {golden:?}");
-                                }
 
-                                let kind = if os.daylight.is_some() && golden_os.daylight.is_none() {
-                                    MetazoneMembershipKind::CustomVariants
-                                } else if Some(os.standard) == os.daylight {
-                                    // Permanent daylight time
-                                    MetazoneMembershipKind::CustomTransitions
-                                } else if os.daylight.is_none() && golden_os.daylight.is_some() {
-                                    // TODO: detect custom transitions
-                                    MetazoneMembershipKind::BehavesLikeGolden
-                                } else {
-                                    MetazoneMembershipKind::BehavesLikeGolden
-                                };
+                        // if let Some(&(_, golden_os, _)) =  {
 
-                                Some((mz, kind))
-                            } else {
-                                None
-                            };
+                        //     if (Some(os.standard) != os.daylight && golden_os.standard != os.standard)
+                        //         || (Some(os.standard) == os.daylight && golden_os.daylight != os.daylight)
+                        //     {
+                        //         log::warn!("Offsets don't agree with metazone golden: {tz:?} - {goldens:?}");
+                        //     }
 
-                            (t, os, mz)
-                        }).collect::<Vec<_>>()
-                    )
+                        //     if os.daylight.is_some() && golden_os.daylight.is_none() {
+                        //         // We have DST, but the golden zone does not
+                        //         out.push((t, os, Some((mz, MetazoneMembershipKind::CustomVariants))));
+                        //     } else if os.daylight.is_none() && golden_os.daylight.is_some() || Some(os.standard) == os.daylight {
+                        //         // The golden has DST but we do not
+                        //         out.push((t, os, Some((mz, MetazoneMembershipKind::CustomTransitions))));
+                        //     } else {
+                        //         unreachable!("{tz:?} {os:?} {golden_os:?}");
+                        //     }
+                        // } else {
+                        //         // There is no golden transition within 12 hours of our transition
+                        //         let golden_offsets = goldens
+                        //             .iter()
+                        //             .rfind(|&&(ts, _, _)| ts < t).unwrap().2;
+
+                        //         if os.daylight.is_some() && golden_os.daylight.is_none() {
+                        //             // We have DST, but the golden zone does not
+                        //             out.push((t, os, Some((mz, MetazoneMembershipKind::CustomVariants))));
+                        //         } else if os.daylight.is_none() && golden_os.daylight.is_some() || Some(os.standard) == os.daylight {
+                        //             // The golden has DST but we do not
+                        //             unreachable!("this means we transition from DST but the golden doesn't {tz:?}")
+                        //         } else {
+                        //             unreachable!("{tz:?} {os:?} {golden_os:?}");
+                        //         }
+
+
+                                
+                        //     }
+
+                        // }
+                    }
+                    (tz, out)
                 }).collect::<BTreeMap<_, _>>();
 
                 let mut reverse = BTreeMap::<(&str, MzMembership), Vec<TimeZone>>::new();
                 for &tz in goldens.values().chain(offsets_and_metazones.keys()) {
-                    let mut ps = offsets_and_metazones[&tz].iter().copied().peekable();
+                    let mut ps = annotated_offsets_and_metazones[&tz].iter().copied().peekable();
 
                     let mut curr = ps.next().unwrap();
                     let mut uses_dst = false;
@@ -346,7 +384,7 @@ impl SourceDataProvider {
 
                         if ps.peek().is_none_or(|&(_, _, next_mz)| next_mz != curr.2) {
                             // End of metazone period. Record usage
-                            if let Some(curr_mz) = curr.2 {
+                            if let Some((curr_mz, MetazoneMembershipKind::BehavesLikeGolden)) = curr.2 {
                                 uses_dst = uses_dst && (
                                     goldens[&curr_mz] == tz ||
                                     // Only record DST usage if we are a golden zone, or if our golden zone has ever
@@ -358,6 +396,9 @@ impl SourceDataProvider {
                                     .entry((curr_mz, if uses_dst { MzMembership::StandardAndDaylight } else { MzMembership::StandardOnly }))
                                     .or_default()
                                     .push(tz);
+                                if ps.peek().is_none_or(|&(next_start, ..)| next_start > self.timezone_horizon) {
+                                    all_metazones.insert(curr_mz);
+                                }
                             }
                             uses_dst = false;
                         }
@@ -385,7 +426,7 @@ impl SourceDataProvider {
                 let hash = hash.finish();
 
                 Ok(MetazoneData {
-                    periods: collapsed_and_annotated_offsets_and_metazones
+                    periods: annotated_offsets_and_metazones
                         .into_iter()
                         .map(|(tz, ps)| {
                             let mut ps = ps.into_iter()
@@ -398,7 +439,48 @@ impl SourceDataProvider {
                                 )))
                                 .collect::<Vec<_>>();
 
-                            ps.dedup_by_key(|&mut (_, os, mz)| (os, mz));
+                            // // First pass: make custom DST collapsible
+                            // let mut i = 1;
+                            // while i < ps.len() - 1{
+                            //     let (_, oa, mza) = ps[i-1];
+                            //     let (_, oc, mzc) = ps[i+1];
+                            //     let (_, ob, mzb) = &mut ps[i];
+
+                            //     let (Some(mza), Some(mzb), Some(mzc)) = (mza, mzb, mzc) else {
+                            //         i+=1;
+                            //         continue;
+                            //     };
+
+                            //     if mza.id == mzb.id && mzb.id == mzc.id && oa.standard == ob.standard && ob.standard == oc.standard
+                            //         && oa.daylight.is_some() && ob.daylight.is_none() && oc.daylight == oa.daylight
+                            //         && mza.kind == MetazoneMembershipKind::CustomVariants && mzb.kind == MetazoneMembershipKind::BehavesLikeGolden && mzc.kind == MetazoneMembershipKind::CustomVariants {
+                            //             // STD period between custom DST periods. Also mark the STD period as Custom so that it will collapse
+                            //             mzb.kind = MetazoneMembershipKind::CustomVariants;
+                            //         }
+                            //     i += 1;
+                            // }
+
+                            // ps.dedup_by(|(_, oa, mza), (_, ob, mzb)| {
+                            //     if oa.standard != ob.standard {
+                            //         return false;
+                            //     }
+                            //     if mza != mzb {
+                            //         return false;
+                            //     }
+                            //     match (oa.daylight, ob.daylight) {
+                            //         (None, None) => true,
+                            //         (Some(a), Some(b)) => a == b,
+                            //         // It's fine if one period doesn't use DST,
+                            //         (Some(a), None) => {
+                            //             ob.daylight = Some(a);
+                            //             true
+                            //         }
+                            //         (None, Some(b)) => {
+                            //             oa.daylight = Some(b);
+                            //             true
+                            //         }
+                            //     }
+                            // });
 
                             (tz, ps)
                         })

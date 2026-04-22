@@ -2,6 +2,8 @@
 // called LICENSE at the top level of the ICU4X source tree
 // (online at: https://github.com/unicode-org/icu4x/blob/main/LICENSE ).
 
+use core::ops::Sub;
+
 use icu_calendar::{types::RataDie, AsCalendar, Date, Iso, RangeError};
 
 use crate::zone::UtcOffset;
@@ -365,6 +367,18 @@ where
 {
     fn partial_cmp(&self, other: &ZonedDateTime<A, UtcOffset>) -> Option<core::cmp::Ordering> {
         Some(self.cmp(other))
+    }
+}
+
+impl Sub for ZonedDateTime<Iso, UtcOffset> {
+    type Output = i64;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        self.date.to_rata_die().since(rhs.date.to_rata_die()) * 24 * 60 * 60
+            + self.time.seconds_since_midnight() as i64
+            - rhs.time.seconds_since_midnight() as i64
+            + self.zone.to_seconds() as i64
+            - rhs.zone.to_seconds() as i64
     }
 }
 

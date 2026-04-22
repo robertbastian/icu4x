@@ -323,6 +323,12 @@ impl DataProvider<TimezonePeriodsV1> for SourceDataProvider {
             }
         }
 
+        let mut metazones = metazones.clone();
+
+        metazones
+            .periods
+            .retain(|tz, _| matches!(tz.as_str(), "aubne" | "ausyd"));
+
         let mut offsets = BTreeSet::new();
         for ps in metazones.periods.values() {
             for &(_, os, mz) in ps {
