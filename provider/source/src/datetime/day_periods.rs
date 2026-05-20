@@ -35,29 +35,32 @@ pub(crate) fn compute_day_periods<'a>(
     let mut entries = std::collections::BTreeMap::new();
 
     for (period, rule) in rules {
+        if matches!(period.as_str(), "am" | "pm" | "noon" | "midnight") {
+            // non-flexible
+            continue;
+        }
         if rule.at.is_some() {
-            assert!(
-                period == "noon" || period == "midnight",
-                "Found 'at' rule for non-noon/midnight period: {} in locale {}",
-                period,
-                locale
-            );
+            log::error!("found 'at' rule for flexible period {period:?} in {locale}, ignoring",);
         }
-        if let Some(name) = names.get(period) {
-            if let (Some(from), Some(before)) = (&rule.from, &rule.before) {
-                let start = parse_hour(from);
-                let end = parse_hour(before);
-                entries.insert((start, end), &**name);
-            } else {
-                log::warn!("Did not have from/before values for rule {period} in locale {locale}")
-            }
-        } else if period != "morning" && period != "afternoon" {
-            log::warn!("missing name for range {period} in locale {locale}");
-        }
+        let Some(name) = names.get(period) else {
+            return Err(DataError::custom("flexible day periods")
+                .with_debug_context(&locale)
+                .with_display_context(&format!("missing name for {period:?}")));
+        };
+
+        let (Some(from), Some(before)) = (&rule.from, &rule.before) else {
+            return Err(DataError::custom("flexible day periods")
+                .with_debug_context(&locale)
+                .with_display_context(&format!("missing from/before values for {period:?}")));
+        };
+
+        let start = parse_hour(from);
+        let end = parse_hour(before);
+        entries.insert((start, end), &**name);
     }
 
     DayPeriodRules::from_periods(entries).map_err(|e| {
-        DataError::custom("day period rules")
+        DataError::custom("flexible day periods")
             .with_debug_context(&locale)
             .with_display_context(e)
     })
