@@ -139,6 +139,7 @@ pub(crate) enum AbstractFs {
     Tar(RwLock<Result<TarArchive, String>>),
     #[cfg(feature = "networking")]
     Http(String),
+    #[allow(unused)]
     Memory(BTreeMap<&'static str, &'static [u8]>),
 }
 
@@ -619,6 +620,7 @@ impl UnicodeCache {
     }
 }
 
+#[allow(unused_macros)]
 macro_rules! include_files {
     ($base:literal; $($file:literal),* $(,)?) => {
         #[allow(clippy::large_stack_arrays)]
@@ -629,4 +631,6 @@ macro_rules! include_files {
         ].into_iter().collect())
     };
 }
+
+#[allow(unused_imports)]
 pub(crate) use include_files;

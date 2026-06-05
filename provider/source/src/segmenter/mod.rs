@@ -12,6 +12,7 @@
 #[cfg(feature = "unstable")]
 use crate::IterableDataProviderCached;
 use crate::SourceDataProvider;
+#[cfg(feature = "unstable")]
 use crate::source::include_files;
 #[cfg(feature = "unstable")]
 use icu::collections::codepointinvlist::CodePointInversionList;
