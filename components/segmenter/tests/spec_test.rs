@@ -4,6 +4,10 @@
 
 use icu_properties::PropertyNamesLong;
 use icu_segmenter::*;
+use itertools::Itertools;
+use rayon::prelude::*;
+use std::char;
+use std::io::BufRead;
 
 struct TestContentIterator<LineIterator>(LineIterator);
 
@@ -121,6 +125,78 @@ fn lb1_sa_replace(c: char) -> char {
             _ => unreachable!(),
         },
         _ => c,
+    }
+}
+
+#[test]
+fn monkeys() {
+    let symbols = include_str!("../../../provider/source/data/segmenter/neo/LineBreakSymbols.txt");
+    let symbols = symbols
+        .lines()
+        .filter_map(|l| {
+            let s = l.split_once('#').map(|(s, _)| s).unwrap_or(l).trim();
+            if s.is_empty() {
+                return None;
+            }
+
+            let mut fields = s.split(';').map(str::trim);
+
+            let name = fields.next().unwrap();
+
+            let set = fields.next().unwrap();
+            let set = icu_properties::unicodeset_parse::parse(set)
+                .unwrap()
+                .0
+                .code_points()
+                .clone();
+
+            Some((name, set.iter_chars().next()?))
+        })
+        .collect::<Vec<_>>();
+
+    let line = LineSegmenter::new_for_non_complex_scripts(Default::default());
+    let neo_line =
+        icu_segmenter::neo::LineSegmenter::new_for_non_complex_scripts(Default::default());
+
+    for (i1, &(name1, c1)) in symbols.iter().enumerate() {
+        for (i2, &(name2, c2)) in symbols.iter().enumerate() {
+            println!(
+                "{:.2}%, {name1} {name2} X X X X",
+                (i1 * symbols.len() + i2) as f32 * 100.0 / ((symbols.len() * symbols.len()) as f32)
+            );
+            symbols.par_iter().for_each(|&(name3, c3)| {
+                let mut s = [c1, c2, c3]
+                    .map(lb1_sa_replace)
+                    .into_iter()
+                    .collect::<String>();
+                for &(name4, c4) in &symbols {
+                    s.push(lb1_sa_replace(c4));
+                    for &(name5, c5) in &symbols {
+                        s.push(lb1_sa_replace(c5));
+                        for &(name6, c6) in &symbols {
+                            s.push(lb1_sa_replace(c6));
+                            if !line.segment_str(&s).eq(neo_line.segment_str(&s)) {
+                                eprintln!(
+                                    "😭 {name1} {name2} {name3} {name4} {name5} {name6}: {:?} / {:?}",
+                                    line.segment_str(&s)
+                                        .tuple_windows()
+                                        .map(|(a, b)| &s[a..b])
+                                        .collect::<Vec<_>>(),
+                                    neo_line
+                                        .segment_str(&s)
+                                        .tuple_windows()
+                                        .map(|(a, b)| &s[a..b])
+                                        .collect::<Vec<_>>()
+                                );
+                            }
+                            s.pop();
+                        }
+                        s.pop();
+                    }
+                    s.pop();
+                }
+            });
+        }
     }
 }
 

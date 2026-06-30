@@ -2014,6 +2014,7 @@ dependencies = [
  "itertools 0.14.0",
  "ndarray",
  "potential_utf",
+ "rayon",
  "serde",
  "serde_json",
  "smallvec",
