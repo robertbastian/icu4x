@@ -121,3 +121,59 @@ impl From<GroupingStrategy> for CompactDecimalFormatterOptions {
         }
     }
 }
+
+
+/// A bag of options defining how numbers will be formatted by
+/// [`ScientificDecimalFormatter`](super::ScientificDecimalFormatter).
+///
+/// <div class="stab unstable">
+/// 🚧 This code is considered unstable; it may change at any time, in breaking or non-breaking ways,
+/// including in SemVer minor releases. Do not use this type unless you are prepared for things to occasionally break.
+///
+/// Graduation tracking issue: [issue #7161](https://github.com/unicode-org/icu4x/issues/7161).
+/// </div>
+///
+/// ✨ *Enabled with the `unstable` Cargo feature.*
+#[cfg(feature = "unstable")]
+#[derive(Debug, Eq, PartialEq, Clone)]
+#[non_exhaustive]
+pub struct ScientificDecimalFormatterOptions {
+    /// When to render grouping separators.
+    ///
+    /// Default is [`GroupingStrategy::Min2`]
+    pub grouping_strategy: Option<GroupingStrategy>,
+}
+
+#[cfg(feature = "unstable")]
+impl Default for ScientificDecimalFormatterOptions {
+    fn default() -> Self {
+        GroupingStrategy::Min2.into()
+    }
+}
+
+#[cfg(feature = "unstable")]
+impl From<DecimalFormatterOptions> for ScientificDecimalFormatterOptions {
+    fn from(decimal_formatter_options: DecimalFormatterOptions) -> Self {
+        Self {
+            grouping_strategy: decimal_formatter_options.grouping_strategy,
+        }
+    }
+}
+
+#[cfg(feature = "unstable")]
+impl From<ScientificDecimalFormatterOptions> for DecimalFormatterOptions {
+    fn from(decimal_formatter_options: ScientificDecimalFormatterOptions) -> Self {
+        Self {
+            grouping_strategy: decimal_formatter_options.grouping_strategy,
+        }
+    }
+}
+
+#[cfg(feature = "unstable")]
+impl From<GroupingStrategy> for ScientificDecimalFormatterOptions {
+    fn from(grouping_strategy: GroupingStrategy) -> Self {
+        Self {
+            grouping_strategy: Some(grouping_strategy),
+        }
+    }
+}

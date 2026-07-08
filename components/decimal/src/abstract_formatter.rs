@@ -7,8 +7,7 @@ use icu_plurals::PluralOperands;
 use writeable::Writeable;
 
 use crate::{
-    CompactDecimalFormatter, DecimalFormatter, FormattedSign, FormattedUnsignedCompactDecimal,
-    FormattedUnsignedDecimal,
+    CompactDecimalFormatter, DecimalFormatter, FormattedSign, FormattedUnsignedCompactDecimal, FormattedUnsignedDecimal, FormattedUnsignedScientificDecimal, ScientificDecimalFormatter,
 };
 
 pub trait Sealed {}
@@ -58,6 +57,27 @@ impl AbstractFormatter for DecimalFormatter {
 impl Sealed for CompactDecimalFormatter {}
 impl AbstractFormatter for CompactDecimalFormatter {
     type Formatted<'a> = FormattedUnsignedCompactDecimal<'a>;
+
+    fn format<'a>(&'a self, value: &'a UnsignedDecimal) -> Self::Formatted<'a> {
+        self.format_unsigned(value)
+    }
+
+    fn format_sign<'a, W: Writeable>(
+        &'a self,
+        value: W,
+        sign: fixed_decimal::Sign,
+    ) -> FormattedSign<'a, W> {
+        self.decimal_formatter.format_sign(sign, value)
+    }
+
+    fn plural_operands(value: &Self::Formatted<'_>) -> PluralOperands {
+        value.plural_operands()
+    }
+}
+
+impl Sealed for ScientificDecimalFormatter {}
+impl AbstractFormatter for ScientificDecimalFormatter {
+    type Formatted<'a> = FormattedUnsignedScientificDecimal<'a>;
 
     fn format<'a>(&'a self, value: &'a UnsignedDecimal) -> Self::Formatted<'a> {
         self.format_unsigned(value)

@@ -125,6 +125,8 @@ pub mod options;
 pub mod parts;
 pub mod preferences;
 pub mod provider;
+#[cfg(feature = "unstable")]
+pub mod scientific_formatter;
 mod size_test_macro;
 
 pub use decimal_formatter::{
@@ -133,6 +135,8 @@ pub use decimal_formatter::{
 
 #[cfg(feature = "unstable")]
 pub use compact_formatter::{CompactDecimalFormatter, FormattedUnsignedCompactDecimal};
+#[cfg(feature = "unstable")]
+pub use scientific_formatter::{ScientificDecimalFormatter, FormattedUnsignedScientificDecimal};
 
 #[cfg(feature = "unstable")]
 pub use abstract_formatter::AbstractFormatter;
