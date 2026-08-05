@@ -10,11 +10,8 @@ use icu_locale_core::LanguageIdentifier;
 use icu_locale_core::subtags::{Language, language};
 use icu_provider::prelude::*;
 
+#[cfg(feature = "serde")]
 mod v1;
-/// The Unicode 17 line breaking implementation, used with `SegmenterBreakLineV3` data.
-#[cfg(any(feature = "unstable", feature = "datagen"))]
-#[cfg_attr(not(feature = "unstable"), allow(dead_code))]
-mod v3;
 
 /// An enum specifies the strictness of line-breaking rules. It can be passed as
 /// an argument when creating a line segmenter.
@@ -155,8 +152,7 @@ impl LineBreakOptions<'_> {
 /// always a breakpoint returned at index 0, but this breakpoint is not a
 /// meaningful line break opportunity.
 ///
-/// Line segmenter is currently compatible with [Unicode Standard Annex #14][UAX14] (Version 15.1.0).
-/// The `*_17_*` and `*_neo_*` constructors, which require the `unstable` Cargo feature, implement Version 17.0.0.
+/// Line segmenter is currently compatible with [Unicode Standard Annex #14][UAX14] (Version 17.0.0).
 ///
 /// [UAX14]: https://www.unicode.org/reports/tr14/tr14-55.html
 ///
@@ -268,21 +264,15 @@ pub struct LineSegmenter(LineSegmenterInner);
 
 #[derive(Debug)]
 enum LineSegmenterInner {
+    #[cfg(feature = "serde")]
     V1 {
         options: ResolvedLineBreakOptions,
         data: DataPayload<SegmenterBreakLineV1>,
         complex: ComplexPayloads,
     },
-    #[cfg(feature = "unstable")]
     V2 {
         data: DataPayload<SegmenterBreakLineV2>,
         tailoring: Option<DataPayload<SegmenterBreakLineOverrideV2>>,
-        complex: ComplexPayloads,
-    },
-    #[cfg(feature = "unstable")]
-    V3 {
-        options: ResolvedLineBreakOptions,
-        data: DataPayload<SegmenterBreakLineV3>,
         complex: ComplexPayloads,
     },
 }
@@ -295,21 +285,15 @@ pub struct LineSegmenterBorrowed<'data>(LineSegmenterBorrowedInner<'data>);
 
 #[derive(Debug, Clone, Copy)]
 enum LineSegmenterBorrowedInner<'data> {
+    #[cfg(feature = "serde")]
     V1 {
         options: ResolvedLineBreakOptions,
         data: &'data RuleBreakData<'data>,
         complex: ComplexPayloadsBorrowed<'data>,
     },
-    #[cfg(feature = "unstable")]
     V2 {
         data: &'data SegmenterStateMachine<'data>,
         tailoring: Option<&'data SegmenterStateMachineOverride<'data>>,
-        complex: ComplexPayloadsBorrowed<'data>,
-    },
-    #[cfg(feature = "unstable")]
-    V3 {
-        options: ResolvedLineBreakOptions,
-        data: &'data RuleBreakData<'data>,
         complex: ComplexPayloadsBorrowed<'data>,
     },
 }
@@ -349,9 +333,10 @@ impl LineSegmenter {
         options: LineBreakOptions,
     ) -> Result<Self, DataError>
     where
-        D: DataProvider<SegmenterBreakLineV1>
+        D: DataProvider<SegmenterBreakLineV2>
+            + DataProvider<SegmenterBreakLineOverrideV2>
             + DataProvider<SegmenterLstmAutoV1>
-            + DataProvider<SegmenterBreakGraphemeClusterV1>
+            + DataProvider<SegmenterBreakGraphemeClusterV2>
             + ?Sized,
     {
         Self::try_new_lstm_unstable(provider, options)
@@ -394,9 +379,10 @@ impl LineSegmenter {
         options: LineBreakOptions,
     ) -> Result<Self, DataError>
     where
-        D: DataProvider<SegmenterBreakLineV1>
+        D: DataProvider<SegmenterBreakLineV2>
+            + DataProvider<SegmenterBreakLineOverrideV2>
             + DataProvider<SegmenterLstmAutoV1>
-            + DataProvider<SegmenterBreakGraphemeClusterV1>
+            + DataProvider<SegmenterBreakGraphemeClusterV2>
             + ?Sized,
     {
         let mut s = Self::try_new_for_non_complex_scripts_unstable(provider, options)?;
@@ -436,9 +422,10 @@ impl LineSegmenter {
         options: LineBreakOptions,
     ) -> Result<Self, DataError>
     where
-        D: DataProvider<SegmenterBreakLineV1>
+        D: DataProvider<SegmenterBreakLineV2>
+            + DataProvider<SegmenterBreakLineOverrideV2>
             + DataProvider<SegmenterDictionaryExtendedV1>
-            + DataProvider<SegmenterBreakGraphemeClusterV1>
+            + DataProvider<SegmenterBreakGraphemeClusterV2>
             + ?Sized,
     {
         let mut s = Self::try_new_for_non_complex_scripts_unstable(provider, options)?;
@@ -454,89 +441,6 @@ impl LineSegmenter {
     /// [📚 Help choosing a constructor](icu_provider::constructors)
     #[cfg(feature = "compiled_data")]
     pub const fn new_for_non_complex_scripts(
-        options: LineBreakOptions,
-    ) -> LineSegmenterBorrowed<'static> {
-        LineSegmenterBorrowed(LineSegmenterBorrowedInner::V1 {
-            options: options.resolve(),
-            data: Baked::SINGLETON_SEGMENTER_BREAK_LINE_V1,
-            complex: ComplexPayloadsBorrowed::new(),
-        })
-    }
-
-    /// Constructs a [`LineSegmenter`] with an invariant locale, custom [`LineBreakOptions`], and
-    /// no support for scripts requiring complex context dependent line breaks (Khmer, Lao, Myanmar, Thai).
-    ///
-    /// ✨ *Enabled with the `unstable` Cargo feature.*
-    ///
-    /// ✨ *Enabled with the `compiled_data` Cargo feature.*
-    ///
-    /// [📚 Help choosing a constructor](icu_provider::constructors)
-    #[cfg(feature = "unstable")]
-    #[cfg(feature = "compiled_data")]
-    pub const fn new_17_for_non_complex_scripts(
-        options: LineBreakOptions,
-    ) -> LineSegmenterBorrowed<'static> {
-        LineSegmenterBorrowed(LineSegmenterBorrowedInner::V3 {
-            options: options.resolve(),
-            data: Baked::SINGLETON_SEGMENTER_BREAK_LINE_V3,
-            complex: ComplexPayloadsBorrowed::new(),
-        })
-    }
-
-    icu_provider::gen_buffer_data_constructors!(
-        (options: LineBreakOptions) -> error: DataError,
-        functions: [
-            new_for_non_complex_scripts: skip,
-            try_new_for_non_complex_scripts_with_buffer_provider,
-            try_new_for_non_complex_scripts_unstable,
-            Self,
-        ]
-    );
-
-    #[doc = icu_provider::gen_buffer_unstable_docs!(UNSTABLE, Self::new_for_non_complex_scripts)]
-    pub fn try_new_for_non_complex_scripts_unstable<D>(
-        provider: &D,
-        options: LineBreakOptions,
-    ) -> Result<Self, DataError>
-    where
-        D: DataProvider<SegmenterBreakLineV1>
-            + DataProvider<SegmenterBreakGraphemeClusterV1>
-            + ?Sized,
-    {
-        Ok(Self(LineSegmenterInner::V1 {
-            data: provider.load(Default::default())?.payload,
-            options: options.resolve(),
-            complex: ComplexPayloads::try_new(provider)?,
-        }))
-    }
-
-    #[cfg(feature = "unstable")]
-    #[doc = icu_provider::gen_buffer_unstable_docs!(UNSTABLE, Self::new_17_for_non_complex_scripts)]
-    pub fn try_new_17_for_non_complex_script_unstable<D>(
-        provider: &D,
-        options: LineBreakOptions,
-    ) -> Result<Self, DataError>
-    where
-        D: DataProvider<SegmenterBreakLineV3>
-            + DataProvider<SegmenterBreakGraphemeClusterV1>
-            + ?Sized,
-    {
-        Ok(Self(LineSegmenterInner::V3 {
-            data: provider.load(Default::default())?.payload,
-            options: options.resolve(),
-            complex: ComplexPayloads::try_new(provider)?,
-        }))
-    }
-
-    /// Constructs a [`LineSegmenter`] with an invariant locale, custom [`LineBreakOptions`], and
-    /// no support for scripts requiring complex context dependent line breaks (Khmer, Lao, Myanmar, Thai).
-    ///
-    /// ✨ *Enabled with the `compiled_data` Cargo feature.*
-    ///
-    /// [📚 Help choosing a constructor](icu_provider::constructors)
-    #[cfg(feature = "compiled_data")]
-    #[cfg(feature = "unstable")]
-    pub const fn new_neo_for_non_complex_scripts(
         options: LineBreakOptions,
     ) -> LineSegmenterBorrowed<'static> {
         const _: () = assert!(
@@ -575,24 +479,33 @@ impl LineSegmenter {
                     return LineSegmenterBorrowed(LineSegmenterBorrowedInner::V2 {
                         data: Baked::SINGLETON_SEGMENTER_BREAK_GRAPHEME_CLUSTER_V2,
                         tailoring: None,
-                        complex: ComplexPayloadsBorrowed::new_neo(),
+                        complex: ComplexPayloadsBorrowed::new(),
                     });
                 }
             },
-            complex: ComplexPayloadsBorrowed::new_neo(),
+            complex: ComplexPayloadsBorrowed::new(),
         })
     }
 
-    #[cfg(feature = "unstable")]
-    #[doc = icu_provider::gen_buffer_unstable_docs!(UNSTABLE, Self::new_neo_for_non_complex_scripts)]
-    pub fn try_new_neo_for_non_complex_scripts_unstable<D>(
+    icu_provider::gen_buffer_data_constructors!(
+        (options: LineBreakOptions) -> error: DataError,
+        functions: [
+            new_for_non_complex_scripts: skip,
+            try_new_for_non_complex_scripts_with_buffer_provider,
+            try_new_for_non_complex_scripts_unstable,
+            Self,
+        ]
+    );
+
+    #[doc = icu_provider::gen_buffer_unstable_docs!(UNSTABLE, Self::new_for_non_complex_scripts)]
+    pub fn try_new_for_non_complex_scripts_unstable<D>(
         provider: &D,
         options: LineBreakOptions,
     ) -> Result<Self, DataError>
     where
         D: DataProvider<SegmenterBreakLineV2>
-            + DataProvider<SegmenterBreakGraphemeClusterV2>
             + DataProvider<SegmenterBreakLineOverrideV2>
+            + DataProvider<SegmenterBreakGraphemeClusterV2>
             + ?Sized,
     {
         let options = options.resolve();
@@ -632,7 +545,7 @@ impl LineSegmenter {
                     .payload
                     .cast(),
                     tailoring: None,
-                    complex: ComplexPayloads::try_new_neo(provider)?,
+                    complex: ComplexPayloads::try_new(provider)?,
                 }));
             }
         };
@@ -663,7 +576,7 @@ impl LineSegmenter {
 
         Ok(Self(LineSegmenterInner::V2 {
             data: data.payload,
-            complex: ComplexPayloads::try_new_neo(provider)?,
+            complex: ComplexPayloads::try_new(provider)?,
             tailoring: tailoring.map(|d| d.payload),
         }))
     }
@@ -684,15 +597,11 @@ impl LineSegmenter {
         // [1]: https://www.unicode.org/reports/tr14/#ID
         // [2]: https://www.unicode.org/reports/tr14/#SA
         match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterInner::V1 {
                 ref mut complex, ..
             } => complex,
-            #[cfg(feature = "unstable")]
             LineSegmenterInner::V2 {
-                ref mut complex, ..
-            } => complex,
-            #[cfg(feature = "unstable")]
-            LineSegmenterInner::V3 {
                 ref mut complex, ..
             } => complex,
         }
@@ -725,15 +634,11 @@ impl LineSegmenter {
         // [1]: https://www.unicode.org/reports/tr14/#ID
         // [2]: https://www.unicode.org/reports/tr14/#SA
         match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterInner::V1 {
                 ref mut complex, ..
             } => complex,
-            #[cfg(feature = "unstable")]
             LineSegmenterInner::V2 {
-                ref mut complex, ..
-            } => complex,
-            #[cfg(feature = "unstable")]
-            LineSegmenterInner::V3 {
                 ref mut complex, ..
             } => complex,
         }
@@ -757,6 +662,7 @@ impl LineSegmenter {
     /// Most useful methods for segmentation are on this type.
     pub fn as_borrowed(&self) -> LineSegmenterBorrowed<'_> {
         LineSegmenterBorrowed(match &self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterInner::V1 {
                 data,
                 options,
@@ -766,7 +672,6 @@ impl LineSegmenter {
                 data: data.get(),
                 complex: complex.as_borrowed(),
             },
-            #[cfg(feature = "unstable")]
             LineSegmenterInner::V2 {
                 data,
                 tailoring,
@@ -774,16 +679,6 @@ impl LineSegmenter {
             } => LineSegmenterBorrowedInner::V2 {
                 data: data.get(),
                 tailoring: tailoring.as_ref().map(|t| t.get()),
-                complex: complex.as_borrowed(),
-            },
-            #[cfg(feature = "unstable")]
-            LineSegmenterInner::V3 {
-                data,
-                options,
-                complex,
-            } => LineSegmenterBorrowedInner::V3 {
-                options: *options,
-                data: data.get(),
                 complex: complex.as_borrowed(),
             },
         })
@@ -796,6 +691,7 @@ impl<'data> LineSegmenterBorrowed<'data> {
     /// There are always breakpoints at 0 and the string length, or only at 0 for the empty string.
     pub fn segment_str<'s>(self, input: &'s str) -> LineBreakIterator<'data, 's, Utf8> {
         LineBreakIterator(match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 options,
                 data,
@@ -808,7 +704,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 complex,
                 v1::line_handle_complex,
             )),
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
                 data,
                 tailoring,
@@ -818,19 +713,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 data,
                 tailoring,
                 Some(complex),
-            )),
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
-                options,
-                data,
-                complex,
-            } => LineBreakIteratorInner::V3(v3::LineBreakIteratorV3::new(
-                input.char_indices(),
-                input.len(),
-                data,
-                options,
-                complex,
-                v3::line_handle_complex,
             )),
         })
     }
@@ -844,6 +726,7 @@ impl<'data> LineSegmenterBorrowed<'data> {
         input: &'s [u8],
     ) -> LineBreakIterator<'data, 's, PotentiallyIllFormedUtf8> {
         LineBreakIterator(match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 data,
                 options,
@@ -856,7 +739,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 complex,
                 v1::line_handle_complex,
             )),
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
                 data,
                 tailoring,
@@ -866,19 +748,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 data,
                 tailoring,
                 Some(complex),
-            )),
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
-                data,
-                options,
-                complex,
-            } => LineBreakIteratorInner::V3(v3::LineBreakIteratorV3::new(
-                Utf8CharIndices::new(input),
-                input.len(),
-                data,
-                options,
-                complex,
-                v3::line_handle_complex,
             )),
         })
     }
@@ -888,6 +757,7 @@ impl<'data> LineSegmenterBorrowed<'data> {
     /// There are always breakpoints at 0 and the string length, or only at 0 for the empty string.
     pub fn segment_latin1<'s>(self, input: &'s [u8]) -> LineBreakIterator<'data, 's, Latin1> {
         LineBreakIterator(match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 data,
                 options,
@@ -900,7 +770,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 complex,
                 |_, _| None,
             )),
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
                 data, tailoring, ..
             } => LineBreakIteratorInner::V2(crate::rule_segmenter_v2::RuleBreakIterator::new(
@@ -908,19 +777,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 data,
                 tailoring,
                 None,
-            )),
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
-                data,
-                options,
-                complex,
-            } => LineBreakIteratorInner::V3(v3::LineBreakIteratorV3::new(
-                Latin1Indices::new(input),
-                input.len(),
-                data,
-                options,
-                complex,
-                |_, _| None,
             )),
         })
     }
@@ -930,6 +786,7 @@ impl<'data> LineSegmenterBorrowed<'data> {
     /// There are always breakpoints at 0 and the string length, or only at 0 for the empty string.
     pub fn segment_utf16<'s>(self, input: &'s [u16]) -> LineBreakIterator<'data, 's, Utf16> {
         LineBreakIterator(match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 data,
                 options,
@@ -942,7 +799,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 complex,
                 v1::line_handle_complex,
             )),
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
                 data,
                 tailoring,
@@ -952,19 +808,6 @@ impl<'data> LineSegmenterBorrowed<'data> {
                 data,
                 tailoring,
                 Some(complex),
-            )),
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
-                data,
-                options,
-                complex,
-            } => LineBreakIteratorInner::V3(v3::LineBreakIteratorV3::new(
-                Utf16Indices::new(input),
-                input.len(),
-                data,
-                options,
-                complex,
-                v3::line_handle_complex,
             )),
         })
     }
@@ -985,15 +828,11 @@ impl LineSegmenterBorrowed<'static> {
         // [1]: https://www.unicode.org/reports/tr14/#ID
         // [2]: https://www.unicode.org/reports/tr14/#SA,
         match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 ref mut complex, ..
             } => complex,
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
-                ref mut complex, ..
-            } => complex,
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
                 ref mut complex, ..
             } => complex,
         }
@@ -1013,15 +852,11 @@ impl LineSegmenterBorrowed<'static> {
         // [1]: https://www.unicode.org/reports/tr14/#ID
         // [2]: https://www.unicode.org/reports/tr14/#SA
         match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 ref mut complex, ..
             } => complex,
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
-                ref mut complex, ..
-            } => complex,
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
                 ref mut complex, ..
             } => complex,
         }
@@ -1034,6 +869,7 @@ impl LineSegmenterBorrowed<'static> {
     /// compile-time optimizations that are possible with [`LineSegmenterBorrowed`].
     pub fn static_to_owned(self) -> LineSegmenter {
         LineSegmenter(match self.0 {
+            #[cfg(feature = "serde")]
             LineSegmenterBorrowedInner::V1 {
                 data,
                 options,
@@ -1043,7 +879,6 @@ impl LineSegmenterBorrowed<'static> {
                 complex: complex.static_to_owned(),
                 options,
             },
-            #[cfg(feature = "unstable")]
             LineSegmenterBorrowedInner::V2 {
                 data,
                 tailoring,
@@ -1052,16 +887,6 @@ impl LineSegmenterBorrowed<'static> {
                 data: DataPayload::from_static_ref(data),
                 complex: complex.static_to_owned(),
                 tailoring: tailoring.map(DataPayload::from_static_ref),
-            },
-            #[cfg(feature = "unstable")]
-            LineSegmenterBorrowedInner::V3 {
-                data,
-                options,
-                complex,
-            } => LineSegmenterInner::V3 {
-                data: DataPayload::from_static_ref(data),
-                complex: complex.static_to_owned(),
-                options,
             },
         })
     }
@@ -1084,11 +909,9 @@ pub struct LineBreakIterator<'data, 's, Y: RuleBreakType>(LineBreakIteratorInner
 
 #[derive(Debug)]
 enum LineBreakIteratorInner<'data, 's, Y: RuleBreakType> {
+    #[cfg(feature = "serde")]
     V1(v1::LineBreakIteratorV1<'data, 's, Y>),
-    #[cfg(feature = "unstable")]
     V2(crate::rule_segmenter_v2::RuleBreakIterator<'data, 's, Y, ComplexLine<Y>>),
-    #[cfg(feature = "unstable")]
-    V3(v3::LineBreakIteratorV3<'data, 's, Y>),
 }
 
 impl<Y: RuleBreakType> Iterator for LineBreakIterator<'_, '_, Y> {
@@ -1096,34 +919,27 @@ impl<Y: RuleBreakType> Iterator for LineBreakIterator<'_, '_, Y> {
 
     fn next(&mut self) -> Option<Self::Item> {
         match self.0 {
+            #[cfg(feature = "serde")]
             LineBreakIteratorInner::V1(ref mut iter) => iter.next(),
-            #[cfg(feature = "unstable")]
             LineBreakIteratorInner::V2(ref mut iter) => iter.next(),
-            #[cfg(feature = "unstable")]
-            LineBreakIteratorInner::V3(ref mut iter) => iter.next(),
         }
     }
 }
 
-#[cfg(feature = "unstable")]
 impl<Y: RuleBreakType> LineBreakIterator<'_, '_, Y> {
     /// Returns whether the last break was mandatory
     pub fn is_mandatory(&self) -> bool {
         match self.0 {
+            #[cfg(feature = "serde")]
             LineBreakIteratorInner::V1(_) => false,
-            #[cfg(feature = "unstable")]
             LineBreakIteratorInner::V2(ref iter) => iter.last_accepting_status() == (true as u8),
-            #[cfg(feature = "unstable")]
-            LineBreakIteratorInner::V3(_) => false,
         }
     }
 }
 
 #[derive(Debug)]
-#[cfg(feature = "unstable")]
 struct ComplexLine<Y>(core::marker::PhantomData<Y>);
 
-#[cfg(feature = "unstable")]
 impl<Y: RuleBreakType> crate::rule_segmenter_v2::ComplexHandler<Y> for ComplexLine<Y> {
     const BREAK_AT_BOUNDARIES: bool = false;
     const BREAK_STATUS: u8 = false as u8;
@@ -1158,7 +974,7 @@ mod tests {
 
     #[test]
     fn test_mandatory() {
-        let mut actual_breaks = LineSegmenter::new_neo_for_non_complex_scripts(Default::default())
+        let mut actual_breaks = LineSegmenter::new_for_non_complex_scripts(Default::default())
             .segment_str("this has a mandatory\nline break");
 
         assert_eq!(actual_breaks.next(), Some(0));
@@ -1180,117 +996,7 @@ mod tests {
 
     #[test]
     fn linebreak() {
-        let segmenter = LineSegmenter::new_dictionary(Default::default());
-
-        check_line("hello world", &["hello ", "world"], segmenter);
-
-        check_line("$10 $10", &["$10 ", "$10"], segmenter);
-
-        // LB10
-
-        // LB14
-        check_line("[  abc def", &["[  abc ", "def"], segmenter);
-
-        // LB15 used to prevent the break at 6, but has been removed in Unicode 15.1.
-        check_line("abc\u{0022}  (def", &["abc\u{0022}  ", "(def"], segmenter);
-
-        // Instead, in Unicode 15.1, LB15a and LB15b prevent these breaks.
-        check_line("« miaou »", &["« miaou »"], segmenter);
-
-        // But not these:
-        check_line(
-            "Die Katze hat »miau« gesagt.",
-            &["Die ", "Katze ", "hat ", "»miau« ", "gesagt."],
-            segmenter,
-        );
-
-        // LB16
-        check_line("\u{0029}\u{203C}", &["\u{0029}\u{203C}"], segmenter);
-        check_line("\u{0029}  \u{203C}", &["\u{0029}  \u{203C}"], segmenter);
-
-        // LB17
-        check_line("\u{2014}\u{2014}aa", &["\u{2014}\u{2014}", "aa"], segmenter);
-        check_line(
-            "\u{2014}  \u{2014}aa",
-            &["\u{2014}  \u{2014}", "aa"],
-            segmenter,
-        );
-
-        check_line(
-            "\u{2014}\u{2014}  \u{2014}\u{2014}123 abc",
-            &["\u{2014}\u{2014}  \u{2014}\u{2014}", "123 ", "abc"],
-            segmenter,
-        );
-
-        // LB25
-        check_line("(0,1)+(2,3)", &["(0,1)+(2,3)"], segmenter);
-
-        check_line("——  ——123 abc", &["——  ——", "123 ", "abc"], segmenter);
-        check_line(
-            "\u{1F3FB} \u{1F3FB}",
-            &["\u{1F3FB} ", "\u{1F3FB}"],
-            segmenter,
-        );
-    }
-
-    #[test]
-    fn linebreak_17() {
-        let segmenter = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
-
-        check_line("hello world", &["hello ", "world"], segmenter);
-
-        check_line("$10 $10", &["$10 ", "$10"], segmenter);
-
-        // LB10
-
-        // LB14
-        check_line("[  abc def", &["[  abc ", "def"], segmenter);
-
-        // LB15 used to prevent the break at 6, but has been removed in Unicode 15.1.
-        check_line("abc\u{0022}  (def", &["abc\u{0022}  ", "(def"], segmenter);
-
-        // Instead, in Unicode 15.1, LB15a and LB15b prevent these breaks.
-        check_line("« miaou »", &["« miaou »"], segmenter);
-
-        // But not these:
-        check_line(
-            "Die Katze hat »miau« gesagt.",
-            &["Die ", "Katze ", "hat ", "»miau« ", "gesagt."],
-            segmenter,
-        );
-
-        // LB16
-        check_line("\u{0029}\u{203C}", &["\u{0029}\u{203C}"], segmenter);
-        check_line("\u{0029}  \u{203C}", &["\u{0029}  \u{203C}"], segmenter);
-
-        // LB17
-        check_line("\u{2014}\u{2014}aa", &["\u{2014}\u{2014}", "aa"], segmenter);
-        check_line(
-            "\u{2014}  \u{2014}aa",
-            &["\u{2014}  \u{2014}", "aa"],
-            segmenter,
-        );
-
-        check_line(
-            "\u{2014}\u{2014}  \u{2014}\u{2014}123 abc",
-            &["\u{2014}\u{2014}  \u{2014}\u{2014}", "123 ", "abc"],
-            segmenter,
-        );
-
-        // LB25
-        check_line("(0,1)+(2,3)", &["(0,1)+(2,3)"], segmenter);
-
-        check_line("——  ——123 abc", &["——  ——", "123 ", "abc"], segmenter);
-        check_line(
-            "\u{1F3FB} \u{1F3FB}",
-            &["\u{1F3FB} ", "\u{1F3FB}"],
-            segmenter,
-        );
-    }
-
-    #[test]
-    fn linebreak_neo() {
-        let segmenter = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
+        let segmenter = LineSegmenter::new_for_non_complex_scripts(Default::default());
 
         check_line("hello world", &["hello ", "world"], segmenter);
 
@@ -1348,35 +1054,8 @@ mod tests {
         check_line(
             "ภาษาไทยภาษาไทย",
             &["ภาษา", "ไทย", "ภาษา", "ไทย"],
-            LineSegmenter::new_lstm(Default::default()),
-        );
-
-        check_line(
-            "ภาษาไทยภาษาไทย",
-            &["ภาษา", "ไทย", "ภาษา", "ไทย"],
-            LineSegmenter::new_dictionary(Default::default()),
-        );
-
-        check_line(
-            "ภาษา",
-            &["ภาษา"],
-            LineSegmenter::new_lstm(Default::default()),
-        );
-
-        check_line(
-            "ภาษา",
-            &["ภาษา"],
-            LineSegmenter::new_dictionary(Default::default()),
-        );
-    }
-
-    #[test]
-    fn thai_line_break_17() {
-        check_line(
-            "ภาษาไทยภาษาไทย",
-            &["ภาษา", "ไทย", "ภาษา", "ไทย"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_lstm();
                 s
             },
@@ -1386,47 +1065,39 @@ mod tests {
             "ภาษาไทยภาษาไทย",
             &["ภาษา", "ไทย", "ภาษา", "ไทย"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_dictionary();
                 s
             },
         );
 
         check_line("ภาษา", &["ภาษา"], {
-            let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+            let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
             s.load_lstm();
             s
         });
 
         check_line("ภาษา", &["ภาษา"], {
-            let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+            let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
             s.load_dictionary();
             s
         });
+
+        // # 8243
+        check_line(
+            "ก\u{2060}รุ\u{2060}ง",
+            &["ก\u{2060}รุ\u{2060}ง"],
+            {
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
+                s.load_dictionary();
+                s
+            },
+        );
     }
 
     #[test]
     fn complex_line_break_encodings() {
         let segmenter = LineSegmenter::new_dictionary(Default::default());
-        let input = "ภาษาไทย龟山岛";
-        check_line(input, &["ภาษา", "ไทย", "龟", "山", "岛"], segmenter);
-
-        let ill_formed =
-            b"\xE0\xB8\xA0\xE0\xB8\xB2\xE0\xB8\xA9\xE0\xB8\xB2\xFF\xE0\xB9\x84\xE0\xB8\x97\xE0\xB8\xA2";
-        let breaks: Vec<usize> = segmenter.segment_utf8(ill_formed).collect();
-        assert_eq!(breaks, [0, 12, 22]);
-
-        let unpaired_surrogate = [
-            0x0E20, 0x0E32, 0x0E29, 0x0E32, 0xD800, 0x0E44, 0x0E17, 0x0E22,
-        ];
-        let breaks: Vec<usize> = segmenter.segment_utf16(&unpaired_surrogate).collect();
-        assert_eq!(breaks, [0, 4, 8]);
-    }
-
-    #[test]
-    fn complex_line_break_encodings_neo() {
-        let mut segmenter = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-        segmenter.load_dictionary();
         let input = "ภาษาไทย龟山岛";
         check_line(input, &["ภาษา", "ไทย", "龟", "山", "岛"], segmenter);
 
@@ -1443,96 +1114,14 @@ mod tests {
     }
 
     #[test]
-    fn complex_line_break_encodings_17() {
-        let mut segmenter = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
-        segmenter.load_dictionary();
-        let input = "ภาษาไทย龟山岛";
-        check_line(input, &["ภาษา", "ไทย", "龟", "山", "岛"], segmenter);
-
-        let ill_formed =
-            b"\xE0\xB8\xA0\xE0\xB8\xB2\xE0\xB8\xA9\xE0\xB8\xB2\xFF\xE0\xB9\x84\xE0\xB8\x97\xE0\xB8\xA2";
-        let breaks: Vec<usize> = segmenter.segment_utf8(ill_formed).collect();
-        assert_eq!(breaks, [0, 12, 22]);
-
-        let unpaired_surrogate = [
-            0x0E20, 0x0E32, 0x0E29, 0x0E32, 0xD800, 0x0E44, 0x0E17, 0x0E22,
-        ];
-        let breaks: Vec<usize> = segmenter.segment_utf16(&unpaired_surrogate).collect();
-        assert_eq!(breaks, [0, 4, 8]);
-    }
-
-    #[test]
-    fn thai_line_break_neo() {
-        check_line(
-            "ภาษาไทยภาษาไทย",
-            &["ภาษา", "ไทย", "ภาษา", "ไทย"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-                s.load_lstm();
-                s
-            },
-        );
-
-        check_line(
-            "ภาษาไทยภาษาไทย",
-            &["ภาษา", "ไทย", "ภาษา", "ไทย"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-                s.load_dictionary();
-                s
-            },
-        );
-
-        check_line("ภาษา", &["ภาษา"], {
-            let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-            s.load_lstm();
-            s
-        });
-
-        check_line("ภาษา", &["ภาษา"], {
-            let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-            s.load_dictionary();
-            s
-        });
-
-        // # 8243
-        check_line(
-            "ก\u{2060}รุ\u{2060}ง",
-            &["ก\u{2060}รุ\u{2060}ง"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-                s.load_dictionary();
-                s
-            },
-        );
-    }
-
-    #[test]
     fn burmese_line_break() {
         // "Burmese Language" in Burmese
 
         check_line(
             "မြန်မာဘာသာစကား",
             &["မြန်", "မာ", "ဘာသာ", "စကား"],
-            LineSegmenter::new_lstm(Default::default()),
-        );
-
-        check_line(
-            "မြန်မာဘာသာစကား",
-            &["မြန်မာဘာသာ", "စကား"],
-            LineSegmenter::new_dictionary(Default::default()),
-        );
-    }
-
-    #[test]
-    fn burmese_line_break_17() {
-        // "Burmese Language" in Burmese
-
-        check_line(
-            "မြန်မာဘာသာစကား",
-            &["မြန်", "မာ", "ဘာသာ", "စကား"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_lstm();
                 s
             },
@@ -1542,32 +1131,7 @@ mod tests {
             "မြန်မာဘာသာစကား",
             &["မြန်မာဘာသာ", "စကား"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
-                s.load_dictionary();
-                s
-            },
-        );
-    }
-
-    #[test]
-    fn burmese_line_break_neo() {
-        // "Burmese Language" in Burmese
-
-        check_line(
-            "မြန်မာဘာသာစကား",
-            &["မြန်", "မာ", "ဘာသာ", "စကား"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-                s.load_lstm();
-                s
-            },
-        );
-
-        check_line(
-            "မြန်မာဘာသာစကား",
-            &["မြန်မာဘာသာ", "စကား"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_dictionary();
                 s
             },
@@ -1579,23 +1143,8 @@ mod tests {
         check_line(
             "សេចក្ដីប្រកាសជាសកលស្ដីពីសិទ្ធិមនុស្ស",
             &["សេចក្ដីប្រកាស", "ជាស", "កល", "ស្ដីពី", "សិទ្ធិមនុស្ស"],
-            LineSegmenter::new_lstm(Default::default()),
-        );
-
-        check_line(
-            "សេចក្ដីប្រកាសជាសកលស្ដីពីសិទ្ធិមនុស្ស",
-            &["សេចក្ដីប្រកាស", "ជាស", "កល", "ស្ដីពី", "សិទ្ធិមនុស្ស"],
-            LineSegmenter::new_dictionary(Default::default()),
-        );
-    }
-
-    #[test]
-    fn khmer_line_break_17() {
-        check_line(
-            "សេចក្ដីប្រកាសជាសកលស្ដីពីសិទ្ធិមនុស្ស",
-            &["សេចក្ដីប្រកាស", "ជាស", "កល", "ស្ដីពី", "សិទ្ធិមនុស្ស"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_lstm();
                 s
             },
@@ -1605,30 +1154,7 @@ mod tests {
             "សេចក្ដីប្រកាសជាសកលស្ដីពីសិទ្ធិមនុស្ស",
             &["សេចក្ដីប្រកាស", "ជាស", "កល", "ស្ដីពី", "សិទ្ធិមនុស្ស"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
-                s.load_dictionary();
-                s
-            },
-        );
-    }
-
-    #[test]
-    fn khmer_line_break_neo() {
-        check_line(
-            "សេចក្ដីប្រកាសជាសកលស្ដីពីសិទ្ធិមនុស្ស",
-            &["សេចក្ដីប្រកាស", "ជាស", "កល", "ស្ដីពី", "សិទ្ធិមនុស្ស"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-                s.load_lstm();
-                s
-            },
-        );
-
-        check_line(
-            "សេចក្ដីប្រកាសជាសកលស្ដីពីសិទ្ធិមនុស្ស",
-            &["សេចក្ដីប្រកាស", "ជាស", "កល", "ស្ដីពី", "សិទ្ធិមនុស្ស"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_dictionary();
                 s
             },
@@ -1639,7 +1165,7 @@ mod tests {
             "អស់ នឹង មាន",
             &["អស់ ", "នឹង ", "មាន"],
             {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_dictionary();
                 s
             },
@@ -1651,23 +1177,8 @@ mod tests {
         check_line(
             "ກ່ຽວກັບສິດຂອງມະນຸດ",
             &["ກ່ຽວ", "ກັບ", "ສິດ", "ຂອງ", "ມະນຸດ"],
-            LineSegmenter::new_lstm(Default::default()),
-        );
-
-        check_line(
-            "ກ່ຽວກັບສິດຂອງມະນຸດ",
-            &["ກ່ຽວກັບ", "ສິດ", "ຂອງ", "ມະນຸດ"],
-            LineSegmenter::new_dictionary(Default::default()),
-        );
-    }
-
-    #[test]
-    fn lao_line_break_17() {
-        check_line(
-            "ກ່ຽວກັບສິດຂອງມະນຸດ",
-            &["ກ່ຽວ", "ກັບ", "ສິດ", "ຂອງ", "ມະນຸດ"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_lstm();
                 s
             },
@@ -1677,30 +1188,7 @@ mod tests {
             "ກ່ຽວກັບສິດຂອງມະນຸດ",
             &["ກ່ຽວກັບ", "ສິດ", "ຂອງ", "ມະນຸດ"],
             {
-                let mut s = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
-                s.load_dictionary();
-                s
-            },
-        );
-    }
-
-    #[test]
-    fn lao_line_break_neo() {
-        check_line(
-            "ກ່ຽວກັບສິດຂອງມະນຸດ",
-            &["ກ່ຽວ", "ກັບ", "ສິດ", "ຂອງ", "ມະນຸດ"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
-                s.load_lstm();
-                s
-            },
-        );
-
-        check_line(
-            "ກ່ຽວກັບສິດຂອງມະນຸດ",
-            &["ກ່ຽວກັບ", "ສິດ", "ຂອງ", "ມະນຸດ"],
-            {
-                let mut s = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
+                let mut s = LineSegmenter::new_for_non_complex_scripts(Default::default());
                 s.load_dictionary();
                 s
             },
@@ -1710,20 +1198,6 @@ mod tests {
     #[test]
     fn empty_string() {
         let segmenter = LineSegmenter::new_for_non_complex_scripts(Default::default());
-        let breaks: Vec<usize> = segmenter.segment_str("").collect();
-        assert_eq!(breaks, [0]);
-    }
-
-    #[test]
-    fn empty_string_17() {
-        let segmenter = LineSegmenter::new_17_for_non_complex_scripts(Default::default());
-        let breaks: Vec<usize> = segmenter.segment_str("").collect();
-        assert_eq!(breaks, [0]);
-    }
-
-    #[test]
-    fn empty_string_neo() {
-        let segmenter = LineSegmenter::new_neo_for_non_complex_scripts(Default::default());
         let breaks: Vec<usize> = segmenter.segment_str("").collect();
         assert_eq!(breaks, [0]);
     }

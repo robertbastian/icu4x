@@ -199,17 +199,15 @@ mod tests {
         let result: Vec<usize> = dict_segmenter.segment_str(s).collect();
         assert_eq!(result, vec![15, 24]);
 
-        // TODO(#3236): Why is WordSegmenter not returning the middle segment?
         let result: Vec<usize> = word_segmenter.segment_str(s).collect();
-        assert_eq!(result, vec![0, 24]);
+        assert_eq!(result, vec![0, 15, 24]);
 
         let s_utf16: Vec<u16> = s.encode_utf16().collect();
         let result: Vec<usize> = dict_segmenter.segment_utf16(&s_utf16).collect();
         assert_eq!(result, vec![5, 8]);
 
-        // TODO(#3236): Why is WordSegmenter not returning the middle segment?
         let result: Vec<usize> = word_segmenter.segment_utf16(&s_utf16).collect();
-        assert_eq!(result, vec![0, 8]);
+        assert_eq!(result, vec![0, 5, 8]);
     }
 
     #[test]
